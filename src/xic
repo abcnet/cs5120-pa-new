@@ -1,0 +1,3 @@
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+#Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+java -cp "${DIR}":"${DIR}"/../lib/java_cup.jar zr54.lexer.XiLexer $@

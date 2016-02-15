@@ -1,0 +1,17 @@
+// A stub for a Xi CUP specification.
+
+package zr54.parser;
+
+// You might want to add types to these declarations.
+terminal IDENTIFIER, INTEGER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
+
+// You might want to add types to these declarations.
+nonterminal program;
+// Add more nonterminals here...
+
+start with program;
+
+// Recognizes "Hello World!", but not much else.
+program ::= USE IDENTIFIER IDENTIFIER LPAREN IDENTIFIER COLON
+  INT LBRACK RBRACK LBRACK RBRACK RPAREN
+  LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;
