@@ -6,12 +6,48 @@ package zr54.parser;
 terminal IDENTIFIER, INTEGER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program;
+nonterminal program, useSpecifier, array, type, argumentWithType, argumentsWithType, argument, arguments, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, conditions, logicalOperator, condition;
 // Add more nonterminals here...
 
 start with program;
 
 // Recognizes "Hello World!", but not much else.
-program ::= USE IDENTIFIER IDENTIFIER LPAREN IDENTIFIER COLON
+/*program ::= USE IDENTIFIER IDENTIFIER LPAREN IDENTIFIER COLON
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
-  LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;
+  LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
+
+useSpecifier        ::= USE IDENTIFIER;
+
+array               ::= INT LBRACK RBRACK LBRACK RBRACK;
+type                ::= array
+                      | INT;
+argumentWithType    ::= IDENTIFIER COLON type;
+argumentsWithType   ::= argumentsWithType COMMA argumentWithType
+                      | argumentWithType;
+argument            ::= BOOLEAN_LITERAL
+                      | INTEGER_LITERAL
+                      | CHARACTER_LITERAL
+                      | STRING_LITERAL
+                      | IDENTIFIER
+                      | functionCall;
+arguments           ::= arguments COMMA argument
+                      | argument;
+functionReturnType  ::= COLON typesList
+                      |;
+typesList           ::= typesList COLON type | type;
+function            ::= IDENTIFIER LPAREN argumentsWithType RPAREN
+                          LBRACE multipleStatements RBRACE;
+multipleStatements  ::= multipleStatements statement
+                      | statement;
+statement           ::= functionCall | assignment | ifStatement | whileStatement; 
+logicalOperator     ::= EQEQ | GTEQ | LTEQ | NOTEQ | EQ | GT | LT | AND | OR;
+conditions          ::= argument logicalOperator argument; /*to be added later*/
+condition           ::= argument logicalOperator argument;
+ifStatement         ::= IF LPAREN conditions RPAREN LBRACE multipleStatements RBRACE;
+whileStatement      ::= WHILE LPAREN conditions RPAREN LBRACE multipleStatements RBRACE;
+assignment          ::= IDENTIFIER EQ argument;
+functionCall        ::= IDENTIFIER LPAREN arguments RPAREN;
+program             ::= blocks;
+blocks              ::= blocks block
+                      | block;
+block               ::= useSpecifier | function;

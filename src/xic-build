@@ -1,5 +1,5 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 #Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 ~/jflex/bin/jflex "${DIR}"/zr54/lexer/*.flex
-
+"${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/parser/ "${DIR}"/zr54/parser/xi.cup
 javac -cp "${DIR}":"${DIR}"/../lib/java_cup.jar "${DIR}"/zr54/*/*.java 
