@@ -2,6 +2,8 @@ package zr54.parser;
 import java.io.*;
 import java.util.Scanner;
 import zr54.lexer.*;
+import edu.cornell.cs.cs4120.util.*;
+import polyglot.util.*;
 
 public class ParsePrint {
 //    public static void main(String args[]) throws Exception {
@@ -11,9 +13,14 @@ public class ParsePrint {
 //        System.out.println("Result = " + result);
 //    }
 	public static void parseAndPrint(String arg) throws Exception {
-      parser p = new parser();
+	  OptimalCodeWriter writer = new OptimalCodeWriter(System.out, 76);
+      CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(writer);
+      parser p = new parser(printer);
       p.setScanner(new Lexer(new FileReader(arg)));
       Integer result = (Integer) p.parse().value;
+//      printer.printAtom("asdf");
+      
+      
       System.out.println("Result = " + result);
   }
 }
