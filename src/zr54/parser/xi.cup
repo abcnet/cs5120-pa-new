@@ -19,10 +19,10 @@ parser code {:
 //scan with {: return s.next_token(); :};
 
 // You might want to add types to these declarations.
-terminal IDENTIFIER, INTEGER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
+terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program, useSpecifier, array, type, argumentWithType, argumentsWithType, argument, arguments, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements;
+nonterminal program, useSpecifier, arrayType, type, argumentWithType, argumentsWithType, argument, arguments, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets;
 // Add more nonterminals here...
 
 
@@ -48,9 +48,15 @@ start with program;
 
 useSpecifier        ::= USE IDENTIFIER       {: printer.printAtom("use"); :}
                       ;
-array               ::= INT LBRACK RBRACK LBRACK RBRACK; // not finished
-type                ::= array
-                      | INT;
+arrayType           ::= INT brackets
+                      | BOOL brackets
+                      ;
+brackets            ::= brackets LBRACK RBRACK
+                      | LBRACK RBRACK
+                      ;
+type                ::= arrayType
+                      | INT
+                      | BOOL;
 argumentWithType    ::= IDENTIFIER COLON type;
 argumentsWithType   ::= argumentsWithType COMMA argumentWithType
                       | argumentWithType;
@@ -75,7 +81,8 @@ multipleStatements  ::= multipleStatements statement
                       | statement;
 statement           ::= functionCall | assignment | ifStatement | whileStatement | RETURN expression
                       | assignment SEMICOLON | RETURN expression SEMICOLON; 
-operator     ::= EQEQ | GTEQ | LTEQ | NOTEQ | EQ | GT | LT | AND | OR | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
+operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | EQ | GT | LT | AND | OR 
+                      | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
 
 ifStatement         ::= IF LPAREN expression RPAREN oneOrMorestatements ELSE oneOrMorestatements
                       | IF LPAREN expression RPAREN oneOrMorestatements
@@ -91,7 +98,9 @@ expression          ::= expression operator expression
                       | NOT expression
                       | MINUS expression
                       ;
-functionCall        ::= IDENTIFIER LPAREN arguments RPAREN;
+functionCall        ::= IDENTIFIER LPAREN arguments RPAREN
+                      | LENGTH LPAREN IDENTIFIER RPAREN
+                      ;
 program             ::= blocks; 
 blocks              ::= blocks block
                       | block;

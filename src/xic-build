@@ -1,5 +1,18 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-#Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+# Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+
+# Code of escaping spaces from http://mindspill.net/computing/linux-notes/escape-spaces-with-sed/
+#P="${DIR}/zr54/lexer/lexer.flex"
+#echo $P
+#Q=$(echo $P | sed 's/ /\\ /g')
+#echo $Q
+echo "Start processing lexer.flex"
+#~/jflex/bin/jflex \"$Q\"
 ~/jflex/bin/jflex "${DIR}"/zr54/lexer/*.flex
+echo "Done processing lexer.flex"
+echo "Start processing xi.cup"
 "${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/parser/ "${DIR}"/zr54/parser/xi.cup
+echo "Done processing xi.cup"
+echo "Start compiling .java files"
 javac -cp "${DIR}":"${DIR}"/../lib/java_cup.jar "${DIR}"/zr54/*/*.java 
+echo "Done compiling .java files"
