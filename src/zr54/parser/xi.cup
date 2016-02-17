@@ -46,7 +46,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-useSpecifier        ::= USE IDENTIFIER       {: printer.printAtom("use"); :}
+useSpecifier        ::= USE IDENTIFIER:id       {: printer.printAtom("use "+id+"\n"); :}
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
@@ -99,13 +99,11 @@ oneOrMorestatements ::= statement
                       | LBRACE multipleStatements RBRACE
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
-/*assignment          ::= variable EQ LPAREN expressions COMMA expression RPAREN
-                      | LPAREN variables RPAREN EQ LPAREN expressions COMMA expression RPAREN
-                      | variable EQ expression
-                      | LPAREN variables RPAREN EQ functionCall
-                      ;*/ //not resolved
-assignment          ::=variable EQ expression
 
+assignment          ::= variable EQ expression
+                      | variable EQ LPAREN expressions COMMA expression RPAREN
+                      //| LPAREN variables RPAREN EQ LPAREN expressions COMMA expression RPAREN
+                      //| LPAREN variables RPAREN EQ functionCall
                       ;
 variables           ::= variables COMMA variable
                       | variable
