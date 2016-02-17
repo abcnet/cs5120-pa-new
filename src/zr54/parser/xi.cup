@@ -22,7 +22,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program, useSpecifier, arrayType, type, argumentWithType, argumentsWithType, argument, arguments, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets;
+nonterminal program, useSpecifier, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions;
 // Add more nonterminals here...
 
 
@@ -46,13 +46,15 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-useSpecifier        ::= USE IDENTIFIER       {: printer.printAtom("use"); :}
+useSpecifier        ::= USE IDENTIFIER:id       {: RESULT = "(use "+id+")\n"; :}
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
                       ;
 brackets            ::= brackets LBRACK RBRACK
                       | LBRACK RBRACK
+                      | brackets LBRACK INTEGER_LITERAL RBRACK
+                      | LBRACK INTEGER_LITERAL RBRACK
                       ;
 type                ::= arrayType
                       | INT
@@ -65,23 +67,29 @@ argument            ::= BOOLEAN_LITERAL
                       | CHARACTER_LITERAL
                       | STRING_LITERAL
                       | IDENTIFIER
-                      | functionCall;
-arguments           ::= arguments COMMA argument
-                      | argument;
+                      | functionCall
+                      ;
+
 functionReturnType  ::= COLON type
                       | COLON LPAREN typesList RPAREN
                       |;
 typesList           ::= typesList COMMA type | type;
 
 
-function            ::= IDENTIFIER LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    {: printer.printAtom("Function"); :}
+function            ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
+                          LBRACE multipleStatements RBRACE    {: RESULT = id; :}
                           ;
 multipleStatements  ::= multipleStatements statement
                       | statement;
-statement           ::= functionCall | assignment | ifStatement | whileStatement | RETURN expression
-                      | assignment SEMICOLON | RETURN expression SEMICOLON; 
-operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | EQ | GT | LT | AND | OR 
+statement           ::= functionCall | assignment | ifStatement | whileStatement 
+                      | RETURN LPAREN expressions RPAREN
+                      | assignment SEMICOLON 
+                      | RETURN LPAREN expressions RPAREN SEMICOLON
+                      | functionCall SEMICOLON
+                      | argumentWithType
+                      | argumentWithType SEMICOLON 
+                      ; 
+operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | GT | LT | AND | OR 
                       | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
 
 ifStatement         ::= IF LPAREN expression RPAREN oneOrMorestatements ELSE oneOrMorestatements
@@ -91,17 +99,36 @@ oneOrMorestatements ::= statement
                       | LBRACE multipleStatements RBRACE
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
-assignment          ::= IDENTIFIER EQ expression; // ((_,q’:int)=ratadd(1,2,1,3)) to be added
+
+assignment          ::= variable EQ expression
+                      | variable EQ LPAREN expressions COMMA expression RPAREN
+                      //| LPAREN variables COMMA variable RPAREN EQ LPAREN expressions COMMA expression RPAREN
+                      //| LPAREN variables COMMA variable RPAREN EQ functionCall
+                      ;
+variables           ::= variables COMMA variable
+                      | variable
+                      ;
+variable            ::= UNDERSCORE
+                      | IDENTIFIER
+                      | argumentWithType
+                      ;
 expression          ::= expression operator expression
                       | LPAREN expression RPAREN
                       | argument
                       | NOT expression
                       | MINUS expression
                       ;
-functionCall        ::= IDENTIFIER LPAREN arguments RPAREN
+expressions         ::= expression
+                      | expressions COMMA expression
+                      ;
+functionCall        ::= IDENTIFIER LPAREN expressions RPAREN
                       | LENGTH LPAREN IDENTIFIER RPAREN
                       ;
-program             ::= blocks; 
-blocks              ::= blocks block
-                      | block;
-block               ::= useSpecifier | function;
+program             ::= blocks:bs                  {: RESULT = "("+bs+")"; :}
+                      ; 
+blocks              ::= blocks:bs block:b          {: RESULT = bs+"\n"+b; :}
+                      | block:b                     {: RESULT = b; :}
+                      ;                  
+block               ::= useSpecifier:u             {: RESULT = u; :}
+                      | function:f                {: RESULT = f; :}
+                      ;

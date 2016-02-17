@@ -240,7 +240,7 @@ public class OptimalCodeWriter extends CodeWriter {
     protected int width;
     protected static int format_calls = 0;
     public static final boolean debug = false; // show every step
-    public static final boolean showInput = true; // show input
+    public static final boolean showInput = false; // show input
     public static final boolean visualize = false; // visualize formatting
     // (requires VT100 terminal)
 
