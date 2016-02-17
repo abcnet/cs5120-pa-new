@@ -439,7 +439,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
                 Object id = CUP$parser$stack.peek().<Object> value();
-                 RESULT = "(use "+id+")\n"; 
+                 RESULT = "(use "+id+")"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("singleUse",1, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1078,7 +1078,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Object es = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
-                 RESULT = "("+bs+")"; 
+                 RESULT = "("+id+es+")"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",11, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1090,7 +1090,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Object id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
-                 RESULT = "length("; 
+                 RESULT = "( length "+id+")"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",11, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1099,13 +1099,13 @@ class CUP$parser$actions {
         case 73: // program ::= uses methods 
             {
                 Object RESULT = null;
-                int ssleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
-                int ssright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
-                Object ss = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
+                int usleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int usright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Object us = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
                 int msleft = CUP$parser$stack.peek().left;
                 int msright = CUP$parser$stack.peek().right;
                 Object ms = CUP$parser$stack.peek().<Object> value();
-                 RESULT = "("+ss+")"; 
+                 RESULT = "( ("+us+")\n("+ms+" )\n)"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1114,7 +1114,13 @@ class CUP$parser$actions {
         case 74: // uses ::= uses singleUse 
             {
                 Object RESULT = null;
-
+                int usleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int usright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Object us = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
+                int suleft = CUP$parser$stack.peek().left;
+                int suright = CUP$parser$stack.peek().right;
+                Object su = CUP$parser$stack.peek().<Object> value();
+                 RESULT = us+"\n"+su; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("uses",2, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1123,7 +1129,10 @@ class CUP$parser$actions {
         case 75: // uses ::= singleUse 
             {
                 Object RESULT = null;
-
+                int suleft = CUP$parser$stack.peek().left;
+                int suright = CUP$parser$stack.peek().right;
+                Object su = CUP$parser$stack.peek().<Object> value();
+                 RESULT = su; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("uses",2, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1132,7 +1141,13 @@ class CUP$parser$actions {
         case 76: // methods ::= methods method 
             {
                 Object RESULT = null;
-
+                int msleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int msright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Object ms = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
+                int mleft = CUP$parser$stack.peek().left;
+                int mright = CUP$parser$stack.peek().right;
+                Object m = CUP$parser$stack.peek().<Object> value();
+                 RESULT = ms+"\n"+m; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("methods",23, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1141,7 +1156,10 @@ class CUP$parser$actions {
         case 77: // methods ::= method 
             {
                 Object RESULT = null;
-
+                int mleft = CUP$parser$stack.peek().left;
+                int mright = CUP$parser$stack.peek().right;
+                Object m = CUP$parser$stack.peek().<Object> value();
+                 RESULT = m; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("methods",23, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

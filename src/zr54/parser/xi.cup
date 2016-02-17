@@ -46,7 +46,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-singleUse           ::= USE IDENTIFIER:id       {: RESULT = "(use "+id+")\n"; :}
+singleUse           ::= USE IDENTIFIER:id                                    {: RESULT = "(use "+id+")"; :}
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
@@ -122,14 +122,14 @@ expression          ::= expression operator expression
 expressions         ::= expression
                       | expressions COMMA expression
                       ;
-functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN       {: RESULT = "("+bs+")"; :}
-                      | LENGTH LPAREN IDENTIFIER:id RPAREN               {: RESULT = "length("; :}
+functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN       {: RESULT = "("+id+es+")"; :}
+                      | LENGTH LPAREN IDENTIFIER:id RPAREN               {: RESULT = "( length "+id+")"; :}
                       ;
-program             ::= uses:ss  methods:ms                {: RESULT = "("+ss+")"; :}
+program             ::= uses:us  methods:ms                              {: RESULT = "( ("+us+")\n("+ms+" )\n)"; :}
                       ; 
-uses                ::= uses singleUse
-                      | singleUse
+uses                ::= uses:us singleUse:su                             {: RESULT = us+"\n"+su; :}
+                      | singleUse:su                                     {: RESULT = su; :}
                       ;
-methods             ::= methods method
-                      | method
+methods             ::= methods:ms method:m                              {: RESULT = ms+"\n"+m; :}    
+                      | method:m                                         {: RESULT = m; :}
                       ;
