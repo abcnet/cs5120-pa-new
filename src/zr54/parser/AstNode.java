@@ -8,7 +8,7 @@ public class AstNode {
 	private String value = "";
 	private ArrayList<AstNode> children = new ArrayList<AstNode>();
 	private AstNode parent = null;
-	
+
 	
 	public AstNode() {
 	}

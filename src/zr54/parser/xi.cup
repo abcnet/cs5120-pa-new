@@ -88,8 +88,21 @@ statement           ::= functionCall | assignment | ifStatement | whileStatement
                       | argumentWithType
                       | argumentWithType SEMICOLON 
                       ; 
-operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | GT | LT | AND | OR 
-                      | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
+operator            ::= EQEQ		{: RESULT = new AstNode("EQEQ", "=="); :} 
+					  | GTEQ		{: RESULT = new AstNode("GTEQ", ">="); :} 
+					  | LTEQ		{: RESULT = new AstNode("LTEQ", "<="); :} 
+					  | NOTEQ		{: RESULT = new AstNode("NOTEQ", "!="); :} 
+					  | GT		 	{: RESULT = new AstNode("GT", ">"); :} 
+					  | LT			{: RESULT = new AstNode("LT", "<"); :} 
+					  | AND			{: RESULT = new AstNode("AND", "&"); :} 
+					  | OR 			{: RESULT = new AstNode("OR", "|"); :} 
+                      | MULT 		{: RESULT = new AstNode("MULT", "*"); :} 
+                      | PLUS 		{: RESULT = new AstNode("PLUS", "+"); :} 
+                      | MINUS 		{: RESULT = new AstNode("MINUS", "-"); :} 
+                      | DIV 		{: RESULT = new AstNode("DIV", "/"); :} 
+                      | HIGHMULT 	{: RESULT = new AstNode("HIGHMULT", "*>>"); :} 
+                      | MOD			{: RESULT = new AstNode("MOD", "%"); :} 
+                      ; // incomplete
 
 ifStatement         ::= IF LPAREN expression RPAREN oneOrMorestatements ELSE oneOrMorestatements
                       | IF LPAREN expression RPAREN oneOrMorestatements
@@ -104,26 +117,27 @@ assignment          ::= variable EQ expression
                       //| LPAREN variables COMMA variable RPAREN EQ LPAREN expressions COMMA expression RPAREN
                       //| LPAREN variables COMMA variable RPAREN EQ functionCall
                       ;
-variables           ::= variables COMMA variable
-                      | variable
+variables           ::= variables:vs COMMA variable:v			{: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | variable:v								{: RESULT = new AstNode("variables", "", v); :} 
                       ;
-variable            ::= UNDERSCORE
-                      | IDENTIFIER
-                      | argumentWithType
+variable            ::= UNDERSCORE								{: RESULT = new AstNode("UNDERSCORE", "_"); :}
+                      | IDENTIFIER								{: RESULT = new AstNode("IDENTIFIER", "id"); :}
+                      | argumentWithType:a						{: RESULT = new AstNode("argumentWithType", ""); RESULT.addGrandChildren(a); :}
                       ;
-expression          ::= expression operator expression
-                      | LPAREN expression RPAREN
-                      | argument
-                      | NOT expression 
-                      | MINUS expression
+expression          ::= expression:e1 operator:o expression:e2	{: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | LPAREN expression:e RPAREN				{: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
+                      | argument:a								{: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(a); :}
+                      | NOT expression:e 						{: AstNode n = new AstNode("NOT", "!"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}
+                      | MINUS expression:e						{: AstNode n = new AstNode("MINUS", "-"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}
                       ;
-expressions         ::= expression
-                      | expressions COMMA expression
+expressions         ::= expression:e							{: RESULT = new AstNode("expressions", "", e); :}
+                      | expressions:es COMMA expression:e		{: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
                       ;
-functionCall        ::= IDENTIFIER LPAREN expressions:e RPAREN 	{: RESULT = new AstNode("functionCall", "", new AstNode("id", ""), e); :}
-                      | LENGTH LPAREN IDENTIFIER RPAREN			{: RESULT = new AstNode("functionCall", "", new AstNode("kw", ""), new AstNode("id", "")); :}
+functionCall        ::= IDENTIFIER LPAREN expressions:e RPAREN 	{: RESULT = new AstNode("functionCall", "", new AstNode("IDENTIFIER", ""), e); :}
+                      | LENGTH LPAREN IDENTIFIER RPAREN			{: RESULT = new AstNode("functionCall", "", new AstNode("LENGTH", ""), new AstNode("IDENTIFIER", "")); :}
                       ;
 program             ::= blocks:bs                  	{: RESULT = new AstNode("program", ""); RESULT.addGrandChildren(bs); :}
+                      | IDENTIFIER:id				{: RESULT = new AstNode("program", "", new AstNode("IDENTIFIER", id.toString())); :}
                       ; 
 blocks              ::= blocks:bs block:b			{: RESULT = new AstNode("blocks", ""); RESULT.addGrandChildren(bs); RESULT.addChild(b); :}
                       | block:b                     {: RESULT = new AstNode("blocks", "", b); :}
