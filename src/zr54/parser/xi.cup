@@ -99,8 +99,13 @@ oneOrMorestatements ::= statement
                       | LBRACE multipleStatements RBRACE
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
-assignment          ::= variable EQ expressions
-                      | LPAREN variables RPAREN EQ expressions
+/*assignment          ::= variable EQ LPAREN expressions COMMA expression RPAREN
+                      | LPAREN variables RPAREN EQ LPAREN expressions COMMA expression RPAREN
+                      | variable EQ expression
+                      | LPAREN variables RPAREN EQ functionCall
+                      ;*/ //not resolved
+assignment          ::=variable EQ expression
+
                       ;
 variables           ::= variables COMMA variable
                       | variable
