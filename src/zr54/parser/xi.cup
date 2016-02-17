@@ -6,7 +6,6 @@ import java_cup.runtime.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*; 
 
-
 parser code {:
     // Connect this parser to a scanner!
     //Lexer s;
@@ -22,7 +21,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program, useSpecifier, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions;
+nonterminal AstNode program, useSpecifier, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType, function, multipleStatements, statement, functionCall, blocks, block, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions;
 // Add more nonterminals here...
 
 
@@ -46,7 +45,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-useSpecifier        ::= USE IDENTIFIER:id       {: RESULT = "(use "+id+")\n"; :}
+useSpecifier        ::= USE IDENTIFIER:id       
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
@@ -77,7 +76,7 @@ typesList           ::= typesList COMMA type | type;
 
 
 function            ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    {: RESULT = id; :}
+                          LBRACE multipleStatements RBRACE    
                           ;
 multipleStatements  ::= multipleStatements statement
                       | statement;
@@ -115,20 +114,20 @@ variable            ::= UNDERSCORE
 expression          ::= expression operator expression
                       | LPAREN expression RPAREN
                       | argument
-                      | NOT expression
+                      | NOT expression 
                       | MINUS expression
                       ;
 expressions         ::= expression
                       | expressions COMMA expression
                       ;
-functionCall        ::= IDENTIFIER LPAREN expressions RPAREN
-                      | LENGTH LPAREN IDENTIFIER RPAREN
+functionCall        ::= IDENTIFIER LPAREN expressions:e RPAREN 	{: RESULT = new AstNode("functionCall", "", new AstNode("id", ""), e); :}
+                      | LENGTH LPAREN IDENTIFIER RPAREN			{: RESULT = new AstNode("functionCall", "", new AstNode("kw", ""), new AstNode("id", "")); :}
                       ;
-program             ::= blocks:bs                  {: RESULT = "("+bs+")"; :}
+program             ::= blocks:bs                  	{: RESULT = new AstNode("program", ""); RESULT.addGrandChildren(bs); :}
                       ; 
-blocks              ::= blocks:bs block:b          {: RESULT = bs+"\n"+b; :}
-                      | block:b                     {: RESULT = b; :}
+blocks              ::= blocks:bs block:b			{: RESULT = new AstNode("blocks", ""); RESULT.addGrandChildren(bs); RESULT.addChild(b); :}
+                      | block:b                     {: RESULT = new AstNode("blocks", "", b); :}
                       ;                  
-block               ::= useSpecifier:u             {: RESULT = u; :}
-                      | function:f                {: RESULT = f; :}
+block               ::= useSpecifier:u             	{: RESULT = new AstNode("block", "", u); :}
+                      | function:f                	{: RESULT = new AstNode("block", "", f); :}
                       ;
