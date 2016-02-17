@@ -18,9 +18,9 @@ public class ParsePrint {
       parser p = new parser(printer);
       p.setScanner(new Lexer(new FileReader(arg)));
 //      Integer result = (Integer) p.parse().value;
-      p.parse();
-      System.out.println("asdfasdf");
-      printer.printAtom("asdf");
+      printer.printAtom(p.parse().value());
+//      System.out.println("asdfasdf");
+//      printer.printAtom("asdf");
       printer.flush();
 //      printer.
       

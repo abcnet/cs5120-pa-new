@@ -46,7 +46,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-useSpecifier        ::= USE IDENTIFIER:id       {: printer.printAtom("use "+id+"\n"); :}
+useSpecifier        ::= USE IDENTIFIER:id       {: RESULT = "(use "+id+")\n"; :}
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
@@ -76,8 +76,8 @@ functionReturnType  ::= COLON type
 typesList           ::= typesList COMMA type | type;
 
 
-function            ::= IDENTIFIER LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    {: printer.printAtom("Function"); :}
+function            ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
+                          LBRACE multipleStatements RBRACE    {: RESULT = id; :}
                           ;
 multipleStatements  ::= multipleStatements statement
                       | statement;
@@ -102,8 +102,8 @@ whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements
 
 assignment          ::= variable EQ expression
                       | variable EQ LPAREN expressions COMMA expression RPAREN
-                      //| LPAREN variables RPAREN EQ LPAREN expressions COMMA expression RPAREN
-                      //| LPAREN variables RPAREN EQ functionCall
+                      //| LPAREN variables COMMA variable RPAREN EQ LPAREN expressions COMMA expression RPAREN
+                      //| LPAREN variables COMMA variable RPAREN EQ functionCall
                       ;
 variables           ::= variables COMMA variable
                       | variable
@@ -124,7 +124,11 @@ expressions         ::= expression
 functionCall        ::= IDENTIFIER LPAREN expressions RPAREN
                       | LENGTH LPAREN IDENTIFIER RPAREN
                       ;
-program             ::= blocks; 
-blocks              ::= blocks block
-                      | block;
-block               ::= useSpecifier | function;
+program             ::= blocks:bs                  {: RESULT = "("+bs+")"; :}
+                      ; 
+blocks              ::= blocks:bs block:b          {: RESULT = bs+"\n"+b; :}
+                      | block:b                     {: RESULT = b; :}
+                      ;                  
+block               ::= useSpecifier:u             {: RESULT = u; :}
+                      | function:f                {: RESULT = f; :}
+                      ;

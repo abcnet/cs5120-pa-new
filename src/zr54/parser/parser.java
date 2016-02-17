@@ -440,7 +440,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
                 Object id = CUP$parser$stack.peek().<Object> value();
-                 printer.printAtom("use "+id+"\n"); 
+                 RESULT = "(use "+id+")\n"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("useSpecifier",1, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -656,7 +656,10 @@ class CUP$parser$actions {
         case 25: // function ::= IDENTIFIER LPAREN argumentsWithType RPAREN functionReturnType LBRACE multipleStatements RBRACE 
             {
                 Object RESULT = null;
-                 printer.printAtom("Function"); 
+                int idleft = CUP$parser$stack.elementAt(CUP$parser$top-7).left;
+                int idright = CUP$parser$stack.elementAt(CUP$parser$top-7).right;
+                Object id = CUP$parser$stack.elementAt(CUP$parser$top-7).<Object> value();
+                 RESULT = id; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("function",8, CUP$parser$stack.elementAt(CUP$parser$top-7), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1088,7 +1091,10 @@ class CUP$parser$actions {
         case 73: // program ::= blocks 
             {
                 Object RESULT = null;
-
+                int bsleft = CUP$parser$stack.peek().left;
+                int bsright = CUP$parser$stack.peek().right;
+                Object bs = CUP$parser$stack.peek().<Object> value();
+                 RESULT = "("+bs+")"; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1097,7 +1103,13 @@ class CUP$parser$actions {
         case 74: // blocks ::= blocks block 
             {
                 Object RESULT = null;
-
+                int bsleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int bsright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Object bs = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
+                int bleft = CUP$parser$stack.peek().left;
+                int bright = CUP$parser$stack.peek().right;
+                Object b = CUP$parser$stack.peek().<Object> value();
+                 RESULT = bs+"\n"+b; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("blocks",12, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1106,7 +1118,10 @@ class CUP$parser$actions {
         case 75: // blocks ::= block 
             {
                 Object RESULT = null;
-
+                int bleft = CUP$parser$stack.peek().left;
+                int bright = CUP$parser$stack.peek().right;
+                Object b = CUP$parser$stack.peek().<Object> value();
+                 RESULT = b; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("blocks",12, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1115,7 +1130,10 @@ class CUP$parser$actions {
         case 76: // block ::= useSpecifier 
             {
                 Object RESULT = null;
-
+                int uleft = CUP$parser$stack.peek().left;
+                int uright = CUP$parser$stack.peek().right;
+                Object u = CUP$parser$stack.peek().<Object> value();
+                 RESULT = u; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("block",13, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1124,7 +1142,10 @@ class CUP$parser$actions {
         case 77: // block ::= function 
             {
                 Object RESULT = null;
-
+                int fleft = CUP$parser$stack.peek().left;
+                int fright = CUP$parser$stack.peek().right;
+                Object f = CUP$parser$stack.peek().<Object> value();
+                 RESULT = f; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("block",13, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
