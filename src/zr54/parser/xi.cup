@@ -22,7 +22,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method;
+nonterminal program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon;
 // Add more nonterminals here...
 
 
@@ -51,6 +51,9 @@ singleUse           ::= USE IDENTIFIER:id                                    {: 
 arrayType           ::= INT brackets
                       | BOOL brackets
                       ;
+arrayLiteral        ::= LBRACE expressions RBRACE
+                      ;
+
 brackets            ::= brackets LBRACK RBRACK
                       | LBRACK RBRACK
                       | brackets LBRACK INTEGER_LITERAL RBRACK
@@ -69,10 +72,10 @@ argument            ::= BOOLEAN_LITERAL
                       | STRING_LITERAL
                       | IDENTIFIER
                       | functionCall
+                      | arrayLiteral
                       ;
 
-functionReturnType  ::= COLON type
-                      | COLON LPAREN typesList RPAREN
+functionReturnType  ::= COLON typesList
                       |;
 typesList           ::= typesList COMMA type | type;
 
@@ -82,14 +85,16 @@ method              ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionRe
                           ;
 multipleStatements  ::= multipleStatements statement
                       | statement;
-statement           ::= functionCall | assignment | ifStatement | whileStatement 
-                      | RETURN LPAREN expressions RPAREN
-                      | assignment SEMICOLON 
-                      | RETURN LPAREN expressions RPAREN SEMICOLON
-                      | functionCall SEMICOLON
-                      | argumentWithType
-                      | argumentWithType SEMICOLON 
+statement           ::= functionCall optionalSemicolon
+                      | assignment optionalSemicolon
+                      | ifStatement 
+                      | whileStatement 
+                      | RETURN expressions optionalSemicolon
+                      | argumentWithType optionalSemicolon
                       ; 
+optionalSemicolon   ::= SEMICOLON
+                      | 
+                      ;
 operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | GT | LT | AND | OR 
                       | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
 
@@ -101,10 +106,7 @@ oneOrMorestatements ::= statement
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
 
-assignment          ::= variable EQ expression
-                      | variable EQ LPAREN expressions COMMA expression RPAREN
-                      //| LPAREN variables COMMA variable RPAREN EQ LPAREN expressions COMMA expression RPAREN
-                      //| LPAREN variables COMMA variable RPAREN EQ functionCall
+assignment          ::= variables EQ expression                      
                       ;
 variables           ::= variables COMMA variable
                       | variable
