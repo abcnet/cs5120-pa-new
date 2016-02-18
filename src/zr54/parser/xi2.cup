@@ -45,7 +45,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-useSpecifier        ::= USE IDENTIFIER:id       
+useSpecifier        ::= USE IDENTIFIER:id   		{: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
 arrayType           ::= INT brackets
                       | BOOL brackets
@@ -75,11 +75,12 @@ functionReturnType  ::= COLON type
 typesList           ::= typesList COMMA type | type;
 
 
-function            ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    
+function            ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN functionReturnType:r	
+                          LBRACE multipleStatements:s RBRACE    	{: RESULT = new AstNode("function", id.toString(), a, r); RESULT.addChild(s); :}
                           ;
-multipleStatements  ::= multipleStatements statement
-                      | statement;
+multipleStatements  ::= multipleStatements:ms statement:s			{: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); }
+                      | statement:s												
+                      ;
 statement           ::= functionCall | assignment | ifStatement | whileStatement 
                       | RETURN LPAREN expressions RPAREN
                       | assignment SEMICOLON 
@@ -112,8 +113,7 @@ oneOrMorestatements ::= statement
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
 
-assignment          ::= variable EQ expression
-                      | variable EQ LPAREN expressions COMMA expression RPAREN
+assignment          ::= variable:v EQ expression:e									{: RESULT = new AstNode("assignment", "=", v); RESULT.addChild(v); RESULT.addGrandChildren(e); :}
                       //| LPAREN variables COMMA variable RPAREN EQ LPAREN expressions COMMA expression RPAREN
                       //| LPAREN variables COMMA variable RPAREN EQ functionCall
                       ;
