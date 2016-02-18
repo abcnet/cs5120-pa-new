@@ -17,13 +17,11 @@ public class ParsePrint {
       CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(System.out);
       parser p = new parser(printer);
       p.setScanner(new Lexer(new FileReader(arg)));
+
       System.out.println("parsing");
       AstNode root = p.parse().value();
       System.out.println("printing root");
       System.out.println(root);
-      
-      printer.flush();
-//      printer.
       
 //      System.out.println("Result = " + result);
   }
