@@ -46,7 +46,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-singleUse           ::= USE IDENTIFIER:id                                    {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
+singleUse           ::= USE IDENTIFIER:id                               {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
 arrayType           ::= INT brackets:b									{: RESULT = new AstNode("arrayType", "int"); RESULT.addChild(b); :}
                       | BOOL brackets:b									{: RESULT = new AstNode("arrayType", "bool"); RESULT.addChild(b); :}
@@ -77,7 +77,7 @@ argument            ::= BOOLEAN_LITERAL:bl				{: RESULT = new AstNode("BOOLEAN_L
                       | arrayLiteral:al					{: RESULT = new AstNode("argument", "", al); :}
                       ;
 
-functionReturnType  ::= COLON typesList
+functionReturnType  ::= COLON typesList:tl					{: RESULT = new AstNode("functionReturnType", "", tl); :} 
                       |;
 typesList           ::= typesList:tl COMMA type:t		{: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
 					  | type:t							{: RESULT = new AstNode("typesList", ""); RESULT.addChild(t); :}
@@ -87,14 +87,15 @@ typesList           ::= typesList:tl COMMA type:t		{: RESULT = new AstNode("type
 method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN functionReturnType:r
                           LBRACE multipleStatements:s RBRACE    	{: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
                           ;
-multipleStatements  ::= multipleStatements statement
-                      | statement;
+multipleStatements  ::= multipleStatements:ms statement:s 		{: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); System.out.println("stmts"); :}
+                      | statement:s							{: RESULT = new AstNode("multipleStatements", "", s); :}
+                      ;
 statement           ::= functionCall:f optionalSemicolon:sc		{: RESULT = new AstNode("statement", "", f, sc); :}
                       | assignment:a optionalSemicolon:sc		{: RESULT = new AstNode("statement", "", a, sc); :} 
                       | ifStatement:s 							{: RESULT = new AstNode("statement", "", s); :}		
                       | whileStatement:s						{: RESULT = new AstNode("statement", "", s); :}
                       | RETURN expressions:e optionalSemicolon:sc	{: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); RESULT.addChild(sc); :} 
-                      | argumentWithType:a optionalSemicolon:sc		{: RESULT = new AstNode("statement", "", a, sc); :}
+                      | argumentsWithType:a optionalSemicolon:sc	{: RESULT = new AstNode("statement", "", a, sc); :}
                       ; 
 optionalSemicolon   ::= SEMICOLON	{: RESULT = new AstNode("SEMICOLON", ";"); :}
                       | 
@@ -135,7 +136,7 @@ variable            ::= UNDERSCORE								{: RESULT = new AstNode("UNDERSCORE", 
                       ;
 expression          ::= expression:e1 operator:o expression:e2			{: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
                       | LPAREN expression:e RPAREN						{: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
-                      | argument:a										{: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(a); :}
+                      | argument:a										{: RESULT = new AstNode("expression", ""); RESULT.addChild(a); :}
                       | NOT expression:e								{: AstNode n = new AstNode("NOT", "!"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}						
                       | MINUS expression:e								{: AstNode n = new AstNode("MINUS", "-"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}
                       ;

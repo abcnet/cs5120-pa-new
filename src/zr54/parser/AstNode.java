@@ -63,7 +63,7 @@ public class AstNode {
 	}
 
 	public String toString() {
-		String str = /*"(" + type + ":" +*/ value + "\n";
+		String str = type + ":" + value + "\n";
 
 		for(AstNode child : children) {
 			str += child.toString() + "\n";
