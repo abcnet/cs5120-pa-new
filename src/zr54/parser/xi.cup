@@ -128,6 +128,9 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN       {: RESU
                       | LENGTH LPAREN IDENTIFIER:id RPAREN               {: RESULT = "( length "+id+")"; :}
                       ;
 program             ::= uses:us  methods:ms                              {: RESULT = "( ("+us+")\n("+ms+" )\n)"; :}
+                      | methods:ms  
+                      | uses:us 
+                      |
                       ; 
 uses                ::= uses:us singleUse:su                             {: RESULT = us+"\n"+su; :}
                       | singleUse:su                                     {: RESULT = su; :}
