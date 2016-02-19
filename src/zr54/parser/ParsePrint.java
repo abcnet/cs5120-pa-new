@@ -1,6 +1,6 @@
 package zr54.parser;
 import java.io.*;
-import java.util.Scanner;
+
 import zr54.lexer.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*;

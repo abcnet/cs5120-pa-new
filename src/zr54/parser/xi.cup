@@ -1,7 +1,7 @@
 // A stub for a Xi CUP specification.
 /* Part of code from http://www2.cs.tum.edu/projekte/cup/examples.php */
 package zr54.parser;
-import zr54.lexer.*;
+
 import java_cup.runtime.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*; 
@@ -10,8 +10,8 @@ import polyglot.util.*;
 parser code {:
     // Connect this parser to a scanner!
     //Lexer s;
-    CodeWriterSExpPrinter printer;
-    parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
+    public CodeWriterSExpPrinter printer;
+    public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
 :}
 
 /* define how to connect to the scanner! */
@@ -22,7 +22,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon;
 // Add more nonterminals here...
 
 
@@ -46,45 +46,50 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-singleUse           ::= USE IDENTIFIER:id                                    {: RESULT = "(use "+id+")"; :}
+singleUse           ::= USE IDENTIFIER:id                               {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
-arrayType           ::= INT brackets
-                      | BOOL brackets
+arrayType           ::= INT brackets:b                  {: RESULT = new AstNode("arrayType", "int"); RESULT.addChild(b); :}
+                      | BOOL brackets:b                 {: RESULT = new AstNode("arrayType", "bool"); RESULT.addChild(b); :}
                       ;
-arrayLiteral        ::= LBRACE expressions RBRACE
+arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
-brackets            ::= brackets LBRACK RBRACK
-                      | LBRACK RBRACK
-                      | brackets LBRACK INTEGER_LITERAL RBRACK
-                      | LBRACK INTEGER_LITERAL RBRACK
+brackets            ::= brackets:b LBRACK RBRACK            {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(b); RESULT.addChild(new AstNode("LRBRACK", "[]")); :}
+                      | LBRACK RBRACK                 {: RESULT = new AstNode("brackets", "", new AstNode("LRBRACK", "[]")); :}
+                      | brackets:b LBRACK INTEGER_LITERAL:it RBRACK   {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(b); RESULT.addChild(new AstNode("LRBRACK", "[]", new AstNode("INTEGER_LITERAL", it.toString()))); :}
+                      | LBRACK INTEGER_LITERAL:it RBRACK        {: RESULT = new AstNode("brackets", ""); RESULT.addChild(new AstNode("LRBRACK", "[]", new AstNode("INTEGER_LITERAL", it.toString()))); :}
                       ;
-type                ::= arrayType
-                      | INT
-                      | BOOL
+type                ::= arrayType:a             {: RESULT = new AstNode("arrayType", "", a); :}
+                      | INT                 {: RESULT = new AstNode("INT", "int"); :}
+                      | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
                       ;
-argumentWithType    ::= IDENTIFIER COLON type;
-argumentsWithType   ::= argumentsWithType COMMA argumentWithType
-                      | argumentWithType;
-argument            ::= BOOLEAN_LITERAL
-                      | INTEGER_LITERAL
-                      | CHARACTER_LITERAL
-                      | STRING_LITERAL
-                      | IDENTIFIER
-                      | functionCall
-                      | arrayLiteral
+argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString(), t); :}
+            ; 
+argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
+                      | argumentWithType:a        {: RESULT = new AstNode("argumentsWithType", "", a); :}       
+                      ;
+argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLEAN_LITERAL", bl.toString()); :}
+                      | INTEGER_LITERAL:il        {: RESULT = new AstNode("INTEGER_LITERAL", il.toString()); :}
+                      | CHARACTER_LITERAL:cl      {: RESULT = new AstNode("CHARACTER_LITERAL", cl.toString()); :}
+                      | STRING_LITERAL:sl       {: RESULT = new AstNode("STRING_LITERAL", sl.toString()); :}
+                      | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
+                      | functionCall:fc         {: RESULT = new AstNode("argument", "", fc); :}
+                      | arrayLiteral:al         {: RESULT = new AstNode("argument", "", al); :}
                       ;
 
 functionReturnType  ::= COLON typesList
                       |;
-typesList           ::= typesList COMMA type | type;
+typesList           ::= typesList COMMA type 
+| type
+;
 
 
 method              ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    {: RESULT = id; :}
+                          LBRACE multipleStatements RBRACE    
                           ;
 multipleStatements  ::= multipleStatements statement
-                      | statement;
+                      | statement
+                      ;
 statement           ::= functionCall optionalSemicolon
                       | assignment optionalSemicolon
                       | ifStatement 
@@ -95,8 +100,22 @@ statement           ::= functionCall optionalSemicolon
 optionalSemicolon   ::= SEMICOLON
                       | 
                       ;
+
 operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | GT | LT | AND | OR 
                       | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ifStatement         ::= IF LPAREN expression RPAREN oneOrMorestatements ELSE oneOrMorestatements
                       | IF LPAREN expression RPAREN oneOrMorestatements
@@ -105,6 +124,7 @@ oneOrMorestatements ::= statement
                       | LBRACE multipleStatements RBRACE
                       ;
 whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
+
 
 assignment          ::= variables EQ expression                      
                       ;
@@ -124,17 +144,17 @@ expression          ::= expression operator expression
 expressions         ::= expression
                       | expressions COMMA expression
                       ;
-functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN       {: RESULT = "("+id+es+")"; :}
-                      | LENGTH LPAREN IDENTIFIER:id RPAREN               {: RESULT = "( length "+id+")"; :}
+functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN   {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
+                      | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
-program             ::= uses:us  methods:ms                              {: RESULT = "( ("+us+")\n("+ms+" )\n)"; :}
-                      | methods:ms  
-                      | uses:us 
-                      |
+program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
+                      | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("methods", "")); :}
+                      | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("uses", ""), ms); :}
+                      |                           {: RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); :}
                       ; 
-uses                ::= uses:us singleUse:su                             {: RESULT = us+"\n"+su; :}
-                      | singleUse:su                                     {: RESULT = su; :}
-                      ;
-methods             ::= methods:ms method:m                              {: RESULT = ms+"\n"+m; :}    
-                      | method:m                                         {: RESULT = m; :}
+uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
+                      | singleUse:su                                    {: RESULT = new AstNode("uses", "", su); :}
+                      ; 
+methods             ::= methods:ms method:m               {: RESULT = new AstNode("methods", ""); RESULT.addGrandChildren(ms); RESULT.addChild(m); :} 
+                      | method:m                                        {: RESULT = new AstNode("methods", "", m); :}
                       ;
