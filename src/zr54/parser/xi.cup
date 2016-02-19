@@ -87,7 +87,7 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typ
 method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN functionReturnType:r
                           LBRACE multipleStatements:s RBRACE      {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
                           ;
-multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); System.out.println("stmts"); :}
+multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
                       | statement:s             {: RESULT = new AstNode("multipleStatements", "", s); :}
                       ;
 statement           ::= functionCall:f optionalSemicolon:sc   {: RESULT = new AstNode("statement", "", f, sc); :}

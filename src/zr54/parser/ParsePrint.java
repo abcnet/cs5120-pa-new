@@ -25,12 +25,12 @@ public class ParsePrint {
       parser p = new parser(printer);
       p.setScanner(new Lexer(new FileReader(arg)));
 
-      System.out.println("parsing");
+      System.out.println("Parsing "+arg);
       AstNode root = p.parse().value();
-      System.out.println("printing root");
+      System.out.println("Printing AST");
 //      System.out.println(root);
       root.print(printer);
       printer.flush();
-//      System.out.println("Result = " + result);
+      System.out.println("Parsed AST written to "+fn);
   }
 }
