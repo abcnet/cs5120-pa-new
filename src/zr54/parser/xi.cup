@@ -77,18 +77,18 @@ argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLE
                       | arrayLiteral:al         {: RESULT = new AstNode("argument", "", al); :}
                       ;
 
-functionReturnType  ::= COLON typesList
+functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", "", tl); :} 
                       |;
-typesList           ::= typesList COMMA type 
-| type
-;
+typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
+            | type:t              {: RESULT = new AstNode("typesList", ""); RESULT.addChild(t); :}
+            ;       
 
 
-method              ::= IDENTIFIER:id LPAREN argumentsWithType RPAREN functionReturnType
-                          LBRACE multipleStatements RBRACE    
+method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN functionReturnType:r
+                          LBRACE multipleStatements:s RBRACE      {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
                           ;
-multipleStatements  ::= multipleStatements statement
-                      | statement
+multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); System.out.println("stmts"); :}
+                      | statement:s             {: RESULT = new AstNode("multipleStatements", "", s); :}
                       ;
 statement           ::= functionCall optionalSemicolon
                       | assignment optionalSemicolon

@@ -701,7 +701,10 @@ class CUP$parser$actions {
         case 22: // functionReturnType ::= COLON typesList 
             {
                 AstNode RESULT = null;
-
+                int tlleft = CUP$parser$stack.peek().left;
+                int tlright = CUP$parser$stack.peek().right;
+                AstNode tl = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("functionReturnType", "", tl); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionReturnType",8, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -719,7 +722,13 @@ class CUP$parser$actions {
         case 24: // typesList ::= typesList COMMA type 
             {
                 AstNode RESULT = null;
-
+                int tlleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int tlright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                AstNode tl = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
+                int tleft = CUP$parser$stack.peek().left;
+                int tright = CUP$parser$stack.peek().right;
+                AstNode t = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("typesList",12, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -728,7 +737,10 @@ class CUP$parser$actions {
         case 25: // typesList ::= type 
             {
                 AstNode RESULT = null;
-
+                int tleft = CUP$parser$stack.peek().left;
+                int tright = CUP$parser$stack.peek().right;
+                AstNode t = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("typesList", ""); RESULT.addChild(t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("typesList",12, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -740,7 +752,16 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-7).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-7).right;
                 Object id = CUP$parser$stack.elementAt(CUP$parser$top-7).<Object> value();
-
+                int aleft = CUP$parser$stack.elementAt(CUP$parser$top-5).left;
+                int aright = CUP$parser$stack.elementAt(CUP$parser$top-5).right;
+                AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-5).<AstNode> value();
+                int rleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int rright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                AstNode r = CUP$parser$stack.elementAt(CUP$parser$top-3).<AstNode> value();
+                int sleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int sright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                AstNode s = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
+                 RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",24, CUP$parser$stack.elementAt(CUP$parser$top-7), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -749,7 +770,13 @@ class CUP$parser$actions {
         case 27: // multipleStatements ::= multipleStatements statement 
             {
                 AstNode RESULT = null;
-
+                int msleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int msright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                AstNode ms = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
+                int sleft = CUP$parser$stack.peek().left;
+                int sright = CUP$parser$stack.peek().right;
+                AstNode s = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); System.out.println("stmts"); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("multipleStatements",9, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -758,7 +785,10 @@ class CUP$parser$actions {
         case 28: // multipleStatements ::= statement 
             {
                 AstNode RESULT = null;
-
+                int sleft = CUP$parser$stack.peek().left;
+                int sright = CUP$parser$stack.peek().right;
+                AstNode s = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("multipleStatements", "", s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("multipleStatements",9, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
