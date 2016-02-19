@@ -5,7 +5,7 @@ import java.io.*;
 import zr54.parser.*;
 public class XiLexer {
 
-  public static void main(String argv[]) {
+  public static void mainold(String argv[]) {
 	 if (argv.length==0){
 		 System.out.println("Command arguments required. See ' --help'.");
 	 }else if (argv[0].equals("--help")){
