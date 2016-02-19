@@ -90,61 +90,61 @@ method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN function
 multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); System.out.println("stmts"); :}
                       | statement:s             {: RESULT = new AstNode("multipleStatements", "", s); :}
                       ;
-statement           ::= functionCall optionalSemicolon
-                      | assignment optionalSemicolon
-                      | ifStatement 
-                      | whileStatement 
-                      | RETURN expressions optionalSemicolon
-                      | argumentWithType optionalSemicolon
+statement           ::= functionCall:f optionalSemicolon:sc   {: RESULT = new AstNode("statement", "", f, sc); :}
+                      | assignment:a optionalSemicolon:sc   {: RESULT = new AstNode("statement", "", a, sc); :} 
+                      | ifStatement:s               {: RESULT = new AstNode("statement", "", s); :}   
+                      | whileStatement:s            {: RESULT = new AstNode("statement", "", s); :}
+                      | RETURN expressions:e optionalSemicolon:sc {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); RESULT.addChild(sc); :} 
+                      | argumentWithType:a optionalSemicolon:sc  {: RESULT = new AstNode("statement", "", a, sc); :}
                       ; 
-optionalSemicolon   ::= SEMICOLON
+optionalSemicolon   ::= SEMICOLON {: RESULT = new AstNode("SEMICOLON", ";"); :}
                       | 
                       ;
 
-operator            ::= EQEQ | GTEQ | LTEQ | NOTEQ | GT | LT | AND | OR 
-                      | MULT | PLUS | MINUS | DIV | HIGHMULT | MOD; // incomplete
+operator            ::= EQEQ    {: RESULT = new AstNode("EQEQ", "=="); :} 
+            | GTEQ    {: RESULT = new AstNode("GTEQ", ">="); :} 
+            | LTEQ    {: RESULT = new AstNode("LTEQ", "<="); :} 
+            | NOTEQ   {: RESULT = new AstNode("NOTEQ", "!="); :} 
+            | GT      {: RESULT = new AstNode("GT", ">"); :} 
+            | LT      {: RESULT = new AstNode("LT", "<"); :} 
+            | AND     {: RESULT = new AstNode("AND", "&"); :} 
+            | OR      {: RESULT = new AstNode("OR", "|"); :} 
+                      | MULT    {: RESULT = new AstNode("MULT", "*"); :} 
+                      | PLUS    {: RESULT = new AstNode("PLUS", "+"); :} 
+                      | MINUS     {: RESULT = new AstNode("MINUS", "-"); :} 
+                      | DIV     {: RESULT = new AstNode("DIV", "/"); :} 
+                      | HIGHMULT  {: RESULT = new AstNode("HIGHMULT", "*>>"); :} 
+                      | MOD     {: RESULT = new AstNode("MOD", "%"); :} 
+                      ; // incomplete
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-ifStatement         ::= IF LPAREN expression RPAREN oneOrMorestatements ELSE oneOrMorestatements
-                      | IF LPAREN expression RPAREN oneOrMorestatements
+ifStatement         ::= IF LPAREN expression:e RPAREN oneOrMorestatements:s1 ELSE oneOrMorestatements:s2  {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s1); RESULT.addGrandChildren(s2); :}
+                      | IF LPAREN expression:e RPAREN oneOrMorestatements:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); :}
                       ;
-oneOrMorestatements ::= statement
-                      | LBRACE multipleStatements RBRACE
+oneOrMorestatements ::= statement:s                   {: RESULT = new AstNode("oneOrMorestatements", ""); RESULT.addChild(s); :}
+                      | LBRACE multipleStatements:ms RBRACE       {: RESULT = new AstNode("oneOrMoreStatements", ""); RESULT.addGrandChildren(ms); :}
                       ;
-whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE;
+whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE   {: RESULT = new AstNode("whileStatment", ""); :}
+            ;
 
-
-assignment          ::= variables EQ expression                      
+assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v); RESULT.addChild(v); RESULT.addGrandChildren(e); :}
                       ;
-variables           ::= variables COMMA variable
-                      | variable
+variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | variable:v                {: RESULT = new AstNode("variables", "", v); :} 
                       ;
-variable            ::= UNDERSCORE
-                      | IDENTIFIER
-                      | argumentWithType
+variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
+                      | IDENTIFIER                {: RESULT = new AstNode("IDENTIFIER", "id"); :}
+                      | argumentWithType:a            {: RESULT = new AstNode("argumentWithType", ""); RESULT.addGrandChildren(a); :}
                       ;
-expression          ::= expression operator expression
-                      | LPAREN expression RPAREN
-                      | argument
-                      | NOT expression
-                      | MINUS expression
+expression          ::= expression:e1 operator:o expression:e2      {: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
+                      | argument:a                    {: RESULT = new AstNode("expression", ""); RESULT.addChild(a); :}
+                      | NOT expression:e                {: AstNode n = new AstNode("NOT", "!"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}            
+                      | MINUS expression:e                {: AstNode n = new AstNode("MINUS", "-"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}
                       ;
-expressions         ::= expression
-                      | expressions COMMA expression
+expressions         ::= expression:e                  {: RESULT = new AstNode("expressions", "", e); :} 
+                      | expressions:es COMMA expression:e       {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
                       ;
-functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN   {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
+functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
                       | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
 program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
