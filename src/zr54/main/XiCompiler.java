@@ -8,7 +8,7 @@ import zr54.lexer.*;
 import zr54.parser.*;
 
 class XiCompiler {
-    public static void main(String[] argv) {
+    public static void main(String[] argv) throws Exception {
         int c;
         String arg;
         LongOpt[] longopts = new LongOpt[4];
