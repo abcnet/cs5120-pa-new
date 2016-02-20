@@ -301,7 +301,7 @@ public class Lexer implements java_cup.runtime.Scanner {
   private int zzEndRead;
 
   /** number of newlines encountered up to the start of the matched text */
-  private int yyline;
+  public int yyline;
 
   /** the number of characters up to the start of the matched text */
   private int yychar;
@@ -310,7 +310,7 @@ public class Lexer implements java_cup.runtime.Scanner {
    * the number of characters from the last newline up to the start of the 
    * matched text
    */
-  private int yycolumn;
+  public int yycolumn;
 
   /** 
    * zzAtBOL == true <=> the scanner is currently at the beginning of a line

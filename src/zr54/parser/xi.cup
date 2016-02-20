@@ -5,7 +5,8 @@ package zr54.parser;
 import java_cup.runtime.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*; 
-
+import zr54.lexer.*;
+import zr54.parser.*;
 
 parser code {:
     // Connect this parser to a scanner!
@@ -164,7 +165,7 @@ program             ::= uses:us  methods:ms                             {: RESUL
                       | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("methods", "")); :}
                       | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("uses", ""), ms); :}
                       |                           {: RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); :}
-                      | error
+                      | error   {: Lexer l = (Lexer)getScanner(); int line = l.yyline+1; int column = l.yycolumn+1; l.yypushback(-5); RESULT = new AstNode("error", new Token( l.yyline,l.yycolumn,l.yytext())); :}
                       ; 
 uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
                       | singleUse:su                                    {: RESULT = new AstNode("uses", "", su); :}

@@ -26,18 +26,19 @@ public class ParsePrint {
       File f = new File(srcFile);
       if (f.exists()) {
           parser p = new parser(printer);
-          p.setScanner(new Lexer(new FileReader(srcFile)));
+          Lexer l = new Lexer(new FileReader(srcFile));
+          p.setScanner(l);
 
           System.out.println("Parsing "+srcFile);
-          Symbol s = new Symbol(0);
+          Symbol s;
           try{
         	  s = p.parse();
         	  AstNode root = s.value();
         	  root.print(printer);
           }catch(Exception e){
-        	  
-        	  printer.printAtom(Integer.toString(s.left)+":"
-        	  +Integer.toString(s.right)+" error:Unexpected token "+s.value);
+        	  s = l.next_token();
+        	  System.out.println(Integer.toString(s.left)+":"
+        	  +Integer.toString(s.right)+" error in pp:Unexpected token "+s.value);
         	  
           }
           

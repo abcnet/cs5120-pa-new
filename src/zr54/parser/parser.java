@@ -8,6 +8,8 @@ package zr54.parser;
 import java_cup.runtime.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*;
+import zr54.lexer.*;
+import zr54.parser.*;
 
 /** CUP v0.11b 20150326 generated parser.
   */
@@ -1462,7 +1464,7 @@ class CUP$parser$actions {
         case 83: // program ::= error 
             {
                 AstNode RESULT = null;
-
+                 Lexer l = (Lexer)getScanner(); int line = l.yyline+1; int column = l.yycolumn+1; l.yypushback(-5); RESULT = new AstNode("error", new Token( l.yyline,l.yycolumn,l.yytext())); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

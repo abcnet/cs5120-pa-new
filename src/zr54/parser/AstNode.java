@@ -3,13 +3,15 @@ package zr54.parser;
 import java.io.*;
 import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.*;
-
+import java_cup.runtime.Symbol;
+import zr54.parser.*;
 public class AstNode {
 
 	private String type = "";
 	private String value = "";
 	private ArrayList<AstNode> children = new ArrayList<AstNode>();
 	private AstNode parent = null;
+	public Token to=null;
 
 	public AstNode() {
 	}
@@ -30,6 +32,11 @@ public class AstNode {
 		value = v;
 		addChild(child1);
 		addChild(child2);
+	}
+	
+	public AstNode(String t, Token to){
+		this.type = t;
+		this.to = to;
 	}
 
 	public void setParent(AstNode p) {
@@ -53,9 +60,14 @@ public class AstNode {
 	}
 
 	void print(CodeWriterSExpPrinter printer) {
-		if(this.children.size()>0){
-			System.out.println(">0");
-			System.out.println(type + ": " + value);
+		if (type.equals("error")){
+			String msg = Integer.toString(to.line)+":"
+		        	  +Integer.toString(to.column)+" error in ast:Unexpected token "+to.s;
+			printer.printAtom(msg);
+			System.out.println(msg);
+		}else if(this.children.size()>0){
+//			System.out.println(">0");
+//			System.out.println(type + ": " + value);
 			printer.startList();
 //			System.out.print("(");
 			printer.printAtom(value);
@@ -65,7 +77,7 @@ public class AstNode {
 	        }
 	        printer.endList();
 		}else{
-			System.out.println("=0");
+//			System.out.println("=0");
 //			printer.startList();
 //			System.out.print("(");
 			printer.printAtom(value);
