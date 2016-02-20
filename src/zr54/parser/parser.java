@@ -1224,7 +1224,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.peek().left;
                 int aright = CUP$parser$stack.peek().right;
                 AstNode a = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("argumentWithType", ""); RESULT.addGrandChildren(a); 
+                 RESULT = new AstNode("argumentWithType", ""); RESULT.addChild(a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",21, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
