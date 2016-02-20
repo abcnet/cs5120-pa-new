@@ -55,6 +55,7 @@ public class AstNode {
 	void print(CodeWriterSExpPrinter printer) {
 		if(this.children.size()>0){
 			System.out.println(">0");
+			System.out.println(type + ": " + value);
 			printer.startList();
 //			System.out.print("(");
 			printer.printAtom(value);
