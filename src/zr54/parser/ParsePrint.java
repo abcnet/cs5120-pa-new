@@ -12,25 +12,25 @@ public class ParsePrint {
 //        Integer result = (Integer) p.parse().value;
 //        System.out.println("Result = " + result);
 //    }
-	public static void parseAndPrint(String arg) throws Exception {
+	public static void parseAndPrint(String srcFile, String dstFile) throws Exception {
 //	  OptimalCodeWriter writer = new OptimalCodeWriter(System.out, 76);
-		String fn=arg.substring(0, arg.length()-3)+".parsed";
+
 //		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fn)));
-		FileOutputStream fs = new FileOutputStream(fn);
+		FileOutputStream fs = new FileOutputStream(dstFile);
       CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 //      printer.startList();
 //      printer.endList();
       
 //      printer.printAtom("atom");
       parser p = new parser(printer);
-      p.setScanner(new Lexer(new FileReader(arg)));
+      p.setScanner(new Lexer(new FileReader(srcFile)));
 
-      System.out.println("Parsing "+arg);
+      System.out.println("Parsing "+srcFile);
       AstNode root = p.parse().value();
       System.out.println("Printing AST");
 //      System.out.println(root);
       root.print(printer);
       printer.flush();
-      System.out.println("Parsed AST written to "+fn);
+      System.out.println("Parsed AST written to "+dstFile);
   }
 }

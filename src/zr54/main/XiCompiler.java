@@ -77,7 +77,7 @@ class XiCompiler {
                 //System.out.println(src + " " + dst);
             } else if (op == "parse") {
                 dst = dst + ".parsed";
-                //ParsePrint.parseAndPrint(src, dst);
+                ParsePrint.parseAndPrint(src, dst);
                 System.out.println(src + " " + dst);
             }
         }
