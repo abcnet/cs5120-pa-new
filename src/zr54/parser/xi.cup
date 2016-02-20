@@ -22,7 +22,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices;
 // Add more nonterminals here...
 
 
@@ -56,8 +56,8 @@ arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new As
 
 brackets            ::= brackets:b LBRACK RBRACK            {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(b); RESULT.addChild(new AstNode("LRBRACK", "[]")); :}
                       | LBRACK RBRACK                 {: RESULT = new AstNode("brackets", "", new AstNode("LRBRACK", "[]")); :}
-                      | brackets:b LBRACK INTEGER_LITERAL:it RBRACK   {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(b); RESULT.addChild(new AstNode("LRBRACK", "[]", new AstNode("INTEGER_LITERAL", it.toString()))); :}
-                      | LBRACK INTEGER_LITERAL:it RBRACK        {: RESULT = new AstNode("brackets", ""); RESULT.addChild(new AstNode("LRBRACK", "[]", new AstNode("INTEGER_LITERAL", it.toString()))); :}
+                      | brackets:b LBRACK argument:a RBRACK   {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(b); RESULT.addChild(new AstNode("LRBRACK", "[]", a)); :}
+                      | LBRACK argument:a RBRACK        {: RESULT = new AstNode("brackets", ""); RESULT.addChild(new AstNode("LRBRACK", "[]", a)); :}
                       ;
 type                ::= arrayType:a             {: RESULT = new AstNode("arrayType", "", a); :}
                       | INT                 {: RESULT = new AstNode("INT", "int"); :}
@@ -75,8 +75,11 @@ argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLE
                       | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
                       | functionCall:fc         {: RESULT = new AstNode("argument", "", fc); :}
                       | arrayLiteral:al         {: RESULT = new AstNode("argument", "", al); :}
+                      | arrayIndices:ai         {: RESULT = new AstNode("argument", "", ai); :}
                       ;
-
+arrayIndices        ::= IDENTIFIER:id LBRACK argument:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString()), a); :}
+                      | arrayIndices:ai LBRACK argument:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", ai, a); :}
+                      ;
 functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", "", tl); :} 
                       |;
 typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
