@@ -93,14 +93,14 @@ method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN function
 multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
                       | statement:s             {: RESULT = new AstNode("multipleStatements", "", s); :}
                       ;
-statement           ::= functionCall:f optionalSemicolon:sc   {: RESULT = new AstNode("statement", "", f, sc); :}
-                      | assignment:a optionalSemicolon:sc   {: RESULT = new AstNode("statement", "", a, sc); :} 
+statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNode("statement", "", f); :}
+                      | assignment:a optionalSemicolon   {: RESULT = new AstNode("statement", "", a); :} 
                       | ifStatement:s               {: RESULT = new AstNode("statement", "", s); :}   
                       | whileStatement:s            {: RESULT = new AstNode("statement", "", s); :}
-                      | RETURN expressions:e optionalSemicolon:sc {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); RESULT.addChild(sc); :} 
-                      | argumentWithType:a optionalSemicolon:sc  {: RESULT = new AstNode("statement", "", a, sc); :}
+                      | RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
+                      | argumentWithType:a optionalSemicolon  {: RESULT = new AstNode("statement", "", a); :}
                       ; 
-optionalSemicolon   ::= SEMICOLON {: RESULT = new AstNode("SEMICOLON", ";"); :}
+optionalSemicolon   ::= SEMICOLON 
                       | 
                       ;
 
