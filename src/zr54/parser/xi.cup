@@ -165,7 +165,7 @@ program             ::= uses:us  methods:ms                             {: RESUL
                       | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("methods", "")); :}
                       | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("uses", ""), ms); :}
                       |                           {: RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); :}
-                      | error   {: Lexer l = (Lexer)getScanner(); int line = l.yyline+1; int column = l.yycolumn+1; l.yypushback(-5); RESULT = new AstNode("error", new Token( l.yyline,l.yycolumn,l.yytext())); :}
+                      | error:e   {: Lexer l = (Lexer)getScanner(); int line = l.getLine(); int column = l.getColumn(); RESULT = new AstNode("error", new Token( line,column,l.yytext())); :}
                       ; 
 uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
                       | singleUse:su                                    {: RESULT = new AstNode("uses", "", su); :}

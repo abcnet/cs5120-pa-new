@@ -1464,7 +1464,10 @@ class CUP$parser$actions {
         case 83: // program ::= error 
             {
                 AstNode RESULT = null;
-                 Lexer l = (Lexer)getScanner(); int line = l.yyline+1; int column = l.yycolumn+1; l.yypushback(-5); RESULT = new AstNode("error", new Token( l.yyline,l.yycolumn,l.yytext())); 
+                int eleft = CUP$parser$stack.peek().left;
+                int eright = CUP$parser$stack.peek().right;
+                Object e = CUP$parser$stack.peek().<Object> value();
+                 Lexer l = (Lexer)getScanner(); int line = l.getLine(); int column = l.getColumn(); RESULT = new AstNode("error", new Token( line,column,l.yytext())); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

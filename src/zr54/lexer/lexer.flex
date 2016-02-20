@@ -32,6 +32,13 @@ import java.io.*;
   private Symbol symbol(int type, Object value, int spec_line, int spec_column) {
     return new Symbol(type, spec_line+1, spec_column+1, value);
   }
+
+  public int getLine(){
+    return yyline;
+  }
+  public int getColumn(){
+    return yycolumn;
+  }
   
   private char unicodeChar() {
     int r = 0;
