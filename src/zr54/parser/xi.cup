@@ -133,7 +133,7 @@ ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statemen
                       | IF LPAREN expression:e RPAREN statement:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); :}
                       ;
 
-whileStatement      ::= WHILE LPAREN expression:e RPAREN block:b  {: RESULT = new AstNode("whileStatment", "", e, b); :}
+whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", "", e, s); :}
             ;
 
 assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v); RESULT.addChild(v); RESULT.addGrandChildren(e); :}
