@@ -23,7 +23,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
 // Add more nonterminals here...
 
 
@@ -88,8 +88,7 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typ
             ;       
 
 
-method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r
-                          block:s      {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
+method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); RESULT.addChild(re); :}
                     
                       ;
 optionalStatements  ::= statements:s {: RESULT = s; :}
@@ -105,10 +104,13 @@ statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNo
                       | assignment:a optionalSemicolon   {: RESULT = new AstNode("statement", "", a); :} 
                       | ifStatement:s               {: RESULT = new AstNode("statement", "", s); :}   
                       | whileStatement:s            {: RESULT = new AstNode("statement", "", s); :}
-                      | RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
+                      //| RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
                       | argumentWithType:a optionalSemicolon  {: RESULT = new AstNode("statement", "", a); :}
                       | block: b  {: RESULT = b; :}
                       ; 
+optionalReturn      ::= RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
+                      | 
+                      ;                
 optionalSemicolon   ::= SEMICOLON 
                       | 
                       ;
