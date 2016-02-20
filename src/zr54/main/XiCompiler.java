@@ -74,11 +74,9 @@ class XiCompiler {
             if (op == "lex") {
                 dst = dst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, dst);
-                //System.out.println(src + " " + dst);
             } else if (op == "parse") {
                 dst = dst + ".parsed";
                 ParsePrint.parseAndPrint(src, dst);
-                System.out.println(src + " " + dst);
             }
         }
     }

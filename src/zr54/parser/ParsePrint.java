@@ -22,15 +22,20 @@ public class ParsePrint {
 //      printer.endList();
       
 //      printer.printAtom("atom");
-      parser p = new parser(printer);
-      p.setScanner(new Lexer(new FileReader(srcFile)));
+      File f = new File(srcFile);
+      if (f.exists()) {
+          parser p = new parser(printer);
+          p.setScanner(new Lexer(new FileReader(srcFile)));
 
-      System.out.println("Parsing "+srcFile);
-      AstNode root = p.parse().value();
-      System.out.println("Printing AST");
-//      System.out.println(root);
-      root.print(printer);
-      printer.flush();
-      System.out.println("Parsed AST written to "+dstFile);
+          System.out.println("Parsing "+srcFile);
+          AstNode root = p.parse().value();
+          System.out.println("Printing AST");
+    //      System.out.println(root);
+          root.print(printer);
+          printer.flush();
+          System.out.println("Parsed AST written to "+dstFile);
+      } else {
+        System.out.println("error: '" + srcFile + "' does not exist");
+      }
   }
 }
