@@ -3,6 +3,7 @@ import java.io.*;
 
 import zr54.lexer.*;
 import edu.cornell.cs.cs4120.util.*;
+import java_cup.runtime.Symbol;
 import polyglot.util.*;
 
 public class ParsePrint {
@@ -28,10 +29,21 @@ public class ParsePrint {
           p.setScanner(new Lexer(new FileReader(srcFile)));
 
           System.out.println("Parsing "+srcFile);
-          AstNode root = p.parse().value();
+          Symbol s = new Symbol(0);
+          try{
+        	  s = p.parse();
+        	  AstNode root = s.value();
+        	  root.print(printer);
+          }catch(Exception e){
+        	  
+        	  printer.printAtom(Integer.toString(s.left)+":"
+        	  +Integer.toString(s.right)+" error:Unexpected token "+s.value);
+        	  
+          }
+          
           System.out.println("Printing AST");
     //      System.out.println(root);
-          root.print(printer);
+         
           printer.flush();
           System.out.println("Parsed AST written to "+dstFile);
       } else {

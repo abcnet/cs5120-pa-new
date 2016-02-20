@@ -15,5 +15,5 @@ echo "Start processing xi.cup"
 "${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/parser/ "${DIR}"/zr54/parser/xi.cup
 echo "Done processing xi.cup"
 echo "Start compiling .java files"
-javac -cp ${DIR}:${DIR}/../lib/java_cup.jar:${DIR}/../lib/java-getopt-1.0.14.jar "${DIR}"/zr54/*/*.java 
+javac -cp "${DIR}":"${DIR}"/../lib/java_cup.jar:"${DIR}"/../lib/java-getopt-1.0.14.jar "${DIR}"/zr54/*/*.java 
 echo "Done compiling .java files"

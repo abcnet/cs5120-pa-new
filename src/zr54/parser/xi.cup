@@ -12,6 +12,7 @@ parser code {:
     //Lexer s;
     public CodeWriterSExpPrinter printer;
     public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
+
 :}
 
 /* define how to connect to the scanner! */
@@ -22,7 +23,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, argument, functionReturnType , multipleStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices;
 // Add more nonterminals here...
 
 
@@ -87,11 +88,18 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typ
             ;       
 
 
-method              ::= IDENTIFIER:id LPAREN argumentsWithType:a RPAREN functionReturnType:r
-                          LBRACE multipleStatements:s RBRACE      {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
-                          ;
-multipleStatements  ::= multipleStatements:ms statement:s     {: RESULT = new AstNode("multipleStatements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
-                      | statement:s             {: RESULT = new AstNode("multipleStatements", "", s); :}
+method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r
+                          LBRACE optionalStatements:s RBRACE      {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(s); :}
+                    
+                      ;
+optionalStatements  ::= statements:s {: RESULT = s; :}
+                      |
+                      ;
+optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
+                      |
+                      ;                     
+statements  ::= statements:ms statement:s     {: RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
+                      | statement:s             {: RESULT = new AstNode("statements", "", s); :}
                       ;
 statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNode("statement", "", f); :}
                       | assignment:a optionalSemicolon   {: RESULT = new AstNode("statement", "", a); :} 
@@ -124,9 +132,9 @@ ifStatement         ::= IF LPAREN expression:e RPAREN oneOrMorestatements:s1 ELS
                       | IF LPAREN expression:e RPAREN oneOrMorestatements:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); :}
                       ;
 oneOrMorestatements ::= statement:s                   {: RESULT = new AstNode("oneOrMorestatements", ""); RESULT.addChild(s); :}
-                      | LBRACE multipleStatements:ms RBRACE       {: RESULT = new AstNode("oneOrMoreStatements", ""); RESULT.addGrandChildren(ms); :}
+                      | LBRACE statements:ms RBRACE       {: RESULT = new AstNode("oneOrMoreStatements", ""); RESULT.addGrandChildren(ms); :}
                       ;
-whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE multipleStatements RBRACE   {: RESULT = new AstNode("whileStatment", ""); :}
+whileStatement      ::= WHILE LPAREN expression RPAREN LBRACE statements RBRACE   {: RESULT = new AstNode("whileStatment", ""); :}
             ;
 
 assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v); RESULT.addChild(v); RESULT.addGrandChildren(e); :}
@@ -154,6 +162,7 @@ program             ::= uses:us  methods:ms                             {: RESUL
                       | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("methods", "")); :}
                       | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("uses", ""), ms); :}
                       |                           {: RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); :}
+                      | error
                       ; 
 uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
                       | singleUse:su                                    {: RESULT = new AstNode("uses", "", su); :}
