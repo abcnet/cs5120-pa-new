@@ -1,6 +1,6 @@
 package zr54.parser;
 import java.io.*;
-import java.util.Scanner;
+
 import zr54.lexer.*;
 import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*;
@@ -14,15 +14,23 @@ public class ParsePrint {
 //    }
 	public static void parseAndPrint(String arg) throws Exception {
 //	  OptimalCodeWriter writer = new OptimalCodeWriter(System.out, 76);
-      CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(System.out);
+		String fn=arg.substring(0, arg.length()-3)+".parsed";
+//		BufferedWriter bw = new BufferedWriter(new FileWriter(new File(fn)));
+		FileOutputStream fs = new FileOutputStream(fn);
+      CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
+//      printer.startList();
+//      printer.endList();
+      
+//      printer.printAtom("atom");
       parser p = new parser(printer);
       p.setScanner(new Lexer(new FileReader(arg)));
 
-      System.out.println("parsing");
+      System.out.println("Parsing "+arg);
       AstNode root = p.parse().value();
-      System.out.println("printing root");
-      System.out.println(root);
-      
-//      System.out.println("Result = " + result);
+      System.out.println("Printing AST");
+//      System.out.println(root);
+      root.print(printer);
+      printer.flush();
+      System.out.println("Parsed AST written to "+fn);
   }
 }

@@ -52,14 +52,30 @@ public class AstNode {
 		}
 	}
 
-	void print(OutputStream output) {
-        CodeWriterSExpPrinter sExpPrinter = new CodeWriterSExpPrinter(output);
-        sExpPrinter.startList();
-        sExpPrinter.printAtom(value);
-        for (int i = 0; i < this.children.size(); i++) {
-            this.children.get(i).print(output);
-        }
-        sExpPrinter.endList();
+	void print(CodeWriterSExpPrinter printer) {
+		if(this.children.size()>0){
+			System.out.println(">0");
+			printer.startList();
+//			System.out.print("(");
+			printer.printAtom(value);
+//			System.out.print(value);
+	        for (int i = 0; i < this.children.size(); i++) {
+	            this.children.get(i).print(printer);
+	        }
+	        printer.endList();
+		}else{
+			System.out.println("=0");
+//			printer.startList();
+//			System.out.print("(");
+			printer.printAtom(value);
+//			System.out.print(value);
+	        for (int i = 0; i < this.children.size(); i++) {
+	            this.children.get(i).print(printer);
+	        }
+//	        printer.endList();
+		}
+		
+//        System.out.println(")");
 	}
 
 	public String toString() {
