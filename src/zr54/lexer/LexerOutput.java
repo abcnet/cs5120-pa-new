@@ -1,8 +1,11 @@
 package zr54.lexer;
 
 import java.io.*;
+
 import zr54.parser.sym;
+
 import java.util.*;
+
 import java_cup.runtime.Symbol;
 
 public class LexerOutput {
@@ -15,7 +18,7 @@ public class LexerOutput {
 		terminalName.put(sym.UNDERSCORE,"_");
 		    terminalName.put(sym.LENGTH,"length");
 		    terminalName.put(sym.LT,"<");
-		    terminalName.put(sym.INTEGER_LITERAL,"int");
+		    terminalName.put(sym.INTEGER_LITERAL,"integer");
 		    terminalName.put(sym.error,"error");
 		    terminalName.put(sym.INT,"int");
 		    terminalName.put(sym.MINUS,"-");
@@ -41,9 +44,9 @@ public class LexerOutput {
 		    terminalName.put(sym.GT,">");
 		    terminalName.put(sym.NOTEQ,"!=");
 		    terminalName.put(sym.DIV,"/");
-		    terminalName.put(sym.RBRACK,"{");
+		    terminalName.put(sym.RBRACK,"]");
 		    terminalName.put(sym.NOT,"!");
-		    terminalName.put(sym.RBRACE,"]");
+		    terminalName.put(sym.RBRACE,"}");
 		    terminalName.put(sym.LBRACK,"[");
 		    terminalName.put(sym.BOOL,"bool");
 		    terminalName.put(sym.AND,"&");
@@ -74,23 +77,17 @@ public class LexerOutput {
         System.out.println("Lexing file: " + inFile + "  " + "Output file: " + outFile);
         while (true) {
             Symbol tok = L.next_token();
-            String type = "";
-
-            if (tok.sym == sym.IDENTIFIER) {
-                type = "id ";
-            } else if (tok.sym == sym.CHARACTER_LITERAL) {
-                type = "character ";
-            } else if (tok.sym == sym.INTEGER_LITERAL) {
-                type = "integer ";
-            } else if (tok.sym == sym.STRING_LITERAL) {
-            	type = "string ";
-        	} else if (tok.sym == sym.error) {
-        		type = "error:";
-        	}
-            else if (tok.sym == sym.EOF) {
-                break;
-            }
+	        String errorMessage = L.getErrorMessage();
+	        
+	        if(errorMessage != null) {
+	        	writer.write(errorMessage);
+	        	writer.close();
+	        	break;
+	        }
             
+	        if(tok.sym == sym.EOF)
+	        	break;
+	        
             String str = tok.left + ":" + tok.right + " " + terminalName.get(tok.sym); 
             
             if(tok.value != null)
@@ -100,8 +97,6 @@ public class LexerOutput {
                  
             writer.write(str);
             
-            if(tok.sym == sym.error)
-            	break;
         }
         writer.close();
 	}
