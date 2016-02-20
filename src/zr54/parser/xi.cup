@@ -23,7 +23,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, oneOrMorestatements, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block;
 // Add more nonterminals here...
 
 
@@ -107,6 +107,7 @@ statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNo
                       | whileStatement:s            {: RESULT = new AstNode("statement", "", s); :}
                       | RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
                       | argumentWithType:a optionalSemicolon  {: RESULT = new AstNode("statement", "", a); :}
+                      | block: b  {: RESULT = b; :}
                       ; 
 optionalSemicolon   ::= SEMICOLON 
                       | 
@@ -128,12 +129,10 @@ operator            ::= EQEQ    {: RESULT = new AstNode("EQEQ", "=="); :}
                       | MOD     {: RESULT = new AstNode("MOD", "%"); :} 
                       ; // incomplete
 
-ifStatement         ::= IF LPAREN expression:e RPAREN oneOrMorestatements:s1 ELSE oneOrMorestatements:s2  {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s1); RESULT.addGrandChildren(s2); :}
-                      | IF LPAREN expression:e RPAREN oneOrMorestatements:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); :}
+ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s1); RESULT.addGrandChildren(s2); :}
+                      | IF LPAREN expression:e RPAREN statement:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); :}
                       ;
-oneOrMorestatements ::= statement:s                   {: RESULT = new AstNode("oneOrMorestatements", ""); RESULT.addChild(s); :}
-                      | block:b       {: RESULT = new AstNode("oneOrMoreStatements", ""); RESULT.addGrandChildren(b); :}
-                      ;
+
 whileStatement      ::= WHILE LPAREN expression:e RPAREN block:b  {: RESULT = new AstNode("whileStatment", "", e, b); :}
             ;
 
