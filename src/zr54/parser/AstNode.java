@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.*;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
+/**
+ * This class is used to represent nodes of abstract syntax tree.
+ * @author Rundong Wu
+ *
+ */
 public class AstNode {
 
 	private String type = "";
@@ -15,18 +20,33 @@ public class AstNode {
 
 	public AstNode() {
 	}
-
+/**
+ * Constructor for a node with no child nodes.
+ * @param t
+ * @param v
+ */
 	public AstNode(String t, String v) {
 		type = t;
 		value = v;
 	}
-
+/**
+ * Constructor for a node with one child node.
+ * @param t
+ * @param v
+ * @param child
+ */
 	public AstNode(String t, String v, AstNode child) {
 		type = t;
 		value = v;
 		addChild(child);
 	}
-
+/**
+ * Constructor for a node with two child nodes.
+ * @param t
+ * @param v
+ * @param child1
+ * @param child2
+ */
 	public AstNode(String t, String v, AstNode child1, AstNode child2) {
 		type = t;
 		value = v;
