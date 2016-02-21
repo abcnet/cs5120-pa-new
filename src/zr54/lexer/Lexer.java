@@ -877,14 +877,7 @@ public class Lexer implements java_cup.runtime.Scanner {
             }
           case 77: break;
           case 6: 
-            { try { 
-        									Long l = Long.parseLong(yytext());
-        									return symbol(sym.INTEGER_LITERAL, l); 
-    									} catch(Exception e) { 
-        									errorMessage = (yyline+1)+":"+(yycolumn+1)+" error:Illegal integer range \""+yytext()+"\"\n";
-    				 						error = true;
-    				 						return symbol(sym.EOF);
-    									}
+            { return symbol(sym.INTEGER_LITERAL, yytext());
             }
           case 78: break;
           case 7: 

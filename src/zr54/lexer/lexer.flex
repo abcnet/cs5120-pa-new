@@ -242,15 +242,7 @@ HexDigit              = [0-9a-fA-F]
 
   /* This is matched together with the minus, because the number is too big to 
      be represented by a positive integer. */
-  {DecIntegerLiteral}            {  try { 
-        									Long l = Long.parseLong(yytext());
-        									return symbol(sym.INTEGER_LITERAL, l); 
-    									} catch(Exception e) { 
-        									errorMessage = (yyline+1)+":"+(yycolumn+1)+" error:Illegal integer range \""+yytext()+"\"\n";
-    				 						error = true;
-    				 						return symbol(sym.EOF);
-    									} 
-    							  }
+  {DecIntegerLiteral}            {  return symbol(sym.INTEGER_LITERAL, yytext()); }
   
   /* comments */
   {Comment}                      { /* ignore */ }
