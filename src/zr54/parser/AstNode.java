@@ -43,6 +43,13 @@ public class AstNode {
 		parent = p;
 	}
 
+	public void addChildLeft(AstNode n) {
+		if(n != null) {
+			children.add(0, n);
+			n.setParent(this);
+		}
+	}
+	
 	public void addChild(AstNode n) {
 		if(n != null) {
 			children.add(n);
