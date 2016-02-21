@@ -61,9 +61,9 @@ brackets            ::= LBRACK expression RBRACK
 					  | LBRACK RBRACK
                       ;
 
-type                ::= arrayType:a             {: RESULT = new AstNode("arrayType", "", a); :}
-                      | INT                 {: RESULT = new AstNode("INT", "int"); :}
-                      | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
+type                ::= arrayType:a             {: RESULT = new AstNode("type", "", a); :}
+                      | INT                 {: RESULT = new AstNode("type", "", new AstNode("INT", "int")); :}
+                      | BOOL                {: RESULT = new AstNode("type", "", new AstNode("BOOL", "bool")); :}
                       ;
 argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addGrandChildren(t); :}
             ; 
