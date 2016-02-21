@@ -16,13 +16,13 @@ parser code {:
     
     
     @Override
-	public void syntax_error(Symbol cur_token){
+  public void syntax_error(Symbol cur_token){
   if (cur_token.value!=null){
   printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + cur_token.value);
   }else{
   printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
   }
-		//System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
+    //System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
     }
 
 :}
@@ -35,7 +35,7 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, bracket, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
 // Add more nonterminals here...
 
 
@@ -61,17 +61,18 @@ start with program;
 
 singleUse           ::= USE IDENTIFIER:id            {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
-arrayType           ::= arrayType:at brackets:br							{: RESULT = new AstNode("arrayType", "[]", at); RESULT.addGrandChildren(br); :}
-					            | INT brackets:br    							  	{: RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); RESULT.addGrandChildren(br); :}
-                      | BOOL brackets:br							    		{: RESULT = new AstNode("arrayType", "[]", new AstNode("BOOL", "bool")); RESULT.addGrandChildren(br); :}
+arrayType           ::= INT brackets:bs                     {: bs.addChildLeftMost(new AstNode("INT", "int")); RESULT = bs; :}
+                      | BOOL brackets:bs                      {: bs.addChildLeftMost(new AstNode("BOOL", "int")); RESULT = bs; :}
                       ;
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
-brackets            ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(es); :}
-					            | LBRACK RBRACK
+bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]", es); :}
+                      | LBRACK RBRACK                {: RESULT = new AstNode("bracket", "[]");  :}
                       ;
-
+brackets            ::= bracket:b brackets:bs   {: RESULT = new AstNode("brackets", "[]", bs); RESULT.addGrandChildren(b); :}
+                      | bracket:b  {: RESULT = b; :}
+                      ;
 type                ::= arrayType:a             {: RESULT = a; :}
                       | INT                 {: RESULT = new AstNode("INT", "int"); :}
                       | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
@@ -95,7 +96,7 @@ arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK  {: RESULT = ne
                       | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", ai); RESULT.addGrandChildren(a); :}
                       ;
 functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", ""); RESULT.addGrandChildren(tl); :} 
-                      |	{: RESULT = new AstNode("forceParen", ""); :}
+                      | {: RESULT = new AstNode("forceParen", ""); :}
                       ;
 typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
             | type:t              {: RESULT = new AstNode("typesList", ""); RESULT.addChild(t); :}
@@ -103,11 +104,11 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typ
 
 
 method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE 
-						{: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); if(os != null) os.addChild(re); else RESULT.addChild(re); :}
+            {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                     
                       ;
 optionalStatements  ::= statements:s {: RESULT = s; :}
-                      |				 
+                      |        
                       ;
 optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
                       | {: RESULT = new AstNode("forceParen", ""); :}
@@ -154,7 +155,7 @@ whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT 
             ;
 
 assignment          ::= variables:vs COMMA variable:v EQ expression:e   {: AstNode node = new AstNode("variables", ""); node.addGrandChildren(vs); node.addChild(v); RESULT = new AstNode("assignment", "=", node); RESULT.addGrandChildren(e); :}
-                      | variable:v EQ expression:e						{: RESULT = new AstNode("assignment", "="); RESULT.addChild(v);  RESULT.addGrandChildren(e); :}
+                      | variable:v EQ expression:e            {: RESULT = new AstNode("assignment", "="); RESULT.addChild(v);  RESULT.addGrandChildren(e); :}
                       ;
                       
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
@@ -163,7 +164,7 @@ variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNod
 variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
                       | IDENTIFIER:id                {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
                       | argumentWithType:a        {: RESULT = a; :}
-                      | arrayIndices:a   		  {: RESULT = a; :}
+                      | arrayIndices:a        {: RESULT = a; :}
                       ;
 expression          ::= expression:e1 operator:o expression:e2      {: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
                       | LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
