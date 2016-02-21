@@ -65,7 +65,7 @@ public class AstNode {
 		        	  +Integer.toString(to.column)+" error in ast:Unexpected token "+to.s;
 			printer.printAtom(msg);
 			System.out.println(msg);
-		}else if(this.children.size()>0){
+		}else if(this.children.size()>0 || this.type.equals("forceParen")){
 			
 			printer.startList();
 			printer.printAtom(value);
