@@ -72,8 +72,8 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
                       ;
 argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLEAN_LITERAL", bl.toString()); :}
                       | INTEGER_LITERAL:il        {: RESULT = new AstNode("INTEGER_LITERAL", il.toString()); :}
-                      | CHARACTER_LITERAL:cl      {: RESULT = new AstNode("CHARACTER_LITERAL", cl.toString()); :}
-                      | STRING_LITERAL:sl       {: RESULT = new AstNode("STRING_LITERAL", sl.toString()); :}
+                      | CHARACTER_LITERAL:cl      {: RESULT = new AstNode("CHARACTER_LITERAL", "\'"+cl.toString()+"\'"); :}
+                      | STRING_LITERAL:sl       {: RESULT = new AstNode("STRING_LITERAL", "\""+sl.toString()+"\""); :}
                       | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
                       | functionCall:fc         {: RESULT = new AstNode("argument", "", fc); :}
                       | arrayLiteral:al         {: RESULT = new AstNode("argument", "", al); :}
