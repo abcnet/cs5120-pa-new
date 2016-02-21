@@ -143,6 +143,7 @@ whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT 
 
 assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "="); RESULT.addGrandChildren(v);  RESULT.addGrandChildren(e); :}
                       ;
+                      
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addGrandChildren(v); :}
                       | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(v); :} 
                       ;
