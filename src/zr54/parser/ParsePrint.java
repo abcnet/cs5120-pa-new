@@ -38,8 +38,8 @@ public class ParsePrint {
         	  System.out.println(root.toString());
           }catch(Exception e){
         	  s = l.next_token(); 
-        	  System.out.println(Integer.toString(s.left)+":"
-        	  +Integer.toString(s.right)+" error in pp:Unexpected token "+s.value);
+//        	  System.out.println(Integer.toString(s.left)+":"
+//        	  +Integer.toString(s.right)+" error in pp:Unexpected token "+s.value);
         	  
           }
           

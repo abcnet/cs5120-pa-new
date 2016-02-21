@@ -469,6 +469,17 @@ public class parser
     //Lexer s;
     public CodeWriterSExpPrinter printer;
     public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
+    
+    
+    @Override
+	public void syntax_error(Symbol cur_token){
+  if (cur_token.value!=null){
+  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + cur_token.value);
+  }else{
+  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
+  }
+		//System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
+    }
 
 
 
@@ -754,7 +765,7 @@ class CUP$parser$actions {
                 int aileft = CUP$parser$stack.peek().left;
                 int airight = CUP$parser$stack.peek().right;
                 AstNode ai = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("argument", "", ai); 
+                 RESULT = ai; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",8, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -769,7 +780,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString()), a); 
+                 RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString())); RESULT.addGrandChildren(a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",28, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -784,7 +795,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("arrayIndices", "[]", ai, a); 
+                 RESULT = new AstNode("arrayIndices", "[]", ai); RESULT.addGrandChildren(a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",28, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -856,7 +867,7 @@ class CUP$parser$actions {
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); RESULT.addChild(re); 
+                 RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); if(os != null) os.addChild(re); else RESULT.addChild(re); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",25, CUP$parser$stack.elementAt(CUP$parser$top-8), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1009,7 +1020,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode e = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); 
+                 RESULT = new AstNode("optionalReturn", "return"); RESULT.addGrandChildren(e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("optionalReturn",30, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1180,7 +1191,7 @@ class CUP$parser$actions {
                 int s2left = CUP$parser$stack.peek().left;
                 int s2right = CUP$parser$stack.peek().right;
                 AstNode s2 = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s1); RESULT.addGrandChildren(s2); 
+                 RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addChild(s1); RESULT.addChild(s2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("ifStatement",16, CUP$parser$stack.elementAt(CUP$parser$top-6), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1195,7 +1206,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addGrandChildren(s); 
+                 RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addChild(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("ifStatement",16, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1210,7 +1221,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("whileStatment", "", e, s); 
+                 RESULT = new AstNode("whileStatment", "while"); RESULT.addGrandChildren(e); RESULT.addChild(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("whileStatement",17, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1519,7 +1530,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 Object e = CUP$parser$stack.peek().<Object> value();
-                 Lexer l = (Lexer)getScanner(); int line = l.getLine(); int column = l.getColumn(); RESULT = new AstNode("error", new Token( line,column,l.yytext())); 
+                  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

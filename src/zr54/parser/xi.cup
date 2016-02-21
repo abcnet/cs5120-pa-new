@@ -17,7 +17,12 @@ parser code {:
     
     @Override
 	public void syntax_error(Symbol cur_token){
-		System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
+  if (cur_token.value!=null){
+  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + cur_token.value);
+  }else{
+  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
+  }
+		//System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
     }
 
 :}

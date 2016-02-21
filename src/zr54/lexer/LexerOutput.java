@@ -12,7 +12,7 @@ public class LexerOutput {
 	
 	
 	
-	private static HashMap<Integer, String> terminalName = new HashMap<Integer, String>();
+	public static HashMap<Integer, String> terminalName = new HashMap<Integer, String>();
 		
 	static {
 		terminalName.put(sym.UNDERSCORE,"_");
