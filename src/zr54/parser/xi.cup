@@ -107,7 +107,7 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                     
                       ;
 optionalStatements  ::= statements:s {: RESULT = s; :}
-                      |				 
+                      |	{: RESULT = new AstNode("forceParen", ""); :}			 
                       ;
 optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
                       | {: RESULT = new AstNode("forceParen", ""); :}
