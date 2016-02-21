@@ -69,7 +69,7 @@ arrayType           ::= INT brackets:bs                     {: bs.addChildLeftMo
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
-bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]", es); :}
+bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]"); RESULT.addGrandChildren(es); :}
                       | LBRACK RBRACK                {: RESULT = new AstNode("bracket", "[]", new AstNode("",""));  :}
                       ;
 brackets            ::= bracket:b brackets:bs   {: RESULT = new AstNode("brackets", "[]", bs); RESULT.addGrandChildren(b); :}
@@ -179,7 +179,7 @@ expressions         ::= expression:e                  {: RESULT = new AstNode("e
                       | expressions:es COMMA expression:e       {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addGrandChildren(e); :}
                       ;
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
-                      | IDENTIFIER:id LPAREN RPAREN    {: RESULT = new AstNode("functionCall", id.toString());:}
+                      | IDENTIFIER:id LPAREN RPAREN    {: RESULT = new AstNode("functionCall", id.toString(), new AstNode("emptyArgument", ""));:}
                       | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
 program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
