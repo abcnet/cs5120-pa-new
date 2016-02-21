@@ -141,7 +141,7 @@ ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statemen
 whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", "", e, s); :}
             ;
 
-assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v);  RESULT.addChild(e); :}
+assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v);  RESULT.addGrandChildren(e); :}
                       ;
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addGrandChildren(v); :}
                       | variable:v                {: RESULT = new AstNode("variables1", ""); RESULT.addGrandChildren(v); :} 
