@@ -51,11 +51,12 @@ public class AstNode {
 			}
 			child = child.parent;
 			if(child != null){
-				if(child.children.get(0).value.equals("[]")){
-					child.addChild(n);
-				}else{
-					child.addChildLeft(n);
-				}
+				child.addChildLeft(n);
+//				if(child.children.get(0).value.equals("[]")){
+//					child.addChild(n);
+//				}else{
+//					
+//				}
 				
 			}
 						

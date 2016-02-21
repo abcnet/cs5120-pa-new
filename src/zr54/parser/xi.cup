@@ -70,7 +70,7 @@ arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new As
                       ;
 
 bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]", es); :}
-                      | LBRACK RBRACK                {: RESULT = new AstNode("bracket", "[]");  :}
+                      | LBRACK RBRACK                {: RESULT = new AstNode("bracket", "[]", new AstNode("",""));  :}
                       ;
 brackets            ::= bracket:b brackets:bs   {: RESULT = new AstNode("brackets", "[]", bs); RESULT.addGrandChildren(b); :}
                       | bracket:b  {: RESULT = b; :}
