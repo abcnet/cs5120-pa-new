@@ -66,26 +66,21 @@ public class AstNode {
 			printer.printAtom(msg);
 			System.out.println(msg);
 		}else if(this.children.size()>0){
-//			System.out.println(">0");
-//			System.out.println(type + ": " + value);
+			
 			printer.startList();
-//			System.out.print("(");
 			printer.printAtom(value);
-//			System.out.print(value);
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
 	        }
 	        printer.endList();
 		}else{
-//			System.out.println("=0");
-//			printer.startList();
-//			System.out.print("(");
+
 			printer.printAtom(value);
-//			System.out.print(value);
+			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
 	        }
-//	        printer.endList();
+
 		}
 		
 //        System.out.println(")");

@@ -35,8 +35,9 @@ public class ParsePrint {
         	  s = p.parse();
         	  AstNode root = s.value();
         	  root.print(printer);
+        	  System.out.println(root.toString());
           }catch(Exception e){
-        	  s = l.next_token();
+        	  s = l.next_token(); 
         	  System.out.println(Integer.toString(s.left)+":"
         	  +Integer.toString(s.right)+" error in pp:Unexpected token "+s.value);
         	  
