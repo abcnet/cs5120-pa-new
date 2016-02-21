@@ -92,11 +92,11 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typ
 
 
 method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE 
-						{: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); RESULT.addChild(re); :}
+						{: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                     
                       ;
 optionalStatements  ::= statements:s {: RESULT = s; :}
-                      |
+                      |				 
                       ;
 optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
                       | {: RESULT = new AstNode("forceParen", ""); :}
