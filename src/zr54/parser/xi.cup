@@ -35,7 +35,9 @@ parser code {:
 terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
 // You might want to add types to these declarations.
+
 nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, bracket, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
+
 // Add more nonterminals here...
 
 
@@ -108,7 +110,9 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                     
                       ;
 optionalStatements  ::= statements:s {: RESULT = s; :}
-                      |        
+
+                      |	{: RESULT = new AstNode("forceParen", ""); :}			 
+
                       ;
 optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
                       | {: RESULT = new AstNode("forceParen", ""); :}
@@ -131,22 +135,6 @@ optionalSemicolon   ::= SEMICOLON
                       | 
                       ;
 
-operator            ::= EQEQ    {: RESULT = new AstNode("EQEQ", "=="); :} 
-            | GTEQ    {: RESULT = new AstNode("GTEQ", ">="); :} 
-            | LTEQ    {: RESULT = new AstNode("LTEQ", "<="); :} 
-            | NOTEQ   {: RESULT = new AstNode("NOTEQ", "!="); :} 
-            | GT      {: RESULT = new AstNode("GT", ">"); :} 
-            | LT      {: RESULT = new AstNode("LT", "<"); :} 
-            | AND     {: RESULT = new AstNode("AND", "&"); :} 
-            | OR      {: RESULT = new AstNode("OR", "|"); :} 
-                      | MULT    {: RESULT = new AstNode("MULT", "*"); :} 
-                      | PLUS    {: RESULT = new AstNode("PLUS", "+"); :} 
-                      | MINUS     {: RESULT = new AstNode("MINUS", "-"); :} 
-                      | DIV     {: RESULT = new AstNode("DIV", "/"); :} 
-                      | HIGHMULT  {: RESULT = new AstNode("HIGHMULT", "*>>"); :} 
-                      | MOD     {: RESULT = new AstNode("MOD", "%"); :} 
-                      ; // incomplete
-
 ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addChild(s1); RESULT.addChild(s2); :}
                       | IF LPAREN expression:e RPAREN statement:s       {: RESULT = new AstNode("ifStatement", "if"); RESULT.addGrandChildren(e); RESULT.addChild(s); :}
                       ;
@@ -166,7 +154,20 @@ variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDER
                       | argumentWithType:a        {: RESULT = a; :}
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
-expression          ::= expression:e1 operator:o expression:e2      {: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+expression          ::= expression:e1 OR expression:e2			{: AstNode o = new AstNode("OR", "|"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 AND expression:e2			{: AstNode o = new AstNode("AND", "&"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 EQEQ expression:e2			{: AstNode o = new AstNode("EQEQ", "=="); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 NOTEQ expression:e2			{: AstNode o = new AstNode("NOTEQ", "!="); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 LT expression:e2			{: AstNode o = new AstNode("LT", "<"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 LTEQ expression:e2			{: AstNode o = new AstNode("LTEQ", "<="); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+					  | expression:e1 GTEQ expression:e2			{: AstNode o = new AstNode("GTEQ", ">="); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 GT expression:e2			{: AstNode o = new AstNode("GT", ">"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :} 
+                      |	expression:e1 PLUS expression:e2			{: AstNode o = new AstNode("PLUS", "+"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 MINUS expression:e2			{: AstNode o = new AstNode("MINUS", "-"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 MULT expression:e2			{: AstNode o = new AstNode("MULT", "*"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 HIGHMULT expression:e2			{: AstNode o = new AstNode("HIGHMULT", "*>>"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 DIV expression:e2			{: AstNode o = new AstNode("DIV", "/"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
+                      | expression:e1 MOD expression:e2			{: AstNode o = new AstNode("MOD", "%"); RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
                       | LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
                       | argument:a                    {: RESULT = new AstNode("expression", ""); RESULT.addChild(a); :}
                       | MINUS LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", "", new AstNode("MINUS", "-"), e); :}
