@@ -19,12 +19,12 @@ class XiCompiler {
         longopts[2] = new LongOpt("parse", LongOpt.NO_ARGUMENT, null, 2);
         longopts[3] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 3);
 
-        Getopt g = new Getopt("XiCompiler", argv, "D:", longopts);
+        Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
             "options: --help | --lex | --parse\n" +
-            "srcpath: --sourcepath <path>\n" +
+            "srcpath: -sourcepath <path>\n" +
             "dstpath: -D <path>";
 
         String op = "";
@@ -52,9 +52,14 @@ class XiCompiler {
                           System.exit(0);
             }
         }
-        if (op == "error") {
+        if (op == "") {
+            System.out.println("error: no options provided");
+            System.out.println(usage);
+            System.exit(0);
+        } else if (op == "error") {
             System.out.println("error: can only specify one of --help --lex or --parse");
             System.out.println(usage);
+            System.exit(0);
         } else if (op == "help") {
             System.out.println(usage);
             System.exit(0);
@@ -77,6 +82,7 @@ class XiCompiler {
             } else if (op == "parse") {
                 dst = dst + ".parsed";
                 ParsePrint.parseAndPrint(src, dst);
+                //System.out.println(src + " " + dst);
             }
         }
     }
