@@ -517,7 +517,10 @@ class CUP$parser$actions {
                 int atleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int atright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode at = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("arrayType", "[]", at); 
+                int brleft = CUP$parser$stack.peek().left;
+                int brright = CUP$parser$stack.peek().right;
+                AstNode br = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("arrayType", "[]", at); RESULT.addGrandChildren(br); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",3, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -526,7 +529,10 @@ class CUP$parser$actions {
         case 3: // arrayType ::= INT brackets 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); 
+                int brleft = CUP$parser$stack.peek().left;
+                int brright = CUP$parser$stack.peek().right;
+                AstNode br = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); RESULT.addGrandChildren(br); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",3, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -535,7 +541,10 @@ class CUP$parser$actions {
         case 4: // arrayType ::= BOOL brackets 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("arrayType", "[]", new AstNode("BOOL", "bool")); 
+                int brleft = CUP$parser$stack.peek().left;
+                int brright = CUP$parser$stack.peek().right;
+                AstNode br = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = new AstNode("arrayType", "[]", new AstNode("BOOL", "bool")); RESULT.addGrandChildren(br); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",3, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -556,7 +565,10 @@ class CUP$parser$actions {
         case 6: // brackets ::= LBRACK expression RBRACK 
             {
                 AstNode RESULT = null;
-
+                int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
+                 RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("brackets",20, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1267,7 +1279,10 @@ class CUP$parser$actions {
         case 67: // variable ::= IDENTIFIER 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("IDENTIFIER", "id"); 
+                int idleft = CUP$parser$stack.peek().left;
+                int idright = CUP$parser$stack.peek().right;
+                Object id = CUP$parser$stack.peek().<Object> value();
+                 RESULT = new AstNode("IDENTIFIER", id.toString()); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",22, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

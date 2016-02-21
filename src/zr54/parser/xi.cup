@@ -50,22 +50,23 @@ start with program;
 
 singleUse           ::= USE IDENTIFIER:id            {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
-arrayType           ::= arrayType:at brackets							{: RESULT = new AstNode("arrayType", "[]", at); :}
-					  | INT brackets    								{: RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); :}
-                      | BOOL brackets									{: RESULT = new AstNode("arrayType", "[]", new AstNode("BOOL", "bool")); :}
+arrayType           ::= arrayType:at brackets:br							{: RESULT = new AstNode("arrayType", "[]", at); RESULT.addGrandChildren(br); :}
+					            | INT brackets:br    							  	{: RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); RESULT.addGrandChildren(br); :}
+                      | BOOL brackets:br							    		{: RESULT = new AstNode("arrayType", "[]", new AstNode("BOOL", "bool")); RESULT.addGrandChildren(br); :}
                       ;
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
-brackets            ::= LBRACK expression RBRACK
-					  | LBRACK RBRACK
+brackets            ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("brackets", ""); RESULT.addGrandChildren(es); :}
+					            | LBRACK RBRACK
                       ;
 
-type                ::= arrayType:a             {: RESULT = new AstNode("type", "", a); :}
-                      | INT                 {: RESULT = new AstNode("type", "", new AstNode("INT", "int")); :}
-                      | BOOL                {: RESULT = new AstNode("type", "", new AstNode("BOOL", "bool")); :}
+type                ::= arrayType:a             {: RESULT = a; :}
+                      | INT                 {: RESULT = new AstNode("INT", "int"); :}
+                      | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
                       ;
-argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addGrandChildren(t); :}
+
+argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); :}
             ; 
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a        {: RESULT = new AstNode("argumentsWithType", "", a); :}       
@@ -82,7 +83,7 @@ argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLE
 arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString()), a); :}
                       | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", ai, a); :}
                       ;
-functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", "", tl); :} 
+functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", ""); RESULT.addGrandChildren(tl); :} 
                       |	{: RESULT = new AstNode("forceParen", ""); :}
                       ;
 typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
