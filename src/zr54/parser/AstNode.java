@@ -52,12 +52,6 @@ public class AstNode {
 			child = child.parent;
 			if(child != null){
 				child.addChildLeft(n);
-//				if(child.children.get(0).value.equals("[]")){
-//					child.addChild(n);
-//				}else{
-//					
-//				}
-				
 			}
 						
 		}
@@ -92,7 +86,7 @@ public class AstNode {
 			String msg = Integer.toString(to.line)+":"
 		        	  +Integer.toString(to.column)+" error in ast:Unexpected token "+to.s;
 			printer.printAtom(msg);
-			System.out.println(msg);
+//			System.out.println(msg);
 		}else if(this.children.size()>0 || this.type.equals("forceParen")){
 			
 			if(!(this.type.equals("statement") && this.children.size() == 1))
@@ -113,7 +107,6 @@ public class AstNode {
 
 		}
 		
-//        System.out.println(")");
 	}
 
 	public String toString() {
@@ -122,7 +115,7 @@ public class AstNode {
 		for(AstNode child : children) {
 			str += child.toString() + "\n";
 		}
-		//str += ")";
+
 		return str;
 	}
 }

@@ -36,7 +36,7 @@ terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN
 
 // You might want to add types to these declarations.
 
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, operator, expression, bracket, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, expression, bracket, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
 
 // Add more nonterminals here...
 
