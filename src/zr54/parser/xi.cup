@@ -149,7 +149,7 @@ variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNod
                       | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addChild(v); :} 
                       ;
 variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
-                      | IDENTIFIER                {: RESULT = new AstNode("IDENTIFIER", "id"); :}
+                      | IDENTIFIER:id                {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
                       | argumentWithType:a        {: RESULT = a; :}
                       | arrayIndices:a   		  {: RESULT = a; :}
                       ;
