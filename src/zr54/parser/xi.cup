@@ -48,7 +48,7 @@ start with program;
   INT LBRACK RBRACK LBRACK RBRACK RPAREN
   LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-singleUse           ::= USE IDENTIFIER:id                               {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
+singleUse           ::= USE IDENTIFIER:id            {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
                       ;
 arrayType           ::= arrayType:at brackets							{: RESULT = new AstNode("arrayType", "[]", at); :}
 					  | INT brackets    								{: RESULT = new AstNode("arrayType", "[]", new AstNode("INT", "int")); :}
