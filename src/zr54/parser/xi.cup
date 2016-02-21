@@ -75,7 +75,7 @@ argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLE
                       | CHARACTER_LITERAL:cl      {: RESULT = new AstNode("CHARACTER_LITERAL", "\'"+cl.toString()+"\'"); :}
                       | STRING_LITERAL:sl       {: RESULT = new AstNode("STRING_LITERAL", "\""+sl.toString()+"\""); :}
                       | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
-                      | functionCall:fc         {: RESULT = new AstNode("argument", "", fc); :}
+                      | functionCall:fc         {: RESULT = fc; :}
                       | arrayLiteral:al         {: RESULT = new AstNode("argument", ""); RESULT.addGrandChildren(al); :}
                       | arrayIndices:ai         {: RESULT = new AstNode("argument", "", ai); :}
                       ;
@@ -141,16 +141,17 @@ ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statemen
 whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", "", e, s); :}
             ;
 
-assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "="); RESULT.addGrandChildren(v);  RESULT.addGrandChildren(e); :}
+assignment          ::= variables:vs COMMA variable:v EQ expression:e   {: AstNode node = new AstNode("variables", ""); node.addGrandChildren(vs); node.addChild(v); RESULT = new AstNode("assignment", "=", node); RESULT.addGrandChildren(e); :}
+                      | variable:v EQ expression:e						{: RESULT = new AstNode("assignment", "="); RESULT.addChild(v);  RESULT.addGrandChildren(e); :}
                       ;
                       
-variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addGrandChildren(v); :}
-                      | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(v); :} 
+variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addChild(v); :} 
                       ;
 variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
                       | IDENTIFIER                {: RESULT = new AstNode("IDENTIFIER", "id"); :}
-                      | argumentWithType:a            {: RESULT = new AstNode("variable", ""); RESULT.addChild(a); :}
-                      | arrayIndices: a   {: RESULT = new AstNode("variable", ""); RESULT.addChild(a); :}
+                      | argumentWithType:a        {: RESULT = a; :}
+                      | arrayIndices:a   		  {: RESULT = a; :}
                       ;
 expression          ::= expression:e1 operator:o expression:e2      {: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
                       | LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
