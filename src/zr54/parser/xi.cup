@@ -65,7 +65,7 @@ type                ::= arrayType:a             {: RESULT = new AstNode("arrayTy
                       | INT                 {: RESULT = new AstNode("INT", "int"); :}
                       | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
                       ;
-argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addGrandChildren(t); :}
+argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); :}
             ; 
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a        {: RESULT = new AstNode("argumentsWithType", "", a); :}       
