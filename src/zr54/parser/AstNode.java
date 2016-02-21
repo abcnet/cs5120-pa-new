@@ -42,7 +42,21 @@ public class AstNode {
 	public void setParent(AstNode p) {
 		parent = p;
 	}
-
+	
+	public void addChildLeftMost(AstNode n) {
+		if(n != null) {
+			AstNode child = this;
+			while(child.children.size() > 0) {
+				child = child.children.get(0);
+			}
+			child = child.parent;
+			if(child != null)
+				child.addChildLeft(n);
+						
+		}
+				
+	}
+	
 	public void addChildLeft(AstNode n) {
 		if(n != null) {
 			children.add(0, n);
