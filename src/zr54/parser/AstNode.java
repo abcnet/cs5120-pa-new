@@ -67,12 +67,14 @@ public class AstNode {
 			System.out.println(msg);
 		}else if(this.children.size()>0 || this.type.equals("forceParen")){
 			
-			printer.startList();
+			if(!(this.type.equals("statement") && this.children.size() == 1))
+				printer.startList();
 			printer.printAtom(value);
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
 	        }
-	        printer.endList();
+	        if(!(this.type.equals("statement") && this.children.size() == 1))
+				printer.endList();
 		}else{
 
 			printer.printAtom(value);

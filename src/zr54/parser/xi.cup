@@ -112,7 +112,7 @@ statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNo
                       | argumentWithType:a optionalSemicolon  {: RESULT = new AstNode("statement", "", a); :}
                       | block: b  {: RESULT = b; :}
                       ; 
-optionalReturn      ::= RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
+optionalReturn      ::= RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("optionalReturn", "return"); RESULT.addGrandChildren(e); :} 
                       | 
                       ;                
 optionalSemicolon   ::= SEMICOLON 
