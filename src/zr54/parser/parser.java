@@ -1645,7 +1645,7 @@ class CUP$parser$actions {
                 int usleft = CUP$parser$stack.peek().left;
                 int usright = CUP$parser$stack.peek().right;
                 AstNode us = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("program", "", us, new AstNode("methods", "")); 
+                 RESULT = new AstNode("program", "", us, new AstNode("forceParen", "")); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1666,7 +1666,7 @@ class CUP$parser$actions {
         case 84: // program ::= 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); 
+                 RESULT = new AstNode("program", "", new AstNode("forceParen", ""), new AstNode("forceParen", "")); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

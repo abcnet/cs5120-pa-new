@@ -183,9 +183,9 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT 
                       | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
 program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
-                      | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("methods", "")); :}
+                      | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("forceParen", "")); :}
                       | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), ms); :}
-                      |                           {: RESULT = new AstNode("program", "", new AstNode("uses", ""), new AstNode("methods", "")); :}
+                      |                           {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), new AstNode("forceParen", "")); :}
                       | error:e   {:  :}
                       ; 
 uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
