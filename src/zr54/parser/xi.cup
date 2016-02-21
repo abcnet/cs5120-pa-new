@@ -157,8 +157,10 @@ variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDER
 expression          ::= expression:e1 operator:o expression:e2      {: RESULT = new AstNode("expression", "", o); o.addGrandChildren(e1); o.addGrandChildren(e2); :}
                       | LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", ""); RESULT.addGrandChildren(e); :}
                       | argument:a                    {: RESULT = new AstNode("expression", ""); RESULT.addChild(a); :}
+                      | MINUS LPAREN expression:e RPAREN            {: RESULT = new AstNode("expression", "", new AstNode("MINUS", "-"), e); :}
+                      | MINUS INTEGER_LITERAL:il            {: RESULT = new AstNode("expression", "", new AstNode("MINUS", "-", new AstNode("INTEGER_LITERAL", il.toString()))); :}
                       | NOT expression:e                {: AstNode n = new AstNode("NOT", "!"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}            
-                      | MINUS expression:e                {: AstNode n = new AstNode("MINUS", "-"); n.addGrandChildren(e); RESULT = new AstNode("expression", "", n); :}
+                      
                       ;
 expressions         ::= expression:e                  {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(e); :} 
                       | expressions:es COMMA expression:e       {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addGrandChildren(e); :}
