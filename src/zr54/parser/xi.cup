@@ -159,6 +159,7 @@ expressions         ::= expression:e                  {: RESULT = new AstNode("e
                       | expressions:es COMMA expression:e       {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addGrandChildren(e); :}
                       ;
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
+                      | IDENTIFIER:id LPAREN RPAREN    {: RESULT = new AstNode("functionCall", id.toString());:}
                       | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
 program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
