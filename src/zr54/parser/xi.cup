@@ -65,7 +65,7 @@ type                ::= arrayType:a             {: RESULT = new AstNode("arrayTy
                       | INT                 {: RESULT = new AstNode("INT", "int"); :}
                       | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
                       ;
-argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); :}
+argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addGrandChildren(t); :}
             ; 
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a        {: RESULT = new AstNode("argumentsWithType", "", a); :}       
@@ -141,10 +141,10 @@ ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statemen
 whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", "", e, s); :}
             ;
 
-assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "=", v);  RESULT.addChild(e); :}
+assignment          ::= variables:v EQ expression:e                 {: RESULT = new AstNode("assignment", "="); RESULT.addGrandChildren(v);  RESULT.addGrandChildren(e); :}
                       ;
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addGrandChildren(v); :}
-                      | variable:v                {: RESULT = new AstNode("variables1", ""); RESULT.addGrandChildren(v); :} 
+                      | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(v); :} 
                       ;
 variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
                       | IDENTIFIER                {: RESULT = new AstNode("IDENTIFIER", "id"); :}
