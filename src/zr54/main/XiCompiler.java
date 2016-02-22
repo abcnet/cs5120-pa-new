@@ -10,6 +10,7 @@ import zr54.parser.*;
 class XiCompiler {
 	/**
 	 * Main function of the compiler
+     * Parses the command-line arguments and sends them to the Lexer/Parser
 	 * @param argv: input arguments
 	 * @throws Exception
 	 */
@@ -87,7 +88,6 @@ class XiCompiler {
             } else if (op == "parse") {
                 dst = dst + ".parsed";
                 ParsePrint.parseAndPrint(src, dst);
-                //System.out.println(src + " " + dst);
             }
         }
     }

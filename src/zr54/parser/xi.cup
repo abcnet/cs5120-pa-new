@@ -1,47 +1,39 @@
-// A stub for a Xi CUP specification.
 /* Part of code from http://www2.cs.tum.edu/projekte/cup/examples.php */
 package zr54.parser;
 
 import java_cup.runtime.*;
 import edu.cornell.cs.cs4120.util.*;
-import polyglot.util.*; 
+import polyglot.util.*;
 import zr54.lexer.*;
 import zr54.parser.*;
 
 parser code {:
-    // Connect this parser to a scanner!
-    //Lexer s;
     public CodeWriterSExpPrinter printer;
     public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
-    
-    
-    @Override
-  public void syntax_error(Symbol cur_token){
-  if (cur_token.value!=null){
-  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + cur_token.value);
-  }else{
-  printer.printAtom(cur_token.left + ":" +  cur_token.right + " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
-  }
-    //System.out.println("Syntax error at hahaha "+cur_token.sym + " " + cur_token.left + " " +  cur_token.right + " " + cur_token.value);
-    }
 
+    @Override
+    public void syntax_error(Symbol cur_token){
+        if (cur_token.value!=null){
+            printer.printAtom(cur_token.left + ":" +
+                cur_token.right + " error:Unexpected token " + cur_token.value);
+        } else{
+            printer.printAtom(cur_token.left + ":" + cur_token.right +
+            " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
+        }
+    }
 :}
 
-/* define how to connect to the scanner! */
-//init with {: s.init(); :};
-//scan with {: return s.next_token(); :};
+terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL,
+         LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ,
+         GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
+         HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
 
-// You might want to add types to these declarations.
-terminal IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL, LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ, GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ, HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE;
-
-// You might want to add types to these declarations.
-
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, argument, functionReturnType , statements, optionalStatements, statement, functionCall, typesList, assignment, ifStatement, whileStatement, expression, bracket, brackets, variables, variable, expressions, methods, method, arrayLiteral, optionalSemicolon, arrayIndices, block, optionalReturn;
-
-// Add more nonterminals here...
-
-
-
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
+            argumentsWithType, optionalArgumentsWithType, argument, functionReturnType ,
+            statements, optionalStatements, statement, functionCall, typesList, assignment,
+            ifStatement, whileStatement, expression, bracket, brackets, variables,
+            variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
+            arrayIndices, block, optionalReturn;
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -56,144 +48,163 @@ precedence nonassoc NOT;
 
 start with program;
 
-// Recognizes "Hello World!", but not much else.
-/*program ::= USE IDENTIFIER IDENTIFIER LPAREN IDENTIFIER COLON
-  INT LBRACK RBRACK LBRACK RBRACK RPAREN
-  LBRACE IDENTIFIER LPAREN STRING_LITERAL RPAREN RBRACE;*/
 
-singleUse           ::= USE IDENTIFIER:id            {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}    
+singleUse           ::= USE IDENTIFIER:id  {: RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); :}
                       ;
-arrayType           ::= INT brackets:bs                     {: bs.addChildLeftMost(new AstNode("INT", "int")); RESULT = bs; :}
-                      | BOOL brackets:bs                      {: bs.addChildLeftMost(new AstNode("BOOL", "int")); RESULT = bs; :}
+
+arrayType           ::= INT brackets:bs    {: bs.addChildLeftMost(new AstNode("INT", "int")); RESULT = bs; :}
+                      | BOOL brackets:bs   {: bs.addChildLeftMost(new AstNode("BOOL", "int")); RESULT = bs; :}
                       ;
+
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
-                      | LBRACE expressions:es COMMA RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
+                      | LBRACE expressions:es COMMA RBRACE    {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
 bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]", es); :}
                       | LBRACK RBRACK                {: RESULT = new AstNode("bracket", "[]", new AstNode("",""));  :}
                       ;
+
 brackets            ::= bracket:b brackets:bs   {: RESULT = new AstNode("brackets", "[]", bs); RESULT.addGrandChildren(b); :}
-                      | bracket:b  {: RESULT = b; :}
-                      ;
-type                ::= arrayType:a             {: RESULT = a; :}
-                      | INT                 {: RESULT = new AstNode("INT", "int"); :}
-                      | BOOL                {: RESULT = new AstNode("BOOL", "bool"); :}
+                      | bracket:b               {: RESULT = b; :}
                       ;
 
-argumentWithType    ::= IDENTIFIER:id COLON type:t      {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); :}
-            ; 
-argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
-                      | argumentWithType:a        {: RESULT = new AstNode("argumentsWithType", "", a); :}       
+type                ::= arrayType:a     {: RESULT = a; :}
+                      | INT             {: RESULT = new AstNode("INT", "int"); :}
+                      | BOOL            {: RESULT = new AstNode("BOOL", "bool"); :}
                       ;
-argument            ::= BOOLEAN_LITERAL:bl        {: RESULT = new AstNode("BOOLEAN_LITERAL", bl.toString()); :}
-                      | INTEGER_LITERAL:il        {: RESULT = new AstNode("INTEGER_LITERAL", il.toString()); :}
-                      | CHARACTER_LITERAL:cl      {: RESULT = new AstNode("CHARACTER_LITERAL", "\'"+cl.toString()+"\'"); :}
+
+argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); :}
+                      ;
+
+argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
+                      | argumentWithType:a                            {: RESULT = new AstNode("argumentsWithType", "", a); :}
+                      ;
+
+argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new AstNode("BOOLEAN_LITERAL", bl.toString()); :}
+                      | INTEGER_LITERAL:il      {: RESULT = new AstNode("INTEGER_LITERAL", il.toString()); :}
+                      | CHARACTER_LITERAL:cl    {: RESULT = new AstNode("CHARACTER_LITERAL", "\'"+cl.toString()+"\'"); :}
                       | STRING_LITERAL:sl       {: RESULT = new AstNode("STRING_LITERAL", "\""+sl.toString()+"\""); :}
-                      | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
+                      | IDENTIFIER:id           {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
                       | functionCall:fc         {: RESULT = fc; :}
                       | arrayLiteral:al         {: RESULT = new AstNode("argument", ""); RESULT.addGrandChildren(al); :}
                       | arrayIndices:ai         {: RESULT = ai; :}
                       ;
-arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString()), a); :}
+
+arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new AstNode("arrayIndices", "[]", new AstNode("IDENTIFIER", id.toString()), a); :}
                       | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new AstNode("arrayIndices", "[]", ai, a); :}
                       ;
-functionReturnType  ::= COLON typesList:tl          {: RESULT = new AstNode("functionReturnType", ""); RESULT.addGrandChildren(tl); :} 
-                      | {: RESULT = new AstNode("forceParen", ""); :}
+
+functionReturnType  ::= COLON typesList:tl    {: RESULT = new AstNode("functionReturnType", ""); RESULT.addGrandChildren(tl); :}
+                      |                       {: RESULT = new AstNode("forceParen", ""); :}
                       ;
-typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}  
-            | type:t              {: RESULT = new AstNode("typesList", ""); RESULT.addChild(t); :}
-            ;       
+
+typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}
+                      | type:t                      {: RESULT = new AstNode("typesList", ""); RESULT.addChild(t); :}
+                      ;
 
 
-method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE 
-            {: RESULT = new AstNode("method", id.toString()); RESULT.addChild(a); RESULT.addChild(r); RESULT.addChild(os); if(os != null) os.addChild(re); else RESULT.addChild(re); :}
-                    
+method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE
+                        {: RESULT = new AstNode("method", id.toString());
+                           RESULT.addChild(a); RESULT.addChild(r);
+                           RESULT.addChild(os);
+                           if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       ;
+
 optionalStatements  ::= statements:s {: RESULT = s; :}
-
-                      |	{: RESULT = new AstNode("forceParen", ""); :}			 
-
+                      |	             {: RESULT = new AstNode("forceParen", ""); :}
                       ;
-optionalArgumentsWithType::=  argumentsWithType:a {: RESULT = a; :}
-                      | {: RESULT = new AstNode("forceParen", ""); :}
-                      ;                     
+
+optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
+                            |                      {: RESULT = new AstNode("forceParen", ""); :}
+                            ;
+
 statements  ::= statements:ms statement:s     {: RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
-                      | statement:s             {: RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(s); :}
+                      | statement:s           {: RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(s); :}
                       ;
-statement           ::= functionCall:f optionalSemicolon   {: RESULT = new AstNode("statement", "", f); :}
-                      | assignment:a optionalSemicolon   {: RESULT = new AstNode("statement", "", a); :} 
-                      | ifStatement:s               {: RESULT = new AstNode("statement", "", s); :}   
-                      | whileStatement:s            {: RESULT = new AstNode("statement", "", s); :}
-                      //| RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("statement", "return"); RESULT.addGrandChildren(e); :} 
-                      | argumentWithType:a optionalSemicolon  {: RESULT = new AstNode("statement", "", a); :}
-                      | block: b  {: RESULT = b; :}
-                      ; 
-optionalReturn      ::= RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("optionalReturn", "return"); RESULT.addGrandChildren(e); :} 
-                      | 
-                      ;                
-optionalSemicolon   ::= SEMICOLON 
-                      | 
+
+statement           ::= functionCall:f optionalSemicolon         {: RESULT = new AstNode("statement", "", f); :}
+                      | assignment:a optionalSemicolon           {: RESULT = new AstNode("statement", "", a); :}
+                      | ifStatement:s                            {: RESULT = new AstNode("statement", "", s); :}
+                      | whileStatement:s                         {: RESULT = new AstNode("statement", "", s); :}
+                      | argumentWithType:a optionalSemicolon     {: RESULT = new AstNode("statement", "", a); :}
+                      | block: b                                 {: RESULT = b; :}
+                      ;
+
+optionalReturn      ::= RETURN expressions:e optionalSemicolon {: RESULT = new AstNode("optionalReturn", "return"); RESULT.addGrandChildren(e); :}
+                      |
+                      ;
+
+optionalSemicolon   ::= SEMICOLON
+                      |
                       ;
 
 ifStatement         ::= IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new AstNode("ifStatement", "if", e, s1); RESULT.addChild(s2); :}
-                      | IF LPAREN expression:e RPAREN statement:s       {: RESULT = new AstNode("ifStatement", "if", e, s); :}
+                      | IF LPAREN expression:e RPAREN statement:s                     {: RESULT = new AstNode("ifStatement", "if", e, s); :}
                       ;
 
 whileStatement      ::= WHILE LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", "while", e, s); :}
-            ;
+                      ;
 
-assignment          ::= variables:vs COMMA variable:v EQ expression:e   {: AstNode node = new AstNode("variables", ""); node.addGrandChildren(vs); node.addChild(v); RESULT = new AstNode("assignment", "=", node); RESULT.addChild(e); :}
-                      | variable:v EQ expression:e            {: RESULT = new AstNode("assignment", "=", v, e); :}
+assignment          ::= variables:vs COMMA variable:v EQ expression:e   {: AstNode node = new AstNode("variables", "");
+                                                                           node.addGrandChildren(vs); node.addChild(v);
+                                                                           RESULT = new AstNode("assignment", "=", node); RESULT.addChild(e); :}
+                      | variable:v EQ expression:e                      {: RESULT = new AstNode("assignment", "=", v, e); :}
                       ;
-                      
+
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
-                      | variable:v                {: RESULT = new AstNode("variables", ""); RESULT.addChild(v); :} 
+                      | variable:v                        {: RESULT = new AstNode("variables", ""); RESULT.addChild(v); :}
                       ;
-variable            ::= UNDERSCORE                {: RESULT = new AstNode("UNDERSCORE", "_"); :}
-                      | IDENTIFIER:id                {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
-                      | argumentWithType:a        {: RESULT = a; :}
+
+variable            ::= UNDERSCORE            {: RESULT = new AstNode("UNDERSCORE", "_"); :}
+                      | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id.toString()); :}
+                      | argumentWithType:a    {: RESULT = a; :}
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
+
 expression          ::= expression:e1 OR expression:e2				{: RESULT = new AstNode("OR", "|", e1, e2); :}
-		      | expression:e1 AND expression:e2				{: RESULT = new AstNode("AND", "&", e1, e2); :}
-		      | expression:e1 EQEQ expression:e2			{: RESULT = new AstNode("EQEQ", "==", e1, e2); :}
-		      | expression:e1 NOTEQ expression:e2			{: RESULT = new AstNode("NOTEQ", "!=", e1, e2); :}
-		      | expression:e1 LT expression:e2				{: RESULT = new AstNode("LT", "<", e1, e2); :}
-		      | expression:e1 LTEQ expression:e2			{: RESULT = new AstNode("LTEQ", "<=", e1, e2); :}
-		      | expression:e1 GTEQ expression:e2			{: RESULT = new AstNode("GTEQ", ">=", e1, e2); :}
-                      | expression:e1 GT expression:e2				{: RESULT = new AstNode("GT", ">", e1, e2); :} 
+		              | expression:e1 AND expression:e2				{: RESULT = new AstNode("AND", "&", e1, e2); :}
+		              | expression:e1 EQEQ expression:e2			{: RESULT = new AstNode("EQEQ", "==", e1, e2); :}
+		              | expression:e1 NOTEQ expression:e2			{: RESULT = new AstNode("NOTEQ", "!=", e1, e2); :}
+		              | expression:e1 LT expression:e2				{: RESULT = new AstNode("LT", "<", e1, e2); :}
+		              | expression:e1 LTEQ expression:e2			{: RESULT = new AstNode("LTEQ", "<=", e1, e2); :}
+		              | expression:e1 GTEQ expression:e2			{: RESULT = new AstNode("GTEQ", ">=", e1, e2); :}
+                      | expression:e1 GT expression:e2				{: RESULT = new AstNode("GT", ">", e1, e2); :}
                       |	expression:e1 PLUS expression:e2			{: RESULT = new AstNode("PLUS", "+", e1, e2); :}
                       | expression:e1 MINUS expression:e2			{: RESULT = new AstNode("MINUS", "-", e1, e2); :}
                       | expression:e1 MULT expression:e2			{: RESULT = new AstNode("MULT", "*", e1, e2); :}
-                      | expression:e1 HIGHMULT expression:e2			{: RESULT = new AstNode("HIGHMULT", "*>>", e1, e2); :}
+                      | expression:e1 HIGHMULT expression:e2		{: RESULT = new AstNode("HIGHMULT", "*>>", e1, e2); :}
                       | expression:e1 DIV expression:e2				{: RESULT = new AstNode("DIV", "/", e1, e2); :}
                       | expression:e1 MOD expression:e2				{: RESULT = new AstNode("MOD", "%", e1, e2); :}
-                      | LPAREN expression:e RPAREN				{: RESULT = e; :}
+                      | LPAREN expression:e RPAREN				    {: RESULT = e; :}
                       | argument:a                   				{: RESULT = a; :}
-                      | MINUS LPAREN expression:e RPAREN            		{: RESULT = new AstNode("MINUS", "-", e); :}
-                      | MINUS INTEGER_LITERAL:il            			{: RESULT = new AstNode("MINUS", "-", new AstNode("INTEGER_LITERAL", il.toString())); :}
-                      | NOT expression:e		                        {: RESULT = new AstNode("NOT", "!", e); :}            
-                      
+                      | MINUS LPAREN expression:e RPAREN            {: RESULT = new AstNode("MINUS", "-", e); :}
+                      | MINUS INTEGER_LITERAL:il            		{: RESULT = new AstNode("MINUS", "-", new AstNode("INTEGER_LITERAL", il.toString())); :}
+                      | NOT expression:e		                    {: RESULT = new AstNode("NOT", "!", e); :}
                       ;
-expressions         ::= expression:e                  {: RESULT = new AstNode("expressions", "", e); :} 
+
+expressions         ::= expression:e                            {: RESULT = new AstNode("expressions", "", e); :}
                       | expressions:es COMMA expression:e       {: RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
                       ;
+
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new AstNode("functionCall", id.toString()); RESULT.addGrandChildren(es); :}
-                      | IDENTIFIER:id LPAREN RPAREN    {: RESULT = new AstNode("functionCall", id.toString(), new AstNode("emptyArgument", ""));:}
-                      | LENGTH LPAREN IDENTIFIER:id RPAREN              {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
+                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new AstNode("functionCall", id.toString(), new AstNode("emptyArgument", ""));:}
+                      | LENGTH LPAREN IDENTIFIER:id RPAREN            {: RESULT = new AstNode("functionCall", "length", new AstNode("IDENTIFIER", id.toString())); :}
                       ;
-program             ::= uses:us  methods:ms                             {: RESULT = new AstNode("program", "", us, ms); :}
-                      | uses:us                     {: RESULT = new AstNode("program", "", us, new AstNode("forceParen", "")); :}
-                      | methods:ms                    {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), ms); :}
-                      |                           {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), new AstNode("forceParen", "")); :}
-                      | error:e   {:  :}
-                      ; 
-uses                ::= uses:us singleUse:su                            {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
-                      | singleUse:su                                    {: RESULT = new AstNode("uses", "", su); :}
-                      ; 
-methods             ::= methods:ms method:m               {: RESULT = new AstNode("methods", ""); RESULT.addGrandChildren(ms); RESULT.addChild(m); :} 
-                      | method:m                                        {: RESULT = new AstNode("methods", "", m); :}
+
+program             ::= uses:us  methods:ms   {: RESULT = new AstNode("program", "", us, ms); :}
+                      | uses:us               {: RESULT = new AstNode("program", "", us, new AstNode("forceParen", "")); :}
+                      | methods:ms            {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), ms); :}
+                      |                       {: RESULT = new AstNode("program", "", new AstNode("forceParen", ""), new AstNode("forceParen", "")); :}
+                      | error:e               {:  :}
                       ;
+
+uses                ::= uses:us singleUse:su  {: RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
+                      | singleUse:su          {: RESULT = new AstNode("uses", "", su); :}
+                      ;
+
+methods             ::= methods:ms method:m   {: RESULT = new AstNode("methods", ""); RESULT.addGrandChildren(ms); RESULT.addChild(m); :}
+                      | method:m              {: RESULT = new AstNode("methods", "", m); :}
+                      ;
+
 block               ::= LBRACE optionalStatements:s RBRACE      {: RESULT = s; :}
                       ;

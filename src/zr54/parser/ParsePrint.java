@@ -31,13 +31,9 @@ public class ParsePrint {
 				s = p.parse();
 				AstNode root = s.value();
 				root.print(printer);
-//				System.out.println(root.toString());
 			}catch(Exception e){
-				s = l.next_token(); 
+				s = l.next_token();
 			}
-
-//			System.out.println("Printing AST");
-
 			printer.flush();
 			System.out.println("Parsed AST written to "+dstFile);
 		} else {
