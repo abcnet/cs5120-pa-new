@@ -16,37 +16,42 @@ public class AstNode {
 	private String value = "";
 	private ArrayList<AstNode> children = new ArrayList<AstNode>();
 	private AstNode parent = null;
-	public Token to=null;
 
+	/**
+	 * Default constructor
+	 */
 	public AstNode() {
 	}
-/**
- * Constructor for a node with no child nodes.
- * @param t
- * @param v
- */
+
+	/**
+	 * Constructor for a node with no child nodes.
+	 * @param t: type of the node 
+	 * @param v: value of the node
+	 */
 	public AstNode(String t, String v) {
 		type = t;
 		value = v;
 	}
-/**
- * Constructor for a node with one child node.
- * @param t
- * @param v
- * @param child
- */
+	
+	/**
+	 * Constructor for a node with one child node.
+	 * @param t: type of the node
+	 * @param v: value of the node 
+	 * @param child: first child node of this
+	 */
 	public AstNode(String t, String v, AstNode child) {
 		type = t;
 		value = v;
 		addChild(child);
 	}
-/**
- * Constructor for a node with two child nodes.
- * @param t
- * @param v
- * @param child1
- * @param child2
- */
+	
+	/**
+	 * Constructor for a node with two child nodes.
+	 * @param t: type of the node
+	 * @param v: value of the node
+	 * @param child1: first child of this node
+  	 * @param child2: second child of this node 
+  	 */
 	public AstNode(String t, String v, AstNode child1, AstNode child2) {
 		type = t;
 		value = v;
@@ -54,15 +59,18 @@ public class AstNode {
 		addChild(child2);
 	}
 	
-	public AstNode(String t, Token to){
-		this.type = t;
-		this.to = to;
-	}
-
+	/**
+	 * set the parent of this node  
+	 * @param p: parent of this node 
+	 */
 	public void setParent(AstNode p) {
 		parent = p;
 	}
 	
+	/**
+	 * Add a node to the lowest left of the AST, this method is used in the array type declaration
+	 * @param n: the node to be added
+	 */
 	public void addChildLeftMost(AstNode n) {
 		if(n != null) {
 			AstNode child = this;
@@ -78,6 +86,10 @@ public class AstNode {
 				
 	}
 	
+	/**
+	 * Add a node to the left of the children list
+	 * @param n: the node to be added
+	 */
 	public void addChildLeft(AstNode n) {
 		if(n != null) {
 			children.add(0, n);
@@ -85,6 +97,10 @@ public class AstNode {
 		}
 	}
 	
+	/**
+	 * Add a node to the right of the children list
+	 * @param n: the node to be added
+	 */
 	public void addChild(AstNode n) {
 		if(n != null) {
 			children.add(n);
@@ -92,6 +108,10 @@ public class AstNode {
 		}
 	}
 
+	/**
+	 * Add the children of a node to the children list, this method is used when recursive production in the grammar
+	 * @param n: all of n's children will be added to this node's children list 
+	 */
 	public void addGrandChildren(AstNode n) {
 		if(n != null) {
 			for(AstNode gc : n.children) {
@@ -101,21 +121,20 @@ public class AstNode {
 		}
 	}
 
+	/**
+	 * print this node
+	 * @param printer: the printer
+	 */
 	void print(CodeWriterSExpPrinter printer) {
-		if (type.equals("error")){
-			String msg = Integer.toString(to.line)+":"
-		        	  +Integer.toString(to.column)+" error in ast:Unexpected token "+to.s;
-			printer.printAtom(msg);
-//			System.out.println(msg);
-		}else if(this.children.size()>0 || this.type.equals("forceParen")){
-			
+		if(this.children.size()>0 || this.type.equals("forceParen")){
+
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.startList();
 			printer.printAtom(value);
-	        for (int i = 0; i < this.children.size(); i++) {
-	            this.children.get(i).print(printer);
-	        }
-	        if(!(this.type.equals("statement") && this.children.size() == 1))
+			for (int i = 0; i < this.children.size(); i++) {
+				this.children.get(i).print(printer);
+			}
+			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
 
@@ -129,6 +148,9 @@ public class AstNode {
 		
 	}
 
+	/**
+	 * Convert this node to a string.
+	 */
 	public String toString() {
 		String str = type + ":" + value + "\n";
 

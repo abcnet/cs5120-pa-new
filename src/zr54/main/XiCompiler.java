@@ -8,6 +8,11 @@ import zr54.lexer.*;
 import zr54.parser.*;
 
 class XiCompiler {
+	/**
+	 * Main function of the compiler
+	 * @param argv: input arguments
+	 * @throws Exception
+	 */
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;

@@ -8,6 +8,12 @@ import polyglot.util.*;
 
 public class ParsePrint {
 
+	/**
+	 * Parse an xi file and print the results in another file
+	 * @param srcFile: name of the input *.xi file
+	 * @param dstFile: name of the output *.parsed file
+	 * @throws Exception
+	 */
 	public static void parseAndPrint(String srcFile, String dstFile) throws Exception {
 
 		FileOutputStream fs = new FileOutputStream(dstFile);
