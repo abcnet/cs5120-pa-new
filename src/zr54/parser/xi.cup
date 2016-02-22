@@ -67,6 +67,7 @@ arrayType           ::= INT brackets:bs                     {: bs.addChildLeftMo
                       | BOOL brackets:bs                      {: bs.addChildLeftMost(new AstNode("BOOL", "int")); RESULT = bs; :}
                       ;
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
+                      | LBRACE expressions:es COMMA RBRACE          {: RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); :}
                       ;
 
 bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", "[]", es); :}
