@@ -17,19 +17,20 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[4];
+        LongOpt[] longopts = new LongOpt[5];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
         longopts[1] = new LongOpt("lex", LongOpt.NO_ARGUMENT, null, 1);
         longopts[2] = new LongOpt("parse", LongOpt.NO_ARGUMENT, null, 2);
-        longopts[3] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 3);
+        longopts[3] = new LongOpt("typecheck", LongOpt.NO_ARGUMENT, null, 3);
+        longopts[4] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 4);
 
         Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
-            "options: --help | --lex | --parse\n" +
+            "options: --help | --lex | --parse | --typecheck\n" +
             "srcpath: -sourcepath <path>\n" +
             "dstpath: -D <path>";
 
@@ -45,7 +46,9 @@ class XiCompiler {
                         break;
                 case 2: op = (op == "") ? "parse" : "error";
                         break;
-                case 3: arg = g.getOptarg();
+                case 3: op = (op == "") ? "typecheck" : "error";
+                        break;
+                case 4: arg = g.getOptarg();
                         srcPath = arg;
                         break;
                 case 'D': arg = g.getOptarg();
@@ -63,7 +66,7 @@ class XiCompiler {
             System.out.println(usage);
             System.exit(0);
         } else if (op == "error") {
-            System.out.println("error: can only specify one of --help --lex or --parse");
+            System.out.println("error: can only specify one of --help --lex --parse or --typecheck");
             System.out.println(usage);
             System.exit(0);
         } else if (op == "help") {
@@ -88,6 +91,8 @@ class XiCompiler {
             } else if (op == "parse") {
                 dst = dst + ".parsed";
                 ParsePrint.parseAndPrint(src, dst);
+            } else if (op == "typecheck") {
+                System.out.println("Typechecking..");
             }
         }
     }
