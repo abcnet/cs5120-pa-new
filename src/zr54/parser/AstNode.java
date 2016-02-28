@@ -12,10 +12,10 @@ import zr54.parser.*;
  */
 public class AstNode {
 
-	private String type = "";
-	private String value = "";
-	private ArrayList<AstNode> children = new ArrayList<AstNode>();
-	private AstNode parent = null;
+	protected String type = "";
+	protected String value = "";
+	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
+	protected AstNode parent = null;
 
 	/**
 	 * Default constructor
