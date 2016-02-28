@@ -162,20 +162,20 @@ variable            ::= UNDERSCORE            {: RESULT = new AstNode("UNDERSCOR
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
 
-expression          ::= expression:e1 OR expression:e2				 {: RESULT = new BinaryExprNode("OR", "|", e1, e2); :}
-		                  | expression:e1 AND expression:e2				 {: RESULT = new BinaryExprNode("AND", "&", e1, e2); :}
-		                  | expression:e1 EQEQ expression:e2			 {: RESULT = new BinaryExprNode("EQEQ", "==", e1, e2); :}
-		                  | expression:e1 NOTEQ expression:e2			 {: RESULT = new BinaryExprNode("NOTEQ", "!=", e1, e2); :}
-		                  | expression:e1 LT expression:e2				 {: RESULT = new BinaryExprNode("LT", "<", e1, e2); :}
-		                  | expression:e1 LTEQ expression:e2			 {: RESULT = new BinaryExprNode("LTEQ", "<=", e1, e2); :}
-		                  | expression:e1 GTEQ expression:e2			 {: RESULT = new BinaryExprNode("GTEQ", ">=", e1, e2); :}
-                      | expression:e1 GT expression:e2				 {: RESULT = new BinaryExprNode("GT", ">", e1, e2); :}
-                      |	expression:e1 PLUS expression:e2			 {: RESULT = new BinaryExprNode("PLUS", "+", e1, e2); :}
-                      | expression:e1 MINUS expression:e2			 {: RESULT = new BinaryExprNode("MINUS", "-", e1, e2); :}
-                      | expression:e1 MULT expression:e2			 {: RESULT = new BinaryExprNode("MULT", "*", e1, e2); :}
-                      | expression:e1 HIGHMULT expression:e2	 {: RESULT = new BinaryExprNode("HIGHMULT", "*>>", e1, e2); :}
-                      | expression:e1 DIV expression:e2				 {: RESULT = new BinaryExprNode("DIV", "/", e1, e2); :}
-                      | expression:e1 MOD expression:e2				 {: RESULT = new BinaryExprNode("MOD", "%", e1, e2); :}
+expression          ::= expression:e1 OR expression:e2				 {: RESULT = new BoolBinaryExprNode("OR", "|", e1, e2); :}
+		                  | expression:e1 AND expression:e2				 {: RESULT = new BoolBinaryExprNode("AND", "&", e1, e2); :}
+		                  | expression:e1 EQEQ expression:e2			 {: RESULT = new BoolBinaryExprNode("EQEQ", "==", e1, e2); :}
+		                  | expression:e1 NOTEQ expression:e2			 {: RESULT = new BoolBinaryExprNode("NOTEQ", "!=", e1, e2); :}
+		                  | expression:e1 LT expression:e2				 {: RESULT = new BoolBinaryExprNode("LT", "<", e1, e2); :}
+		                  | expression:e1 LTEQ expression:e2			 {: RESULT = new BoolBinaryExprNode("LTEQ", "<=", e1, e2); :}
+		                  | expression:e1 GTEQ expression:e2			 {: RESULT = new BoolBinaryExprNode("GTEQ", ">=", e1, e2); :}
+                      | expression:e1 GT expression:e2				 {: RESULT = new BoolBinaryExprNode("GT", ">", e1, e2); :}
+                      |	expression:e1 PLUS expression:e2			 {: RESULT = new IntBinaryExprNode("PLUS", "+", e1, e2); :}
+                      | expression:e1 MINUS expression:e2			 {: RESULT = new IntBinaryExprNode("MINUS", "-", e1, e2); :}
+                      | expression:e1 MULT expression:e2			 {: RESULT = new IntBinaryExprNode("MULT", "*", e1, e2); :}
+                      | expression:e1 HIGHMULT expression:e2	 {: RESULT = new IntBinaryExprNode("HIGHMULT", "*>>", e1, e2); :}
+                      | expression:e1 DIV expression:e2				 {: RESULT = new IntBinaryExprNode("DIV", "/", e1, e2); :}
+                      | expression:e1 MOD expression:e2				 {: RESULT = new IntBinaryExprNode("MOD", "%", e1, e2); :}
                       | LPAREN expression:e RPAREN				     {: RESULT = e; :}
                       | argument:a                   				   {: RESULT = a; :}
                       | MINUS LPAREN expression:e RPAREN       {: RESULT = new UnaryExprNode("MINUS", "-", e); :}

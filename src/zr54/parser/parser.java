@@ -1319,7 +1319,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("OR", "|", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("OR", "|", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1334,7 +1334,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("AND", "&", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("AND", "&", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1349,7 +1349,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("EQEQ", "==", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("EQEQ", "==", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1364,7 +1364,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("NOTEQ", "!=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("NOTEQ", "!=", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1379,7 +1379,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("LT", "<", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("LT", "<", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1394,7 +1394,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("LTEQ", "<=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("LTEQ", "<=", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1409,7 +1409,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("GTEQ", ">=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("GTEQ", ">=", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1424,7 +1424,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("GT", ">", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("GT", ">", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1439,7 +1439,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("PLUS", "+", e1, e2); 
+                 RESULT = new IntBinaryExprNode("PLUS", "+", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1454,7 +1454,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("MINUS", "-", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MINUS", "-", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1469,7 +1469,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("MULT", "*", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MULT", "*", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1484,7 +1484,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("HIGHMULT", "*>>", e1, e2); 
+                 RESULT = new IntBinaryExprNode("HIGHMULT", "*>>", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1499,7 +1499,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("DIV", "/", e1, e2); 
+                 RESULT = new IntBinaryExprNode("DIV", "/", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1514,7 +1514,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BinaryExprNode("MOD", "%", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MOD", "%", e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
