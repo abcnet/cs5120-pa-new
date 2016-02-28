@@ -12,8 +12,8 @@ public class IntBinaryExprNode extends ExprNode {
 	}
 
     public Type typeCheck() {
-        Type t1 = this.children[0].typeCheck();
-        Type t2 = this.children[1].typeCheck();
+        Type t1 = this.children.get(0).typeCheck();
+        Type t2 = this.children.get(1).typeCheck();
 
         if ((t1.getType() == Type.INT && t2.getType() == Type.INT)
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
