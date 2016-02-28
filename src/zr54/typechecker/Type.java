@@ -17,6 +17,11 @@ class Type {
         this.dimension = 0;
     }
 
+    public Type(int type, int dimension) {
+        this.type = type;
+        this.dimension = dimension;
+    }
+
     public void setType(int type) {
         this.type = type;
     }
