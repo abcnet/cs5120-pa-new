@@ -2,24 +2,23 @@ package zr54.typechecker;
 
 import java.util.HashMap;
 
-class SymbolTable {
-    private SymbolTable parent;
+class VarSymbolTable {
+    private VarSymbolTable parent;
     private HashMap<String, Type> table;
 
-    public SymbolTable() {
+    public VarSymbolTable() {
         this.parent = null;
         this.table = new HashMap<String, Type>();
     }
 
     public Type lookup(String var) {
-        if (table.containsKey(var)) {
-            return table.get(var);
+        if (this.table.containsKey(var)) {
+            return this.table.get(var);
         } else {
             if (this.parent != null) {
-                return parent.lookup(var);
+                return this.parent.lookup(var);
             } else {
-                Type t = new Type();
-                return t;
+                return(new Type());
             }
         }
     }
@@ -31,11 +30,11 @@ class SymbolTable {
         } else return 0;
     }
 
-    public void setParent(SymbolTable p) {
+    public void setParent(VarSymbolTable p) {
         this.parent = p;
     }
 
-    public SymbolTable getParent() {
+    public VarSymbolTable getParent() {
         return this.parent;
     }
 }
