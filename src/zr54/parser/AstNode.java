@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.*;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
+
+import zr54.typechecker.Type;
+
 /**
  * This class is used to represent nodes of abstract syntax tree.
  * @author Rundong Wu
  *
  */
-public class AstNode {
+public abstract class AstNode {
 
 	protected String type = "";
 	protected Symbol value = null;
@@ -160,5 +163,7 @@ public class AstNode {
 
 		return str;
 	}
+
+    public abstract Type typeCheck();
 }
 

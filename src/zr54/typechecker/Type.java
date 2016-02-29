@@ -2,7 +2,7 @@ package zr54.typechecker;
 
 import java.util.HashMap;
 
-class Type {
+public class Type {
     public static int NIL = 0;
     public static int INT = 1;
     public static int BOOL = 2;
