@@ -13,7 +13,7 @@ import zr54.parser.*;
 public class AstNode {
 
 	protected String type = "";
-	protected String value = "";
+	protected Symbol value = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
 	protected AstNode parent = null;
 
@@ -28,7 +28,7 @@ public class AstNode {
 	 * @param t: type of the node 
 	 * @param v: value of the node
 	 */
-	public AstNode(String t, String v) {
+	public AstNode(String t, Symbol v) {
 		type = t;
 		value = v;
 	}
@@ -39,7 +39,7 @@ public class AstNode {
 	 * @param v: value of the node 
 	 * @param child: first child node of this
 	 */
-	public AstNode(String t, String v, AstNode child) {
+	public AstNode(String t, Symbol v, AstNode child) {
 		type = t;
 		value = v;
 		addChild(child);
@@ -52,7 +52,7 @@ public class AstNode {
 	 * @param child1: first child of this node
   	 * @param child2: second child of this node 
   	 */
-	public AstNode(String t, String v, AstNode child1, AstNode child2) {
+	public AstNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		type = t;
 		value = v;
 		addChild(child1);
@@ -130,7 +130,7 @@ public class AstNode {
 
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.startList();
-			printer.printAtom(value);
+			printer.printAtom((String) value.value);
 			for (int i = 0; i < this.children.size(); i++) {
 				this.children.get(i).print(printer);
 			}
@@ -138,7 +138,7 @@ public class AstNode {
 				printer.endList();
 		}else{
 
-			printer.printAtom(value);
+			printer.printAtom((String) value.value);
 			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
