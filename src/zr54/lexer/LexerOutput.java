@@ -76,7 +76,7 @@ public class LexerOutput {
         PrintWriter writer = new PrintWriter(outFile, "UTF-8");
         System.out.println("Lexing file: " + inFile + "  " + "Output file: " + outFile);
         while (true) {
-            Symbol tok = L.next_token();
+            Symbol tok = (Symbol) L.next_token().value;
 	        String errorMessage = L.getErrorMessage();
 	        
 	        if(errorMessage != null) {
@@ -85,13 +85,19 @@ public class LexerOutput {
 	        	break;
 	        }
             
+	        
 	        if(tok.sym == sym.EOF)
 	        	break;
 	        
-            String str = tok.left + ":" + tok.right + " " + terminalName.get(tok.sym); 
+            String str = "";
+            if(tok.sym == sym.IDENTIFIER || tok.sym == sym.CHARACTER_LITERAL 
+            		|| tok.sym == sym.STRING_LITERAL || tok.sym == sym.INTEGER_LITERAL)
+            	str = tok.left + ":" + tok.right + " " + terminalName.get(tok.sym) + " "; 
+            else
+            	str = tok.left + ":" + tok.right + " ";
             
             if(tok.value != null)
-            	str += " " + tok.value + "\n";
+            	str += tok.value + "\n";
             else
             	str += "\n";
                  

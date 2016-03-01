@@ -21,16 +21,14 @@ import java.io.*;
   
   StringBuilder string = new StringBuilder();
   
-  private Symbol symbol(int type) {
-    return new Symbol(type, yyline+1, yycolumn+1);
-  }
-
   private Symbol symbol(int type, Object value) {
-    return new Symbol(type, yyline+1, yycolumn+1, value);
+  	Symbol symObj = new Symbol(type, yyline+1, yycolumn+1, value);
+    return new Symbol(type, yyline+1, yycolumn+1, symObj);
   }
   
   private Symbol symbol(int type, Object value, int spec_line, int spec_column) {
-    return new Symbol(type, spec_line+1, spec_column+1, value);
+  	Symbol symObj = new Symbol(type, spec_line+1, spec_column+1, value);
+    return new Symbol(type, spec_line+1, spec_column+1, symObj);
   }
 
   public int getLine(){
@@ -180,48 +178,48 @@ HexDigit              = [0-9a-fA-F]
 <YYINITIAL> {
 
   /* keywords */
-  "bool"                         { return symbol(sym.BOOL); }
-  "else"                         { return symbol(sym.ELSE); }
-  "int"                          { return symbol(sym.INT); }
-  "if"                           { return symbol(sym.IF); }
-  "return"                       { return symbol(sym.RETURN); }
-  "while"                        { return symbol(sym.WHILE); }
-  "length"                       { return symbol(sym.LENGTH); }
-  "use"                          { return symbol(sym.USE); }
-  "_"							 { return symbol(sym.UNDERSCORE); }
+  "bool"                         { return symbol(sym.BOOL, "bool"); }
+  "else"                         { return symbol(sym.ELSE, "else"); }
+  "int"                          { return symbol(sym.INT, "int"); }
+  "if"                           { return symbol(sym.IF, "if"); }
+  "return"                       { return symbol(sym.RETURN, "return"); }
+  "while"                        { return symbol(sym.WHILE, "while"); }
+  "length"                       { return symbol(sym.LENGTH, "length"); }
+  "use"                          { return symbol(sym.USE, "use"); }
+  "_"							 { return symbol(sym.UNDERSCORE, "_"); }
   
   /* boolean literals */
-  "true"                         { return symbol(sym.BOOLEAN_LITERAL, true); }
-  "false"                        { return symbol(sym.BOOLEAN_LITERAL, false); }
+  "true"                         { return symbol(sym.BOOLEAN_LITERAL, "true"); }
+  "false"                        { return symbol(sym.BOOLEAN_LITERAL, "false"); }
   
   /* separators */
-  "("                            { return symbol(sym.LPAREN); }
-  ")"                            { return symbol(sym.RPAREN); }
-  "{"                            { return symbol(sym.LBRACE); }
-  "}"                            { return symbol(sym.RBRACE); }
-  "["                            { return symbol(sym.LBRACK); }
-  "]"                            { return symbol(sym.RBRACK); }
-  ";"                            { return symbol(sym.SEMICOLON); }
-  ","                            { return symbol(sym.COMMA); }
-  ":"                            { return symbol(sym.COLON); }
+  "("                            { return symbol(sym.LPAREN, "("); }
+  ")"                            { return symbol(sym.RPAREN, ")"); }
+  "{"                            { return symbol(sym.LBRACE, "{"); }
+  "}"                            { return symbol(sym.RBRACE, "}"); }
+  "["                            { return symbol(sym.LBRACK, "["); }
+  "]"                            { return symbol(sym.RBRACK, "]"); }
+  ";"                            { return symbol(sym.SEMICOLON, ";"); }
+  ","                            { return symbol(sym.COMMA, ","); }
+  ":"                            { return symbol(sym.COLON, ":"); }
   
   /* operators */
-  "="                            { return symbol(sym.EQ); }
-  ">"                            { return symbol(sym.GT); }
-  "<"                            { return symbol(sym.LT); }
-  "!"                            { return symbol(sym.NOT); }
-  "=="                           { return symbol(sym.EQEQ); }
-  "<="                           { return symbol(sym.LTEQ); }
-  ">="                           { return symbol(sym.GTEQ); }
-  "!="                           { return symbol(sym.NOTEQ); }
-  "*>>"                          { return symbol(sym.HIGHMULT); }
-  "+"                            { return symbol(sym.PLUS); }
-  "-"                            { return symbol(sym.MINUS); }
-  "*"                            { return symbol(sym.MULT); }
-  "/"                            { return symbol(sym.DIV); }
-  "&"                            { return symbol(sym.AND); }
-  "|"                            { return symbol(sym.OR); }
-  "%"                            { return symbol(sym.MOD); }
+  "="                            { return symbol(sym.EQ, "="); }
+  ">"                            { return symbol(sym.GT, ">"); }
+  "<"                            { return symbol(sym.LT, "<"); }
+  "!"                            { return symbol(sym.NOT, "!"); }
+  "=="                           { return symbol(sym.EQEQ, "=="); }
+  "<="                           { return symbol(sym.LTEQ, "<="); }
+  ">="                           { return symbol(sym.GTEQ, ">="); }
+  "!="                           { return symbol(sym.NOTEQ, "!="); }
+  "*>>"                          { return symbol(sym.HIGHMULT, "*>>"); }
+  "+"                            { return symbol(sym.PLUS, "+"); }
+  "-"                            { return symbol(sym.MINUS, "-"); }
+  "*"                            { return symbol(sym.MULT, "*"); }
+  "/"                            { return symbol(sym.DIV, "/"); }
+  "&"                            { return symbol(sym.AND, "&"); }
+  "|"                            { return symbol(sym.OR, "|"); }
+  "%"                            { return symbol(sym.MOD, "%"); }
   
   /* string literal */
   \"                             { 
@@ -285,12 +283,12 @@ HexDigit              = [0-9a-fA-F]
   \\.              { 
     				 errorMessage = (yyline+1)+":"+(yycolumn+1)+" error:Illegal escape sequence \""+yytext()+"\"\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
   {LineTerminator} { 
   					 errorMessage = (yyline+1)+":"+(yycolumn+1)+" error:Unterminated string at end of line\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }              
 }
 
@@ -303,12 +301,12 @@ HexDigit              = [0-9a-fA-F]
   [^]              { 
   					 errorMessage = (start_line+1)+":"+(start_column+1)+" error:Illegal escape sequence \""+yytext()+"\"\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
   <<EOF>>          { 
   					 errorMessage = (start_line+1)+":"+(start_column+1)+" error:Illegal escape sequence \""+yytext()+"\"\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
 
 }
@@ -334,17 +332,17 @@ HexDigit              = [0-9a-fA-F]
   \\.              { 
   					 errorMessage = (start_line+1)+":"+(start_column+1)+" error:Illegal escape sequence \""+yytext()+"\"\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
   {LineTerminator} { 
   					 errorMessage = (start_line+1)+":"+(start_column+1)+" error:Unterminated string at end of line\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }              
   \'               { 
   					 errorMessage = (start_line+1)+":"+(start_column+1)+" error:empty character literal\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
 }
 
@@ -353,6 +351,6 @@ HexDigit              = [0-9a-fA-F]
 [^]                { 
   					 errorMessage = (yyline+1)+":"+(yycolumn+1)+" error:Illegal escape sequence \""+yytext()+"\"\n";
     				 error = true;
-    				 return symbol(sym.EOF);
+    				 return symbol(sym.EOF, null);
   				   }
-<<EOF>>            { return symbol(sym.EOF); }
+<<EOF>>            { return symbol(sym.EOF, null); }

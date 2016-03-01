@@ -22,6 +22,7 @@ public class sym {
   public static final int LTEQ = 29;
   public static final int ELSE = 34;
   public static final int IDENTIFIER = 2;
+  public static final int LRBRACK = 41;
   public static final int EOF = 0;
   public static final int IF = 26;
   public static final int COMMA = 14;
@@ -90,7 +91,8 @@ public class sym {
   "RETURN",
   "DIV",
   "USE",
-  "UNDERSCORE"
+  "UNDERSCORE",
+  "LRBRACK"
   };
 }
 

@@ -13,7 +13,7 @@ import zr54.typechecker.Type;
  * @author Rundong Wu
  *
  */
-public abstract class AstNode {
+public class AstNode {
 
 	protected String type = "";
 	protected Symbol value = null;
@@ -133,15 +133,18 @@ public abstract class AstNode {
 
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.startList();
-			printer.printAtom((String) value.value);
-			for (int i = 0; i < this.children.size(); i++) {
+
+			if(value != null)
+				printer.printAtom((String) value.value);
+
+			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
-			}
+			
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
-
-			printer.printAtom((String) value.value);
+			if(value != null)
+				printer.printAtom((String) value.value);
 			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
@@ -149,6 +152,14 @@ public abstract class AstNode {
 
 		}
 		
+	}
+	
+	void printValue(CodeWriterSExpPrinter printer) {
+		if(value != null) {
+			String str = "";
+			if(value.sym == sym.STRING_LITERAL)
+				str += "\"";
+		}
 	}
 
 	/**
@@ -164,6 +175,9 @@ public abstract class AstNode {
 		return str;
 	}
 
-    public abstract Type typeCheck();
+    public Type typeCheck() {
+    	return new Type();
+    }
+    
 }
 

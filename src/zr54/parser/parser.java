@@ -549,8 +549,9 @@ public class parser
     @Override
     public void syntax_error(Symbol cur_token){
         if (cur_token.value!=null){
+        	Symbol tok = (Symbol) cur_token.value;
             printer.printAtom(cur_token.left + ":" +
-                cur_token.right + " error:Unexpected token " + cur_token.value);
+                cur_token.right + " error:Unexpected token " + tok.value);
         } else{
             printer.printAtom(cur_token.left + ":" + cur_token.right +
             " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
@@ -597,10 +598,13 @@ class CUP$parser$actions {
         case 1: // singleUse ::= USE IDENTIFIER 
             {
                 AstNode RESULT = null;
+                int uleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int uright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol u = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
-                Object id = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new AstNode("useSpecifier", "", new AstNode("USE", "use"), new AstNode("IDENTIFIER", id.toString())); 
+                Symbol id = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new AstNode("useSpecifier", null, new AstNode("USE", u), new AstNode("IDENTIFIER", id)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("singleUse",1, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -609,10 +613,13 @@ class CUP$parser$actions {
         case 2: // arrayType ::= INT brackets 
             {
                 AstNode RESULT = null;
+                int ileft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int iright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol i = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 bs.addChildLeftMost(new AstNode("INT", "int")); RESULT = bs; 
+                 bs.addChildLeftMost(new AstNode("INT", i)); RESULT = bs; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",3, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -621,10 +628,13 @@ class CUP$parser$actions {
         case 3: // arrayType ::= BOOL brackets 
             {
                 AstNode RESULT = null;
+                int bleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int bright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol b = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 bs.addChildLeftMost(new AstNode("BOOL", "int")); RESULT = bs; 
+                 bs.addChildLeftMost(new AstNode("BOOL", b)); RESULT = bs; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",3, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -636,7 +646,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); 
+                 RESULT = new AstNode("arrayLiteral", null); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -648,7 +658,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
-                 RESULT = new AstNode("arrayLiteral", ""); RESULT.addGrandChildren(es); 
+                 RESULT = new AstNode("arrayLiteral", null); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -660,7 +670,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 ExprNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<ExprNode> value();
-                 RESULT = new AstNode("bracket", "[]", es); 
+                 RESULT = new AstNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("bracket",16, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -669,7 +679,7 @@ class CUP$parser$actions {
         case 7: // bracket ::= LBRACK RBRACK 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("bracket", "[]", new AstNode("",""));  
+                 RESULT = new AstNode("bracket", new Symbol(sym.LRBRACK, "[]"), new AstNode("", null));  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("bracket",16, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -684,7 +694,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("brackets", "[]", bs); RESULT.addGrandChildren(b); 
+                 RESULT = new AstNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("brackets",17, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -717,7 +727,10 @@ class CUP$parser$actions {
         case 11: // type ::= INT 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("INT", "int"); 
+                int ileft = CUP$parser$stack.peek().left;
+                int iright = CUP$parser$stack.peek().right;
+                Symbol i = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new AstNode("INT", i); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("type",4, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -726,7 +739,10 @@ class CUP$parser$actions {
         case 12: // type ::= BOOL 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("BOOL", "bool"); 
+                int bleft = CUP$parser$stack.peek().left;
+                int bright = CUP$parser$stack.peek().right;
+                Symbol b = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new AstNode("BOOL", b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("type",4, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -737,11 +753,11 @@ class CUP$parser$actions {
                 AstNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-2).<Object> value();
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("argumentWithType", id.toString()); RESULT.addChild(t); 
+                 RESULT = new AstNode("argumentWithType", id); RESULT.addChild(t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argumentWithType",5, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -756,7 +772,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.peek().left;
                 int aright = CUP$parser$stack.peek().right;
                 AstNode a = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("argumentsWithType", ""); RESULT.addGrandChildren(as); RESULT.addChild(a); 
+                 RESULT = new AstNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argumentsWithType",6, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -768,7 +784,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.peek().left;
                 int aright = CUP$parser$stack.peek().right;
                 AstNode a = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("argumentsWithType", "", a); 
+                 RESULT = new AstNode("argumentsWithType", null, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argumentsWithType",6, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -779,8 +795,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int blleft = CUP$parser$stack.peek().left;
                 int blright = CUP$parser$stack.peek().right;
-                Object bl = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new SingleExprNode("BOOLEAN_LITERAL", bl.toString()); 
+                Symbol bl = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new SingleExprNode("BOOLEAN_LITERAL", bl); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -791,8 +807,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int illeft = CUP$parser$stack.peek().left;
                 int ilright = CUP$parser$stack.peek().right;
-                Object il = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new SingleExprNode("INTEGER_LITERAL", il.toString()); 
+                Symbol il = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new SingleExprNode("INTEGER_LITERAL", il); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -803,8 +819,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int clleft = CUP$parser$stack.peek().left;
                 int clright = CUP$parser$stack.peek().right;
-                Object cl = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new SingleExprNode("CHARACTER_LITERAL", "\'"+cl.toString()+"\'"); 
+                Symbol cl = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new SingleExprNode("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'")); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -815,8 +831,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int slleft = CUP$parser$stack.peek().left;
                 int slright = CUP$parser$stack.peek().right;
-                Object sl = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new SingleExprNode("STRING_LITERAL", "\""+sl.toString()+"\""); 
+                Symbol sl = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new SingleExprNode("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\"")); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -827,8 +843,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
-                Object id = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new SingleExprNode("IDENTIFIER", id.toString()); 
+                Symbol id = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new SingleExprNode("IDENTIFIER", id); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -852,7 +868,7 @@ class CUP$parser$actions {
                 int alleft = CUP$parser$stack.peek().left;
                 int alright = CUP$parser$stack.peek().right;
                 AstNode al = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new SingleExprNode("argument", ""); RESULT.addGrandChildren(al); 
+                 RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -875,11 +891,11 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-3).<Object> value();
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 ExprNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<ExprNode> value();
-                 RESULT = new BinaryExprNode("arrayIndices", "[]", new SingleExprNode("IDENTIFIER", id.toString()), a); 
+                 RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new SingleExprNode("IDENTIFIER", id), a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",29, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -894,7 +910,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 ExprNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<ExprNode> value();
-                 RESULT = new BinaryExprNode("arrayIndices", "[]", ai, a); 
+                 RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",29, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -906,7 +922,7 @@ class CUP$parser$actions {
                 int tlleft = CUP$parser$stack.peek().left;
                 int tlright = CUP$parser$stack.peek().right;
                 AstNode tl = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("functionReturnType", ""); RESULT.addGrandChildren(tl); 
+                 RESULT = new AstNode("functionReturnType", null); RESULT.addGrandChildren(tl); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionReturnType",8, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -915,7 +931,7 @@ class CUP$parser$actions {
         case 27: // functionReturnType ::= 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("forceParen", ""); 
+                 RESULT = new AstNode("forceParen", null); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionReturnType",8, CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -930,7 +946,7 @@ class CUP$parser$actions {
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("typesList", ""); RESULT.addGrandChildren(tl); RESULT.addChild(t); 
+                 RESULT = new AstNode("typesList", null); RESULT.addGrandChildren(tl); RESULT.addChild(t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("typesList",12, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -942,7 +958,7 @@ class CUP$parser$actions {
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("typesList", ""); RESULT.addChild(t); 
+                 RESULT = new AstNode("typesList", null); RESULT.addChild(t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("typesList",12, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -953,7 +969,7 @@ class CUP$parser$actions {
                 AstNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-8).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-8).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-8).<Object> value();
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-8).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-6).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-6).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-6).<AstNode> value();
@@ -966,7 +982,7 @@ class CUP$parser$actions {
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("method", id.toString());
+                 RESULT = new AstNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); 
@@ -990,7 +1006,7 @@ class CUP$parser$actions {
         case 32: // optionalStatements ::= 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("forceParen", ""); 
+                 RESULT = new AstNode("forceParen", null); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("optionalStatements",10, CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1011,7 +1027,7 @@ class CUP$parser$actions {
         case 34: // optionalArgumentsWithType ::= 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("forceParen", ""); 
+                 RESULT = new AstNode("forceParen", null); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("optionalArgumentsWithType",7, CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1026,7 +1042,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); 
+                 RESULT = new AstNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1038,7 +1054,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("statements", ""); RESULT.addGrandChildren(s); 
+                 RESULT = new AstNode("statements", null); RESULT.addGrandChildren(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1050,7 +1066,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 ExprNode f = CUP$parser$stack.elementAt(CUP$parser$top-1).<ExprNode> value();
-                 RESULT = new AstNode("statement", "", f); 
+                 RESULT = new AstNode("statement", null, f); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1062,7 +1078,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("statement", "", a); 
+                 RESULT = new AstNode("statement", null, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1074,7 +1090,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("statement", "", s); 
+                 RESULT = new AstNode("statement", null, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1086,7 +1102,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("statement", "", s); 
+                 RESULT = new AstNode("statement", null, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1098,7 +1114,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("statement", "", a); 
+                 RESULT = new AstNode("statement", null, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1119,10 +1135,13 @@ class CUP$parser$actions {
         case 43: // optionalReturn ::= RETURN expressions optionalSemicolon 
             {
                 AstNode RESULT = null;
+                int retleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int retright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol ret = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode e = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new AstNode("optionalReturn", "return"); RESULT.addGrandChildren(e); 
+                 RESULT = new AstNode("optionalReturn", ret); RESULT.addGrandChildren(e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("optionalReturn",26, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1158,6 +1177,9 @@ class CUP$parser$actions {
         case 47: // ifStatement ::= IF LPAREN expression RPAREN statement ELSE statement 
             {
                 AstNode RESULT = null;
+                int ileft = CUP$parser$stack.elementAt(CUP$parser$top-6).left;
+                int iright = CUP$parser$stack.elementAt(CUP$parser$top-6).right;
+                Symbol i = CUP$parser$stack.elementAt(CUP$parser$top-6).<Symbol> value();
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
                 ExprNode e = CUP$parser$stack.elementAt(CUP$parser$top-4).<ExprNode> value();
@@ -1167,7 +1189,7 @@ class CUP$parser$actions {
                 int s2left = CUP$parser$stack.peek().left;
                 int s2right = CUP$parser$stack.peek().right;
                 AstNode s2 = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("ifStatement", "if", e, s1); RESULT.addChild(s2); 
+                 RESULT = new AstNode("ifStatement", i, e, s1); RESULT.addChild(s2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("ifStatement",14, CUP$parser$stack.elementAt(CUP$parser$top-6), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1176,13 +1198,16 @@ class CUP$parser$actions {
         case 48: // ifStatement ::= IF LPAREN expression RPAREN statement 
             {
                 AstNode RESULT = null;
+                int ileft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
+                int iright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
+                Symbol i = CUP$parser$stack.elementAt(CUP$parser$top-4).<Symbol> value();
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("ifStatement", "if", e, s); 
+                 RESULT = new AstNode("ifStatement", i, e, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("ifStatement",14, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1191,13 +1216,16 @@ class CUP$parser$actions {
         case 49: // whileStatement ::= WHILE LPAREN expression RPAREN statement 
             {
                 AstNode RESULT = null;
+                int wleft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
+                int wright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
+                Symbol w = CUP$parser$stack.elementAt(CUP$parser$top-4).<Symbol> value();
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("whileStatment", "while", e, s); 
+                 RESULT = new AstNode("whileStatment", w, e, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("whileStatement",15, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1212,12 +1240,15 @@ class CUP$parser$actions {
                 int vleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int vright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode v = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
+                int eqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int eqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol eq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 ExprNode e = CUP$parser$stack.peek().<ExprNode> value();
-                 AstNode node = new AstNode("variables", "");
+                 AstNode node = new AstNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
-                                                                           RESULT = new AstNode("assignment", "=", node); RESULT.addChild(e); 
+                                                                           RESULT = new AstNode("assignment", eq, node); RESULT.addChild(e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("assignment",13, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1229,10 +1260,13 @@ class CUP$parser$actions {
                 int vleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int vright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode v = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
+                int eqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int eqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol eq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 ExprNode e = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new AstNode("assignment", "=", v, e); 
+                 RESULT = new AstNode("assignment", eq, v, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("assignment",13, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1247,7 +1281,7 @@ class CUP$parser$actions {
                 int vleft = CUP$parser$stack.peek().left;
                 int vright = CUP$parser$stack.peek().right;
                 AstNode v = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("variables", ""); RESULT.addGrandChildren(vs); RESULT.addChild(v); 
+                 RESULT = new AstNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variables",18, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1259,7 +1293,7 @@ class CUP$parser$actions {
                 int vleft = CUP$parser$stack.peek().left;
                 int vright = CUP$parser$stack.peek().right;
                 AstNode v = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("variables", ""); RESULT.addChild(v); 
+                 RESULT = new AstNode("variables", null); RESULT.addChild(v); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variables",18, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1268,7 +1302,10 @@ class CUP$parser$actions {
         case 54: // variable ::= UNDERSCORE 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("UNDERSCORE", "_"); 
+                int usleft = CUP$parser$stack.peek().left;
+                int usright = CUP$parser$stack.peek().right;
+                Symbol us = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new AstNode("UNDERSCORE", us); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",19, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1279,8 +1316,8 @@ class CUP$parser$actions {
                 AstNode RESULT = null;
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
-                Object id = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new AstNode("IDENTIFIER", id.toString()); 
+                Symbol id = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new AstNode("IDENTIFIER", id); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",19, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1316,10 +1353,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int orleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int orright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol or = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("OR", "|", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("OR", or, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1331,10 +1371,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int andleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int andright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol and = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("AND", "&", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("AND", and, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1346,10 +1389,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int eqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int eqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol eq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("EQEQ", "==", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("EQEQ", eq, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1361,10 +1407,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int neqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int neqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol neq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("NOTEQ", "!=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("NOTEQ", neq, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1376,10 +1425,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int ltleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int ltright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol lt = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("LT", "<", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("LT", lt, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1391,10 +1443,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int leqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int leqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol leq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("LTEQ", "<=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("LTEQ", leq, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1406,10 +1461,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int geqleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int geqright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol geq = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("GTEQ", ">=", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("GTEQ", geq, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1421,10 +1479,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int gtleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int gtright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol gt = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new BoolBinaryExprNode("GT", ">", e1, e2); 
+                 RESULT = new BoolBinaryExprNode("GT", gt, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1436,10 +1497,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int plleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int plright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol pl = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("PLUS", "+", e1, e2); 
+                 RESULT = new IntBinaryExprNode("PLUS", pl, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1451,10 +1515,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int mileft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int miright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol mi = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("MINUS", "-", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MINUS", mi, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1466,10 +1533,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int muleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int muright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol mu = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("MULT", "*", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MULT", mu, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1481,10 +1551,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int hmleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int hmright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol hm = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("HIGHMULT", "*>>", e1, e2); 
+                 RESULT = new IntBinaryExprNode("HIGHMULT", hm, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1496,10 +1569,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int dileft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int diright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol di = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("DIV", "/", e1, e2); 
+                 RESULT = new IntBinaryExprNode("DIV", di, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1511,10 +1587,13 @@ class CUP$parser$actions {
                 int e1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int e1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 ExprNode e1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<ExprNode> value();
+                int mdleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int mdright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol md = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 ExprNode e2 = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new IntBinaryExprNode("MOD", "%", e1, e2); 
+                 RESULT = new IntBinaryExprNode("MOD", md, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1547,10 +1626,13 @@ class CUP$parser$actions {
         case 74: // expression ::= MINUS LPAREN expression RPAREN 
             {
                 ExprNode RESULT = null;
+                int mileft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int miright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol mi = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 ExprNode e = CUP$parser$stack.elementAt(CUP$parser$top-1).<ExprNode> value();
-                 RESULT = new UnaryExprNode("MINUS", "-", e); 
+                 RESULT = new UnaryExprNode("MINUS", mi, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1559,10 +1641,13 @@ class CUP$parser$actions {
         case 75: // expression ::= MINUS INTEGER_LITERAL 
             {
                 ExprNode RESULT = null;
+                int mileft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int miright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol mi = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int illeft = CUP$parser$stack.peek().left;
                 int ilright = CUP$parser$stack.peek().right;
-                Object il = CUP$parser$stack.peek().<Object> value();
-                 RESULT = new UnaryExprNode("MINUS", "-", new AstNode("INTEGER_LITERAL", il.toString())); 
+                Symbol il = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new UnaryExprNode("MINUS", mi, new AstNode("INTEGER_LITERAL", il)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1571,10 +1656,13 @@ class CUP$parser$actions {
         case 76: // expression ::= NOT expression 
             {
                 ExprNode RESULT = null;
+                int nleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int nright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol n = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 ExprNode e = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new UnaryExprNode("NOT", "!", e); 
+                 RESULT = new UnaryExprNode("NOT", n, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1586,7 +1674,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 ExprNode e = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new AstNode("expressions", "", e); 
+                 RESULT = new AstNode("expressions", null, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expressions",20, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1601,7 +1689,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 ExprNode e = CUP$parser$stack.peek().<ExprNode> value();
-                 RESULT = new AstNode("expressions", ""); RESULT.addGrandChildren(es); RESULT.addChild(e); 
+                 RESULT = new AstNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expressions",20, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1612,11 +1700,11 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-3).<Object> value();
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new FunctionCallNode("functionCall", id.toString()); RESULT.addGrandChildren(es); 
+                 RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1627,8 +1715,8 @@ class CUP$parser$actions {
                 ExprNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-2).<Object> value();
-                 RESULT = new FunctionCallNode("functionCall", id.toString(), new AstNode("emptyArgument", ""));
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
+                 RESULT = new FunctionCallNode("functionCall", id, new AstNode("emptyArgument", null));
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1637,10 +1725,13 @@ class CUP$parser$actions {
         case 81: // functionCall ::= LENGTH LPAREN IDENTIFIER RPAREN 
             {
                 ExprNode RESULT = null;
+                int lleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int lright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
-                Object id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Object> value();
-                 RESULT = new FunctionCallNode("functionCall", "length", new SingleExprNode("IDENTIFIER", id.toString())); 
+                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
+                 RESULT = new FunctionCallNode("functionCall", l, new SingleExprNode("IDENTIFIER", id)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1655,7 +1746,7 @@ class CUP$parser$actions {
                 int msleft = CUP$parser$stack.peek().left;
                 int msright = CUP$parser$stack.peek().right;
                 AstNode ms = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("program", "", us, ms); 
+                 RESULT = new AstNode("program", null, us, ms); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1667,7 +1758,7 @@ class CUP$parser$actions {
                 int usleft = CUP$parser$stack.peek().left;
                 int usright = CUP$parser$stack.peek().right;
                 AstNode us = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("program", "", us, new AstNode("forceParen", "")); 
+                 RESULT = new AstNode("program", null, us, new AstNode("forceParen", null)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1679,7 +1770,7 @@ class CUP$parser$actions {
                 int msleft = CUP$parser$stack.peek().left;
                 int msright = CUP$parser$stack.peek().right;
                 AstNode ms = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("program", "", new AstNode("forceParen", ""), ms); 
+                 RESULT = new AstNode("program", null, new AstNode("forceParen", null), ms); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1688,7 +1779,7 @@ class CUP$parser$actions {
         case 85: // program ::= 
             {
                 AstNode RESULT = null;
-                 RESULT = new AstNode("program", "", new AstNode("forceParen", ""), new AstNode("forceParen", "")); 
+                 RESULT = new AstNode("program", null, new AstNode("forceParen", null), new AstNode("forceParen", null)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("program",0, CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1715,7 +1806,7 @@ class CUP$parser$actions {
                 int suleft = CUP$parser$stack.peek().left;
                 int suright = CUP$parser$stack.peek().right;
                 AstNode su = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("uses", ""); RESULT.addGrandChildren(us); RESULT.addChild(su); 
+                 RESULT = new AstNode("uses", null); RESULT.addGrandChildren(us); RESULT.addChild(su); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("uses",2, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1727,7 +1818,7 @@ class CUP$parser$actions {
                 int suleft = CUP$parser$stack.peek().left;
                 int suright = CUP$parser$stack.peek().right;
                 AstNode su = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("uses", "", su); 
+                 RESULT = new AstNode("uses", null, su); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("uses",2, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1742,7 +1833,7 @@ class CUP$parser$actions {
                 int mleft = CUP$parser$stack.peek().left;
                 int mright = CUP$parser$stack.peek().right;
                 AstNode m = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("methods", ""); RESULT.addGrandChildren(ms); RESULT.addChild(m); 
+                 RESULT = new AstNode("methods", null); RESULT.addGrandChildren(ms); RESULT.addChild(m); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("methods",21, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1754,7 +1845,7 @@ class CUP$parser$actions {
                 int mleft = CUP$parser$stack.peek().left;
                 int mright = CUP$parser$stack.peek().right;
                 AstNode m = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new AstNode("methods", "", m); 
+                 RESULT = new AstNode("methods", null, m); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("methods",21, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
