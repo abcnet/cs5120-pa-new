@@ -13,7 +13,7 @@ import zr54.typechecker.Type;
  * @author Rundong Wu
  *
  */
-public class AstNode {
+public abstract class AstNode {
 
 	protected String type = "";
 	protected Symbol value = null;
@@ -175,9 +175,8 @@ public class AstNode {
 		return str;
 	}
 
-    public Type typeCheck() {
-    	return new Type();
-    }
+    public abstract Type typeCheck(); 
+    
     
 }
 

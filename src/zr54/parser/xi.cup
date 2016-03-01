@@ -35,7 +35,7 @@ nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
             ifStatement, whileStatement, bracket, brackets, variables,
             variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn;
-nonterminal ExprNode expression, argument, arrayIndices, functionCall;            
+nonterminal AstNode expression, argument, arrayIndices, functionCall;            
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -51,35 +51,35 @@ precedence nonassoc NOT;
 start with program;
 
 
-singleUse           ::= USE:u IDENTIFIER:id  {: RESULT = new AstNode("useSpecifier", null, new AstNode("USE", u), new AstNode("IDENTIFIER", id)); :}
+singleUse           ::= USE:u IDENTIFIER:id  {: RESULT = new DefaultNode("useSpecifier", null, new DefaultNode("USE", u), new DefaultNode("IDENTIFIER", id)); :}
                       ;
 
-arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new AstNode("INT", i)); RESULT = bs; :}
-                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new AstNode("BOOL", b)); RESULT = bs; :}
+arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new DefaultNode("INT", i)); RESULT = bs; :}
+                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new DefaultNode("BOOL", b)); RESULT = bs; :}
                       ;
 
-arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new AstNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
-                      | LBRACE expressions:es COMMA RBRACE    {: RESULT = new AstNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
+arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
+                      | LBRACE expressions:es COMMA RBRACE    {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
                       ;
 
-bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new AstNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
-                      | LBRACK RBRACK                {: RESULT = new AstNode("bracket", new Symbol(sym.LRBRACK, "[]"), new AstNode("", null));  :}
+bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
+                      | LBRACK RBRACK                {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
                       ;
 
-brackets            ::= bracket:b brackets:bs   {: RESULT = new AstNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | bracket:b               {: RESULT = b; :}
                       ;
 
 type                ::= arrayType:a     {: RESULT = a; :}
-                      | INT:i             {: RESULT = new AstNode("INT", i); :}
-                      | BOOL:b            {: RESULT = new AstNode("BOOL", b); :}
+                      | INT:i             {: RESULT = new DefaultNode("INT", i); :}
+                      | BOOL:b            {: RESULT = new DefaultNode("BOOL", b); :}
                       ;
 
-argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new AstNode("argumentWithType", id); RESULT.addChild(t); :}
+argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DefaultNode("argumentWithType", id); RESULT.addChild(t); :}
                       ;
 
-argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new AstNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
-                      | argumentWithType:a                            {: RESULT = new AstNode("argumentsWithType", null, a); :}
+argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
+                      | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
 
 argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new SingleExprNode("BOOLEAN_LITERAL", bl); :}
@@ -96,43 +96,43 @@ arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = 
                       | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
                       ;
 
-functionReturnType  ::= COLON typesList:tl    {: RESULT = new AstNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
-                      |                       {: RESULT = new AstNode("forceParen", null); :}
+functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
+                      |                       {: RESULT = new DefaultNode("forceParen", null); :}
                       ;
 
-typesList           ::= typesList:tl COMMA type:t   {: RESULT = new AstNode("typesList", null); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}
-                      | type:t                      {: RESULT = new AstNode("typesList", null); RESULT.addChild(t); :}
+typesList           ::= typesList:tl COMMA type:t   {: RESULT = new DefaultNode("typesList", null); RESULT.addGrandChildren(tl); RESULT.addChild(t); :}
+                      | type:t                      {: RESULT = new DefaultNode("typesList", null); RESULT.addChild(t); :}
                       ;
 
 
 method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE
-                        {: RESULT = new AstNode("method", id);
+                        {: RESULT = new DefaultNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
-                      |	             {: RESULT = new AstNode("forceParen", null); :}
+                      |	             {: RESULT = new DefaultNode("forceParen", null); :}
                       ;
 
 optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
-                            |                      {: RESULT = new AstNode("forceParen", null); :}
+                            |                      {: RESULT = new DefaultNode("forceParen", null); :}
                             ;
 
-statements  ::= statements:ms statement:s     {: RESULT = new AstNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
-                      | statement:s           {: RESULT = new AstNode("statements", null); RESULT.addGrandChildren(s); :}
+statements  ::= statements:ms statement:s     {: RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
+                      | statement:s           {: RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(s); :}
                       ;
 
-statement           ::= functionCall:f optionalSemicolon         {: RESULT = new AstNode("statement", null, f); :}
-                      | assignment:a optionalSemicolon           {: RESULT = new AstNode("statement", null, a); :}
-                      | ifStatement:s                            {: RESULT = new AstNode("statement", null, s); :}
-                      | whileStatement:s                         {: RESULT = new AstNode("statement", null, s); :}
-                      | argumentWithType:a optionalSemicolon     {: RESULT = new AstNode("statement", null, a); :}
+statement           ::= functionCall:f optionalSemicolon         {: RESULT = new DefaultNode("statement", null, f); :}
+                      | assignment:a optionalSemicolon           {: RESULT = new DefaultNode("statement", null, a); :}
+                      | ifStatement:s                            {: RESULT = new DefaultNode("statement", null, s); :}
+                      | whileStatement:s                         {: RESULT = new DefaultNode("statement", null, s); :}
+                      | argumentWithType:a optionalSemicolon     {: RESULT = new DefaultNode("statement", null, a); :}
                       | block: b                                 {: RESULT = b; :}
                       ;
 
-optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new AstNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
+optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new DefaultNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
                       |
                       ;
 
@@ -140,25 +140,25 @@ optionalSemicolon   ::= SEMICOLON
                       |
                       ;
 
-ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new AstNode("ifStatement", i, e, s1); RESULT.addChild(s2); :}
-                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new AstNode("ifStatement", i, e, s); :}
+ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new DefaultNode("ifStatement", i, e, s1); RESULT.addChild(s2); :}
+                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new DefaultNode("ifStatement", i, e, s); :}
                       ;
 
-whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new AstNode("whileStatment", w, e, s); :}
+whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new DefaultNode("whileStatment", w, e, s); :}
                       ;
 
-assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: AstNode node = new AstNode("variables", null);
+assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new DefaultNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
-                                                                           RESULT = new AstNode("assignment", eq, node); RESULT.addChild(e); :}
-                      | variable:v EQ:eq expression:e                      {: RESULT = new AstNode("assignment", eq, v, e); :}
+                                                                           RESULT = new DefaultNode("assignment", eq, node); RESULT.addChild(e); :}
+                      | variable:v EQ:eq expression:e                      {: RESULT = new DefaultNode("assignment", eq, v, e); :}
                       ;
 
-variables           ::= variables:vs COMMA variable:v     {: RESULT = new AstNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
-                      | variable:v                        {: RESULT = new AstNode("variables", null); RESULT.addChild(v); :}
+variables           ::= variables:vs COMMA variable:v     {: RESULT = new DefaultNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | variable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
                       ;
 
-variable            ::= UNDERSCORE:us            {: RESULT = new AstNode("UNDERSCORE", us); :}
-                      | IDENTIFIER:id         {: RESULT = new AstNode("IDENTIFIER", id); :}
+variable            ::= UNDERSCORE:us            {: RESULT = new DefaultNode("UNDERSCORE", us); :}
+                      | IDENTIFIER:id         {: RESULT = new DefaultNode("IDENTIFIER", id); :}
                       | argumentWithType:a    {: RESULT = a; :}
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
@@ -180,32 +180,32 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new Bo
                       | LPAREN expression:e RPAREN				     {: RESULT = e; :}
                       | argument:a                   				   {: RESULT = a; :}
                       | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new UnaryExprNode("MINUS", mi, e); :}
-                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new UnaryExprNode("MINUS", mi, new AstNode("INTEGER_LITERAL", il)); :}
+                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new UnaryExprNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); :}
                       | NOT:n expression:e		                   {: RESULT = new UnaryExprNode("NOT", n, e); :}
                       ;
 
-expressions         ::= expression:e                           {: RESULT = new AstNode("expressions", null, e); :}
-                      | expressions:es COMMA expression:e      {: RESULT = new AstNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
+expressions         ::= expression:e                           {: RESULT = new DefaultNode("expressions", null, e); :}
+                      | expressions:es COMMA expression:e      {: RESULT = new DefaultNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
                       ;
 
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
-                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("functionCall", id, new AstNode("emptyArgument", null));:}
+                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("functionCall", id, new DefaultNode("emptyArgument", null));:}
                       | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new FunctionCallNode("functionCall", l, new SingleExprNode("IDENTIFIER", id)); :}
                       ;
 
-program             ::= uses:us  methods:ms   {: RESULT = new AstNode("program", null, us, ms); :}
-                      | uses:us               {: RESULT = new AstNode("program", null, us, new AstNode("forceParen", null)); :}
-                      | methods:ms            {: RESULT = new AstNode("program", null, new AstNode("forceParen", null), ms); :}
-                      |                       {: RESULT = new AstNode("program", null, new AstNode("forceParen", null), new AstNode("forceParen", null)); :}
+program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
+                      | uses:us               {: RESULT = new DefaultNode("program", null, us, new DefaultNode("forceParen", null)); :}
+                      | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
+                      |                       {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), new DefaultNode("forceParen", null)); :}
                       | error:e               {:  :}
                       ;
 
-uses                ::= uses:us singleUse:su  {: RESULT = new AstNode("uses", null); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
-                      | singleUse:su          {: RESULT = new AstNode("uses", null, su); :}
+uses                ::= uses:us singleUse:su  {: RESULT = new DefaultNode("uses", null); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
+                      | singleUse:su          {: RESULT = new DefaultNode("uses", null, su); :}
                       ;
 
-methods             ::= methods:ms method:m   {: RESULT = new AstNode("methods", null); RESULT.addGrandChildren(ms); RESULT.addChild(m); :}
-                      | method:m              {: RESULT = new AstNode("methods", null, m); :}
+methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("methods", null); RESULT.addGrandChildren(ms); RESULT.addChild(m); :}
+                      | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
 
 block               ::= LBRACE optionalStatements:s RBRACE      {: RESULT = s; :}
