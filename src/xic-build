@@ -1,5 +1,9 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "$0" )" && pwd )"
+if [ ! -e "../bin" ]
+then
+    mkdir ../bin/
+fi
 # Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 
 # Code of escaping spaces from http://mindspill.net/computing/linux-notes/escape-spaces-with-sed/
@@ -15,5 +19,5 @@ echo "Start processing xi.cup"
 "${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/parser/ "${DIR}"/zr54/parser/xi.cup
 echo "Done processing xi.cup"
 echo "Start compiling .java files"
-javac -cp "${DIR}":"${DIR}"/../lib/java_cup.jar:"${DIR}"/../lib/java-getopt-1.0.14.jar "${DIR}"/zr54/*/*.java 
+javac -d ${DIR}/../bin -cp "${DIR}":"${DIR}"/../lib/java_cup.jar:"${DIR}"/../lib/java-getopt-1.0.14.jar "${DIR}"/zr54/*/*.java 
 echo "Done compiling .java files"
