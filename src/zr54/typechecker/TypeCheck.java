@@ -23,27 +23,28 @@ public class TypeCheck {
 			parser p = new parser(printer);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
-
-			System.out.println("Parsing "+srcFile);
+ 
 			Symbol s;
 			try{
 				s = p.parse();
 				AstNode root = s.value();
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
-				if(root.typeCheck(vars, funcs).getType()!= Type.NIL) {
-					System.out.println("type check passed");
+				try {
+					root.typeCheck(vars, funcs);
+					System.out.println("Valid program");
+				}catch(TypeCheckError e) {
+					System.out.println(e.getMessage());
 				}
-				else {
-					System.out.print("error");
-				}
+								
+				System.out.print(root.toString());
 				
 				
 			}catch(Exception e){
 				s = l.next_token();
 			}
 			printer.flush();
-			System.out.println("Parsed AST written to "+dstFile);
+
 		} else {
 			System.out.println("error: '" + srcFile + "' does not exist");
 		}

@@ -6,7 +6,7 @@ import edu.cornell.cs.cs4120.util.*;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
 import zr54.typechecker.*;
-import zr54.typechecker.Type;
+
 
 /**
  * This class is used to represent nodes of abstract syntax tree.
@@ -166,8 +166,13 @@ public abstract class AstNode {
 	 * Convert this node to a string.
 	 */
 	public String toString() {
-		String str = type + ":" + value + "\n";
-
+		
+		String str = "";
+		if(value != null)
+			str = type + ":" + value.value + "\n";
+		else
+			str = type + ":\n";
+		
 		for(AstNode child : children) {
 			str += child.toString() + "\n";
 		}
@@ -175,8 +180,8 @@ public abstract class AstNode {
 		return str;
 	}
 
-    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs); 
-    
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError;
+
     
 }
 

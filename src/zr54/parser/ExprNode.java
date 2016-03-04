@@ -4,7 +4,7 @@ import zr54.typechecker.*;
 public class ExprNode extends AstNode{
 
 	@Override
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) {
+    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError{
     	return new Type();
     }
 }

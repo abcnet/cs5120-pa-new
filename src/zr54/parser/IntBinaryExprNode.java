@@ -11,7 +11,7 @@ public class IntBinaryExprNode extends ExprNode {
 		addChild(child2);
 	}
 
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) {
+    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError{
         Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
