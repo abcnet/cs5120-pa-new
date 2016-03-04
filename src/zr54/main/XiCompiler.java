@@ -6,7 +6,7 @@ import gnu.getopt.LongOpt;
 
 import zr54.lexer.*;
 import zr54.parser.*;
-
+import zr54.typechecker.*;
 class XiCompiler {
 	/**
 	 * Main function of the compiler
@@ -93,7 +93,7 @@ class XiCompiler {
                 ParsePrint.parseAndPrint(src, dst);
             } else if (op == "typecheck") {
                 System.out.println("Typechecking..");
-                
+                TypeCheck.typeCheckAndPrint(src, dst);
             }
         }
     }
