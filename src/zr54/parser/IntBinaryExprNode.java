@@ -19,14 +19,15 @@ public class IntBinaryExprNode extends ExprNode {
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
-			try {
-				throw new TypeCheckError("error: operands of '" + this.value
-				                                + "' must be int");
-			} catch (TypeCheckError e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return new Type();
+        	throw new TypeCheckError("error: operands of '" + this.value +  "' must be int");
+//			try {
+//				throw new TypeCheckError("error: operands of '" + this.value
+//				                                + "' must be int");
+//			} catch (TypeCheckError e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return new Type();
         }
     }
 }
