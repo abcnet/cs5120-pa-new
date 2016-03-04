@@ -17,7 +17,8 @@ public class DefaultNode extends AstNode{
 	}
 	
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError{
-		
+		for(AstNode n : children)
+			n.typeCheck(vars, funcs);
 		
 		return new Type();
 	}
