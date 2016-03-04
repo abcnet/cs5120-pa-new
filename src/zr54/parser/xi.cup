@@ -82,9 +82,9 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
 
-argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new SingleExprNode("BOOLEAN_LITERAL", bl); :}
-                      | INTEGER_LITERAL:il      {: RESULT = new SingleExprNode("INTEGER_LITERAL", il); :}
-                      | CHARACTER_LITERAL:cl    {: RESULT = new SingleExprNode("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'")); :}
+argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new BooleanLiteral("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value)); :}
+                      | INTEGER_LITERAL:il      {: RESULT = new IntegerLiteral("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value)); :}
+                      | CHARACTER_LITERAL:cl    {: RESULT = new IntegerLiteral("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value+"\'")); :}
                       | STRING_LITERAL:sl       {: RESULT = new SingleExprNode("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\"")); :}
                       | IDENTIFIER:id           {: RESULT = new SingleExprNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
