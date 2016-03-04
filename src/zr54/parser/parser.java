@@ -820,7 +820,7 @@ class CUP$parser$actions {
                 int clleft = CUP$parser$stack.peek().left;
                 int clright = CUP$parser$stack.peek().right;
                 Symbol cl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new IntegerLiteral("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value+"\'")); 
+                 RESULT = new IntegerLiteral("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'")); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
