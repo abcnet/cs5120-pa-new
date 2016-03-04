@@ -2,7 +2,7 @@ package zr54.typechecker;
 
 import java.util.HashMap;
 
-class VarSymbolTable {
+public class VarSymbolTable {
     private VarSymbolTable parent;
     private HashMap<String, Type> table;
 

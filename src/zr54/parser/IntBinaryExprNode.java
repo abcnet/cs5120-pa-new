@@ -1,6 +1,6 @@
 package zr54.parser;
 
-import zr54.typechecker.Type;
+import zr54.typechecker.*;
 import java_cup.runtime.*;
 public class IntBinaryExprNode extends ExprNode {
 
@@ -11,9 +11,9 @@ public class IntBinaryExprNode extends ExprNode {
 		addChild(child2);
 	}
 
-    public Type typeCheck() {
-        Type t1 = this.children.get(0).typeCheck();
-        Type t2 = this.children.get(1).typeCheck();
+    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) {
+        Type t1 = this.children.get(0).typeCheck(vars, funcs);
+        Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
         if ((t1.getType() == Type.INT && t2.getType() == Type.INT)
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {

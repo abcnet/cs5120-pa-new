@@ -16,7 +16,7 @@ public class DefaultNode extends AstNode{
 		super(t, v, c1, c2);
 	}
 	
-	public Type typeCheck() {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) {
 		return new Type();
 	}
 	

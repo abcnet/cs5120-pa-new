@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.*;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
-
+import zr54.typechecker.*;
 import zr54.typechecker.Type;
 
 /**
@@ -175,7 +175,7 @@ public abstract class AstNode {
 		return str;
 	}
 
-    public abstract Type typeCheck(); 
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs); 
     
     
 }

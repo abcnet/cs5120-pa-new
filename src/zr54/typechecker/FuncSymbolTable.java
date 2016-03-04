@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
 
-class FuncSymbolTable {
+public class FuncSymbolTable {
     private HashMap<FunctionSignature, Type> table;
 
     public FuncSymbolTable() {

@@ -1,10 +1,10 @@
 package zr54.parser;
-import zr54.typechecker.Type;
+import zr54.typechecker.*;
 
 public class ExprNode extends AstNode{
 
 	@Override
-    public Type typeCheck() {
+    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) {
     	return new Type();
     }
 }
