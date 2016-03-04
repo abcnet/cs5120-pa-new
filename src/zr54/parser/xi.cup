@@ -171,7 +171,7 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new Bo
 		                  | expression:e1 LTEQ:leq expression:e2			 {: RESULT = new BoolBinaryExprNode("LTEQ", leq, e1, e2); :}
 		                  | expression:e1 GTEQ:geq expression:e2			 {: RESULT = new BoolBinaryExprNode("GTEQ", geq, e1, e2); :}
                       | expression:e1 GT:gt expression:e2				 {: RESULT = new BoolBinaryExprNode("GT", gt, e1, e2); :}
-                      |	expression:e1 PLUS:pl expression:e2			 {: RESULT = new IntBinaryExprNode("PLUS", pl, e1, e2); :}
+                      |	expression:e1 PLUS:pl expression:e2			 {: RESULT = new AddIntBinaryExprNode("PLUS", pl, e1, e2); :}
                       | expression:e1 MINUS:mi expression:e2			 {: RESULT = new IntBinaryExprNode("MINUS", mi, e1, e2); :}
                       | expression:e1 MULT:mu expression:e2			 {: RESULT = new IntBinaryExprNode("MULT", mu, e1, e2); :}
                       | expression:e1 HIGHMULT:hm expression:e2	 {: RESULT = new IntBinaryExprNode("HIGHMULT", hm, e1, e2); :}

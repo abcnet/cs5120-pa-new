@@ -1503,7 +1503,7 @@ class CUP$parser$actions {
                 int e2left = CUP$parser$stack.peek().left;
                 int e2right = CUP$parser$stack.peek().right;
                 AstNode e2 = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new IntBinaryExprNode("PLUS", pl, e1, e2); 
+                 RESULT = new AddIntBinaryExprNode("PLUS", pl, e1, e2); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
