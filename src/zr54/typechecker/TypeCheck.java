@@ -28,6 +28,7 @@ public class TypeCheck {
 			try{
 				s = p.parse();
 				AstNode root = s.value();
+				System.out.print(root.toString());
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				try {
@@ -43,6 +44,7 @@ public class TypeCheck {
 				
 				
 			}catch(Exception e){
+				System.out.println(e.getMessage());
 				s = l.next_token();
 			}
 			printer.flush();
