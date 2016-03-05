@@ -32,9 +32,11 @@ public class TypeCheck {
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				try {
 					root.typeCheck(vars, funcs);
+					printer.printAtom("Valid Xi Program");
 					System.out.println("Valid program");
 				}catch(TypeCheckError e) {
 					System.out.println(e.getMessage());
+					printer.printAtom(e.getMessage());
 				}
 								
 				System.out.print(root.toString());
