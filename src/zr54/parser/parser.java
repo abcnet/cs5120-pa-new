@@ -883,7 +883,7 @@ class CUP$parser$actions {
                 int alleft = CUP$parser$stack.peek().left;
                 int alright = CUP$parser$stack.peek().right;
                 AstNode al = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); 
+                 RESULT = new ArrayLiteralNode("argument", null); RESULT.addGrandChildren(al); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

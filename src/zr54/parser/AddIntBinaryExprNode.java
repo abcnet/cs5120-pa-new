@@ -20,16 +20,11 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
         if ((t1.getType() == Type.INT && t2.getType() == Type.INT)
             && (t1.getDimension() == t2.getDimension())) {
             return(new Type(Type.INT, t1.getDimension()));
-        } else {
-        	throw new TypeCheckException(this.value.left,this.value.right,"error: operands of '" + this.value +  "' must be int");
-//			try {
-//				throw new TypeCheckError("error: operands of '" + this.value
-//				                                + "' must be int");
-//			} catch (TypeCheckError e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			return new Type();
+        } 
+        else {
+        	System.out.println("t1: "+t1.getType() + " dim: " + t1.getDimension()); 
+        	System.out.println("t2: "+t2.getType() + " dim: " + t2.getDimension());
+        	throw new TypeCheckException(value, "operands of '" + (String) value.value +  "' must be int or arrays of the same dimension");
         }
     }
 

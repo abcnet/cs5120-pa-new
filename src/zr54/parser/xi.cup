@@ -89,7 +89,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
                       | IDENTIFIER:id           {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
-                      | arrayLiteral:al         {: RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); :}
+                      | arrayLiteral:al         {: RESULT = new ArrayLiteralNode("argument", null); RESULT.addGrandChildren(al); :}
                       | arrayIndices:ai         {: RESULT = ai; :}
                       ;
 
