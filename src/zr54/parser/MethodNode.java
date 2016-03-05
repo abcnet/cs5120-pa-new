@@ -16,6 +16,7 @@ public class MethodNode extends AstNode{
 		for(AstNode n : children) {
 			n.typeCheck(newVars, funcs);
 		}		
+		//TODO: need to check argument type
 		return new Type();
 
 	}

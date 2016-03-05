@@ -15,7 +15,9 @@ public class DeclarationNode extends AstNode {
 				throw new TypeCheckException(this.value.left,this.value.right,"Duplicate Variable " + (String)value.value);
 			}			
 			else {
-				vars.add((String) value.value, children.get(0).typeCheck(vars, funcs));
+				Type t = children.get(0).typeCheck(vars, funcs);
+				vars.add((String) value.value, t);
+				return t;
 			}
 		}
 		
