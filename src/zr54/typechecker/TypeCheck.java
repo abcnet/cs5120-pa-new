@@ -37,7 +37,7 @@ public class TypeCheck {
 					System.out.println("Valid program");
 				}catch(TypeCheckException e) {
 					System.out.println(e.getLine()+":"+e.getColumn()+e.getMessage());
-					printer.printAtom(e.getLine()+":"+e.getColumn()+e.getMessage());
+					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 				}
 								
 				System.out.print(root.toString());

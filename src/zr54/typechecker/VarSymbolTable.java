@@ -24,7 +24,7 @@ public class VarSymbolTable {
     }
 
     public int add(String var, Type t) {
-        if (this.lookup(var).getType() == Type.NIL) {
+        if (this.lookup(var) == null) {
            table.put(var, t);
            return 1;
         } else return 0;

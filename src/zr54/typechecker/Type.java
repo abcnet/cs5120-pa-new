@@ -29,6 +29,10 @@ public class Type {
     public void setDimension(int dimension) {
         this.dimension = dimension;
     }
+    
+    public void incDimension() {
+    	this.dimension++;
+    }
 
     public int getType() {
         return this.type;

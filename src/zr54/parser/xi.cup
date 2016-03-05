@@ -55,16 +55,16 @@ start with program;
 singleUse           ::= USE:u IDENTIFIER:id optionalSemicolon  {: RESULT = new DefaultNode("useSpecifier", null, new DefaultNode("USE", u), new DefaultNode("IDENTIFIER", id)); :}
                       ;
 
-arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new DefaultNode("INT", i)); RESULT = bs; :}
-                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new DefaultNode("BOOL", b)); RESULT = bs; :}
+arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
+                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
 
 arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
                       | LBRACE expressions:es COMMA RBRACE    {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
                       ;
 
-bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
-                      | LBRACK RBRACK                {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
+bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
+                      | LBRACK RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
                       ;
 
 brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
@@ -72,8 +72,8 @@ brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("bra
                       ;
 
 type                ::= arrayType:a     {: RESULT = a; :}
-                      | INT:i             {: RESULT = new DefaultNode("INT", i); :}
-                      | BOOL:b            {: RESULT = new DefaultNode("BOOL", b); :}
+                      | INT:i             {: RESULT = new TypeNode("INT", i); :}
+                      | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
                       ;
 
 argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
