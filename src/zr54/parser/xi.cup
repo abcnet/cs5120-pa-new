@@ -180,9 +180,9 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new An
                       | expression:e1 MOD:md expression:e2				 {: RESULT = new IntBinaryExprNode("MOD", md, e1, e2); :}
                       | LPAREN expression:e RPAREN				     {: RESULT = e; :}
                       | argument:a                   				   {: RESULT = a; :}
-                      | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new UnaryExprNode("MINUS", mi, e); :}
-                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new UnaryExprNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); :}
-                      | NOT:n expression:e		                   {: RESULT = new UnaryExprNode("NOT", n, e); :}
+                      | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new MinusNode("MINUS", mi, e); :}
+                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new MinusNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); :}
+                      | NOT:n expression:e		                   {: RESULT = new NotNode("NOT", n, e); :}
                       ;
 
 expressions         ::= expression:e                           {: RESULT = new DefaultNode("expressions", null, e); :}

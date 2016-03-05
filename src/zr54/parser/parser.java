@@ -1635,7 +1635,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode e = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new UnaryExprNode("MINUS", mi, e); 
+                 RESULT = new MinusNode("MINUS", mi, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1650,7 +1650,7 @@ class CUP$parser$actions {
                 int illeft = CUP$parser$stack.peek().left;
                 int ilright = CUP$parser$stack.peek().right;
                 Symbol il = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new UnaryExprNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); 
+                 RESULT = new MinusNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1665,7 +1665,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 AstNode e = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new UnaryExprNode("NOT", n, e); 
+                 RESULT = new NotNode("NOT", n, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
