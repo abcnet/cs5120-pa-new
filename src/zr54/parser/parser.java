@@ -847,7 +847,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
                 Symbol id = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new SingleExprNode("IDENTIFIER", id); 
+                 RESULT = new VariableNode("IDENTIFIER", id); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1320,7 +1320,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.peek().left;
                 int idright = CUP$parser$stack.peek().right;
                 Symbol id = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new DefaultNode("IDENTIFIER", id); 
+                 RESULT = new VariableNode("IDENTIFIER", id); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",19, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

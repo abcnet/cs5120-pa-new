@@ -19,15 +19,9 @@ public class IntBinaryExprNode extends ExprNode {
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
+        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
+        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
         	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be int");
-//			try {
-//				throw new TypeCheckError("error: operands of '" + this.value
-//				                                + "' must be int");
-//			} catch (TypeCheckError e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			return new Type();
         }
     }
 }

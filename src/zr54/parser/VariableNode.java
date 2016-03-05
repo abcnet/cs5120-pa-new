@@ -15,8 +15,8 @@ public class VariableNode extends SingleExprNode{
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		 Type t = vars.lookup((String)this.value.value);
 		 if (t == null){
-			 throw new TypeCheckException(this.value.left,this.value.right,"");
+			 throw new TypeCheckException(this.value.left,this.value.right,"Undefined identifier");
 		 }
-		 return null;
+		 return t;
 	 }
 }

@@ -87,7 +87,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
                       | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); :}
                       | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
-                      | IDENTIFIER:id           {: RESULT = new SingleExprNode("IDENTIFIER", id); :}
+                      | IDENTIFIER:id           {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
                       | arrayLiteral:al         {: RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); :}
                       | arrayIndices:ai         {: RESULT = ai; :}
@@ -159,7 +159,7 @@ variables           ::= variables:vs COMMA variable:v     {: RESULT = new Defaul
                       ;
 
 variable            ::= UNDERSCORE:us            {: RESULT = new DefaultNode("UNDERSCORE", us); :}
-                      | IDENTIFIER:id         {: RESULT = new DefaultNode("IDENTIFIER", id); :}
+                      | IDENTIFIER:id         {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a    {: RESULT = a; :}
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
