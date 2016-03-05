@@ -7,15 +7,16 @@ import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
 public class AssignStmtNode extends StmtNode{
-	public AssignStmtNode(String t, Symbol v, AstNode child1, AstNode child2) {
-		type = t;
-		value = v;
-		addChild(child1);
-		addChild(child2);
+	public AssignStmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
+		super(t, v, c1, c2);
+		// TODO Auto-generated constructor stub
 	}
 
+	
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+		for(AstNode n : children)
+			n.typeCheck(vars, funcs);
 		
 		Type left=this.children.get(0).typeCheck(vars, funcs).getTuple().get(0);
 		Type right=this.children.get(1).typeCheck(vars, funcs).getTuple().get(0);

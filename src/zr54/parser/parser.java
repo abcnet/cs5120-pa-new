@@ -646,10 +646,13 @@ class CUP$parser$actions {
         case 4: // arrayLiteral ::= LBRACE expressions RBRACE 
             {
                 AstNode RESULT = null;
+                int lleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); 
+                 RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -658,10 +661,13 @@ class CUP$parser$actions {
         case 5: // arrayLiteral ::= LBRACE expressions COMMA RBRACE 
             {
                 AstNode RESULT = null;
+                int lleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int lright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
-                 RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); 
+                 RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1269,7 +1275,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 AstNode e = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("assignment", eq, v, e); 
+                 RESULT = new AssignStmtNode("assignment", eq, v, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("assignment",13, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

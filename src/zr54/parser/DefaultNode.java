@@ -16,6 +16,7 @@ public class DefaultNode extends AstNode{
 		super(t, v, c1, c2);
 	}
 	
+	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		for(AstNode n : children)
 			n.typeCheck(vars, funcs);
