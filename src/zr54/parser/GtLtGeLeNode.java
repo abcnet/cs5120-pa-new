@@ -21,7 +21,7 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 
         if ((t1.getType() == Type.INT && t2.getType() == Type.INT )
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
-            return(new Type(Type.INT, 0));
+            return(new Type(Type.BOOL, 0));
         } else {
         	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
         	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");

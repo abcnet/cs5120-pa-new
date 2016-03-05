@@ -21,11 +21,11 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 
         if ((t1.getType() == t2.getType() )
             && (t1.getDimension() == t2.getDimension())) {
-            return(new Type(Type.INT, 0));
+            return(new Type(Type.BOOL, 0));
         } else {
         	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
         	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be int");
+        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' do not match");
         }
     }
 

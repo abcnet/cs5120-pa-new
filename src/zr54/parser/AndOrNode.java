@@ -19,13 +19,13 @@ public class AndOrNode extends BoolBinaryExprNode {
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
-        if ((t1.getType() == t2.getType() )
+        if ((t1.getType() == Type.BOOL && t2.getType() == Type.BOOL)
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
-            return(new Type(Type.INT, 0));
+            return(new Type(Type.BOOL, 0));
         } else {
         	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
         	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be int");
+        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be bool");
         }
     }
 
