@@ -1740,7 +1740,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
-                 RESULT = new LengthNode("length", l, new SingleExprNode("IDENTIFIER", id)); 
+                 RESULT = new LengthNode("length", l, new VariableNode("IDENTIFIER", id)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
