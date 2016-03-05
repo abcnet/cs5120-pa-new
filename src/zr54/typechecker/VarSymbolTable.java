@@ -10,6 +10,10 @@ public class VarSymbolTable {
         this.parent = null;
         this.table = new HashMap<String, Type>();
     }
+    public VarSymbolTable(VarSymbolTable parent){
+    	this.parent = parent;
+    	this.table = new HashMap<String, Type>();
+    }
 
     public Type lookup(String var) {
         if (this.table.containsKey(var)) {

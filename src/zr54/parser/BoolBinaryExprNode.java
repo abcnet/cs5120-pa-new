@@ -1,6 +1,10 @@
 package zr54.parser;
 
 import java_cup.runtime.Symbol;
+import zr54.typechecker.FuncSymbolTable;
+import zr54.typechecker.Type;
+import zr54.typechecker.TypeCheckException;
+import zr54.typechecker.VarSymbolTable;
 
 public class BoolBinaryExprNode extends ExprNode{
 	
@@ -10,6 +14,8 @@ public class BoolBinaryExprNode extends ExprNode{
 		addChild(child1);
 		addChild(child2);
 	}
+	
+	
 	
 	
 }
