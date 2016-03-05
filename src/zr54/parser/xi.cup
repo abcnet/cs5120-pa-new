@@ -209,5 +209,5 @@ methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("metho
                       | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
 
-block               ::= LBRACE optionalStatements:s RBRACE      {: RESULT = s; :}
+block               ::= LBRACE:l optionalStatements:s RBRACE      {: RESULT = new BlockNode("block", l, s); :}
                       ;

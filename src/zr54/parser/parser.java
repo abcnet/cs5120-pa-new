@@ -1869,10 +1869,13 @@ class CUP$parser$actions {
         case 91: // block ::= LBRACE optionalStatements RBRACE 
             {
                 AstNode RESULT = null;
+                int lleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int sleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int sright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode s = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = s; 
+                 RESULT = new BlockNode("block", l, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("block",25, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
