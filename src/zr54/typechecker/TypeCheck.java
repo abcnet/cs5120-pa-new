@@ -28,7 +28,7 @@ public class TypeCheck {
 			try{
 				s = p.parse();
 				AstNode root = s.value();
-				System.out.print(root.toString());
+				//System.out.print(root.toString());
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				try {
@@ -36,17 +36,14 @@ public class TypeCheck {
 					printer.printAtom("Valid Xi Program");
 					System.out.println("Valid program");
 				}catch(TypeCheckException e) {
-					System.out.println(e.getLine()+":"+e.getColumn()+e.getMessage());
+					System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 				}
 								
-				System.out.print(root.toString());
-				
-				
 			}catch(Exception e){
 				System.out.println(e.getMessage());
 				s = l.next_token();
-			}
+			} 
 			printer.flush();
 
 		} else {

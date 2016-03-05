@@ -19,7 +19,7 @@ public class IntBinaryExprNode extends ExprNode {
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
-        	throw new TypeCheckException(this.value.left,this.value.right,"error: operands of '" + this.value +  "' must be int");
+        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be int");
 //			try {
 //				throw new TypeCheckError("error: operands of '" + this.value
 //				                                + "' must be int");
