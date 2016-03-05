@@ -6,6 +6,7 @@ public class StmtNode extends AstNode{
 
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+		//not finished
     	return new Type();
     }
 }

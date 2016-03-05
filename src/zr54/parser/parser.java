@@ -898,7 +898,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new SingleExprNode("IDENTIFIER", id), a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",29, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -913,7 +913,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",29, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1734,7 +1734,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
-                 RESULT = new FunctionCallNode("functionCall", l, new SingleExprNode("IDENTIFIER", id)); 
+                 RESULT = new LengthNode("length", l, new SingleExprNode("IDENTIFIER", id)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

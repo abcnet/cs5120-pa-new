@@ -93,8 +93,8 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | arrayIndices:ai         {: RESULT = ai; :}
                       ;
 
-arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new SingleExprNode("IDENTIFIER", id), a); :}
-                      | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
+arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
+                      | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
                       ;
 
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
@@ -191,7 +191,7 @@ expressions         ::= expression:e                           {: RESULT = new D
 
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
                       | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("functionCall", id, new DefaultNode("emptyArgument", null));:}
-                      | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new FunctionCallNode("functionCall", l, new SingleExprNode("IDENTIFIER", id)); :}
+                      | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new LengthNode("length", l, new SingleExprNode("IDENTIFIER", id)); :}
                       ;
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
