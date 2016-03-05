@@ -13,9 +13,9 @@ public class VariableNode extends SingleExprNode{
 		// TODO Auto-generated constructor stub
 	}
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		 Type t = vars.lookup((String)this.value.value);
+		 Type t = vars.lookup((String)value.value);
 		 if (t == null){
-			 throw new TypeCheckException(this.value.left,this.value.right,"Undefined identifier");
+			 throw new TypeCheckException(value, "Name " + (String) value.value + " cannot be resolved");
 		 }
 		 return t;
 	 }

@@ -40,7 +40,8 @@ public class ArrayLiteralNode extends ExprNode{
 	}
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
+ 		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
+		System.out.println("t0: " + t0.getType() + "dim: " +t0.getDimension());
 		for (int i=1; i<this.children.size();i++){
 			t=this.children.get(i).typeCheck(vars, funcs);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
