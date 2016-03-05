@@ -180,7 +180,7 @@ public abstract class AstNode {
 		return str;
 	}
 
-    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError;
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException;
 
     
 }

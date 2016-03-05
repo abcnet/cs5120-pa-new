@@ -3,7 +3,7 @@ package zr54.parser;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckError;
+import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
 
@@ -13,7 +13,7 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		super(t, v, child1, child2);
 		// TODO Auto-generated constructor stub
 	}
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
         Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
@@ -21,7 +21,7 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
             && (t1.getDimension() == t2.getDimension())) {
             return(new Type(Type.INT, t1.getDimension()));
         } else {
-        	throw new TypeCheckError("error: operands of '" + this.value +  "' must be int");
+        	throw new TypeCheckException(this.value.left,this.value.right,"error: operands of '" + this.value +  "' must be int");
 //			try {
 //				throw new TypeCheckError("error: operands of '" + this.value
 //				                                + "' must be int");

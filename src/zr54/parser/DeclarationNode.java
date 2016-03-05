@@ -9,10 +9,10 @@ public class DeclarationNode extends AstNode {
 		super(t, v, child);
 	}
 	
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		if(value != null) {
 			if(vars.lookup((String) value.value) != null) {
-				throw new TypeCheckError("Duplicate Variable " + (String)value.value);
+				throw new TypeCheckException(this.value.left,this.value.right,"Duplicate Variable " + (String)value.value);
 			}			
 			else {
 				vars.add((String) value.value, children.get(0).typeCheck(vars, funcs));

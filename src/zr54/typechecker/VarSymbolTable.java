@@ -18,7 +18,7 @@ public class VarSymbolTable {
             if (this.parent != null) {
                 return this.parent.lookup(var);
             } else {
-                return(new Type());
+                return null;
             }
         }
     }

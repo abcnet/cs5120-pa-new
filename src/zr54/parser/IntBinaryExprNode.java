@@ -11,7 +11,7 @@ public class IntBinaryExprNode extends ExprNode {
 		addChild(child2);
 	}
 
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckError{
+    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
         Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
@@ -19,7 +19,7 @@ public class IntBinaryExprNode extends ExprNode {
             && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
-        	throw new TypeCheckError("error: operands of '" + this.value +  "' must be int");
+        	throw new TypeCheckException(this.value.left,this.value.right,"error: operands of '" + this.value +  "' must be int");
 //			try {
 //				throw new TypeCheckError("error: operands of '" + this.value
 //				                                + "' must be int");

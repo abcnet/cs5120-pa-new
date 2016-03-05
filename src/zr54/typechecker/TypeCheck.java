@@ -34,7 +34,7 @@ public class TypeCheck {
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
 					System.out.println("Valid program");
-				}catch(TypeCheckError e) {
+				}catch(TypeCheckException e) {
 					System.out.println(e.getMessage());
 					printer.printAtom(e.getMessage());
 				}
