@@ -19,6 +19,10 @@ echo "Done processing lexer.flex"
 echo "Start processing xi.cup"
 "${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/parser/ "${DIR}"/zr54/parser/xi.cup
 echo "Done processing xi.cup"
+echo "Start processing ixi.cup"
+"${DIR}"/../lib/cup  -destdir "${DIR}"/zr54/ixi/ "${DIR}"/zr54/ixi/ixi.cup
+echo "Done processing ixi.cup"
+
 echo "Start compiling .java files"
 javac -d ${DIR}/../bin -cp "${DIR}":"${DIR}"/../lib/java_cup.jar:"${DIR}"/../lib/java-getopt-1.0.14.jar "${DIR}"/zr54/*/*.java 
 echo "Done compiling .java files"

@@ -15,6 +15,8 @@ public class LiteralExpr extends SingleExprNode {
 		this.dimension = dimension;
 		
 	}
+	
+	@Override
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
 		 
 		 return new Type(this.type, this.dimension);
