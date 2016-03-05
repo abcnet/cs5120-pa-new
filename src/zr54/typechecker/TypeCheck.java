@@ -36,8 +36,8 @@ public class TypeCheck {
 					printer.printAtom("Valid Xi Program");
 					System.out.println("Valid program");
 				}catch(TypeCheckException e) {
-					System.out.println(e.getMessage());
-					printer.printAtom(e.getMessage());
+					System.out.println(e.getLine()+":"+e.getColumn()+e.getMessage());
+					printer.printAtom(e.getLine()+":"+e.getColumn()+e.getMessage());
 				}
 								
 				System.out.print(root.toString());
