@@ -59,8 +59,8 @@ arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
 
-arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
-                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
+arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
+                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
                       ;
 
 bracket             ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
@@ -89,7 +89,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
                       | IDENTIFIER:id           {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
-                      | arrayLiteral:al         {: RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); :}
+                      | arrayLiteral:al         {: RESULT = al; :}
                       | arrayIndices:ai         {: RESULT = ai; :}
                       ;
 
