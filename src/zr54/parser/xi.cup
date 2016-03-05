@@ -76,7 +76,7 @@ type                ::= arrayType:a     {: RESULT = a; :}
                       | BOOL:b            {: RESULT = new DefaultNode("BOOL", b); :}
                       ;
 
-argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DefaultNode("argumentWithType", id); RESULT.addChild(t); :}
+argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
                       ;
 
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}

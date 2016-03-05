@@ -758,7 +758,7 @@ class CUP$parser$actions {
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("argumentWithType", id); RESULT.addChild(t); 
+                 RESULT = new DeclarationNode("argumentWithType", id, t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argumentWithType",5, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
