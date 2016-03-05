@@ -30,13 +30,8 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK;
 
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
-            argumentsWithType, optionalArgumentsWithType, functionReturnType ,
-            statements, optionalStatements, statement, typesList, assignment,
-            ifStatement, whileStatement, bracket, brackets, variables,
-            variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
-            block, optionalReturn;
-nonterminal AstNode expression, argument, arrayIndices, functionCall;            
+nonterminal AstNode arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, functionReturnType, typesList, bracket, brackets, methods, method, optionalSemicolon;
+          
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -57,12 +52,8 @@ arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new DefaultN
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new DefaultNode("BOOL", b)); RESULT = bs; :}
                       ;
 
-arrayLiteral        ::= LBRACE expressions:es RBRACE          {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
-                      | LBRACE expressions:es COMMA RBRACE    {: RESULT = new DefaultNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
-                      ;
 
-bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
-                      | LBRACK RBRACK                {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
+bracket             ::= LBRACK RBRACK                {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
                       ;
 
 brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
@@ -81,19 +72,7 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
 
-argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); :}
-                      | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
-                      | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); :}
-                      | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
-                      | IDENTIFIER:id           {: RESULT = new SingleExprNode("IDENTIFIER", id); :}
-                      | functionCall:fc         {: RESULT = fc; :}
-                      | arrayLiteral:al         {: RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); :}
-                      | arrayIndices:ai         {: RESULT = ai; :}
-                      ;
 
-arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new SingleExprNode("IDENTIFIER", id), a); :}
-                      | arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new BinaryExprNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
-                      ;
 
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
@@ -125,38 +104,6 @@ optionalSemicolon   ::= SEMICOLON
 
 
 
-
-
-
-expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new BoolBinaryExprNode("OR", or, e1, e2); :}
-		                  | expression:e1 AND:and expression:e2				 {: RESULT = new BoolBinaryExprNode("AND", and, e1, e2); :}
-		                  | expression:e1 EQEQ:eq expression:e2			 {: RESULT = new BoolBinaryExprNode("EQEQ", eq, e1, e2); :}
-		                  | expression:e1 NOTEQ:neq expression:e2			 {: RESULT = new BoolBinaryExprNode("NOTEQ", neq, e1, e2); :}
-		                  | expression:e1 LT:lt expression:e2				 {: RESULT = new BoolBinaryExprNode("LT", lt, e1, e2); :}
-		                  | expression:e1 LTEQ:leq expression:e2			 {: RESULT = new BoolBinaryExprNode("LTEQ", leq, e1, e2); :}
-		                  | expression:e1 GTEQ:geq expression:e2			 {: RESULT = new BoolBinaryExprNode("GTEQ", geq, e1, e2); :}
-                      | expression:e1 GT:gt expression:e2				 {: RESULT = new BoolBinaryExprNode("GT", gt, e1, e2); :}
-                      |	expression:e1 PLUS:pl expression:e2			 {: RESULT = new AddIntBinaryExprNode("PLUS", pl, e1, e2); :}
-                      | expression:e1 MINUS:mi expression:e2			 {: RESULT = new IntBinaryExprNode("MINUS", mi, e1, e2); :}
-                      | expression:e1 MULT:mu expression:e2			 {: RESULT = new IntBinaryExprNode("MULT", mu, e1, e2); :}
-                      | expression:e1 HIGHMULT:hm expression:e2	 {: RESULT = new IntBinaryExprNode("HIGHMULT", hm, e1, e2); :}
-                      | expression:e1 DIV:di expression:e2				 {: RESULT = new IntBinaryExprNode("DIV", di, e1, e2); :}
-                      | expression:e1 MOD:md expression:e2				 {: RESULT = new IntBinaryExprNode("MOD", md, e1, e2); :}
-                      | LPAREN expression:e RPAREN				     {: RESULT = e; :}
-                      | argument:a                   				   {: RESULT = a; :}
-                      | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new UnaryExprNode("MINUS", mi, e); :}
-                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new UnaryExprNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); :}
-                      | NOT:n expression:e		                   {: RESULT = new UnaryExprNode("NOT", n, e); :}
-                      ;
-
-expressions         ::= expression:e                           {: RESULT = new DefaultNode("expressions", null, e); :}
-                      | expressions:es COMMA expression:e      {: RESULT = new DefaultNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
-                      ;
-
-functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
-                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("functionCall", id, new DefaultNode("emptyArgument", null));:}
-                      | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new FunctionCallNode("functionCall", l, new SingleExprNode("IDENTIFIER", id)); :}
-                      ;
 
 
 
