@@ -59,8 +59,8 @@ arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
 
-arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
-                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
+arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
+                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
                       ;
 
 bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
@@ -150,7 +150,7 @@ whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESUL
 
 assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new DefaultNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
-                                                                           RESULT = new DefaultNode("assignment", eq, node); RESULT.addChild(e); :}
+                                                                           RESULT = new AssignStmtNode("assignment", eq, node, e); :}
                       | variable:v EQ:eq expression:e                      {: RESULT = new AssignStmtNode("assignment", eq, v, e); :}
                       ;
 

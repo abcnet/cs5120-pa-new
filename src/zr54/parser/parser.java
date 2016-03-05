@@ -652,7 +652,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
+                 RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -667,7 +667,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
-                 RESULT = new DefaultNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
+                 RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayLiteral",23, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1257,7 +1257,7 @@ class CUP$parser$actions {
                 AstNode e = CUP$parser$stack.peek().<AstNode> value();
                  DefaultNode node = new DefaultNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
-                                                                           RESULT = new DefaultNode("assignment", eq, node); RESULT.addChild(e); 
+                                                                           RESULT = new AssignStmtNode("assignment", eq, node, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("assignment",13, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

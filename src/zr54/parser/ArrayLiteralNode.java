@@ -6,8 +6,8 @@ import zr54.typechecker.Type;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
-public class ArrayLiteral extends ExprNode{
-	public ArrayLiteral(String t, Symbol v) {
+public class ArrayLiteralNode extends ExprNode{
+	public ArrayLiteralNode(String t, Symbol v) {
 		type = t;
 		value = v;
 	}
