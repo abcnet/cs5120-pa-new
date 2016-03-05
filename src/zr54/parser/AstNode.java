@@ -128,7 +128,7 @@ public abstract class AstNode {
 	 * print this node
 	 * @param printer: the printer
 	 */
-	void print(CodeWriterSExpPrinter printer) {
+	public void print(CodeWriterSExpPrinter printer) {
 		if(this.children.size()>0 || this.type.equals("forceParen")){
 
 			if(!(this.type.equals("statement") && this.children.size() == 1))
