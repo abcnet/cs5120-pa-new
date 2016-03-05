@@ -1,6 +1,7 @@
 package zr54.typechecker;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Type {
     public static int NIL = 0;
@@ -8,10 +9,12 @@ public class Type {
     public static int BOOL = 2;
     public static int UNIT = 3;
     public static int VOID = 4;
-
-    private int type;
-    private int dimension;
-
+    public static int TUPLE = 5;
+    
+    private int type = 0;
+    private int dimension = NIL;
+    private ArrayList<Type> tuple = new ArrayList<Type>();
+    
     public Type() {
         this.type = NIL;
         this.dimension = 0;
@@ -40,5 +43,13 @@ public class Type {
 
     public int getDimension() {
         return this.dimension;
+    }
+    
+    public void addTupleEntry(Type t) {
+    	tuple.add(t);
+    }
+    
+    public ArrayList<Type> getTuple() {
+    	return tuple;
     }
 }

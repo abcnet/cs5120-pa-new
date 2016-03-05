@@ -20,8 +20,16 @@ public class FunctionCallNode extends ExprNode{
 	
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		//not finished
-    	return new Type();
+
+		if(funcs.lookupName((String) value.value) != null) {
+			//TODO: need compare signature
+			
+			return new Type();
+		}
+		else {
+			throw new TypeCheckException(value, "Name " + (String) value.value + " cannot been resolved");
+		}
+		    	
     }
 	
 }

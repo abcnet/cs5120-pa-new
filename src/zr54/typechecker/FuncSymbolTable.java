@@ -18,14 +18,14 @@ public class FuncSymbolTable {
                 return this.table.get(key);
             }
         }
-        return(new Type());
+        return null;
     }
 
     public Type lookupSignature(FunctionSignature f) {
         if (this.table.containsKey(f)) {
             return this.table.get(f);
         } else {
-            return(new Type());
+            return null;
         }
     }
 
