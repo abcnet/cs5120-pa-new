@@ -18,7 +18,7 @@ public class TypeNode extends AstNode {
 			return new Type(Type.INT, 0);
 		else if(type.equals("BOOL"))
 			return new Type(Type.BOOL, 0);
-		else if(type.equals("bracket")) {
+		else if(type.equals("bracket") || type.equals("brackets")) {
 			if(children.size() > 0) {
 				Type t = children.get(0).typeCheck(vars, funcs);
 				t.incDimension();

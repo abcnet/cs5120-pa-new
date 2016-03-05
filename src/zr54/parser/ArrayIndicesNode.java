@@ -16,13 +16,14 @@ public class ArrayIndicesNode extends BinaryExprNode{
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 	        Type t1 = this.children.get(0).typeCheck(vars, funcs);
 	        Type t2 = this.children.get(1).typeCheck(vars, funcs);
-
+        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
+        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
 	        if ((t2.getType() == Type.INT)
 	            && (t1.getDimension() >= 1 && t2.getDimension() == 0)) {
 	            return(new Type(t1.getType(), t1.getDimension()-1));
 	        } else {
-	        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-	        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
+
+	        	
 	        	throw new TypeCheckException(this.value.left,this.value.right,"operands of array access must be array and int");
 	        }
 	    }

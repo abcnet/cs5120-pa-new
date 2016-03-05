@@ -676,6 +676,9 @@ class CUP$parser$actions {
         case 6: // bracket ::= LBRACK expression RBRACK 
             {
                 AstNode RESULT = null;
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
@@ -688,6 +691,9 @@ class CUP$parser$actions {
         case 7: // bracket ::= LBRACK RBRACK 
             {
                 AstNode RESULT = null;
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                  RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("bracket",16, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
@@ -703,7 +709,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
+                 RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("brackets",17, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

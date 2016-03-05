@@ -63,11 +63,11 @@ arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new 
                       | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
                       ;
 
-bracket             ::= LBRACK expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
-                      | LBRACK RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
+bracket             ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
+                      | LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
                       ;
 
-brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+brackets            ::= bracket:b brackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | bracket:b               {: RESULT = b; :}
                       ;
 

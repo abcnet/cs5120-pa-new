@@ -16,6 +16,7 @@ public class DeclarationNode extends AstNode {
 			}			
 			else {
 				Type t = children.get(0).typeCheck(vars, funcs);
+				System.out.println(t.getType() + " dim: " + t.getDimension());
 				vars.add((String) value.value, t);
 				return t;
 			}
