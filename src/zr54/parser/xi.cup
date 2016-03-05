@@ -141,11 +141,11 @@ optionalSemicolon   ::= SEMICOLON
                       |
                       ;
 
-ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new DefaultNode("ifStatement", i, e, s1); RESULT.addChild(s2); :}
-                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new DefaultNode("ifStatement", i, e, s); :}
+ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new IfElseStmtNode("ifStatement", i, e, s1, s2); :}
+                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new IfWhileStmtNode("ifStatement", i, e, s); :}
                       ;
 
-whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new DefaultNode("whileStatment", w, e, s); :}
+whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatment", w, e, s); :}
                       ;
 
 assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new DefaultNode("variables", null);
