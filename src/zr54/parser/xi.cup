@@ -164,14 +164,14 @@ variable            ::= UNDERSCORE:us            {: RESULT = new DefaultNode("UN
                       | arrayIndices:a        {: RESULT = a; :}
                       ;
 
-expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new BoolBinaryExprNode("OR", or, e1, e2); :}
-		                  | expression:e1 AND:and expression:e2				 {: RESULT = new BoolBinaryExprNode("AND", and, e1, e2); :}
-		                  | expression:e1 EQEQ:eq expression:e2			 {: RESULT = new BoolBinaryExprNode("EQEQ", eq, e1, e2); :}
-		                  | expression:e1 NOTEQ:neq expression:e2			 {: RESULT = new BoolBinaryExprNode("NOTEQ", neq, e1, e2); :}
-		                  | expression:e1 LT:lt expression:e2				 {: RESULT = new BoolBinaryExprNode("LT", lt, e1, e2); :}
-		                  | expression:e1 LTEQ:leq expression:e2			 {: RESULT = new BoolBinaryExprNode("LTEQ", leq, e1, e2); :}
-		                  | expression:e1 GTEQ:geq expression:e2			 {: RESULT = new BoolBinaryExprNode("GTEQ", geq, e1, e2); :}
-                      | expression:e1 GT:gt expression:e2				 {: RESULT = new BoolBinaryExprNode("GT", gt, e1, e2); :}
+expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new AndOrNode("OR", or, e1, e2); :}
+		                  | expression:e1 AND:and expression:e2				 {: RESULT = new AndOrNode("AND", and, e1, e2); :}
+		                  | expression:e1 EQEQ:eq expression:e2			 {: RESULT = new EqNotEqNode("EQEQ", eq, e1, e2); :}
+		                  | expression:e1 NOTEQ:neq expression:e2			 {: RESULT = new EqNotEqNode("NOTEQ", neq, e1, e2); :}
+		                  | expression:e1 LT:lt expression:e2				 {: RESULT = new GtLtGeLeNode("LT", lt, e1, e2); :}
+		                  | expression:e1 LTEQ:leq expression:e2			 {: RESULT = new GtLtGeLeNode("LTEQ", leq, e1, e2); :}
+		                  | expression:e1 GTEQ:geq expression:e2			 {: RESULT = new GtLtGeLeNode("GTEQ", geq, e1, e2); :}
+                      | expression:e1 GT:gt expression:e2				 {: RESULT = new GtLtGeLeNode("GT", gt, e1, e2); :}
                       |	expression:e1 PLUS:pl expression:e2			 {: RESULT = new AddIntBinaryExprNode("PLUS", pl, e1, e2); :}
                       | expression:e1 MINUS:mi expression:e2			 {: RESULT = new IntBinaryExprNode("MINUS", mi, e1, e2); :}
                       | expression:e1 MULT:mu expression:e2			 {: RESULT = new IntBinaryExprNode("MULT", mu, e1, e2); :}

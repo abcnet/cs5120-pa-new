@@ -6,7 +6,7 @@ import zr54.typechecker.Type;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
-public class BoolBinaryExprNode extends ExprNode{
+public abstract class BoolBinaryExprNode extends ExprNode{
 	
 	public BoolBinaryExprNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		type = t;
