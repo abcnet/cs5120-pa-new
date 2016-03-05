@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*;
 import zr54.lexer.*;
 import zr54.parser.*;
+import zr54.typechecker.Type;
 
 /** CUP v0.11b 20150326 generated parser.
   */
@@ -796,7 +797,7 @@ class CUP$parser$actions {
                 int blleft = CUP$parser$stack.peek().left;
                 int blright = CUP$parser$stack.peek().right;
                 Symbol bl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new BooleanLiteral("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value)); 
+                 RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -808,7 +809,7 @@ class CUP$parser$actions {
                 int illeft = CUP$parser$stack.peek().left;
                 int ilright = CUP$parser$stack.peek().right;
                 Symbol il = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new IntegerLiteral("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value)); 
+                 RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -820,7 +821,7 @@ class CUP$parser$actions {
                 int clleft = CUP$parser$stack.peek().left;
                 int clright = CUP$parser$stack.peek().right;
                 Symbol cl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new IntegerLiteral("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'")); 
+                 RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -832,7 +833,7 @@ class CUP$parser$actions {
                 int slleft = CUP$parser$stack.peek().left;
                 int slright = CUP$parser$stack.peek().right;
                 Symbol sl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new SingleExprNode("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\"")); 
+                 RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

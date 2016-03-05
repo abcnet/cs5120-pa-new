@@ -6,6 +6,7 @@ import edu.cornell.cs.cs4120.util.*;
 import polyglot.util.*;
 import zr54.lexer.*;
 import zr54.parser.*;
+import zr54.typechecker.Type;
 
 parser code {:
     public CodeWriterSExpPrinter printer;
@@ -82,10 +83,10 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
 
-argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new BooleanLiteral("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value)); :}
-                      | INTEGER_LITERAL:il      {: RESULT = new IntegerLiteral("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value)); :}
-                      | CHARACTER_LITERAL:cl    {: RESULT = new IntegerLiteral("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'")); :}
-                      | STRING_LITERAL:sl       {: RESULT = new SingleExprNode("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\"")); :}
+argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); :}
+                      | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
+                      | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); :}
+                      | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
                       | IDENTIFIER:id           {: RESULT = new SingleExprNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
                       | arrayLiteral:al         {: RESULT = new SingleExprNode("argument", null); RESULT.addGrandChildren(al); :}

@@ -5,14 +5,18 @@ import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
 
-public class BooleanLiteral extends SingleExprNode {
+public class LiteralExpr extends SingleExprNode {
+	private int type;
+	private int dimension;
 
-	public BooleanLiteral(String t, Symbol v) {
+	public LiteralExpr(String t, Symbol v, int type, int dimension) {
 		super(t,v);
+		this.type = type;
+		this.dimension = dimension;
 		
 	}
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
 		 
-		 return new Type(Type.BOOL, 0);
+		 return new Type(this.type, this.dimension);
 	 }
 }
