@@ -28,4 +28,21 @@ public class FuncSymbolTable {
         } else return 0;
     }
         
+    /**
+     * append func table from interface file to this func symbol table
+     * @param funcs: the FuncSymbolTable to be appended
+     */
+    public void appendTable(FuncSymbolTable funcs) {
+    	
+    	for(String key : funcs.table.keySet()) {
+    		if(lookup(key) == null) {
+    			table.put(key, funcs.lookup(key));
+    		}
+    		else {
+    	    	//TODO: if same func exists, need to check whether type matches    			
+    		}
+    	}
+    	
+    }
+    
 }

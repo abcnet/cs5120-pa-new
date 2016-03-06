@@ -16,10 +16,10 @@ import zr54.typechecker.VarSymbolTable;
 
 public class ixiAnalyze {
 	
-	public static void typeCheckAndPrint(String ixiFile, String dstFile) throws IOException {
+	public static FuncSymbolTable typeCheckAndPrint(String ixiFile, String dstFile) throws IOException {
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
-
+		FuncSymbolTable funcTable = new FuncSymbolTable();
 		File f = new File(ixiFile);
 		if (f.exists()) {
 			parser p = new parser(printer);
@@ -35,8 +35,9 @@ public class ixiAnalyze {
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				try {
 					root.typeCheck(vars, funcs);
-					printer.printAtom("Valid Xi Program");
-					System.out.println("Valid program");
+					registerAllFunctions(root, funcTable);
+					printer.printAtom("Valid Xi Interface");
+					System.out.println("Valid Xi Interface");
 				}catch(TypeCheckException e) {
 					System.out.println(e.getLine()+":"+e.getColumn()+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+e.getMessage());
@@ -54,6 +55,13 @@ public class ixiAnalyze {
 		} else {
 			System.out.println("error: '" + ixiFile + "' does not exist");
 		}
+		
+		return funcTable;
 	}
-
+	
+	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws TypeCheckException{
+		root.registerFunctionSignature(funcs);		
+	}
+	
+	
 }

@@ -124,6 +124,8 @@ public abstract class AstNode {
 		}
 	}
 
+	
+	
 	/**
 	 * print this node
 	 * @param printer: the printer
@@ -185,6 +187,14 @@ public abstract class AstNode {
     public void registerFunctionSignature(FuncSymbolTable funcs) throws TypeCheckException {
     	for(AstNode child : children)
     		child.registerFunctionSignature(funcs);
+    }
+    
+    public ArrayList<AstNode> getChildren(){
+    	return children;
+    }
+    
+    public Symbol getValue() {
+    	return value;
     }
 }
 

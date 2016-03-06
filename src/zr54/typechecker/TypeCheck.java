@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-
+import zr54.ixi.*;
 import java_cup.runtime.Symbol;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
@@ -33,6 +33,23 @@ public class TypeCheck {
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				
 				try {
+					String dirPath = srcFile.substring(0, srcFile.lastIndexOf("/") + 1);
+					//first need load all interface files and register function signatures
+					AstNode useNode = root.getChildren().get(0);
+					for(AstNode useSpec : useNode.getChildren()) {
+						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
+						System.out.println(interfaceName);
+						
+						
+						
+						String ixiFile = dirPath + interfaceName + ".ixi";
+						String ixiDstFile = dirPath + interfaceName + ".typed";
+						FuncSymbolTable interFuncs = ixiAnalyze.typeCheckAndPrint(ixiFile, ixiDstFile); 
+						funcs.appendTable(interFuncs);
+						
+					}
+					
+					
 					registerAllFunctions(funcs, root);
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
