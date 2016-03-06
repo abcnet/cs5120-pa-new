@@ -201,7 +201,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 bs.addChildLeftMost(new DefaultNode("INT", i)); RESULT = bs; 
+                 bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",0, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -216,7 +216,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 bs.addChildLeftMost(new DefaultNode("BOOL", b)); RESULT = bs; 
+                 bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayType",0, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -225,7 +225,7 @@ class CUP$parser$actions {
         case 3: // bracket ::= LBRACK RBRACK 
             {
                 AstNode RESULT = null;
-                 RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  
+                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("bracket",7, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -240,7 +240,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
+                 RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("brackets",8, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -276,7 +276,7 @@ class CUP$parser$actions {
                 int ileft = CUP$parser$stack.peek().left;
                 int iright = CUP$parser$stack.peek().right;
                 Symbol i = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new DefaultNode("INT", i); 
+                 RESULT = new TypeNode("INT", i); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("type",1, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -288,7 +288,7 @@ class CUP$parser$actions {
                 int bleft = CUP$parser$stack.peek().left;
                 int bright = CUP$parser$stack.peek().right;
                 Symbol b = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new DefaultNode("BOOL", b); 
+                 RESULT = new TypeNode("BOOL", b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("type",1, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -396,7 +396,7 @@ class CUP$parser$actions {
                 int rleft = CUP$parser$stack.peek().left;
                 int rright = CUP$parser$stack.peek().right;
                 AstNode r = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("method", id);
+                 RESULT = new MethodNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",10, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
