@@ -8,21 +8,18 @@ public class FuncSignature {
     private ArrayList<Type> retTypes = null;
     private boolean isInterface = false;
     
-    public FuncSignature() {
-        this.name = "";
-        this.argTypes = null;
-        
-    }
-
-    public FuncSignature(String n, ArrayList<Type> args) {
-    	name = n;
-    	argTypes = args;
-    }
-
+    
     public FuncSignature(String n, ArrayList<Type> args, ArrayList<Type> ret) {
     	name = n;
     	argTypes = args;
     	retTypes = ret;
+    }
+    
+    public FuncSignature(String n, ArrayList<Type> args, ArrayList<Type> ret, boolean inter) {
+    	name = n;
+    	argTypes = args;
+    	retTypes = ret;
+    	isInterface = inter;
     }
     
     public void setFunctionName(String name) {
@@ -49,5 +46,23 @@ public class FuncSignature {
     }
     public Type getFunctionReturnTypes(){
     	return new Type(retTypes);
+    }
+    
+    public boolean isInterface() {
+    	return isInterface;
+    }
+    
+    public void setIsInterface(boolean b) {
+    	isInterface = b;
+    }
+    
+    public boolean typeMatch(Type args, Type ret) {
+    	Type thisArgs = this.getFunctionArgTypes();
+    	Type thisRet = this.getFunctionReturnTypes();
+    	if(ret.matches(thisRet) && args.matches(thisArgs))
+    		return true;
+    	else
+    		return false;
+    	
     }
 }

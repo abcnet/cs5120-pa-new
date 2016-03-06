@@ -21,13 +21,17 @@ public class FuncSymbolTable {
     }
 
     public int add(String name, ArrayList<Type> argTypes, ArrayList<Type> retTypes) {
-        FuncSignature f = new FuncSignature(name, argTypes, retTypes);
+    	return add(name, argTypes, retTypes, false);
+    }
+        
+    public int add(String name, ArrayList<Type> argTypes, ArrayList<Type> retTypes, boolean inter) {
+    	FuncSignature f = new FuncSignature(name, argTypes, retTypes, inter);
         if (lookup(name) == null) {
            table.put(name, f);
            return 1;
         } else return 0;
     }
-        
+    
     /**
      * append func table from interface file to this func symbol table
      * @param funcs: the FuncSymbolTable to be appended

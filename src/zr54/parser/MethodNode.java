@@ -52,23 +52,48 @@ public class MethodNode extends AstNode{
 
 	}
 	
+
 	@Override
-	public void registerFunctionSignature(FuncSymbolTable funcs) throws TypeCheckException{
+	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws TypeCheckException{
+		String funcName = (String) value.value;
+		FuncSignature funcSig = funcs.lookup(funcName);
+		
 		VarSymbolTable newVars = new VarSymbolTable();
+		//get the argument and return types of this function
 		AstNode argNode = children.get(0);
 		AstNode retNode = children.get(1);
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
-		
-		for(AstNode arg : argNode.children) {
+		for(AstNode arg : argNode.children) 
 			argTypes.add(arg.typeCheck(newVars, funcs));
-		}
-		for(AstNode ret : retNode.children) {
+		for(AstNode ret : retNode.children) 
 			retTypes.add(ret.typeCheck(newVars, funcs));
+				
+		if(funcSig != null) {
+			if(isInterface) {
+				//need to check whether the signature matches
+				if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
+					throw new TypeCheckException(value, "Function signature '" + (String) value.value 
+							+ "' and '" + funcSig.getFunctionName() + "' does not match");
+			}
+			else {
+				//need to check whether the existing signature is an interface 
+				if(!funcSig.isInterface())
+					throw new TypeCheckException(value, "Function '" + (String) value.value + "' redefined");
+				else {
+					if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
+						throw new TypeCheckException(value, "Function signature '" + (String) value.value 
+								+ "' and '" + funcSig.getFunctionName() + "' does not match");
+					else
+						funcSig.setIsInterface(false);
+				}
+					
+				
+			}			
 		}
-		
-		funcs.add((String) value.value, argTypes, retTypes);
-		
+		else {
+			funcs.add((String) value.value, argTypes, retTypes, isInterface);
+		}
 		
 	}
 	
