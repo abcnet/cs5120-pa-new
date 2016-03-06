@@ -15,9 +15,8 @@ public class Type {
     private int dimension = 0;
     private ArrayList<Type> tuple = new ArrayList<Type>();
     
-    public Type() {
-        this.type = NIL;
-        this.dimension = 0;
+    public Type(){
+    	
     }
 
     public Type(int type, int dimension) {
@@ -65,6 +64,7 @@ public class Type {
     public boolean matches(Type t){
     	
     	if(this.type!=t.type||this.dimension!=t.dimension)return false;
+    	if(this.type==UNIT||t.type==UNIT)return true;
     	if(this.type==TUPLE){
     		int m=this.tuple.size();
     		int n=t.tuple.size();
@@ -76,5 +76,32 @@ public class Type {
     	}else{
     		return true;
     	}
+    }
+    public String toString(){
+    	String s="";
+    	if (type==NIL){
+    		s="nil";
+    	}else if (type==INT){
+    	
+    		s="int";
+    	}else if(type==BOOL){
+    		s="bool";
+    	}else if (type==UNIT){
+    		s="unit";
+    	}else if(type==VOID){
+    		s="void";
+    		
+    	}else if(type==TUPLE){
+    		for(int i=0;i<tuple.size();i++){
+        		s+=tuple.get(i).toString();
+        		if(i<=tuple.size()-2){
+        			s+=", ";
+        		}
+        	}
+    	}
+    	for(int i=0;i<dimension;i++){
+    		s+="[]";
+    	}
+    	return s;
     }
 }
