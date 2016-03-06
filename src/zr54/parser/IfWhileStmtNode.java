@@ -16,9 +16,10 @@ public class IfWhileStmtNode extends StmtNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
-		VarSymbolTable tempScope = new VarSymbolTable(vars);
+		
 		
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		VarSymbolTable tempScope = new VarSymbolTable(vars);
         
         if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
         	throw new TypeCheckException(this.children.get(0).value.left, 

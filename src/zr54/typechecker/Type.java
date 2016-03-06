@@ -12,7 +12,7 @@ public class Type {
     public static int TUPLE = 5;
     
     private int type = 0;
-    private int dimension = NIL;
+    private int dimension = 0;
     private ArrayList<Type> tuple = new ArrayList<Type>();
     
     public Type() {
@@ -23,6 +23,15 @@ public class Type {
     public Type(int type, int dimension) {
         this.type = type;
         this.dimension = dimension;
+//        if(type==TUPLE){
+//        	tuple = new ArrayList<Type>();
+//        }
+    }
+    
+    public Type(ArrayList<Type> tuple){
+    	this.type=TUPLE;
+    	this.dimension = 0;
+    	this.tuple = tuple;
     }
 
     public void setType(int type) {

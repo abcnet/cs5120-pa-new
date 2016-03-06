@@ -44,7 +44,10 @@ public class FunctionSignature {
         return this.name;
     }
 
-    public ArrayList<Type> getFunctionArgTypes() {
-        return this.argTypes;
+    public Type getFunctionArgTypes() {
+        return new Type(argTypes);
+    }
+    public Type getFunctionReturnTypes(){
+    	return new Type(retTypes);
     }
 }
