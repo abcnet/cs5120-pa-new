@@ -34,7 +34,7 @@ public class FunctionCallNode extends ExprNode{
 			AstNode node = this.children.get(i);
 			Type l=node.typeCheck(vars, funcs);
 			if(l.matches(args.getTuple().get(i))==false){
-				throw new TypeCheckException(node.value,"Expected "+l+", but found "+args.getTuple().get(i));
+				throw new TypeCheckException(node.value,"Expected "+args.getTuple().get(i)+", but found "+l);
 				
 			}
 		}
