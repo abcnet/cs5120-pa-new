@@ -148,7 +148,7 @@ ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statem
 whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatment", w, e, s); :}
                       ;
 
-assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new DefaultNode("variables", null);
+assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
                                                                            RESULT = new AssignStmtNode("assignment", eq, node, e); :}
                       | variable:v EQ:eq expression:e                      {: RESULT = new AssignStmtNode("assignment", eq, v, e); :}

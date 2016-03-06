@@ -1261,7 +1261,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 AstNode e = CUP$parser$stack.peek().<AstNode> value();
-                 DefaultNode node = new DefaultNode("variables", null);
+                 DefaultNode node = new MultiVariableNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
                                                                            RESULT = new AssignStmtNode("assignment", eq, node, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("assignment",13, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
