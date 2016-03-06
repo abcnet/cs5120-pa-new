@@ -45,9 +45,25 @@ public class AssignStmtNode extends StmtNode{
 			if(right.getType()==Type.TUPLE &&right.getTuple().size()>1 && left.getType()!=Type.TUPLE){
 				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
 			}
-			if(right.getType()==Type.TUPLE && left.getType()==Type.TUPLE && left.getTuple().size()!=right.getTuple().size()){
-				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+			if(right.getType()==Type.TUPLE && left.getType()==Type.TUPLE ){
+				if(left.getTuple().size()!=right.getTuple().size()){
+					throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+				}else{
+					for(int i=0;i<left.getTuple().size();i++){
+						
+						
+						Type l=left.getTuple().get(i);
+						Type r=right.getTuple().get(i);
+						if(l.matches(r)==false){
+							AstNode node = this.children.get(0).getChildren().get(i);
+							throw new TypeCheckException(node.value,"Expected "+r+", but found "+l);
+							
+						}
+					}
+				}
+				
 			}
+			
 
 			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left);
 		}
