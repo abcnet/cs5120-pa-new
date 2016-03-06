@@ -41,9 +41,7 @@ public class TypeCheck {
 						
 						String ixiFile = dirPath + interfaceName + ".ixi";
 						String ixiDstFile = dirPath + interfaceName + ".typed";
-						FuncSymbolTable interFuncs = ixiAnalyze.typeCheckAndPrint(ixiFile, ixiDstFile); 
-						funcs.appendTable(interFuncs);
-						
+						ixiAnalyze.typeCheckAndPrint(ixiFile, ixiDstFile, funcs); 
 					}
 					
 					
@@ -68,7 +66,7 @@ public class TypeCheck {
 	}
 	
 	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws TypeCheckException{
-		root.registerFunctionSignature(funcs);
+		root.registerFunctionSignature(funcs, false);
 	}
 	
 }
