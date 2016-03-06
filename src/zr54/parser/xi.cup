@@ -133,7 +133,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | block: b                                 {: RESULT = b; :}
                       ;
 
-optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new DefaultNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
+optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new ReturnNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
                       |
                       ;
 
