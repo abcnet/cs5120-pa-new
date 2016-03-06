@@ -2,7 +2,7 @@ package zr54.parser;
 import java_cup.runtime.Symbol;
 
 import zr54.typechecker.FuncSymbolTable;
-import zr54.typechecker.FunctionSignature;
+import zr54.typechecker.FuncSignature;
 import zr54.typechecker.Type;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
@@ -22,7 +22,7 @@ public class FunctionCallNode extends ExprNode{
 	
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		FunctionSignature f = funcs.lookup((String) value.value); 
+		FuncSignature f = funcs.lookup((String) value.value); 
 		if (f==null){
 			throw new TypeCheckException(value.left, value.right, (String)value.value+ " cannot been resolved");
 		}

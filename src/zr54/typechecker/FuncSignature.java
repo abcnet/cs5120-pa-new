@@ -2,24 +2,24 @@ package zr54.typechecker;
 
 import java.util.ArrayList;
 
-public class FunctionSignature {
+public class FuncSignature {
     private String name = "";
     private ArrayList<Type> argTypes = null;
     private ArrayList<Type> retTypes = null;
     private boolean isInterface = false;
     
-    public FunctionSignature() {
+    public FuncSignature() {
         this.name = "";
         this.argTypes = null;
         
     }
 
-    public FunctionSignature(String n, ArrayList<Type> args) {
+    public FuncSignature(String n, ArrayList<Type> args) {
     	name = n;
     	argTypes = args;
     }
 
-    public FunctionSignature(String n, ArrayList<Type> args, ArrayList<Type> ret) {
+    public FuncSignature(String n, ArrayList<Type> args, ArrayList<Type> ret) {
     	name = n;
     	argTypes = args;
     	retTypes = ret;
