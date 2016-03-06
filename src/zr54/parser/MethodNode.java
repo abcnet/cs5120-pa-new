@@ -78,8 +78,8 @@ public class MethodNode extends AstNode{
 			if(isInterface) {
 				//need to check whether the signature matches
 				if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
-					throw new TypeCheckException(value, "Function signature '" + (String) value.value 
-							+ "' and '" + funcSig.getFunctionName() + "' does not match");
+					throw new TypeCheckException(value, "Function signature of '" + (String) value.value 
+							+"' does not match");
 			}
 			else {
 				//need to check whether the existing signature is an interface 
@@ -88,7 +88,7 @@ public class MethodNode extends AstNode{
 				else {
 					if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
 						throw new TypeCheckException(value, "Function signature '" + (String) value.value 
-								+ "' and '" + funcSig.getFunctionName() + "' does not match");
+								+  "' does not match");
 					else
 						funcSig.setIsInterface(false);
 				}
