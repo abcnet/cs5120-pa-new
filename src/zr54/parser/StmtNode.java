@@ -4,6 +4,10 @@ import java_cup.runtime.Symbol;
 import zr54.typechecker.*;
 
 public abstract class StmtNode extends DefaultNode{
+	public StmtNode(String t, Symbol v, AstNode c1) {
+		super(t, v, c1);
+		// TODO Auto-generated constructor stub
+	}
 
 	public StmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v, c1, c2);

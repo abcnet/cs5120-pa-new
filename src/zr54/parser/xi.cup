@@ -59,8 +59,8 @@ arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
 
-arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
-                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", null); RESULT.addGrandChildren(es); :}
+arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
+                      | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
                       ;
 
 bracket             ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
@@ -209,5 +209,5 @@ methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("metho
                       | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
 
-block               ::= LBRACE optionalStatements:s RBRACE      {: RESULT = s; :}
+block               ::= LBRACE:l optionalStatements:s RBRACE      {: RESULT = new BlockNode("block", l, s); :}
                       ;
