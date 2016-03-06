@@ -17,10 +17,6 @@ public class AssignStmtNode extends StmtNode{
 	
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		for(AstNode n : children)
-			n.typeCheck(vars, funcs);
-		
-//		return new Type();
 		
 		Type left, right;
 //		//not finished for single assignment
