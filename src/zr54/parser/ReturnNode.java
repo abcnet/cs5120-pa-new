@@ -18,7 +18,7 @@ public class ReturnNode extends StmtNode {
 			t.addTupleEntry(n.typeCheck(vars, funcs));
     	
     	vars.returned = t.getTuple();
-    	System.out.println("Returning "+vars.returned.size());
+//    	System.out.println("Returning "+vars.returned.size());
     	return new Type();
     }
 }
