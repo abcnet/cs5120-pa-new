@@ -31,7 +31,9 @@ public class TypeCheck {
 				//System.out.print(root.toString());
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
+				
 				try {
+					registerAllFunctions(funcs, root);
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
 					System.out.println("Valid program");
@@ -50,4 +52,9 @@ public class TypeCheck {
 			System.out.println("error: '" + srcFile + "' does not exist");
 		}
 	}
+	
+	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws TypeCheckException{
+		root.registerFunctionSignature(funcs);
+	}
+	
 }

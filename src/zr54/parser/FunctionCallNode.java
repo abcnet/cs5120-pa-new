@@ -21,7 +21,7 @@ public class FunctionCallNode extends ExprNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 
-		if(funcs.lookupName((String) value.value) != null) {
+		if(funcs.lookup((String) value.value) != null) {
 			//TODO: need compare signature
 			
 			return new Type();

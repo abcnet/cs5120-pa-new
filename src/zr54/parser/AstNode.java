@@ -182,6 +182,9 @@ public abstract class AstNode {
 
     public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException;
 
-    
+    public void registerFunctionSignature(FuncSymbolTable funcs) throws TypeCheckException {
+    	for(AstNode child : children)
+    		child.registerFunctionSignature(funcs);
+    }
 }
 
