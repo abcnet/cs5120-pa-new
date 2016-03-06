@@ -41,7 +41,7 @@ public class TypeCheck {
 						
 						String ixiFile = dirPath + interfaceName + ".ixi";
 						String ixiDstFile = dirPath + interfaceName + ".typed";
-						ixiAnalyze.typeCheckAndPrint(ixiFile, ixiDstFile, funcs); 
+						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
 					
 					

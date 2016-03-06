@@ -15,48 +15,30 @@ import zr54.typechecker.VarSymbolTable;
 
 public class ixiAnalyze {
 	
-	public static FuncSymbolTable typeCheckAndPrint(String ixiFile, String dstFile) throws IOException {
-		FileOutputStream fs = new FileOutputStream(dstFile);
+	public static void typeCheckAndPrint(String ixiFile, FileOutputStream fs, FuncSymbolTable funcs) throws Exception {
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
-		FuncSymbolTable funcTable = new FuncSymbolTable();
 		File f = new File(ixiFile);
 		if (f.exists()) {
 			parser p = new parser(printer);
 			Lexer l = new Lexer(new FileReader(ixiFile));
 			p.setScanner(l);
- 
+
 			Symbol s;
-			try{
-				s = p.parse();
-				AstNode root = s.value();
-		
-				VarSymbolTable vars = new VarSymbolTable();
-				FuncSymbolTable funcs = new FuncSymbolTable();
-				try {
-					
-					registerAllFunctions(root, funcTable);
-					printer.printAtom("Valid Xi Interface");
-					System.out.println("Valid Xi Interface");
-				}catch(TypeCheckException e) {
-					System.out.println(e.getLine()+":"+e.getColumn()+e.getMessage());
-					printer.printAtom(e.getLine()+":"+e.getColumn()+e.getMessage());
-				}
-								
-			}catch(Exception e){
-				System.out.println(e.getMessage());
-				s = l.next_token();
-			}
+			s = p.parse();
+			AstNode root = s.value();
+			registerAllFunctions(root, funcs);
+			System.out.println("Valid Xi Interface");
 			printer.flush();
 
 		} else {
 			System.out.println("error: '" + ixiFile + "' does not exist");
 		}
 		
-		return funcTable;
+
 	}
 	
 	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws TypeCheckException{
-		root.registerFunctionSignature(funcs);		
+		root.registerFunctionSignature(funcs, true);		
 	}
 	
 	
