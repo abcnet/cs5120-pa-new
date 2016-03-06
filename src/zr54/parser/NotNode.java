@@ -27,7 +27,7 @@ public class NotNode extends UnaryExprNode{
         } else {
         	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
 //        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be bool");
+        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.value.value +  "' must be bool");
         }
     }
 
