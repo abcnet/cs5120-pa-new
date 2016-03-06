@@ -61,4 +61,19 @@ public class Type {
     public ArrayList<Type> getTuple() {
     	return tuple;
     }
+   
+    public boolean equals(Type t){
+    	if(this.type!=t.type||this.dimension!=t.dimension)return false;
+    	if(this.type==TUPLE){
+    		int m=this.tuple.size();
+    		int n=t.tuple.size();
+    		if (m!=n)return false;
+    		for(int i=0;i<m;i++){
+    			if (this.tuple.get(i).equals(t.tuple.get(i))==false) return false;
+    		}
+    		return true;
+    	}else{
+    		return true;
+    	}
+    }
 }
