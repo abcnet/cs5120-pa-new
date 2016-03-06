@@ -11,9 +11,42 @@ public class MethodNode extends AstNode{
 	
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		VarSymbolTable newVars = new VarSymbolTable(vars);
+		newVars.toReturn = funcs.lookup((String)value.value).getFunctionReturnTypes().getTuple();
 		for(AstNode n : children) {
 			n.typeCheck(newVars, funcs);
 		}		
+		int m=newVars.toReturn.size();
+		
+		int n=newVars.returned.size();
+		Symbol s;
+		if(m==0){
+			if(n>0){
+//				s= this.children.get(this.children.size()-1).value;
+				throw new TypeCheckException(value.left,value.right,"Unexpeced return");
+			}
+		}else{
+			if(n==0){
+				System.out.println("Should return "+m+" values");
+				System.out.println("Returned "+n+" values");
+				
+				throw new TypeCheckException(value.left,value.right,"Missing return");
+			}
+//			s= this.children.get(this.children.size()-1).value;
+			if(m!=n){
+				
+				throw new TypeCheckException(value.left,value.right,"Incorrect number of elements returned");
+			}
+			for(int i=0;i<m;i++){
+				if(newVars.toReturn.get(i).matches(newVars.returned.get(i))==false){
+					throw new TypeCheckException(value.left,value.right,"Incorrect type(s) returned");
+				}
+			}
+		}
+		
+		
+		
+		
+		
 		//TODO: need to check argument type
 		return new Type();
 

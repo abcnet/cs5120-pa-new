@@ -1,10 +1,13 @@
 package zr54.typechecker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class VarSymbolTable {
     private VarSymbolTable parent;
     private HashMap<String, Type> table;
+    public ArrayList<Type> toReturn = null; 
+    public ArrayList<Type> returned = new ArrayList<Type>();
 
     public VarSymbolTable() {
         this.parent = null;
