@@ -18,6 +18,7 @@ public class AssignStmtNode extends StmtNode{
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
+		
 		Type left, right;
 
 		left=this.children.get(0).typeCheck(vars, funcs);
@@ -29,6 +30,12 @@ public class AssignStmtNode extends StmtNode{
 //				
 //			}
 //		}
+		if(left.getType()==Type.UNIT){
+			if(right.getType()!=Type.TUPLE){
+				Symbol s = this.children.get(1).value;
+				throw new TypeCheckException(s.left,s.right,"Expected function call");
+			}
+		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			System.out.println(left.getType() + ":" + left.getDimension());
