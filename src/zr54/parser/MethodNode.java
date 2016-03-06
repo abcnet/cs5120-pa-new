@@ -4,9 +4,14 @@ import java_cup.runtime.*;
 import java.util.*;
 
 public class MethodNode extends AstNode{
-	
+	private Symbol lrace;
 	public MethodNode(String t, Symbol v) {
 		super(t, v);
+		
+	}
+	public MethodNode(String t, Symbol v, Symbol lbrace) {
+		super(t, v);
+		this.lrace=lbrace;
 	}
 	
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
@@ -29,7 +34,7 @@ public class MethodNode extends AstNode{
 //				System.out.println("Should return "+m+" values");
 //				System.out.println("Returned "+n+" values");
 //				
-				throw new TypeCheckException(value.left,value.right,"Missing return");
+				throw new TypeCheckException(this.lrace,"Missing return");
 			}
 //			s= this.children.get(this.children.size()-1).value;
 			if(m!=n){

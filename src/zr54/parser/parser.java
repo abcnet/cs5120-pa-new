@@ -991,13 +991,16 @@ class CUP$parser$actions {
                 int rleft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
                 int rright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
                 AstNode r = CUP$parser$stack.elementAt(CUP$parser$top-4).<AstNode> value();
+                int lleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int lright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int osleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int osright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode os = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new MethodNode("method", id);
+                 RESULT = new MethodNode("method", id, l);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); 

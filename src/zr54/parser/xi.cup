@@ -106,8 +106,8 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new DefaultNode(
                       ;
 
 
-method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE optionalStatements:os optionalReturn:re RBRACE
-                        {: RESULT = new MethodNode("method", id);
+method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
+                        {: RESULT = new MethodNode("method", id, l);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
