@@ -41,6 +41,13 @@ public class AssignStmtNode extends StmtNode{
 			if(right.getType()==Type.TUPLE && right.getTuple().size()==0){
 				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).value.value+" is not a function");
 			}
+			
+			if(right.getType()==Type.TUPLE &&right.getTuple().size()>1 && left.getType()!=Type.TUPLE){
+				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+			}
+			if(right.getType()==Type.TUPLE && left.getType()==Type.TUPLE && left.getTuple().size()!=right.getTuple().size()){
+				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+			}
 
 			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left);
 		}
