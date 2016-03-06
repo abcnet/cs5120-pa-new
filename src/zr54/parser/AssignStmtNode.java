@@ -22,7 +22,15 @@ public class AssignStmtNode extends StmtNode{
 
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
-		if(!left.matches(right)){
+		System.out.println("LHS: "+left);
+		System.out.println("RHS: "+right);
+//		if(right.getType()==Type.TUPLE){
+//			if(left.matches(right.getTuple().get(0))==false){
+//				
+//			}
+//		}
+		if(left.matches(right)==false && (right.getType()!=Type.TUPLE || left.matches(right.getTuple().get(0))==false)){
+
 			System.out.println(left.getType() + ":" + left.getDimension());
 			System.out.println(right.getType() + ":" + right.getDimension());
 			

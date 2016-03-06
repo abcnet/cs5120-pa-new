@@ -1320,7 +1320,7 @@ class CUP$parser$actions {
                 int usleft = CUP$parser$stack.peek().left;
                 int usright = CUP$parser$stack.peek().right;
                 Symbol us = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new DefaultNode("UNDERSCORE", us); 
+                 RESULT = new UnderscoreNode("UNDERSCORE", us); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("variable",19, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

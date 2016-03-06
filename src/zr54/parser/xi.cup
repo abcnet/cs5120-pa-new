@@ -158,7 +158,7 @@ variables           ::= variables:vs COMMA variable:v     {: RESULT = new Defaul
                       | variable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
                       ;
 
-variable            ::= UNDERSCORE:us            {: RESULT = new DefaultNode("UNDERSCORE", us); :}
+variable            ::= UNDERSCORE:us            {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                       | IDENTIFIER:id         {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a    {: RESULT = a; :}
                       | arrayIndices:a        {: RESULT = a; :}
