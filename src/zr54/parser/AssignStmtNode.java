@@ -23,8 +23,8 @@ public class AssignStmtNode extends StmtNode{
 
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
-		System.out.println("LHS: "+left);
-		System.out.println("RHS: "+right);
+//		System.out.println("LHS: "+left);
+//		System.out.println("RHS: "+right);
 //		if(right.getType()==Type.TUPLE){
 //			if(left.matches(right.getTuple().get(0))==false){
 //				
@@ -38,10 +38,8 @@ public class AssignStmtNode extends StmtNode{
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
-			System.out.println(left.getType() + ":" + left.getDimension());
-			System.out.println(right.getType() + ":" + right.getDimension());
-			
-			throw new TypeCheckException(this.value.left,this.value.right,"types do not match at LHS and RHS of =");
+
+			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Cannot assign "+right+" to "+left);
 		}
 		
 		return new Type();

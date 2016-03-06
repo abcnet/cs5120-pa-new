@@ -196,5 +196,18 @@ public abstract class AstNode {
     public Symbol getValue() {
     	return value;
     }
+    
+    public Symbol getFirstSymbol(){
+    	if(this.children.size()==0){
+    		return value;
+    	}else{
+    		Symbol c=this.children.get(0).value;
+    		if(c.left<this.value.left || (c.left==this.value.left&&c.right<this.value.right)){
+    			return c;
+    		}else{
+    			return value;
+    		}
+    	}
+    }
 }
 

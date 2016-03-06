@@ -26,15 +26,15 @@ public class MethodNode extends AstNode{
 			}
 		}else{
 			if(n==0){
-				System.out.println("Should return "+m+" values");
-				System.out.println("Returned "+n+" values");
-				
+//				System.out.println("Should return "+m+" values");
+//				System.out.println("Returned "+n+" values");
+//				
 				throw new TypeCheckException(value.left,value.right,"Missing return");
 			}
 //			s= this.children.get(this.children.size()-1).value;
 			if(m!=n){
 				
-				throw new TypeCheckException(value.left,value.right,"Incorrect number of elements returned");
+				throw new TypeCheckException(value.left,value.right,"Incorrect number of values returned");
 			}
 			for(int i=0;i<m;i++){
 				if(newVars.toReturn.get(i).matches(newVars.returned.get(i))==false){
