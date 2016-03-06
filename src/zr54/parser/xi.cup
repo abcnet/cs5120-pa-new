@@ -181,7 +181,7 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new An
                       | LPAREN expression:e RPAREN				     {: RESULT = e; :}
                       | argument:a                   				   {: RESULT = a; :}
                       | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new MinusNode("MINUS", mi, e); :}
-                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new MinusNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); :}
+                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new MinusNode("MINUS", mi, new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0)); :}
                       | NOT:n expression:e		                   {: RESULT = new NotNode("NOT", n, e); :}
                       ;
 
@@ -190,7 +190,7 @@ expressions         ::= expression:e                           {: RESULT = new D
                       ;
 
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
-                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("functionCall", id, new DefaultNode("emptyArgument", null));:}
+                      | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("forceParen", id);:}
                       | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new LengthNode("length", l, new VariableNode("IDENTIFIER", id)); :}
                       ;
 

@@ -11,14 +11,13 @@ public class DeclarationNode extends AstNode {
 	
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		Type t=null;
-		System.out.println((String)value.value);
+
 		if(value != null) {
 			if(vars.lookup((String) value.value) != null) {
 				throw new TypeCheckException(this.value.left,this.value.right,"Duplicate Variable " + (String)value.value);
 			}			
 			else {
 				t = children.get(0).typeCheck(vars, funcs);
-//				System.out.println(t.getType() + " dim: " + t.getDimension());
 				vars.add((String) value.value, t);
 				return t;
 			}

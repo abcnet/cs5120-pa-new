@@ -38,7 +38,6 @@ public class TypeCheck {
 					AstNode useNode = root.getChildren().get(0);
 					for(AstNode useSpec : useNode.getChildren()) {
 						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
-						System.out.println(interfaceName);
 						
 						String ixiFile = dirPath + interfaceName + ".ixi";
 						String ixiDstFile = dirPath + interfaceName + ".typed";

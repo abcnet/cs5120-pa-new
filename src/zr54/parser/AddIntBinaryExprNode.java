@@ -22,8 +22,8 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
             return(new Type(Type.INT, t1.getDimension()));
         } 
         else {
-        	System.out.println("t1: "+t1.getType() + " dim: " + t1.getDimension()); 
-        	System.out.println("t2: "+t2.getType() + " dim: " + t2.getDimension());
+//        	System.out.println("t1: "+t1.getType() + " dim: " + t1.getDimension()); 
+//        	System.out.println("t2: "+t2.getType() + " dim: " + t2.getDimension());
         	throw new TypeCheckException(value.left,value.right, "operands of '" + (String) value.value +  "' must be int or arrays of the same dimension");
         }
     }

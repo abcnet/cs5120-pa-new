@@ -1662,7 +1662,7 @@ class CUP$parser$actions {
                 int illeft = CUP$parser$stack.peek().left;
                 int ilright = CUP$parser$stack.peek().right;
                 Symbol il = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new MinusNode("MINUS", mi, new DefaultNode("INTEGER_LITERAL", il)); 
+                 RESULT = new MinusNode("MINUS", mi, new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("expression",27, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1731,7 +1731,7 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
-                 RESULT = new FunctionCallNode("functionCall", id, new DefaultNode("emptyArgument", null));
+                 RESULT = new FunctionCallNode("forceParen", id);
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",30, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

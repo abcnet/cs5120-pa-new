@@ -25,8 +25,6 @@ public class MinusNode extends UnaryExprNode{
             && (t1.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
-        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-//        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
         	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be int");
         }
     }
