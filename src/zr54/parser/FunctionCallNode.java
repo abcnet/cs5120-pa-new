@@ -24,7 +24,7 @@ public class FunctionCallNode extends ExprNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		FuncSignature f = funcs.lookup((String) value.value);
 		if (f==null){
-			throw new TypeCheckException(value.left, value.right, (String)value.value+ " cannot been resolved");
+			throw new TypeCheckException(value.left, value.right,"Name "+ (String)value.value+ " cannot be resolved");
 		}
 		Type args = f.getFunctionArgTypes();
 		if(args.getTuple().size()!=this.children.size()){
@@ -32,10 +32,9 @@ public class FunctionCallNode extends ExprNode{
 		}
 		for(int i=0;i<args.getTuple().size();i++){
 			AstNode node = this.children.get(i);
-			Symbol s = node.value;
-			
-			if(node.typeCheck(vars, funcs).matches(args.getTuple().get(i))==false){
-				throw new TypeCheckException(s.left, s.right,"argument type does not match function signature");
+			Type l=node.typeCheck(vars, funcs);
+			if(l.matches(args.getTuple().get(i))==false){
+				throw new TypeCheckException(node.value,"Expected "+l+", but found "+args.getTuple().get(i));
 				
 			}
 		}

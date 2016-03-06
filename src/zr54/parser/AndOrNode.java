@@ -18,15 +18,21 @@ public class AndOrNode extends BoolBinaryExprNode {
 		
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
-
-        if ((t1.getType() == Type.BOOL && t2.getType() == Type.BOOL)
-            && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
-            return(new Type(Type.BOOL, 0));
-        } else {
-        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' must be bool");
+        if(t1.getType()!=Type.BOOL || t1.getDimension()!=0){
+        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.value.value +  " must be bool");
         }
+        if(t2.getType()!=Type.BOOL || t2.getDimension()!=0){
+        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.value.value +  " must be bool");
+        }
+        return new Type(Type.BOOL, 0);
+//        if ((t1.getType() == Type.BOOL && t2.getType() == Type.BOOL)
+//            && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
+//            return(new Type(Type.BOOL, 0));
+//        } else {
+//        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
+//        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
+//        	throw new TypeCheckException(this.value.left,this.value.right,"Operands of " + this.value.value +  " must be bool");
+//        }
     }
 
 }
