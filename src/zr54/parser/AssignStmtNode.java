@@ -22,7 +22,7 @@ public class AssignStmtNode extends StmtNode{
 //		//not finished for single assignment
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
-		if(left.equals(right)==false){
+		if(left.matches(right)==false && left.matches(right.getTuple().get(0))==false){
 			throw new TypeCheckException(this.value.left,this.value.right,"types do not match at LHS and RHS of =");
 		}
 //		if (left.size() != right.size()){

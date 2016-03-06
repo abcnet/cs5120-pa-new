@@ -34,7 +34,7 @@ public class FunctionCallNode extends ExprNode{
 			AstNode node = this.children.get(i);
 			Symbol s = node.value;
 			
-			if(node.typeCheck(vars, funcs).equals(args.getTuple().get(i))==false){
+			if(node.typeCheck(vars, funcs).matches(args.getTuple().get(i))==false){
 				throw new TypeCheckException(s.left, s.right,"argument type does not match function signature");
 				
 			}
