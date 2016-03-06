@@ -40,8 +40,6 @@ public class TypeCheck {
 						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
 						System.out.println(interfaceName);
 						
-						
-						
 						String ixiFile = dirPath + interfaceName + ".ixi";
 						String ixiDstFile = dirPath + interfaceName + ".typed";
 						FuncSymbolTable interFuncs = ixiAnalyze.typeCheckAndPrint(ixiFile, ixiDstFile); 
