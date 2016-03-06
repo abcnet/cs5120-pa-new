@@ -39,10 +39,10 @@ public class AssignStmtNode extends StmtNode{
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			if(right.getType()==Type.TUPLE && right.getTuple().size()==0){
-				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).value.value+"() is not a function");
+				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).value.value+" is not a function");
 			}
 
-			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Cannot assign "+right+" to "+left);
+			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left);
 		}
 		
 		return new Type();

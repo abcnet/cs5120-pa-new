@@ -198,6 +198,7 @@ public abstract class AstNode {
     }
     
     public Symbol getFirstSymbol(){
+    	if(value==null)return this.children.get(0).getFirstSymbol();
     	if(this.children.size()==0){
     		return value;
     	}else{
