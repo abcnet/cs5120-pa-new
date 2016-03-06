@@ -20,13 +20,15 @@ public class AssignStmtNode extends StmtNode{
 		for(AstNode n : children)
 			n.typeCheck(vars, funcs);
 		
-		return new Type();
+//		return new Type();
 		
-//		ArrayList<Type> left, right;
+		Type left, right;
 //		//not finished for single assignment
-//		left=this.children.get(0).typeCheck(vars, funcs).getTuple();
-//		right=this.children.get(1).typeCheck(vars, funcs).getTuple();
-//		Type l,r;
+		left=this.children.get(0).typeCheck(vars, funcs);
+		right=this.children.get(1).typeCheck(vars, funcs);
+		if(left.equals(right)==false){
+			throw new TypeCheckException(this.value.left,this.value.right,"types do not match at LHS and RHS of =");
+		}
 //		if (left.size() != right.size()){
 //			throw new TypeCheckException(this.value.left,this.value.right,"number of elements do not match at LHS and RHS of =");
 //		}
@@ -50,7 +52,7 @@ public class AssignStmtNode extends StmtNode{
 ////				throw new TypeCheckException(this.value.left,this.value.right,"elements of array literal do not match");
 ////			}
 ////		}
-//		return null;
+		return new Type();
 ////		return new Type(t0.getType(),t0.getDimension()+1);
 //       
     }

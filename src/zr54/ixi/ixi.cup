@@ -48,21 +48,21 @@ start with methods;
 
 
 
-arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new DefaultNode("INT", i)); RESULT = bs; :}
-                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new DefaultNode("BOOL", b)); RESULT = bs; :}
+arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
+                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
 
 
-bracket             ::= LBRACK RBRACK                {: RESULT = new DefaultNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
+bracket             ::= LBRACK RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
                       ;
 
-brackets            ::= bracket:b brackets:bs   {: RESULT = new DefaultNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+brackets            ::= bracket:b brackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | bracket:b               {: RESULT = b; :}
                       ;
 
 type                ::= arrayType:a     {: RESULT = a; :}
-                      | INT:i             {: RESULT = new DefaultNode("INT", i); :}
-                      | BOOL:b            {: RESULT = new DefaultNode("BOOL", b); :}
+                      | INT:i             {: RESULT = new TypeNode("INT", i); :}
+                      | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
                       ;
 
 argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
@@ -84,7 +84,7 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new DefaultNode(
 
 
 method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r 
-                        {: RESULT = new DefaultNode("method", id);
+                        {: RESULT = new MethodNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r); :}
                       ;
 

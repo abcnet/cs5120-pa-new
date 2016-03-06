@@ -9,7 +9,7 @@ import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import java_cup.runtime.Symbol;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
-import zr54.parser.parser;
+
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
