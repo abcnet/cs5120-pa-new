@@ -29,7 +29,7 @@ public class AssignStmtNode extends StmtNode{
 //				
 //			}
 //		}
-		if(left.matches(right)==false && (right.getType()!=Type.TUPLE || left.matches(right.getTuple().get(0))==false)){
+		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			System.out.println(left.getType() + ":" + left.getDimension());
 			System.out.println(right.getType() + ":" + right.getDimension());
