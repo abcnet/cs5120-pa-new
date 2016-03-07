@@ -24,11 +24,12 @@ public class Type {
     public Type(int type, int dimension) {
         this.type = type;
         this.dimension = dimension;
-//        if(type==TUPLE){
-//        	tuple = new ArrayList<Type>();
-//        }
     }
     
+    /**
+     * Constructor for tuple type
+     * @param tuple
+     */
     public Type(ArrayList<Type> tuple){
     	this.type=TUPLE;
     	this.dimension = 0;

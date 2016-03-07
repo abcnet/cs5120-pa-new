@@ -9,8 +9,7 @@ import zr54.typechecker.VarSymbolTable;
 public class LengthNode extends ExprNode{
 
 	public LengthNode(String t, Symbol v, AstNode child) {
-		type = t;
-		value = v;
+		super(t, v);
 		addChild(child);
 		
 	}

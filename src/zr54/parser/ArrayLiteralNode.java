@@ -14,8 +14,7 @@ public class ArrayLiteralNode extends ExprNode{
 	 * @param v
 	 */
 	public ArrayLiteralNode(String t, Symbol v) {
-		type = t;
-		value = v;
+		super(t, v);
 	}
 	/**
 	 * Type-checking method for array literal nodes
@@ -26,9 +25,6 @@ public class ArrayLiteralNode extends ExprNode{
 
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.startList();
-
-//			if(value != null)
-//				printer.printAtom((String) value.value);
 
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
@@ -46,10 +42,10 @@ public class ArrayLiteralNode extends ExprNode{
 		}
 		
 	}
+
 	@Override
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
  		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
-//		System.out.println("t0: " + t0.getType() + "dim: " +t0.getDimension());
 		for (int i=1; i<this.children.size();i++){
 			t=this.children.get(i).typeCheck(vars, funcs);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){

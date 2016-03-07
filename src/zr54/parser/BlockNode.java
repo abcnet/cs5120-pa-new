@@ -9,10 +9,14 @@ import zr54.typechecker.VarSymbolTable;
 
 public class BlockNode extends StmtNode{
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param c1
+	 */
 	public BlockNode(String t, Symbol v, AstNode c1) {
 		super(t, v, c1);
-				
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override
@@ -27,10 +31,8 @@ public class BlockNode extends StmtNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
-		
-		
         this.children.get(0).typeCheck(tempScope, funcs);
-        
+
         return null;
     }
 

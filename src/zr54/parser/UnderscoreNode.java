@@ -6,11 +6,10 @@ import zr54.typechecker.Type;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
-public class UnderscoreNode extends SingleExprNode{
+public class UnderscoreNode extends ExprNode{
 
 	public UnderscoreNode(String t, Symbol v) {
 		super(t, v);
-		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

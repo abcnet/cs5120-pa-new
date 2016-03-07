@@ -5,7 +5,7 @@ import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
 
-public class LiteralExpr extends SingleExprNode {
+public class LiteralExpr extends ExprNode {
 	private int type;
 	private int dimension;
 

@@ -9,15 +9,12 @@ import zr54.typechecker.VarSymbolTable;
 public class FunctionCallNode extends ExprNode{
 
 	public FunctionCallNode(String t, Symbol v, AstNode child) {
-		type = t;
-		value = v;
+		super(t, v);
 		addChild(child);
 		
 	}
 	public FunctionCallNode(String t, Symbol v) {
-		type = t;
-		value = v;
-		
+		super(t, v);		
 	}
 	
 	@Override

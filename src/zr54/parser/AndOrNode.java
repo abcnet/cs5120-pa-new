@@ -16,7 +16,6 @@ public class AndOrNode extends BoolBinaryExprNode {
  */
 	public AndOrNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		super(t, v, child1, child2);
-		// TODO Auto-generated constructor stub
 	}
 /**
  * Type-checking method for and/or (boolean operation) nodes

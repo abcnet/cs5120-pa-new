@@ -18,7 +18,6 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	 */
 	public AddIntBinaryExprNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		super(t, v, child1, child2);
-		// TODO Auto-generated constructor stub
 	}
 	/**
 	 * Type-checking method for integer addition (binary expression) nodes

@@ -5,8 +5,7 @@ import java_cup.runtime.*;
 public class IntBinaryExprNode extends ExprNode {
 
 	public IntBinaryExprNode(String t, Symbol v, AstNode child1, AstNode child2) {
-		type = t;
-		value = v;
+		super(t, v);
 		addChild(child1);
 		addChild(child2);
 	}
