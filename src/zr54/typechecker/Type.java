@@ -84,7 +84,7 @@ public class Type {
     	}
     }
     /**
-     * Generating the string to represent the type for dubugging purpose.
+     * Generating the string to represent the type for debugging purpose.
      */
     public String toString(){
     	String s="";

@@ -13,11 +13,20 @@ public class VarSymbolTable {
         this.parent = null;
         this.table = new HashMap<String, Type>();
     }
+    /**
+     * Constructor with a parent symbol table. This is used when entering
+     * a new scope ({} block, if/while statement).
+     * @param parent
+     */
     public VarSymbolTable(VarSymbolTable parent){
     	this.parent = parent;
     	this.table = new HashMap<String, Type>();
     }
-
+/**
+ * Look up a variable in the symbol table
+ * @param var
+ * @return
+ */
     public Type lookup(String var) {
         if (this.table.containsKey(var)) {
             return this.table.get(var);
@@ -29,7 +38,12 @@ public class VarSymbolTable {
             }
         }
     }
-
+/**
+ * Add a new variable to the symbol table if not in it yet
+ * @param var
+ * @param t
+ * @return 1 if succeed and 0 if the variable is already in it
+ */
     public int add(String var, Type t) {
         if (this.lookup(var) == null) {
            table.put(var, t);
