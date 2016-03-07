@@ -5,10 +5,19 @@ import zr54.typechecker.*;
 
 public class DeclarationNode extends AstNode {
 	
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param child
+	 */
 	public DeclarationNode(String t, Symbol v, AstNode child) {
 		super(t, v, child);
 	}
 	
+	/**
+	 * type checking
+	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		Type t=null;
 

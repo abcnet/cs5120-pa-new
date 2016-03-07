@@ -8,11 +8,20 @@ import zr54.typechecker.VarSymbolTable;
 
 public class GtLtGeLeNode extends BoolBinaryExprNode {
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param child1
+	 * @param child2
+	 */
 	public GtLtGeLeNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		super(t, v, child1, child2);
-		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
@@ -25,14 +34,7 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
         	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.value.value +  " must be int");
         }
         return new Type(Type.BOOL, 0);
-//        if ((t1.getType() == Type.INT && t2.getType() == Type.INT )
-//            && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
-//            return(new Type(Type.BOOL, 0));
-//        } else {
-//        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-//        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-//        	throw new TypeCheckException(this.value.left,this.value.right,"Operands of " + this.value.value +  " must be int");
-//        }
+
     }
 
 }

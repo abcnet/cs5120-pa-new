@@ -8,11 +8,18 @@ import zr54.typechecker.VarSymbolTable;
 
 public class MultiVariableNode extends DefaultNode{
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 */
 	public MultiVariableNode(String t, Symbol v) {
 		super(t, v);
-		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		Type t = new Type(Type.TUPLE, 0);

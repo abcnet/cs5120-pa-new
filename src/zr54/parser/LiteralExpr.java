@@ -9,6 +9,13 @@ public class LiteralExpr extends ExprNode {
 	private int type;
 	private int dimension;
 
+	/**
+	 * constructor 
+	 * @param t
+	 * @param v
+	 * @param type
+	 * @param dimension
+	 */
 	public LiteralExpr(String t, Symbol v, int type, int dimension) {
 		super(t,v);
 		this.type = type;
@@ -16,6 +23,9 @@ public class LiteralExpr extends ExprNode {
 		
 	}
 	
+	/*
+	 * type checking
+	 */
 	@Override
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
 		 

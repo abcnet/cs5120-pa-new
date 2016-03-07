@@ -182,17 +182,38 @@ public abstract class AstNode {
 		return str;
 	}
 
+	/**
+	 * type checking
+	 * @param vars: variable symbol table
+	 * @param funcs: function symbo table
+	 * @return type
+	 * @throws TypeCheckException
+	 */
     public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException;
 
+    /**
+     * register function signature 
+     * @param funcs
+     * @param isInterface
+     * @throws TypeCheckException
+     */
     public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws TypeCheckException {
     	for(AstNode child : children)
     		child.registerFunctionSignature(funcs, isInterface);
     }
     
+    /**
+     * get children
+     * @return
+     */
     public ArrayList<AstNode> getChildren(){
     	return children;
     }
     
+    /**
+     * get value
+     * @return
+     */
     public Symbol getValue() {
     	return value;
     }

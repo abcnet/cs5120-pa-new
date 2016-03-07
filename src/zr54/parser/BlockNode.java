@@ -19,14 +19,17 @@ public class BlockNode extends StmtNode{
 		super(t, v, c1);
 	}
 	
+	/**
+	 * print first child
+	 */
 	@Override
 	public void print(CodeWriterSExpPrinter printer) {
-		
 		this.children.get(0).print(printer);
-		
-		
 	}
-	
+
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		

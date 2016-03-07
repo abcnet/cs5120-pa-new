@@ -8,10 +8,18 @@ import zr54.typechecker.VarSymbolTable;
 
 public class UnderscoreNode extends ExprNode{
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 */
 	public UnderscoreNode(String t, Symbol v) {
 		super(t, v);
 	}
 	
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 

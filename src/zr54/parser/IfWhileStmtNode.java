@@ -8,15 +8,23 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IfWhileStmtNode extends StmtNode{
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param c1
+	 * @param c2
+	 */
 	public IfWhileStmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v, c1, c2);
-		// TODO Auto-generated constructor stub
+
 	}
 	
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
-		
 		
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
