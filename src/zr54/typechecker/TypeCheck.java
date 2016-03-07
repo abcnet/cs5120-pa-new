@@ -49,13 +49,12 @@ public class TypeCheck {
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
 					
-					
 					registerAllFunctions(funcs, root);
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
-					System.out.println("Valid program");
+					//System.out.println("Valid Xi Program");
 				}catch(TypeCheckException e) {
-					System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 				}
 								
@@ -68,6 +67,7 @@ public class TypeCheck {
 		} else {
 			System.out.println("error: '" + srcFile + "' does not exist");
 		}
+		System.out.println("Type checking result written to: " + dstFile);
 	}
 	
 	/**

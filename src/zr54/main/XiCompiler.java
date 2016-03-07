@@ -93,7 +93,6 @@ class XiCompiler {
                 ParsePrint.parseAndPrint(src, dst);
             } else if (op == "typecheck") {
             	dst = dst + ".typed";
-            	System.out.println("Typechecking..");
                 TypeCheck.typeCheckAndPrint(src, dst);
             }
         }

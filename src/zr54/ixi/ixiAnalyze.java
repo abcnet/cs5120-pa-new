@@ -34,7 +34,6 @@ public class ixiAnalyze {
 			s = p.parse();
 			AstNode root = s.value();
 			registerAllFunctions(root, funcs);
-			System.out.println("Valid Xi Interface");
 			printer.flush();
 
 		} else {
