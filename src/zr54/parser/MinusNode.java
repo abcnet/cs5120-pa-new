@@ -9,17 +9,23 @@ import zr54.typechecker.VarSymbolTable;
 public class MinusNode extends UnaryExprNode{
 
 	
-	
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param child
+	 */
 	public MinusNode(String t, Symbol v, AstNode child) {
 		super(t, v, child);
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
-//        Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
         if ((t1.getType() == Type.INT)
             && (t1.getDimension() == 0)) {

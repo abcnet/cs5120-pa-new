@@ -8,15 +8,30 @@ import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 public class FunctionCallNode extends ExprNode{
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param child
+	 */
 	public FunctionCallNode(String t, Symbol v, AstNode child) {
 		super(t, v);
 		addChild(child);
 		
 	}
+	
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 */
 	public FunctionCallNode(String t, Symbol v) {
 		super(t, v);		
 	}
 	
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		FuncSignature f = funcs.lookup((String) value.value);
@@ -35,13 +50,13 @@ public class FunctionCallNode extends ExprNode{
 				
 			}
 		}
+
 		Type t=f.getFunctionReturnTypes();
 		if (t!=null&&t.getTuple().size()==1){
     		return t.getTuple().get(0);
     	}
 		return t;
 
-	
 		    	
     }
 	

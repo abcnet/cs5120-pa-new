@@ -8,12 +8,22 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IfElseStmtNode extends StmtNode {
 
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param c1
+	 * @param c2
+	 * @param c3
+	 */
 	public IfElseStmtNode(String t, Symbol v, AstNode c1, AstNode c2, AstNode c3) {
 		super(t, v, c1, c2);
-		// TODO Auto-generated constructor stub
 		this.addChild(c3);
 	}
-	
+
+	/**
+	 * type checking
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		

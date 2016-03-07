@@ -5,15 +5,31 @@ import java.util.*;
 
 public class MethodNode extends AstNode{
 	private Symbol lrace;
+	
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 */
 	public MethodNode(String t, Symbol v) {
 		super(t, v);
 		
 	}
+	
+	/**
+	 * constructor
+	 * @param t
+	 * @param v
+	 * @param lbrace
+	 */
 	public MethodNode(String t, Symbol v, Symbol lbrace) {
 		super(t, v);
 		this.lrace=lbrace;
 	}
 	
+	/*
+	 * type checking
+	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = funcs.lookup((String)value.value).getFunctionReturnTypes().getTuple();
@@ -26,20 +42,14 @@ public class MethodNode extends AstNode{
 		Symbol s;
 		if(m==0){
 			if(n>0){
-				System.out.println("Should return "+m+" values");
-				System.out.println("Returned "+n+" values");
-				
-//				s= this.children.get(this.children.size()-1).value;
+
 				throw new TypeCheckException(value.left,value.right,"Unexpeced return");
 			}
 		}else{
 			if(n==0){
-				System.out.println("Should return "+m+" values");
-				System.out.println("Returned "+n+" values");
-				
+
 				throw new TypeCheckException(this.lrace,"Missing return");
 			}
-//			s= this.children.get(this.children.size()-1).value;
 			if(m!=n){
 				
 				throw new TypeCheckException(value.left,value.right,"Incorrect number of values returned");
@@ -51,16 +61,15 @@ public class MethodNode extends AstNode{
 			}
 		}
 		
-		
-		
-		
-		
-		//TODO: need to check argument type
 		return new Type();
 
 	}
 	
-
+	/**
+	 * register function signature
+	 * @param funcs: function symbol table 
+	 * @param isInterface: true if this is an unimplemented function in interface file, false if this is an implemented function  
+	 */
 	@Override
 	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws TypeCheckException{
 		String funcName = (String) value.value;
