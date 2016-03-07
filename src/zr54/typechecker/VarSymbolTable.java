@@ -51,10 +51,18 @@ public class VarSymbolTable {
         } else return 0;
     }
 
+    /**
+     * set parent field
+     * @param p
+     */
     public void setParent(VarSymbolTable p) {
         this.parent = p;
     }
 
+    /**
+     * get parent field
+     * @return
+     */
     public VarSymbolTable getParent() {
         return this.parent;
     }

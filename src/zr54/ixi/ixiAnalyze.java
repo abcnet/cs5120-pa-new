@@ -15,6 +15,13 @@ import zr54.typechecker.VarSymbolTable;
 
 public class ixiAnalyze {
 	
+	/**
+	 * Analyze an interface file and register function signatures
+	 * @param ixiFile: path of input *.ixi file
+	 * @param fs: output stream (*.typed file)
+	 * @param funcs: current function symbol table
+	 * @throws Exception
+	 */
 	public static void typeCheckAndPrint(String ixiFile, FileOutputStream fs, FuncSymbolTable funcs) throws Exception {
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 		File f = new File(ixiFile);
@@ -37,6 +44,12 @@ public class ixiAnalyze {
 
 	}
 	
+	/**
+	 * register all functions in the interface file
+	 * @param root: root node of the 
+	 * @param funcs: current function symbol table
+	 * @throws TypeCheckException
+	 */
 	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws TypeCheckException{
 		root.registerFunctionSignature(funcs, true);		
 	}

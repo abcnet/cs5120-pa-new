@@ -21,6 +21,11 @@ public class Type {
     	
     }
 
+    /**
+     * Constructor 
+     * @param type
+     * @param dimension
+     */
     public Type(int type, int dimension) {
         this.type = type;
         this.dimension = dimension;

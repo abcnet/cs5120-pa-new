@@ -15,8 +15,8 @@ import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 public class TypeCheck {
 	/**
 	 * Main method used to perform --typecheck
-	 * @param srcFile
-	 * @param dstFile
+	 * @param srcFile: path of the input *.xi file
+	 * @param dstFile: path of the ouput *.typed file
 	 * @throws IOException
 	 */
 	public static void typeCheckAndPrint(String srcFile, String dstFile) throws IOException {
@@ -72,8 +72,8 @@ public class TypeCheck {
 	
 	/**
 	 * Register all function signatures during first pass
-	 * @param funcs
-	 * @param root
+	 * @param funcs: function symbol table
+	 * @param root: root node of the program
 	 * @throws TypeCheckException
 	 */
 	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws TypeCheckException{
