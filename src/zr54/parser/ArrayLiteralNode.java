@@ -49,7 +49,7 @@ public class ArrayLiteralNode extends ExprNode{
 		for (int i=1; i<this.children.size();i++){
 			t=this.children.get(i).typeCheck(vars, funcs);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
-				throw new TypeCheckException(this.value.left,this.value.right,"elements of array literal do not match");
+				throw new TypeCheckException(this.children.get(i).getFirstSymbol(),"elements of array literal do not match");
 			}
 		}
 		

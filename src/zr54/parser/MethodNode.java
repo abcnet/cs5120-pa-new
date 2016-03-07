@@ -26,14 +26,17 @@ public class MethodNode extends AstNode{
 		Symbol s;
 		if(m==0){
 			if(n>0){
+				System.out.println("Should return "+m+" values");
+				System.out.println("Returned "+n+" values");
+				
 //				s= this.children.get(this.children.size()-1).value;
 				throw new TypeCheckException(value.left,value.right,"Unexpeced return");
 			}
 		}else{
 			if(n==0){
-//				System.out.println("Should return "+m+" values");
-//				System.out.println("Returned "+n+" values");
-//				
+				System.out.println("Should return "+m+" values");
+				System.out.println("Returned "+n+" values");
+				
 				throw new TypeCheckException(this.lrace,"Missing return");
 			}
 //			s= this.children.get(this.children.size()-1).value;

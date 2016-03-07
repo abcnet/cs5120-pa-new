@@ -35,7 +35,11 @@ public class FunctionCallNode extends ExprNode{
 				
 			}
 		}
-		return f.getFunctionReturnTypes();
+		Type t=f.getFunctionReturnTypes();
+		if (t!=null&&t.getTuple().size()==1){
+    		return t.getTuple().get(0);
+    	}
+		return t;
 
 	
 		    	
