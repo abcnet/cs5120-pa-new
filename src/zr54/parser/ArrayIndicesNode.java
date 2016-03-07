@@ -8,24 +8,32 @@ import zr54.typechecker.VarSymbolTable;
 
 public class ArrayIndicesNode extends BinaryExprNode{
 
+	/**
+	 * Constructor for array access (e.g., a[0][1]) nodes
+	 * @param t
+	 * @param v
+	 * @param child1
+	 * @param child2
+	 */
 	public ArrayIndicesNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		super(t, v, child1, child2);
 		// TODO Auto-generated constructor stub
 	}
+	/**
+	 * Type-checking method for array access (e.g., a[0][1]) nodes
+	 */
 	@Override
 	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 	        Type t1 = this.children.get(0).typeCheck(vars, funcs);
 	        Type t2 = this.children.get(1).typeCheck(vars, funcs);
-//        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-//        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-	        if ((t2.getType() == Type.INT)
-	            && (t1.getDimension() >= 1 && t2.getDimension() == 0)) {
-	            return(new Type(t1.getType(), t1.getDimension()-1));
-	        } else {
 
-	        	
-	        	throw new TypeCheckException(this.value.left,this.value.right,"operands of array access must be array and int");
+	        if(t1.getDimension()<1){
+	        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"First operand of array access must be array");
 	        }
+	        if(t2.getDimension() != 0 || t2.getType() != Type.INT){
+	        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Second operand of array access must be int");
+	        }
+	        return(new Type(t1.getType(), t1.getDimension()-1));
 	    }
 
 }

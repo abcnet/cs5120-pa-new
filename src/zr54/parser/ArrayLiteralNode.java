@@ -8,10 +8,18 @@ import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
 public class ArrayLiteralNode extends ExprNode{
+	/**
+	 * Constructor for array literal nodes
+	 * @param t
+	 * @param v
+	 */
 	public ArrayLiteralNode(String t, Symbol v) {
 		type = t;
 		value = v;
 	}
+	/**
+	 * Type-checking method for array literal nodes
+	 */
 	@Override
 	public void print(CodeWriterSExpPrinter printer) {
 		if(this.children.size()>0 || this.type.equals("forceParen")){

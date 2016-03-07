@@ -7,12 +7,20 @@ import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
 public class AndOrNode extends BoolBinaryExprNode {
-
+/**
+ * Constructor for and/or (boolean operation) nodes
+ * @param t
+ * @param v
+ * @param child1
+ * @param child2
+ */
 	public AndOrNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		super(t, v, child1, child2);
 		// TODO Auto-generated constructor stub
 	}
-	
+/**
+ * Type-checking method for and/or (boolean operation) nodes
+ */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
@@ -25,14 +33,7 @@ public class AndOrNode extends BoolBinaryExprNode {
         	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.value.value +  " must be bool");
         }
         return new Type(Type.BOOL, 0);
-//        if ((t1.getType() == Type.BOOL && t2.getType() == Type.BOOL)
-//            && (t1.getDimension() == 0 && t2.getDimension() == 0)) {
-//            return(new Type(Type.BOOL, 0));
-//        } else {
-//        	System.out.println(children.get(0).toString() + "t1: " + t1.getType() + " ");
-//        	System.out.println(children.get(1).toString() + "t2: " + t2.getType() + " ");
-//        	throw new TypeCheckException(this.value.left,this.value.right,"Operands of " + this.value.value +  " must be bool");
-//        }
+
     }
 
 }

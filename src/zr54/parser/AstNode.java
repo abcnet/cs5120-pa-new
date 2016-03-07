@@ -196,7 +196,10 @@ public abstract class AstNode {
     public Symbol getValue() {
     	return value;
     }
-    
+    /**
+     * Get the first symbol of this node and its all children. This is useful for error output.
+     * @return
+     */
     public Symbol getFirstSymbol(){
     	if(value==null)return this.children.get(0).getFirstSymbol();
     	if(this.children.size()==0){

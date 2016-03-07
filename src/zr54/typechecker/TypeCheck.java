@@ -13,7 +13,12 @@ import zr54.parser.parser;
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 
 public class TypeCheck {
-	
+	/**
+	 * Main method used to perform --typecheck
+	 * @param srcFile
+	 * @param dstFile
+	 * @throws IOException
+	 */
 	public static void typeCheckAndPrint(String srcFile, String dstFile) throws IOException {
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
@@ -65,6 +70,12 @@ public class TypeCheck {
 		}
 	}
 	
+	/**
+	 * Register all function signatures during first pass
+	 * @param funcs
+	 * @param root
+	 * @throws TypeCheckException
+	 */
 	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws TypeCheckException{
 		root.registerFunctionSignature(funcs, false);
 	}

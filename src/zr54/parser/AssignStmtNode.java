@@ -9,12 +9,21 @@ import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
 
 public class AssignStmtNode extends StmtNode{
+	/**
+	 * Constructor for assignment statement nodes
+	 * @param t
+	 * @param v
+	 * @param c1
+	 * @param c2
+	 */
 	public AssignStmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v, c1, c2);
 		// TODO Auto-generated constructor stub
 	}
 
-	
+	/**
+	 * Type-checking method for assignment statement nodes
+	 */
 	@Override
     public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 		
@@ -23,13 +32,7 @@ public class AssignStmtNode extends StmtNode{
 
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
-//		System.out.println("LHS: "+left);
-//		System.out.println("RHS: "+right);
-//		if(right.getType()==Type.TUPLE){
-//			if(left.matches(right.getTuple().get(0))==false){
-//				
-//			}
-//		}
+
 		if(left.getType()==Type.UNIT){
 			if(right.getType()!=Type.TUPLE){
 				Symbol s = this.children.get(1).value;

@@ -14,7 +14,9 @@ public class Type {
     private int type = 0;
     private int dimension = 0;
     private ArrayList<Type> tuple = new ArrayList<Type>();
-    
+    /**
+     * Empty constructor
+     */
     public Type(){
     	
     }
@@ -60,7 +62,11 @@ public class Type {
     public ArrayList<Type> getTuple() {
     	return tuple;
     }
-   
+   /**
+    * Check if two types match with each other
+    * @param t
+    * @return
+    */
     public boolean matches(Type t){
     	if(this.type==UNIT||t.type==UNIT)return true;
     	if(this.type!=t.type||this.dimension!=t.dimension)return false;
@@ -77,6 +83,9 @@ public class Type {
     		return true;
     	}
     }
+    /**
+     * Generating the string to represent the type for dubugging purpose.
+     */
     public String toString(){
     	String s="";
     	if (type==NIL){
