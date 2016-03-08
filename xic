@@ -1,4 +1,4 @@
 #!/bin/bash
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 #Code of DIR from http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
-java -cp "${DIR}"/../bin:"${DIR}":"${DIR}"/../lib/java_cup.jar:"${DIR}"/../lib/java-getopt-1.0.14.jar zr54.main.XiCompiler $@
+java -cp "${DIR}"/bin:"${DIR}"/lib/java_cup.jar:"${DIR}"/lib/java-getopt-1.0.14.jar zr54.main.XiCompiler $@

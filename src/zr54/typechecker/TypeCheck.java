@@ -56,18 +56,23 @@ public class TypeCheck {
 				}catch(TypeCheckException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+					System.out.println("Error in "+dstFile);
 				}
 								
 			}catch(Exception e){
 				System.out.println(e.getMessage());
 				s = l.next_token();
-			} 
-			printer.flush();
+			}finally{
+				printer.flush();
+//				System.out.println("Type checking result written to: " + dstFile);
+			}
+			
 
 		} else {
 			System.out.println("error: '" + srcFile + "' does not exist");
+			System.exit(1);
 		}
-		System.out.println("Type checking result written to: " + dstFile);
+		
 	}
 	
 	/**
