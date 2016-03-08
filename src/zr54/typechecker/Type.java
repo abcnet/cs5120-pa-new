@@ -13,6 +13,7 @@ public class Type {
     
     private int type = 0;
     private int dimension = 0;
+    private boolean isFunctionCall = false;
     private ArrayList<Type> tuple = new ArrayList<Type>();
     /**
      * Empty constructor
@@ -39,6 +40,11 @@ public class Type {
     	this.type=TUPLE;
     	this.dimension = 0;
     	this.tuple = tuple;
+    	this.isFunctionCall = true;
+    }
+    public Type functionCallTrue(){
+    	this.isFunctionCall = true;
+    	return this;
     }
 
     public void setType(int type) {
@@ -59,6 +65,10 @@ public class Type {
 
     public int getDimension() {
         return this.dimension;
+    }
+    
+    public boolean isFunctionCall(){
+    	return this.isFunctionCall;
     }
     
     public void addTupleEntry(Type t) {

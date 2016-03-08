@@ -32,11 +32,8 @@ public class AssignStmtNode extends StmtNode{
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
 
-		if(left.getType()==Type.UNIT){
-			if(right.getType()!=Type.TUPLE){
-				Symbol s = this.children.get(1).value;
-				throw new TypeCheckException(s.left,s.right,"Expected function call");
-			}
+		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
+				throw new TypeCheckException(this.children.get(1).value,"Expected function call");
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
