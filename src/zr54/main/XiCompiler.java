@@ -17,7 +17,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[5];
+        LongOpt[] longopts = new LongOpt[6];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -25,18 +25,21 @@ class XiCompiler {
         longopts[2] = new LongOpt("parse", LongOpt.NO_ARGUMENT, null, 2);
         longopts[3] = new LongOpt("typecheck", LongOpt.NO_ARGUMENT, null, 3);
         longopts[4] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 4);
+        longopts[5] = new LongOpt("libpath", LongOpt.REQUIRED_ARGUMENT, null, 5);
 
         Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
             "options: --help | --lex | --parse | --typecheck\n" +
+            "libpath: -libpath <path>\n" +
             "srcpath: -sourcepath <path>\n" +
             "dstpath: -D <path>";
 
         String op = "";
         String srcPath = System.getProperty("user.dir");
         String dstPath = System.getProperty("user.dir");
+        String libPath = System.getProperty("user.dir");
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -51,6 +54,9 @@ class XiCompiler {
                 case 4: arg = g.getOptarg();
                         srcPath = arg;
                         break;
+                case 5: arg = g.getOptarg();
+                		libPath = arg;
+                		break;
                 case 'D': arg = g.getOptarg();
                           dstPath = arg;
                           break;
@@ -93,7 +99,7 @@ class XiCompiler {
                 ParsePrint.parseAndPrint(src, dst);
             } else if (op == "typecheck") {
             	dst = dst + ".typed";
-                TypeCheck.typeCheckAndPrint(src, dst);
+                TypeCheck.typeCheckAndPrint(src, dst, libPath);
             }
         }
     }

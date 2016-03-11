@@ -19,7 +19,7 @@ public class TypeCheck {
 	 * @param dstFile: path of the ouput *.typed file
 	 * @throws IOException
 	 */
-	public static void typeCheckAndPrint(String srcFile, String dstFile) throws IOException {
+	public static void typeCheckAndPrint(String srcFile, String dstFile, String libPath) throws IOException {
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 
@@ -38,14 +38,13 @@ public class TypeCheck {
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				
 				try {
-					String dirPath = srcFile.substring(0, srcFile.lastIndexOf("/") + 1);
 					//first need load all interface files and register function signatures
 					AstNode useNode = root.getChildren().get(0);
 					for(AstNode useSpec : useNode.getChildren()) {
 						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
 						
-						String ixiFile = dirPath + interfaceName + ".ixi";
-						String ixiDstFile = dirPath + interfaceName + ".typed";
+						String ixiFile = libPath + interfaceName + ".ixi";
+						String ixiDstFile = libPath + interfaceName + ".typed";
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
 					
