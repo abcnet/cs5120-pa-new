@@ -7,6 +7,8 @@ import gnu.getopt.LongOpt;
 import zr54.lexer.*;
 import zr54.parser.*;
 import zr54.typechecker.*;
+import zr54.irgen.*;
+
 class XiCompiler {
 	/**
 	 * Main function of the compiler
@@ -17,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[6];
+        LongOpt[] longopts = new LongOpt[7];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -26,12 +28,13 @@ class XiCompiler {
         longopts[3] = new LongOpt("typecheck", LongOpt.NO_ARGUMENT, null, 3);
         longopts[4] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 4);
         longopts[5] = new LongOpt("libpath", LongOpt.REQUIRED_ARGUMENT, null, 5);
+        longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
 
         Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
-            "options: --help | --lex | --parse | --typecheck\n" +
+            "options: --help | --lex | --parse | --typecheck | --irgen\n" +
             "libpath: -libpath <path>\n" +
             "srcpath: -sourcepath <path>\n" +
             "dstpath: -D <path>";
@@ -57,6 +60,8 @@ class XiCompiler {
                 case 5: arg = g.getOptarg();
                 		libPath = arg;
                 		break;
+                case 6: op = (op == "") ? "irgen" : "error";
+                		break;
                 case 'D': arg = g.getOptarg();
                           dstPath = arg;
                           break;
@@ -72,7 +77,7 @@ class XiCompiler {
             System.out.println(usage);
             System.exit(0);
         } else if (op == "error") {
-            System.out.println("error: can only specify one of --help --lex --parse or --typecheck");
+            System.out.println("error: can only specify one of --help --lex --parse --typecheck or --irgen");
             System.out.println(usage);
             System.exit(0);
         } else if (op == "help") {
@@ -100,6 +105,9 @@ class XiCompiler {
             } else if (op == "typecheck") {
             	dst = dst + ".typed";
                 TypeCheck.typeCheckAndPrint(src, dst, libPath);
+            } else if (op == "irgen") {
+            	dst = dst + ".ir";
+            	IRGenerate.IRGenAndPrint(src, dst, libPath);
             }
         }
     }
