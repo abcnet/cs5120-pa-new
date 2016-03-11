@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import polyglot.util.CodeWriter;
 import polyglot.util.OptimalCodeWriter;
@@ -28,11 +29,24 @@ public class CodeWriterSExpPrinter implements SExpPrinter {
 
     /**
      * Constructs a new {@linkplain SExpPrinter} instance that prints programs
-     * using to the given stream.  Output is kept to 80 columns.
+     * using the given writer.  Output is kept to 80 columns if possible.
+     *
+     * @param w
+     *          the writer to write to
+     */
+    public CodeWriterSExpPrinter(PrintWriter w) {
+        this(new OptimalCodeWriter(w, 80));
+    }
+
+    /**
+     * Constructs a new {@linkplain SExpPrinter} instance that prints programs
+     * using the given stream.  Output is kept to 80 columns if possible.
+     * Deprecated: use the previous constructor instead.
      *
      * @param o
      *          the output stream to print to
      */
+    @Deprecated
     public CodeWriterSExpPrinter(OutputStream o) {
         this(new OptimalCodeWriter(o, 80));
     }
@@ -47,25 +61,36 @@ public class CodeWriterSExpPrinter implements SExpPrinter {
 
     @Override
     public void startList() {
-        if (addSpace)
-            writer.allowBreak(0);
-        else addSpace = true;
-        addSpace = false;
-        writer.begin(1);
+        if (addSpace) writer.allowBreak(0);
         writer.write("(");
+        writer.allowBreak(2, 2, "", 0); // miser mode
+        writer.begin(0);
+        addSpace = false;
     }
 
     @Override
     public void endList() {
-        writer.write(")");
         writer.end();
+        writer.write(")");
         addSpace = true;
     }
 
     @Override
     public void flush() {
         try {
+            writer.newline();
             writer.flush();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close() {
+        try {
+            flush();
+            writer.close();
         }
         catch (IOException e) {
             throw new RuntimeException(e);
