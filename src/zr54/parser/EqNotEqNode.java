@@ -33,7 +33,7 @@ public class EqNotEqNode extends BoolBinaryExprNode{
             && (t1.getDimension() == t2.getDimension())) {
             return(new Type(Type.BOOL, 0));
         } else {
-        	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' do not match");
+        	throw new TypeCheckException(this.symbol.left,this.symbol.right,"operands of '" + this.symbol.value +  "' do not match");
         }
     }
 

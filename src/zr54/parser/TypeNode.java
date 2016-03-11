@@ -40,7 +40,7 @@ public class TypeNode extends AstNode {
 				return t;
 			}
 			else
-				throw new TypeCheckException(value.left,value.right, "Array without INT/BOOL type");
+				throw new TypeCheckException(symbol.left,symbol.right, "Array without INT/BOOL type");
 		}
 		else
 			return new Type();

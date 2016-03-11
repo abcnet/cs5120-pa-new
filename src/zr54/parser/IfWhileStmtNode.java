@@ -30,8 +30,8 @@ public class IfWhileStmtNode extends StmtNode{
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
         
         if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
-        	throw new TypeCheckException(this.children.get(0).value.left, 
-        			this.children.get(0).value.right,"predicate of if statement must be bool type");
+        	throw new TypeCheckException(this.children.get(0).symbol.left, 
+        			this.children.get(0).symbol.right,"predicate of if statement must be bool type");
         }
         this.children.get(1).typeCheck(tempScope, funcs);
         

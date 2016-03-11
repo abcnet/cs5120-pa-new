@@ -1,6 +1,7 @@
 package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -27,10 +28,10 @@ public class AndOrNode extends BoolBinaryExprNode {
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
         Type t2 = this.children.get(1).typeCheck(vars, funcs);
         if(t1.getType()!=Type.BOOL || t1.getDimension()!=0){
-        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.value.value +  " must be bool");
+        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
         }
         if(t2.getType()!=Type.BOOL || t2.getDimension()!=0){
-        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.value.value +  " must be bool");
+        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
         }
         return new Type(Type.BOOL, 0);
 
@@ -38,7 +39,7 @@ public class AndOrNode extends BoolBinaryExprNode {
 @Override
 public IRNode generateIR() {
 	// TODO Auto-generated method stub
-	return null;
+	return new IRTemp((String)this.symbol.value);
 }
 @Override
 public boolean isConst() {

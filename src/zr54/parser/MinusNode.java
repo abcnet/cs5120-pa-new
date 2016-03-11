@@ -32,7 +32,7 @@ public class MinusNode extends UnaryExprNode{
             && (t1.getDimension() == 0)) {
             return(new Type(Type.INT, 0));
         } else {
-        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.value.value +  "' must be int");
+        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be int");
         }
     }
 

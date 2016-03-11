@@ -33,12 +33,12 @@ public class AssignStmtNode extends StmtNode{
 		right=this.children.get(1).typeCheck(vars, funcs);
 
 		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
-				throw new TypeCheckException(this.children.get(1).value,"Expected function call");
+				throw new TypeCheckException(this.children.get(1).symbol,"Expected function call");
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			if(right.getType()==Type.TUPLE && right.getTuple().size()==0){
-				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).value.value+" is not a function");
+				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function");
 			}
 			
 			if(right.getType()==Type.TUPLE &&right.getTuple().size()>1 && left.getType()!=Type.TUPLE){
@@ -55,7 +55,7 @@ public class AssignStmtNode extends StmtNode{
 						Type r=right.getTuple().get(i);
 						if(l.matches(r)==false){
 							AstNode node = this.children.get(0).getChildren().get(i);
-							throw new TypeCheckException(node.value,"Expected "+r+", but found "+l);
+							throw new TypeCheckException(node.symbol,"Expected "+r+", but found "+l);
 							
 						}
 					}

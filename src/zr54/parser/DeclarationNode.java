@@ -22,13 +22,13 @@ public class DeclarationNode extends AstNode {
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
 		Type t=null;
 
-		if(value != null) {
-			if(vars.lookup((String) value.value) != null) {
-				throw new TypeCheckException(this.value.left,this.value.right,"Duplicate Variable " + (String)value.value);
+		if(symbol != null) {
+			if(vars.lookup((String) symbol.value) != null) {
+				throw new TypeCheckException(this.symbol.left,this.symbol.right,"Duplicate Variable " + (String)symbol.value);
 			}			
 			else {
 				t = children.get(0).typeCheck(vars, funcs);
-				vars.add((String) value.value, t);
+				vars.add((String) symbol.value, t);
 				return t;
 			}
 		}

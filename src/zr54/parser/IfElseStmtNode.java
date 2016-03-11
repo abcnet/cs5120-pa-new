@@ -32,8 +32,8 @@ public class IfElseStmtNode extends StmtNode {
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
         
         if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
-        	throw new TypeCheckException(this.children.get(0).value.left, 
-        			this.children.get(0).value.right,"predicate of if statement must be bool type");
+        	throw new TypeCheckException(this.children.get(0).symbol.left, 
+        			this.children.get(0).symbol.right,"predicate of if statement must be bool type");
         }
         this.children.get(1).typeCheck(tempScope, funcs);
         this.children.get(2).typeCheck(tempScope, funcs);

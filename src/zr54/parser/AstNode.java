@@ -17,7 +17,7 @@ import zr54.typechecker.*;
 public abstract class AstNode {
 
 	protected String type = "";
-	protected Symbol value = null;
+	protected Symbol symbol = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
 	protected AstNode parent = null;
 
@@ -34,7 +34,7 @@ public abstract class AstNode {
 	 */
 	public AstNode(String t, Symbol v) {
 		type = t;
-		value = v;
+		symbol = v;
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public abstract class AstNode {
 	 */
 	public AstNode(String t, Symbol v, AstNode child) {
 		type = t;
-		value = v;
+		symbol = v;
 		addChild(child);
 	}
 	
@@ -58,7 +58,7 @@ public abstract class AstNode {
   	 */
 	public AstNode(String t, Symbol v, AstNode child1, AstNode child2) {
 		type = t;
-		value = v;
+		symbol = v;
 		addChild(child1);
 		addChild(child2);
 	}
@@ -137,8 +137,8 @@ public abstract class AstNode {
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.startList();
 
-			if(value != null)
-				printer.printAtom((String) value.value);
+			if(symbol != null)
+				printer.printAtom((String) symbol.value);
 
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
@@ -146,8 +146,8 @@ public abstract class AstNode {
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
-			if(value != null)
-				printer.printAtom((String) value.value);
+			if(symbol != null)
+				printer.printAtom((String) symbol.value);
 			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
@@ -158,9 +158,9 @@ public abstract class AstNode {
 	}
 	
 	void printValue(CodeWriterSExpPrinter printer) {
-		if(value != null) {
+		if(symbol != null) {
 			String str = "";
-			if(value.sym == sym.STRING_LITERAL)
+			if(symbol.sym == sym.STRING_LITERAL)
 				str += "\"";
 		}
 	}
@@ -171,8 +171,8 @@ public abstract class AstNode {
 	public String toString() {
 		
 		String str = "";
-		if(value != null)
-			str = type + ":" + value.value + "\n";
+		if(symbol != null)
+			str = type + ":" + symbol.value + "\n";
 		else
 			str = type + ":\n";
 		
@@ -216,22 +216,22 @@ public abstract class AstNode {
      * @return
      */
     public Symbol getValue() {
-    	return value;
+    	return symbol;
     }
     /**
      * Get the first symbol of this node and its all children. This is useful for error output.
      * @return
      */
     public Symbol getFirstSymbol(){
-    	if(value==null)return this.children.get(0).getFirstSymbol();
+    	if(symbol==null)return this.children.get(0).getFirstSymbol();
     	if(this.children.size()==0){
-    		return value;
+    		return symbol;
     	}else{
-    		Symbol c=this.children.get(0).value;
-    		if(c.left<this.value.left || (c.left==this.value.left&&c.right<this.value.right)){
+    		Symbol c=this.children.get(0).symbol;
+    		if(c.left<this.symbol.left || (c.left==this.symbol.left&&c.right<this.symbol.right)){
     			return c;
     		}else{
-    			return value;
+    			return symbol;
     		}
     	}
     }

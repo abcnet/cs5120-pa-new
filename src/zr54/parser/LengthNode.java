@@ -30,7 +30,7 @@ public class LengthNode extends ExprNode{
 	        if  (t1.getDimension() >= 1) {
 	            return(new Type(t1.getType(), t1.getDimension()-1));
 	        } else {
-	        	throw new TypeCheckException(this.value.left,this.value.right,"operand of 'length' must be array");
+	        	throw new TypeCheckException(this.symbol.left,this.symbol.right,"operand of 'length' must be array");
 	        }
 	    }
 

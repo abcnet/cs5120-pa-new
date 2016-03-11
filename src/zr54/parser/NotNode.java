@@ -32,7 +32,7 @@ public class NotNode extends UnaryExprNode{
             && (t1.getDimension() == 0 )) {
             return(new Type(Type.BOOL, 0));
         } else {
-        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.value.value +  "' must be bool");
+        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be bool");
         }
     }
 

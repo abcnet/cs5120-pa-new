@@ -23,9 +23,9 @@ public class VariableNode extends ExprNode{
 	 * type checking
 	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		Type t = vars.lookup((String)value.value);
+		Type t = vars.lookup((String)symbol.value);
 		if (t == null){
-			throw new TypeCheckException(value.left,value.right, "Name " + (String) value.value + " cannot be resolved");
+			throw new TypeCheckException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved");
 		}
 		return t;
 	}

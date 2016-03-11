@@ -33,8 +33,8 @@ public class ArrayLiteralNode extends ExprNode{
 			if(!(this.type.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
-			if(value != null)
-				printer.printAtom((String) value.value);
+			if(symbol != null)
+				printer.printAtom((String) symbol.value);
 			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);

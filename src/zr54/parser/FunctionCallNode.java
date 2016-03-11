@@ -35,19 +35,19 @@ public class FunctionCallNode extends ExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		FuncSignature f = funcs.lookup((String) value.value);
+		FuncSignature f = funcs.lookup((String) symbol.value);
 		if (f==null){
-			throw new TypeCheckException(value.left, value.right,"Name "+ (String)value.value+ " cannot be resolved");
+			throw new TypeCheckException(symbol.left, symbol.right,"Name "+ (String)symbol.value+ " cannot be resolved");
 		}
 		Type args = f.getFunctionArgTypes();
 		if(args.getTuple().size()!=this.children.size()){
-			throw new TypeCheckException(value.left, value.right,"incorrect number of function arguments");
+			throw new TypeCheckException(symbol.left, symbol.right,"incorrect number of function arguments");
 		}
 		for(int i=0;i<args.getTuple().size();i++){
 			AstNode node = this.children.get(i);
 			Type l=node.typeCheck(vars, funcs);
 			if(l.matches(args.getTuple().get(i))==false){
-				throw new TypeCheckException(node.value,"Expected "+args.getTuple().get(i)+", but found "+l);
+				throw new TypeCheckException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l);
 				
 			}
 		}
