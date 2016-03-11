@@ -65,7 +65,7 @@ public class ArrayLiteralNode extends ExprNode{
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 
