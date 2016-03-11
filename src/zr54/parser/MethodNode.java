@@ -3,6 +3,8 @@ import zr54.typechecker.*;
 import java_cup.runtime.*;
 import java.util.*;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
+
 public class MethodNode extends AstNode{
 	private Symbol lrace;
 	
@@ -112,6 +114,18 @@ public class MethodNode extends AstNode{
 			funcs.add((String) value.value, argTypes, retTypes, isInterface);
 		}
 		
+	}
+
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

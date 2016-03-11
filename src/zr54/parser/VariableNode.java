@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -27,5 +28,19 @@ public class VariableNode extends ExprNode{
 			throw new TypeCheckException(value.left,value.right, "Name " + (String) value.value + " cannot be resolved");
 		}
 		return t;
+	}
+
+
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

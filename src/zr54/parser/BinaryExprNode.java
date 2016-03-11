@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 public class BinaryExprNode extends ExprNode{
 
@@ -14,5 +15,17 @@ public class BinaryExprNode extends ExprNode{
 		super(t, v);
 		addChild(child1);
 		addChild(child2);
+	}
+
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

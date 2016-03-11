@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
 
@@ -44,5 +45,17 @@ public class TypeNode extends AstNode {
 		else
 			return new Type();
 			
+	}
+
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

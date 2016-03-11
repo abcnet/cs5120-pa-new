@@ -3,6 +3,7 @@ package zr54.parser;
 import java.io.*;
 import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.*;
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
 import zr54.typechecker.*;
@@ -234,5 +235,8 @@ public abstract class AstNode {
     		}
     	}
     }
+    
+    public abstract IRNode generateIR();
+    public abstract boolean isConst();
 }
 

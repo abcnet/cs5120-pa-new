@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -35,5 +36,17 @@ public class EqNotEqNode extends BoolBinaryExprNode{
         	throw new TypeCheckException(this.value.left,this.value.right,"operands of '" + this.value.value +  "' do not match");
         }
     }
+
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }
