@@ -18,12 +18,12 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
 
-	public static void IRGenAndPrint(String srcFile, String dstFile) throws IOException {
+	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath) throws IOException {
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 
 		File f = new File(srcFile);
-		TypeCheck.typeCheckAndPrint(srcFile, dstFile);
+		TypeCheck.typeCheckAndPrint(srcFile, dstFile, libPath);
 		
 	}
 }
