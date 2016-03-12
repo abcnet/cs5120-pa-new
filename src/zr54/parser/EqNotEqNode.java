@@ -1,7 +1,6 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
@@ -43,14 +42,15 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 
 	@Override
 	public void generateIR() {
+		super.generateIR();
 		if (this.symbol.sym == sym.EQ) {
 			this.irNode = new IRBinOp(OpType.EQ,
-			                          this.children.get(0).irNode,
-				                      this.children.get(1).irNode);
+(IRExpr)this.children.get(0).irNode,
+(IRExpr)this.children.get(1).irNode);
 		} else if (this.symbol.sym == sym.NOTEQ) {
 			this.irNode = new IRBinOp(OpType.NEQ,
-					                  this.children.get(0).irNode,
-                                      this.children.get(1).irNode);
+					(IRExpr)this.children.get(0).irNode,
+					(IRExpr)this.children.get(1).irNode);
 		}
 	}
 

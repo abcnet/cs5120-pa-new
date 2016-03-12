@@ -1,9 +1,7 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
-import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -46,9 +44,10 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	
 	@Override
 	public void generateIR() {
+		super.generateIR();
 		this.irNode = new IRBinOp(OpType.ADD,
-				                  this.children.get(0).irNode,
-				                  this.children.get(1).irNode);
+				                  (IRExpr)this.children.get(0).irNode,
+				                  (IRExpr)this.children.get(1).irNode);
 	}
 
 

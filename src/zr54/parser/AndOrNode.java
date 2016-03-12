@@ -1,7 +1,10 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -41,7 +44,16 @@ public class AndOrNode extends BoolBinaryExprNode {
 @Override
 public void generateIR() {
 	// TODO Auto-generated method stub
-	this.irNode = new IRTemp((String)this.symbol.value);
+	super.generateIR();
+	if (this.symbol.sym == sym.AND) {
+		this.irNode = new IRBinOp(OpType.AND,
+(IRExpr)this.children.get(0).irNode,
+(IRExpr)this.children.get(1).irNode);
+	} else if (this.symbol.sym == sym.OR) {
+		this.irNode = new IRBinOp(OpType.OR,
+				(IRExpr)this.children.get(0).irNode,
+				(IRExpr)this.children.get(1).irNode);
+	}
 }
 @Override
 public boolean isConst() {

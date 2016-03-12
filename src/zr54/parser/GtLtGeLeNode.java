@@ -1,7 +1,6 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
@@ -44,22 +43,23 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 
 	@Override
 	public void generateIR() {
+		super.generateIR();
 		if (this.symbol.sym == sym.GT) {
 			this.irNode = new IRBinOp(OpType.GT,
-			                          this.children.get(0).irNode,
-				                      this.children.get(1).irNode);
+					(IRExpr)this.children.get(0).irNode,
+					(IRExpr)this.children.get(1).irNode);
 		} else if (this.symbol.sym == sym.LT) {
 			this.irNode = new IRBinOp(OpType.LT,
-					                  this.children.get(0).irNode,
-                                      this.children.get(1).irNode);
+					(IRExpr)this.children.get(0).irNode,
+					(IRExpr)this.children.get(1).irNode);
 		} else if (this.symbol.sym == sym.GTEQ) {
 			this.irNode = new IRBinOp(OpType.GEQ,
-                                      this.children.get(0).irNode,
-                                      this.children.get(1).irNode);
+					(IRExpr)this.children.get(0).irNode,
+					(IRExpr)this.children.get(1).irNode);
         } else if (this.symbol.sym == sym.LTEQ) {
         	this.irNode = new IRBinOp(OpType.LEQ,
-	                                  this.children.get(0).irNode,
-                                      this.children.get(1).irNode);
+        			(IRExpr)this.children.get(0).irNode,
+        			(IRExpr)this.children.get(1).irNode);
 }
 	}
 

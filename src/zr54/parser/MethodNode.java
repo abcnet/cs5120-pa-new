@@ -3,8 +3,14 @@ import zr54.typechecker.*;
 import java_cup.runtime.*;
 import java.util.*;
 import zr54.main.XiException;
-
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRReturn;
+import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 
 public class MethodNode extends AstNode{
 	private Symbol lrace;
@@ -121,8 +127,17 @@ public class MethodNode extends AstNode{
 
 	@Override
 	public void generateIR() {
-		// TODO Auto-generated method stub
-//		return new IRFuncDecl(this.symbol.value, new IRSeq());
+		AstNode curr;
+		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
+		for (int i=0;i<this.children.size();i++){
+			curr=this.children.get(i);
+			if(curr.irNode==null){
+				curr.generateIR();
+			}
+			l.add((IRStmt)curr.irNode);
+		}
+
+		this.irNode = new IRSeq(l);
 	}
 
 	@Override

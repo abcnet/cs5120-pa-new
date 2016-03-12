@@ -19,7 +19,12 @@ public class BinaryExprNode extends ExprNode{
 
 	@Override
 	public void generateIR() {
-		// TODO Auto-generated method stub
+		if(this.children.get(0).irNode==null){
+			this.children.get(0).generateIR();
+		}
+		if(this.children.get(1).irNode==null){
+			this.children.get(1).generateIR();
+		}
 	}
 
 	@Override

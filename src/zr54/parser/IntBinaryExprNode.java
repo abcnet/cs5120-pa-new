@@ -5,7 +5,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.*;
 import zr54.main.XiException;
 
-public class IntBinaryExprNode extends ExprNode {
+public class IntBinaryExprNode extends BinaryExprNode {
 
 	/**
 	 * constructor
@@ -15,9 +15,7 @@ public class IntBinaryExprNode extends ExprNode {
 	 * @param child2
 	 */
 	public IntBinaryExprNode(String t, Symbol v, AstNode child1, AstNode child2) {
-		super(t, v);
-		addChild(child1);
-		addChild(child2);
+		super(t, v, child1, child2);
 	}
 
 	/**
@@ -41,7 +39,8 @@ public class IntBinaryExprNode extends ExprNode {
 
 	@Override
 	public void generateIR() {
-		// TODO Auto-generated method stub
+		super.generateIR();
+		
 	}
 
 	@Override
