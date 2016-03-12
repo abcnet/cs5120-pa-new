@@ -24,18 +24,20 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-        Type t1 = this.children.get(0).typeCheck(vars, funcs);
-        Type t2 = this.children.get(1).typeCheck(vars, funcs);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
-       
-        if ((t1.getType() == t2.getType() )
-            && (t1.getDimension() == t2.getDimension())) {
-            return(new Type(t1.getType(), t1.getDimension()));
-        } 
-        else {
+		if ((t1.getType() == t2.getType() )
+				&& (t1.getDimension() == t2.getDimension())) {
+			type = new Type(t1.getType(), t1.getDimension());
+		} 
+		else {
 
-        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(), "Operands of + must be of same type and dimension");
-        }
+			throw new TypeCheckException(this.children.get(0).getFirstSymbol(), "Operands of + must be of same type and dimension");
+		}
+
+		return type;
+
     }
 
 }

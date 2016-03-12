@@ -17,16 +17,15 @@ public class UnderscoreNode extends ExprNode{
 	public UnderscoreNode(String t, Symbol v) {
 		super(t, v);
 	}
-	
+
 	/**
 	 * type checking
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-
-		return new Type(Type.UNIT, 0);
-		    	
-    }
+		type = new Type(Type.UNIT, 0);  
+		return type;
+	}
 
 	@Override
 	public IRNode generateIR() {

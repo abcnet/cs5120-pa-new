@@ -22,17 +22,20 @@ public class ArrayIndicesNode extends BinaryExprNode{
 	 * Type-checking method for array access (e.g., a[0][1]) nodes
 	 */
 	@Override
-	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-	        Type t1 = this.children.get(0).typeCheck(vars, funcs);
-	        Type t2 = this.children.get(1).typeCheck(vars, funcs);
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
 
-	        if(t1.getDimension()<1){
-	        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"First operand of array access must be array");
-	        }
-	        if(t2.getDimension() != 0 || t2.getType() != Type.INT){
-	        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Second operand of array access must be int");
-	        }
-	        return(new Type(t1.getType(), t1.getDimension()-1));
-	    }
+		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs);
+
+		if(t1.getDimension()<1){
+			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"First operand of array access must be array");
+		}
+		if(t2.getDimension() != 0 || t2.getType() != Type.INT){
+			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Second operand of array access must be int");
+		}
+		type = new Type(t1.getType(), t1.getDimension()-1);
+
+		return type;
+	} 
 
 }

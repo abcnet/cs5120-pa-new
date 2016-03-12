@@ -35,6 +35,7 @@ public class FunctionCallNode extends ExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+
 		FuncSignature f = funcs.lookup((String) symbol.value);
 		if (f==null){
 			throw new TypeCheckException(symbol.left, symbol.right,"Name "+ (String)symbol.value+ " cannot be resolved");
@@ -48,18 +49,18 @@ public class FunctionCallNode extends ExprNode{
 			Type l=node.typeCheck(vars, funcs);
 			if(l.matches(args.getTuple().get(i))==false){
 				throw new TypeCheckException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l);
-				
+
 			}
 		}
 
-		Type t=f.getFunctionReturnTypes();
-		if (t!=null&&t.getTuple().size()==1){
-    		return t.getTuple().get(0).functionCallTrue();
-    	}
-		return t;
+		type = f.getFunctionReturnTypes();
+		if (type!=null&&type.getTuple().size()==1){
+			return type.getTuple().get(0).functionCallTrue();
+		}
 
-		    	
-    }
+		return type;
+
+	}
 
 	@Override
 	public IRNode generateIR() {

@@ -32,11 +32,12 @@ public class BlockNode extends StmtNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
-		VarSymbolTable tempScope = new VarSymbolTable(vars);
-        this.children.get(0).typeCheck(tempScope, funcs);
 
-        return null;
-    }
+		VarSymbolTable tempScope = new VarSymbolTable(vars);
+		this.children.get(0).typeCheck(tempScope, funcs);
+		type = new Type();
+
+		return type;
+	}
 
 }

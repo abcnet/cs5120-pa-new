@@ -16,11 +16,12 @@ import zr54.typechecker.*;
  */
 public abstract class AstNode {
 
-	protected String type = "";
+	protected String name = "";
 	protected Symbol symbol = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
 	protected AstNode parent = null;
-
+	protected Type type = null;
+	
 	/**
 	 * Default constructor
 	 */
@@ -33,7 +34,7 @@ public abstract class AstNode {
 	 * @param v: value of the node
 	 */
 	public AstNode(String t, Symbol v) {
-		type = t;
+		name = t;
 		symbol = v;
 	}
 	
@@ -44,7 +45,7 @@ public abstract class AstNode {
 	 * @param child: first child node of this
 	 */
 	public AstNode(String t, Symbol v, AstNode child) {
-		type = t;
+		name = t;
 		symbol = v;
 		addChild(child);
 	}
@@ -57,7 +58,7 @@ public abstract class AstNode {
   	 * @param child2: second child of this node 
   	 */
 	public AstNode(String t, Symbol v, AstNode child1, AstNode child2) {
-		type = t;
+		name = t;
 		symbol = v;
 		addChild(child1);
 		addChild(child2);
@@ -132,9 +133,9 @@ public abstract class AstNode {
 	 * @param printer: the printer
 	 */
 	public void print(CodeWriterSExpPrinter printer) {
-		if(this.children.size()>0 || this.type.equals("forceParen")){
+		if(this.children.size()>0 || this.name.equals("forceParen")){
 
-			if(!(this.type.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1))
 				printer.startList();
 
 			if(symbol != null)
@@ -143,7 +144,7 @@ public abstract class AstNode {
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
 			
-			if(!(this.type.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
 			if(symbol != null)
@@ -172,9 +173,9 @@ public abstract class AstNode {
 		
 		String str = "";
 		if(symbol != null)
-			str = type + ":" + symbol.value + "\n";
+			str = name + ":" + symbol.value + "\n";
 		else
-			str = type + ":\n";
+			str = name + ":\n";
 		
 		for(AstNode child : children) {
 			str += child.toString() + "\n";

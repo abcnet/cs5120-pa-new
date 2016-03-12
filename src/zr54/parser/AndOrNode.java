@@ -24,18 +24,20 @@ public class AndOrNode extends BoolBinaryExprNode {
  */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
-        Type t2 = this.children.get(1).typeCheck(vars, funcs);
-        if(t1.getType()!=Type.BOOL || t1.getDimension()!=0){
-        	throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
-        }
-        if(t2.getType()!=Type.BOOL || t2.getDimension()!=0){
-        	throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
-        }
-        return new Type(Type.BOOL, 0);
 
-    }
+		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs);
+		if(t1.getType()!=Type.BOOL || t1.getDimension()!=0){
+			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
+		}
+		if(t2.getType()!=Type.BOOL || t2.getDimension()!=0){
+			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
+		}
+		type = new Type(Type.BOOL, 0);
+
+		return type;
+
+	}
 @Override
 public IRNode generateIR() {
 	// TODO Auto-generated method stub

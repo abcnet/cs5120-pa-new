@@ -41,10 +41,12 @@ public class DefaultNode extends AstNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+
 		for(AstNode n : children)
 			n.typeCheck(vars, funcs);
-		
-		return new Type();
+		type = new Type();
+
+		return type;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import zr54.typechecker.VarSymbolTable;
 
 public class MinusNode extends UnaryExprNode{
 
-	
+
 	/**
 	 * constructor
 	 * @param t
@@ -25,16 +25,18 @@ public class MinusNode extends UnaryExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
+
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 
-        if ((t1.getType() == Type.INT)
-            && (t1.getDimension() == 0)) {
-            return(new Type(Type.INT, 0));
-        } else {
-        	throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be int");
-        }
-    }
+		if ((t1.getType() == Type.INT)
+				&& (t1.getDimension() == 0)) {
+			type = new Type(Type.INT, 0);
+		} else {
+			throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be int");
+		}
+
+		return type;
+	}
 
 	@Override
 	public IRNode generateIR() {

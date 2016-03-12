@@ -17,7 +17,8 @@ public abstract class ExprNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-    	return new Type();
-    }
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+		type = new Type();
+		return type;
+	}
 }

@@ -25,17 +25,19 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
-        Type t2 = this.children.get(1).typeCheck(vars, funcs);
 
-        if ((t1.getType() == t2.getType() )
-            && (t1.getDimension() == t2.getDimension())) {
-            return(new Type(Type.BOOL, 0));
-        } else {
-        	throw new TypeCheckException(this.symbol.left,this.symbol.right,"operands of '" + this.symbol.value +  "' do not match");
-        }
-    }
+		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs);
+
+		if ((t1.getType() == t2.getType() )
+				&& (t1.getDimension() == t2.getDimension())) {
+			type = new Type(Type.BOOL, 0);
+		} else {
+			throw new TypeCheckException(this.symbol.left,this.symbol.right,"operands of '" + this.symbol.value +  "' do not match");
+		}
+
+		return type;
+	}
 
 	@Override
 	public IRNode generateIR() {

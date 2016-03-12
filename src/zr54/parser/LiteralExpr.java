@@ -7,7 +7,7 @@ import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
 
 public class LiteralExpr extends ExprNode {
-	private int type;
+	private int literalType;
 	private int dimension;
 
 	/**
@@ -19,19 +19,20 @@ public class LiteralExpr extends ExprNode {
 	 */
 	public LiteralExpr(String t, Symbol v, int type, int dimension) {
 		super(t,v);
-		this.type = type;
+		this.literalType = type;
 		this.dimension = dimension;
-		
+
 	}
-	
+
 	/*
 	 * type checking
 	 */
 	@Override
-	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
-		 
-		 return new Type(this.type, this.dimension);
-	 }
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
+
+		type = new Type(this.literalType, this.dimension);
+		return type;
+	}
 
 	@Override
 	public IRNode generateIR() {

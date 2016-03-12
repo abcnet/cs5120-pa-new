@@ -34,7 +34,7 @@ public class ixiAnalyze {
 			s = p.parse();
 			AstNode root = s.value();
 			registerAllFunctions(root, funcs);
-			printer.flush();
+//			printer.flush();
 
 		} else {
 			System.out.println("error: '" + ixiFile + "' does not exist");

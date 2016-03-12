@@ -22,15 +22,15 @@ public class ArrayLiteralNode extends ExprNode{
 	 */
 	@Override
 	public void print(CodeWriterSExpPrinter printer) {
-		if(this.children.size()>0 || this.type.equals("forceParen")){
+		if(this.children.size()>0 || this.name.equals("forceParen")){
 
-			if(!(this.type.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1))
 				printer.startList();
 
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
 			
-			if(!(this.type.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1))
 				printer.endList();
 		}else{
 			if(symbol != null)
@@ -46,17 +46,19 @@ public class ArrayLiteralNode extends ExprNode{
 
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
- 		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
+
+		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
 		for (int i=1; i<this.children.size();i++){
 			t=this.children.get(i).typeCheck(vars, funcs);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
 				throw new TypeCheckException(this.children.get(i).getFirstSymbol(),"elements of array literal do not match");
 			}
 		}
-		
-		return new Type(t0.getType(),t0.getDimension()+1);
-       
-    }
+		type = new Type(t0.getType(),t0.getDimension()+1);
+
+		return type;
+	}
+	
 	@Override
 	public IRNode generateIR() {
 		// TODO Auto-generated method stub

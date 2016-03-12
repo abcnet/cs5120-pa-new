@@ -18,21 +18,24 @@ public class LengthNode extends ExprNode{
 	public LengthNode(String t, Symbol v, AstNode child) {
 		super(t, v);
 		addChild(child);
-		
+
 	}
-	
+
 	/**
 	 * type checking
 	 */
 	@Override
-	 public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-	        Type t1 = this.children.get(0).typeCheck(vars, funcs);
-	        if  (t1.getDimension() >= 1) {
-	            return(new Type(t1.getType(), t1.getDimension()-1));
-	        } else {
-	        	throw new TypeCheckException(this.symbol.left,this.symbol.right,"operand of 'length' must be array");
-	        }
-	    }
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+
+		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		if  (t1.getDimension() >= 1) {
+			type = new Type(t1.getType(), t1.getDimension()-1);
+		} else {
+			throw new TypeCheckException(this.symbol.left,this.symbol.right,"operand of 'length' must be array");
+		}
+
+		return type;
+	}
 
 	@Override
 	public IRNode generateIR() {

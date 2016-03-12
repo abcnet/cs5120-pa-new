@@ -24,23 +24,22 @@ public class AssignStmtNode extends StmtNode{
 	 * Type-checking method for assignment statement nodes
 	 */
 	@Override
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-		
-		
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+
 		Type left, right;
 
 		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
 
 		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
-				throw new TypeCheckException(this.children.get(1).symbol,"Expected function call");
+			throw new TypeCheckException(this.children.get(1).symbol,"Expected function call");
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			if(right.getType()==Type.TUPLE && right.getTuple().size()==0){
 				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function");
 			}
-			
+
 			if(right.getType()==Type.TUPLE &&right.getTuple().size()>1 && left.getType()!=Type.TUPLE){
 				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
 			}
@@ -49,24 +48,25 @@ public class AssignStmtNode extends StmtNode{
 					throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
 				}else{
 					for(int i=0;i<left.getTuple().size();i++){
-						
-						
+
+
 						Type l=left.getTuple().get(i);
 						Type r=right.getTuple().get(i);
 						if(l.matches(r)==false){
 							AstNode node = this.children.get(0).getChildren().get(i);
 							throw new TypeCheckException(node.symbol,"Expected "+r+", but found "+l);
-							
+
 						}
 					}
 				}
-				
+
 			}
-			
 
 			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left);
 		}
-		
-		return new Type();
-    }
+
+		type = new Type();
+
+		return type;
+	}
 }

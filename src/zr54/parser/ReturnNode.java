@@ -16,17 +16,20 @@ public class ReturnNode extends StmtNode {
 	public ReturnNode(String t, Symbol v) {
 		super(t, v);
 	}
-	
+
 	/**
 	 * type checking
 	 */
 	@Override
-    public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
-    	Type t=new Type();
-    	for(AstNode n : children)
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+
+		Type t=new Type();
+		for(AstNode n : children)
 			t.addTupleEntry(n.typeCheck(vars, funcs));
-    	
-    	vars.returned = t.getTuple();
-    	return new Type();
-    }
+
+		vars.returned = t.getTuple();
+
+		type = new Type();
+		return type;
+	}
 }

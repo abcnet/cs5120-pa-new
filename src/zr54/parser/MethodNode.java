@@ -33,13 +33,14 @@ public class MethodNode extends AstNode{
 	 * type checking
 	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
+
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
 		for(AstNode n : children) {
 			n.typeCheck(newVars, funcs);
 		}		
 		int m=newVars.toReturn.size();
-		
+
 		int n=newVars.returned.size();
 		Symbol s;
 		if(m==0){
@@ -53,7 +54,7 @@ public class MethodNode extends AstNode{
 				throw new TypeCheckException(this.lrace,"Missing return");
 			}
 			if(m!=n){
-				
+
 				throw new TypeCheckException(symbol.left,symbol.right,"Incorrect number of values returned");
 			}
 			for(int i=0;i<m;i++){
@@ -62,8 +63,9 @@ public class MethodNode extends AstNode{
 				}
 			}
 		}
-		
-		return new Type();
+
+		type = new Type();
+		return type;
 
 	}
 	
