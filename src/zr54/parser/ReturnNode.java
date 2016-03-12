@@ -4,6 +4,7 @@ import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.TypeCheckException;
 import zr54.typechecker.VarSymbolTable;
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 
 public class ReturnNode extends StmtNode {
@@ -31,5 +32,17 @@ public class ReturnNode extends StmtNode {
 
 		type = new Type();
 		return type;
+	}
+	
+	@Override
+	public IRNode generateIR() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
