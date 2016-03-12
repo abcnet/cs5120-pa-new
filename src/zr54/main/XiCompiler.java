@@ -104,10 +104,10 @@ class XiCompiler {
                 ParsePrint.parseAndPrint(src, dst);
             } else if (op == "typecheck") {
             	dst = dst + ".typed";
-                TypeCheck.typeCheckAndPrint(src, dst, libPath);
+                TypeCheck.typeCheckAndPrint(src, dst, libPath+"/");
             } else if (op == "irgen") {
             	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath);
+            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/");
             }
         }
     }
