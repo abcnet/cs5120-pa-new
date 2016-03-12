@@ -77,7 +77,7 @@ public class IRSeq extends IRStmt {
 
     @Override
     public void printSExp(SExpPrinter p) {
-        p.startList();
+        p.startUnifiedList();
         p.printAtom("SEQ");
         for (IRStmt stmt : stmts)
             stmt.printSExp(p);
