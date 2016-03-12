@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import java.util.*;
 import zr54.main.XiException;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import edu.cornell.cs.cs4120.xic.ir.IRMove;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRReturn;
@@ -137,7 +138,7 @@ public class MethodNode extends AstNode{
 			l.add((IRStmt)curr.irNode);
 		}
 
-		this.irNode = new IRSeq(l);
+		this.irNode = new IRFuncDecl((String)this.symbol.value,new IRSeq(l));
 	}
 
 	@Override
