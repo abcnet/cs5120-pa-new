@@ -1,16 +1,17 @@
-package zr54.typechecker;
-import java_cup.runtime.*;
+package zr54.main;
 
-public class TypeCheckException extends Exception {
+import java_cup.runtime.Symbol;
+
+public class XiException extends Exception{ 
 	private int line;
 	private int column;
- 
+	String type;
 	/**
 	 * constructor
 	 * @param sym: java cup symbol
 	 * @param msg: error message
 	 */
-	public TypeCheckException(Symbol sym, String msg) {
+	public XiException(Symbol sym, String msg, String t) {
 		super(msg);
 		if(sym != null) {
 			this.line = sym.left;
@@ -20,6 +21,7 @@ public class TypeCheckException extends Exception {
 			this.line = 0;
 			this.column = 0;
 		}
+		type = t;
 	}
 	
 	/**
@@ -28,10 +30,11 @@ public class TypeCheckException extends Exception {
 	 * @param column: column of the symbol
 	 * @param msg: error message
 	 */
-    public TypeCheckException(int line, int column, String msg) {
+    public XiException(int line, int column, String msg, String t) {
     	super(msg);
     	this.line = line;
     	this.column = column;
+    	type = t;
     }
     
     /**
@@ -49,4 +52,6 @@ public class TypeCheckException extends Exception {
     public int getColumn(){
     	return column;
     }
+
+
 }

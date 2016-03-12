@@ -7,7 +7,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
 import zr54.typechecker.*;
-
+import zr54.main.XiException;
 
 /**
  * This class is used to represent nodes of abstract syntax tree.
@@ -189,17 +189,17 @@ public abstract class AstNode {
 	 * @param vars: variable symbol table
 	 * @param funcs: function symbo table
 	 * @return type
-	 * @throws TypeCheckException
+	 * @throws XiException
 	 */
-    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException;
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException;
 
     /**
      * register function signature 
      * @param funcs
      * @param isInterface
-     * @throws TypeCheckException
+     * @throws XiException
      */
-    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws TypeCheckException {
+    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws XiException {
     	for(AstNode child : children)
     		child.registerFunctionSignature(funcs, isInterface);
     }

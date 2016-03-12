@@ -10,7 +10,7 @@ import java_cup.runtime.Symbol;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
 import zr54.typechecker.FuncSymbolTable;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class ixiAnalyze {
@@ -47,9 +47,9 @@ public class ixiAnalyze {
 	 * register all functions in the interface file
 	 * @param root: root node of the 
 	 * @param funcs: current function symbol table
-	 * @throws TypeCheckException
+	 * @throws XiException
 	 */
-	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws TypeCheckException{
+	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws XiException{
 		root.registerFunctionSignature(funcs, true);		
 	}
 	

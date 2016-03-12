@@ -3,7 +3,7 @@ package zr54.parser;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
-
+import zr54.main.XiException;
 public class TypeNode extends AstNode {
 
 	/**
@@ -28,7 +28,7 @@ public class TypeNode extends AstNode {
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
 
 		if(name.equals("INT"))
 			type = new Type(Type.INT, 0);
@@ -40,7 +40,7 @@ public class TypeNode extends AstNode {
 				type.incDimension();
 			}
 			else
-				throw new TypeCheckException(symbol.left,symbol.right, "Array without INT/BOOL type");
+				throw new XiException(symbol.left,symbol.right, "Array without INT/BOOL type", "Semantic");
 		}
 		else
 			type = new Type();

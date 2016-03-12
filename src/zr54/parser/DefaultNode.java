@@ -2,7 +2,7 @@ package zr54.parser;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
-
+import zr54.main.XiException;
 public class DefaultNode extends AstNode{
 	
 	/**
@@ -40,7 +40,7 @@ public class DefaultNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		for(AstNode n : children)
 			n.typeCheck(vars, funcs);

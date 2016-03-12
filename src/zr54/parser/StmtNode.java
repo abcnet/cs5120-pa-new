@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java_cup.runtime.Symbol;
 import zr54.typechecker.*;
+import zr54.main.XiException;
 
 public abstract class StmtNode extends DefaultNode{
 
@@ -39,7 +40,7 @@ public abstract class StmtNode extends DefaultNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 		for(AstNode n : children)
 			n.typeCheck(vars, funcs);
 

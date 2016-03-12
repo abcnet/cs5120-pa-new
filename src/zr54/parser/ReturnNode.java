@@ -2,7 +2,7 @@ package zr54.parser;
 
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
@@ -22,7 +22,7 @@ public class ReturnNode extends StmtNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		Type t=new Type();
 		for(AstNode n : children)

@@ -5,7 +5,7 @@ import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 public class FunctionCallNode extends ExprNode{
 
@@ -34,21 +34,21 @@ public class FunctionCallNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		FuncSignature f = funcs.lookup((String) symbol.value);
 		if (f==null){
-			throw new TypeCheckException(symbol.left, symbol.right,"Name "+ (String)symbol.value+ " cannot be resolved");
+			throw new XiException(symbol.left, symbol.right,"Name "+ (String)symbol.value+ " cannot be resolved", "Semantic");
 		}
 		Type args = f.getFunctionArgTypes();
 		if(args.getTuple().size()!=this.children.size()){
-			throw new TypeCheckException(symbol.left, symbol.right,"incorrect number of function arguments");
+			throw new XiException(symbol.left, symbol.right,"incorrect number of function arguments", "Semantic");
 		}
 		for(int i=0;i<args.getTuple().size();i++){
 			AstNode node = this.children.get(i);
 			Type l=node.typeCheck(vars, funcs);
 			if(l.matches(args.getTuple().get(i))==false){
-				throw new TypeCheckException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l);
+				throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
 
 			}
 		}

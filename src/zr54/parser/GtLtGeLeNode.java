@@ -4,7 +4,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class GtLtGeLeNode extends BoolBinaryExprNode {
@@ -24,15 +24,15 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 		Type t2 = this.children.get(1).typeCheck(vars, funcs);
 		if(t1.getType()!=Type.INT || t1.getDimension()!=0){
-			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be int");
+			throw new XiException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be int", "Semantic");
 		}
 		if(t2.getType()!=Type.INT || t2.getDimension()!=0){
-			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be int");
+			throw new XiException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be int", "Semantic");
 		}
 
 		type = new Type(Type.BOOL, 0);

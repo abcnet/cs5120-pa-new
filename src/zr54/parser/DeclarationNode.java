@@ -3,6 +3,7 @@ package zr54.parser;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
+import zr54.main.XiException;
 
 public class DeclarationNode extends AstNode {
 	
@@ -19,11 +20,11 @@ public class DeclarationNode extends AstNode {
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
 
 		if(symbol != null) {
 			if(vars.lookup((String) symbol.value) != null) {
-				throw new TypeCheckException(this.symbol.left,this.symbol.right,"Duplicate Variable " + (String)symbol.value);
+				throw new XiException(this.symbol.left,this.symbol.right,"Duplicate Variable " + (String)symbol.value, "Semantic");
 			}			
 			else {
 				type = children.get(0).typeCheck(vars, funcs);

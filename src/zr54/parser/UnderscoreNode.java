@@ -4,7 +4,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class UnderscoreNode extends ExprNode{
@@ -22,7 +22,7 @@ public class UnderscoreNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 		type = new Type(Type.UNIT, 0);  
 		return type;
 	}
