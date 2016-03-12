@@ -35,9 +35,8 @@ public class ReturnNode extends StmtNode {
 	}
 	
 	@Override
-	public IRNode generateIR() {
+	public void generateIR() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

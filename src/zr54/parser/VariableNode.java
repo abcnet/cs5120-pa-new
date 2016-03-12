@@ -1,6 +1,7 @@
 package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -33,9 +34,8 @@ public class VariableNode extends ExprNode{
 
 
 	@Override
-	public IRNode generateIR() {
-		// TODO Auto-generated method stub
-		return null;
+	public void generateIR() {
+		this.irNode = new IRTemp((String) this.symbol.value);
 	}
 
 

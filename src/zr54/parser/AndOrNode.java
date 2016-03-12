@@ -39,9 +39,9 @@ public class AndOrNode extends BoolBinaryExprNode {
 
 	}
 @Override
-public IRNode generateIR() {
+public void generateIR() {
 	// TODO Auto-generated method stub
-	return new IRTemp((String)this.symbol.value);
+	this.irNode = new IRTemp((String)this.symbol.value);
 }
 @Override
 public boolean isConst() {

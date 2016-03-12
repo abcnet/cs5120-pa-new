@@ -21,6 +21,7 @@ public abstract class AstNode {
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
 	protected AstNode parent = null;
 	protected Type type = null;
+	protected IRNode irNode = null;
 	
 	/**
 	 * Default constructor
@@ -237,7 +238,7 @@ public abstract class AstNode {
     	}
     }
     
-    public abstract IRNode generateIR();
+    public abstract void generateIR();
     public abstract boolean isConst();
 }
 

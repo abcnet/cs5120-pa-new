@@ -1,5 +1,7 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -39,5 +41,16 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		return type;
 
     }
+	
+	@Override
+	public void generateIR() {
+	}
+
+
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 }

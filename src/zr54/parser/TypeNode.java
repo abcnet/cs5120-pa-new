@@ -49,9 +49,8 @@ public class TypeNode extends AstNode {
 	}
 
 	@Override
-	public IRNode generateIR() {
+	public void generateIR() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

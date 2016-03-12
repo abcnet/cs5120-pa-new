@@ -120,9 +120,8 @@ public class MethodNode extends AstNode{
 	}
 
 	@Override
-	public IRNode generateIR() {
+	public void generateIR() {
 		// TODO Auto-generated method stub
-		return null;
 //		return new IRFuncDecl(this.symbol.value, new IRSeq());
 	}
 

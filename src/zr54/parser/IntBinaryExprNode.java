@@ -40,9 +40,8 @@ public class IntBinaryExprNode extends ExprNode {
 	}
 
 	@Override
-	public IRNode generateIR() {
+	public void generateIR() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -39,9 +39,8 @@ public class MinusNode extends UnaryExprNode{
 	}
 
 	@Override
-	public IRNode generateIR() {
+	public void generateIR() {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
