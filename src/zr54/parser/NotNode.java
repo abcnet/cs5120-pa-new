@@ -4,7 +4,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class NotNode extends UnaryExprNode{
@@ -24,14 +24,14 @@ public class NotNode extends UnaryExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 
 		if ((t1.getType() == Type.BOOL )
 				&& (t1.getDimension() == 0 )) {
 			type = new Type(Type.BOOL, 0);
 		} else {
-			throw new TypeCheckException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be bool");
+			throw new XiException(children.get(0).getFirstSymbol(),"operands of '" + this.symbol.value +  "' must be bool", "Semantic");
 		}
 
 		return type;

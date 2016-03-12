@@ -2,6 +2,7 @@ package zr54.parser;
 import zr54.typechecker.*;
 import java_cup.runtime.*;
 import java.util.*;
+import zr54.main.XiException;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 
@@ -32,7 +33,7 @@ public class MethodNode extends AstNode{
 	/*
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
 
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
@@ -46,20 +47,20 @@ public class MethodNode extends AstNode{
 		if(m==0){
 			if(n>0){
 
-				throw new TypeCheckException(symbol.left,symbol.right,"Unexpeced return");
+				throw new XiException(symbol.left,symbol.right,"Unexpeced return", "Semantic");
 			}
 		}else{
 			if(n==0){
 
-				throw new TypeCheckException(this.lrace,"Missing return");
+				throw new XiException(this.lrace,"Missing return", "Semantic");
 			}
 			if(m!=n){
 
-				throw new TypeCheckException(symbol.left,symbol.right,"Incorrect number of values returned");
+				throw new XiException(symbol.left,symbol.right,"Incorrect number of values returned", "Semantic");
 			}
 			for(int i=0;i<m;i++){
 				if(newVars.toReturn.get(i).matches(newVars.returned.get(i))==false){
-					throw new TypeCheckException(symbol.left,symbol.right,"Incorrect type(s) returned");
+					throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
 				}
 			}
 		}
@@ -75,7 +76,7 @@ public class MethodNode extends AstNode{
 	 * @param isInterface: true if this is an unimplemented function in interface file, false if this is an implemented function  
 	 */
 	@Override
-	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws TypeCheckException{
+	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws XiException{
 		String funcName = (String) symbol.value;
 		FuncSignature funcSig = funcs.lookup(funcName);
 		
@@ -94,17 +95,17 @@ public class MethodNode extends AstNode{
 			if(isInterface) {
 				//need to check whether the signature matches
 				if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
-					throw new TypeCheckException(symbol, "Function signature of '" + (String) symbol.value 
-							+"' does not match");
+					throw new XiException(symbol, "Function signature of '" + (String) symbol.value 
+							+"' does not match", "Semantic");
 			}
 			else {
 				//need to check whether the existing signature is an interface 
 				if(!funcSig.isInterface())
-					throw new TypeCheckException(symbol, "Function '" + (String) symbol.value + "' redefined");
+					throw new XiException(symbol, "Function '" + (String) symbol.value + "' redefined", "Semantic");
 				else {
 					if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
-						throw new TypeCheckException(symbol, "Function signature '" + (String) symbol.value 
-								+  "' does not match");
+						throw new XiException(symbol, "Function signature '" + (String) symbol.value 
+								+  "' does not match", "Semantic");
 					else
 						funcSig.setIsInterface(false);
 				}

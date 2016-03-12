@@ -3,7 +3,7 @@ package zr54.parser;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class IfWhileStmtNode extends StmtNode{
@@ -24,14 +24,14 @@ public class IfWhileStmtNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 
 		if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
-			throw new TypeCheckException(this.children.get(0).symbol.left, 
-					this.children.get(0).symbol.right,"predicate of if statement must be bool type");
+			throw new XiException(this.children.get(0).symbol.left, 
+					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
 		this.children.get(1).typeCheck(tempScope, funcs);
 

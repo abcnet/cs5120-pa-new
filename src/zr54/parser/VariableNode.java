@@ -4,7 +4,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class VariableNode extends ExprNode{
@@ -22,11 +22,11 @@ public class VariableNode extends ExprNode{
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		type = vars.lookup((String)symbol.value);
 		if (type == null){
-			throw new TypeCheckException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved");
+			throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
 		}
 		return type;
 	}

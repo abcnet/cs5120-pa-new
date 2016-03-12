@@ -11,6 +11,7 @@ import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
 import zr54.parser.parser;
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
+import zr54.main.XiException;
 
 public class TypeCheck {
 	/**
@@ -52,7 +53,7 @@ public class TypeCheck {
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
-				}catch(TypeCheckException e) {
+				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					System.out.println("Error in "+dstFile);
@@ -78,9 +79,9 @@ public class TypeCheck {
 	 * Register all function signatures during first pass
 	 * @param funcs: function symbol table
 	 * @param root: root node of the program
-	 * @throws TypeCheckException
+	 * @throws XiException
 	 */
-	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws TypeCheckException{
+	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws XiException{
 		root.registerFunctionSignature(funcs, false);
 	}
 	

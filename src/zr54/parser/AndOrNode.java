@@ -5,7 +5,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class AndOrNode extends BoolBinaryExprNode {
@@ -23,15 +23,15 @@ public class AndOrNode extends BoolBinaryExprNode {
  * Type-checking method for and/or (boolean operation) nodes
  */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 		Type t2 = this.children.get(1).typeCheck(vars, funcs);
 		if(t1.getType()!=Type.BOOL || t1.getDimension()!=0){
-			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
+			throw new XiException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool", "Semantic");
 		}
 		if(t2.getType()!=Type.BOOL || t2.getDimension()!=0){
-			throw new TypeCheckException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool");
+			throw new XiException(this.children.get(1).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be bool", "Semantic");
 		}
 		type = new Type(Type.BOOL, 0);
 

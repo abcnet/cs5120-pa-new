@@ -1,6 +1,7 @@
 package zr54.parser;
 import zr54.typechecker.*;
 import java_cup.runtime.*;
+import zr54.main.XiException;
 
 public abstract class ExprNode extends AstNode{
 
@@ -17,7 +18,7 @@ public abstract class ExprNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 		type = new Type();
 		return type;
 	}

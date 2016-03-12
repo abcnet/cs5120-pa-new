@@ -13,7 +13,7 @@ import zr54.parser.AstNode;
 import zr54.parser.parser;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.TypeCheck;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {

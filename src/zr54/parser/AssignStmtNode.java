@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
-import zr54.typechecker.TypeCheckException;
+import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class AssignStmtNode extends StmtNode{
@@ -24,7 +24,7 @@ public class AssignStmtNode extends StmtNode{
 	 * Type-checking method for assignment statement nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws TypeCheckException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
 		Type left, right;
 
@@ -32,20 +32,20 @@ public class AssignStmtNode extends StmtNode{
 		right=this.children.get(1).typeCheck(vars, funcs);
 
 		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
-			throw new TypeCheckException(this.children.get(1).symbol,"Expected function call");
+			throw new XiException(this.children.get(1).symbol,"Expected function call", "Semantic");
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
 			if(right.getType()==Type.TUPLE && right.getTuple().size()==0){
-				throw new TypeCheckException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function");
+				throw new XiException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function", "Semantic");
 			}
 
 			if(right.getType()==Type.TUPLE &&right.getTuple().size()>1 && left.getType()!=Type.TUPLE){
-				throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+				throw new XiException(this.children.get(0).getFirstSymbol(),"Mismatched number of values", "Semantic");
 			}
 			if(right.getType()==Type.TUPLE && left.getType()==Type.TUPLE ){
 				if(left.getTuple().size()!=right.getTuple().size()){
-					throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Mismatched number of values");
+					throw new XiException(this.children.get(0).getFirstSymbol(),"Mismatched number of values", "Semantic");
 				}else{
 					for(int i=0;i<left.getTuple().size();i++){
 
@@ -54,7 +54,7 @@ public class AssignStmtNode extends StmtNode{
 						Type r=right.getTuple().get(i);
 						if(l.matches(r)==false){
 							AstNode node = this.children.get(0).getChildren().get(i);
-							throw new TypeCheckException(node.symbol,"Expected "+r+", but found "+l);
+							throw new XiException(node.symbol,"Expected "+r+", but found "+l, "Semantic");
 
 						}
 					}
@@ -62,7 +62,7 @@ public class AssignStmtNode extends StmtNode{
 
 			}
 
-			throw new TypeCheckException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left);
+			throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
 		}
 
 		type = new Type();
