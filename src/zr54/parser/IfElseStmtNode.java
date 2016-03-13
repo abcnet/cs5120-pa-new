@@ -1,5 +1,10 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRCJump;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRLabel;
+import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -40,6 +45,14 @@ public class IfElseStmtNode extends StmtNode {
 
 		type = new Type();
 		return type;
+	}
+	
+	public void generateIR() {
+		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
+                				new IRLabel("L_t"),
+                				(IRStmt)this.children.get(1).irNode,
+                				new IRLabel("L_f"),
+                				(IRStmt)this.children.get(2).irNode);
 	}
 
 }
