@@ -39,8 +39,10 @@ public class LiteralExpr extends ExprNode {
 		// TODO Auto-generated method stub
 		if (this.dimension==0 && this.type.getType() == Type.INT){
 			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));
+		}else if (this.dimension==0 && this.type.getType() == Type.BOOL){
+			this.irNode = new IRConst(((String)this.symbol.value).equals("true")?1:0);
 		}else{
-			// not implemented yet!
+			// not implemented yet
 		}
 	}
 
