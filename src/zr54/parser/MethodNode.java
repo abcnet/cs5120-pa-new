@@ -3,14 +3,7 @@ import zr54.typechecker.*;
 import java_cup.runtime.*;
 import java.util.*;
 import zr54.main.XiException;
-import edu.cornell.cs.cs4120.xic.ir.IRExpr;
-import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
-import edu.cornell.cs.cs4120.xic.ir.IRMove;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
-import edu.cornell.cs.cs4120.xic.ir.IRReturn;
-import edu.cornell.cs.cs4120.xic.ir.IRSeq;
-import edu.cornell.cs.cs4120.xic.ir.IRStmt;
-import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 
 public class MethodNode extends AstNode{
@@ -129,13 +122,29 @@ public class MethodNode extends AstNode{
 	@Override
 	public void generateIR() {
 		AstNode curr;
+		
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
-		for (int i=0;i<this.children.size();i++){
+		int i;
+		
+		for (i=0;i<this.children.get(0).children.size();i++){
 			curr=this.children.get(i);
+			
+			l.add(new IRMove(new IRTemp((String)curr.symbol.value), 
+					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i)));
+		}
+
+		for (i=0;i<this.children.get(2).children.size();i++){
+			curr=this.children.get(2).children.get(i);
+			
 			if(curr.irNode==null){
 				curr.generateIR();
 			}
-			l.add((IRStmt)curr.irNode);
+			if(curr.irNode instanceof IRSeq){
+				l.addAll(((IRSeq)curr.irNode).stmts());
+			}else{
+				l.add((IRStmt)curr.irNode);
+			}
+			
 		}
 
 		this.irNode = new IRFuncDecl((String)this.symbol.value,new IRSeq(l));
