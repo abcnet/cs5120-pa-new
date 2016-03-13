@@ -44,16 +44,17 @@ public class AndOrNode extends BoolBinaryExprNode {
 @Override
 public void generateIR() {
 	// TODO Auto-generated method stub
-	super.generateIR();
-	if (this.symbol.sym == sym.AND) {
-		this.irNode = new IRBinOp(OpType.AND,
-(IRExpr)this.children.get(0).irNode,
-(IRExpr)this.children.get(1).irNode);
-	} else if (this.symbol.sym == sym.OR) {
-		this.irNode = new IRBinOp(OpType.OR,
-				(IRExpr)this.children.get(0).irNode,
-				(IRExpr)this.children.get(1).irNode);
-	}
+	//totally wrong
+//	super.generateIR();
+//	if (this.symbol.sym == sym.AND) {
+//		this.irNode = new IRBinOp(OpType.AND,
+//(IRExpr)this.children.get(0).irNode,
+//(IRExpr)this.children.get(1).irNode);
+//	} else if (this.symbol.sym == sym.OR) {
+//		this.irNode = new IRBinOp(OpType.OR,
+//				(IRExpr)this.children.get(0).irNode,
+//				(IRExpr)this.children.get(1).irNode);
+//	}
 }
 @Override
 public boolean isConst() {
