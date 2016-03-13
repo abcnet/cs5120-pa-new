@@ -11,6 +11,7 @@ import polyglot.util.*;
 import zr54.lexer.*;
 import zr54.parser.*;
 import zr54.typechecker.Type;
+import zr54.main.XiException;
 
 /** CUP v0.11b 20150326 generated parser.
   */
@@ -550,15 +551,22 @@ public class parser
     public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
 
     @Override
-    public void syntax_error(Symbol cur_token){
-        if (cur_token.value!=null){
-        	Symbol tok = (Symbol) cur_token.value;
-            printer.printAtom(cur_token.left + ":" +
-                cur_token.right + " error:Unexpected token " + tok.value);
-        } else{
-            printer.printAtom(cur_token.left + ":" + cur_token.right +
-            " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
-        }
+    public void syntax_error(Symbol cur_token) {
+    	try{
+   	    	if (cur_token.value!=null){
+        		Symbol tok = (Symbol) cur_token.value;
+         	 	printer.printAtom(cur_token.left + ":" +
+                	cur_token.right + " error:Unexpected token " + tok.value);
+				throw new XiException(tok,"Unexpected token " + tok.value, "Syntax");
+        	} else{
+	            printer.printAtom(cur_token.left + ":" + cur_token.right +
+    	        " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
+        	    throw new XiException(cur_token, "Unexpected token " +LexerOutput.terminalName.get(cur_token.sym), "Syntax"); 
+	       }
+    	}
+    	catch(XiException e) {
+    		System.out.println(e.errorMessage());
+    	}
     }
 
 

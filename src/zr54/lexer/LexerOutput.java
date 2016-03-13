@@ -1,12 +1,10 @@
 package zr54.lexer;
 
 import java.io.*;
-
 import zr54.parser.sym;
-
 import java.util.*;
-
 import java_cup.runtime.Symbol;
+import zr54.main.XiException;
 
 public class LexerOutput {
 	
@@ -68,7 +66,7 @@ public class LexerOutput {
 	 * @throws IOException
 	 */
 	public static void writeLexAnalysis(String inFile, String outFile) 
-			throws IOException {
+			throws Exception {
 
 		FileInputStream inp = new FileInputStream(inFile);
         Reader reader = new InputStreamReader(inp, "UTF-8");
@@ -82,7 +80,7 @@ public class LexerOutput {
 	        if(errorMessage != null) {
 	        	writer.write(errorMessage);
 	        	writer.close();
-	        	break;
+	        	throw new XiException(tok, errorMessage, "Lexical");
 	        }
             
 	        

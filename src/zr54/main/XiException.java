@@ -53,5 +53,11 @@ public class XiException extends Exception{
     	return column;
     }
 
-
+    public String getType() {
+    	return type;
+    }
+    
+    public String errorMessage() {
+    	return type + " error begin at " + line +":"+ column +": " + getMessage();
+    }
 }

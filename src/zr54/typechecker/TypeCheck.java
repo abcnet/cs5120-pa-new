@@ -54,7 +54,7 @@ public class TypeCheck {
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
-					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+					System.out.println(e.errorMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					System.out.println("Error in "+dstFile);
 				}
