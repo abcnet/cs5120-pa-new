@@ -1,8 +1,12 @@
 package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
+import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRLabel;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
@@ -44,17 +48,16 @@ public class AndOrNode extends BoolBinaryExprNode {
 @Override
 public void generateIR() {
 	// TODO Auto-generated method stub
-	//totally wrong
-//	super.generateIR();
-//	if (this.symbol.sym == sym.AND) {
-//		this.irNode = new IRBinOp(OpType.AND,
-//(IRExpr)this.children.get(0).irNode,
-//(IRExpr)this.children.get(1).irNode);
-//	} else if (this.symbol.sym == sym.OR) {
-//		this.irNode = new IRBinOp(OpType.OR,
-//				(IRExpr)this.children.get(0).irNode,
-//				(IRExpr)this.children.get(1).irNode);
-//	}
+	super.generateIR();
+	if (this.symbol.sym == sym.AND) {
+		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_1", "L_f"),
+                                new IRLabel("L_1"),
+                                new IRCJump((IRExpr)this.children.get(1).irNode, "L_t", "L_f"));
+	} else if (this.symbol.sym == sym.OR) {
+		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_1"),
+                                new IRLabel("L_1"),
+                                new IRCJump((IRExpr)this.children.get(1).irNode, "L_t", "L_f"));
+	}
 }
 @Override
 public boolean isConst() {
