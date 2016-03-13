@@ -1,5 +1,11 @@
 package zr54.parser;
+import java.util.ArrayList;
+
+import edu.cornell.cs.cs4120.xic.ir.IRCall;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 
 import zr54.typechecker.FuncSymbolTable;
@@ -65,6 +71,16 @@ public class FunctionCallNode extends ExprNode{
 	@Override
 	public void generateIR() {
 		// TODO Auto-generated method stub
+		AstNode curr;
+		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
+		for (int i=0;i<this.children.size();i++){
+			curr=this.children.get(i);
+			if(curr.irNode==null){
+				curr.generateIR();
+			}
+			l.add((IRExpr)curr.irNode);
+		}
+		this.irNode=new IRCall(new IRName((String)this.symbol.value),l);
 	}
 
 	@Override
