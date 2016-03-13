@@ -1,6 +1,6 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -37,6 +37,11 @@ public class LiteralExpr extends ExprNode {
 	@Override
 	public void generateIR() {
 		// TODO Auto-generated method stub
+		if (this.dimension==0 && this.type.getType() == Type.INT){
+			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));
+		}else{
+			// not implemented yet!
+		}
 	}
 
 	@Override

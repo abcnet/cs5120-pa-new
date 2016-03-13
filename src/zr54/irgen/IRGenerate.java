@@ -56,7 +56,7 @@ public class IRGenerate {
 					root.typeCheck(vars, funcs);
 					
 					
-					int slash = srcFile.indexOf('/');
+					int slash = srcFile.lastIndexOf('/');
 					int dot = srcFile.indexOf('.', slash+1);
 					IRCompUnit program;
 					if(slash==-1){
