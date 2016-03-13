@@ -240,5 +240,8 @@ public abstract class AstNode {
     
     public abstract void generateIR();
     public abstract boolean isConst();
+    public IRNode getIRNode(){
+    	return this.irNode;
+    }
 }
 
