@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java.util.ArrayList;
 
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -69,4 +70,13 @@ public class AssignStmtNode extends StmtNode{
 
 		return type;
 	}
+	
+	@Override
+	public void generateIR() {
+		super.generateIR();
+		
+		this.irNode = new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode());		
+	}
+	
+	
 }

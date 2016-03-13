@@ -51,6 +51,8 @@ public class DefaultNode extends AstNode{
 
 	@Override
 	public void generateIR() {
+		for(AstNode n : children)
+			n.generateIR();
 		// TODO Auto-generated method stub
 	}
 
