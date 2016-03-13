@@ -1,9 +1,10 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
 import zr54.main.XiException;
+
 
 public class DeclarationNode extends AstNode {
 	
@@ -41,6 +42,7 @@ public class DeclarationNode extends AstNode {
 	@Override
 	public void generateIR() {
 		// TODO Auto-generated method stub
+		this.irNode = new IRTemp((String) symbol.value);
 	}
 
 	@Override

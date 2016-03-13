@@ -1,0 +1,4 @@
+(COMPUNIT
+ simpleAssign
+ (FUNC main
+  (SEQ (MOVE (TEMP a) (CONST 1)) (MOVE (TEMP _RET0) (CONST 1)) (RETURN))))

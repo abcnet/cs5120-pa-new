@@ -47,4 +47,10 @@ public abstract class StmtNode extends DefaultNode{
 		type = new Type();
 		return type;
 	}
+	
+	@Override
+	public void generateIR() {
+		for(AstNode n : children)
+			n.generateIR();
+	}
 }
