@@ -1,4 +1,12 @@
 (COMPUNIT
  simpleAssign
- (FUNC main
-  (SEQ (MOVE (TEMP a) (CONST 1)) (MOVE (TEMP _RET0) (CONST 1)) (RETURN))))
+ (FUNC
+  main
+  (SEQ
+   (MOVE (TEMP a) (CONST 1))
+   (MOVE (TEMP b) (CALL (NAME foo)))
+   (MOVE (TEMP c) (TEMP _RET1))
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)))
+ (FUNC foo
+  (SEQ (MOVE (TEMP _RET0) (CONST 1)) (MOVE (TEMP _RET1) (CONST 2)) (RETURN))))

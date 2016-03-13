@@ -28,5 +28,11 @@ public class MultiVariableNode extends DefaultNode{
 
 		return type;
 	}
+	
+	@Override
+	public void generateIR() {
+		super.generateIR();
+		this.irNode = children.get(0).getIRNode();
+	}
 
 }

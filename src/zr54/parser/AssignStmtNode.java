@@ -1,8 +1,10 @@
 package zr54.parser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -74,8 +76,18 @@ public class AssignStmtNode extends StmtNode{
 	@Override
 	public void generateIR() {
 		super.generateIR();
+		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
+		moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
 		
-		this.irNode = new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode());		
+		for(int i = 1; i < children.get(0).getChildren().size(); i++) {
+			moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 
+								 (IRExpr)new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i)));
+		}
+		if(moves.size() == 1)
+			this.irNode = moves.get(0);
+		else 
+			this.irNode = new IRSeq(moves);
+		
 	}
 	
 	
