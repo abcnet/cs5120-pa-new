@@ -146,7 +146,7 @@ public class MethodNode extends AstNode{
 			}
 			
 		}
-		String functionName = "_I"+(String)this.symbol.value+"_";
+		String functionName = "_I"+((String)this.symbol.value).replaceAll("_", "__")+"_";
 		int numRet = this.children.get(1).children.size();
 		ArrayList<Type> returnType = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
 		switch(numRet){
