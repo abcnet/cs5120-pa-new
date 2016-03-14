@@ -141,7 +141,10 @@ public class MethodNode extends AstNode{
 			}
 			if(curr.irNode instanceof IRSeq){
 				l.addAll(((IRSeq)curr.irNode).stmts());
-			}else{
+			}else if(curr.irNode instanceof IRCall){
+				l.add(new IRExp((IRExpr)curr.irNode));
+			}
+			else {
 				l.add((IRStmt)curr.irNode);
 			}
 			
