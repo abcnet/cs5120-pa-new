@@ -49,8 +49,8 @@ public abstract class StmtNode extends DefaultNode{
 	}
 	
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		for(AstNode n : children)
-			n.generateIR();
+			n.generateIR(null);
 	}
 }

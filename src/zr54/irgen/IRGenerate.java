@@ -68,7 +68,7 @@ public class IRGenerate {
 					for(int i=0;i<methods.getChildren().size();i++){
 						curr = methods.getChildren().get(i);
 						if(curr.getIRNode()==null){
-							curr.generateIR();
+							curr.generateIR(funcs);
 						}
 						program.appendFunc((IRFuncDecl)curr.getIRNode());
 					}

@@ -74,8 +74,8 @@ public class AssignStmtNode extends StmtNode{
 	}
 	
 	@Override
-	public void generateIR() {
-		super.generateIR();
+	public void generateIR(FuncSymbolTable funcs) {
+		super.generateIR(funcs);
 		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
 		moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
 		

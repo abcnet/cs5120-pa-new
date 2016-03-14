@@ -2,6 +2,7 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.FuncSymbolTable;
 public class BinaryExprNode extends ExprNode{
 
 	/**
@@ -18,12 +19,12 @@ public class BinaryExprNode extends ExprNode{
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		if(this.children.get(0).irNode==null){
-			this.children.get(0).generateIR();
+			this.children.get(0).generateIR(null);
 		}
 		if(this.children.get(1).irNode==null){
-			this.children.get(1).generateIR();
+			this.children.get(1).generateIR(null);
 		}
 	}
 

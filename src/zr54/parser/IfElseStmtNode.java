@@ -47,7 +47,7 @@ public class IfElseStmtNode extends StmtNode {
 		return type;
 	}
 	
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
                 				new IRLabel("L_t"),
                 				(IRStmt)this.children.get(1).irNode,
