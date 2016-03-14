@@ -60,7 +60,7 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
         	this.irNode = new IRBinOp(OpType.LEQ,
         			(IRExpr)this.children.get(0).irNode,
         			(IRExpr)this.children.get(1).irNode);
-}
+        }
 	}
 
 	@Override
@@ -68,5 +68,4 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

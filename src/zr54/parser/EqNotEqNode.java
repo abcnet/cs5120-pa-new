@@ -59,5 +59,4 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

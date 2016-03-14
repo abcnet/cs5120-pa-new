@@ -42,7 +42,7 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		super.generateIR(funcs);
 		
 	}
-
+	
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub

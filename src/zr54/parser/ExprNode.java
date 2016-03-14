@@ -1,4 +1,6 @@
 package zr54.parser;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import zr54.typechecker.*;
 import java_cup.runtime.*;
 import zr54.main.XiException;
@@ -26,7 +28,6 @@ public abstract class ExprNode extends AstNode{
 	@Override 
 	public void generateIR(FuncSymbolTable funcs) {
 		for(AstNode n : children)
-			n.generateIR(funcs);
-		
+			n.generateIR(funcs);	
 	}
 }

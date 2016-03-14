@@ -1,12 +1,14 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
-public abstract class BoolBinaryExprNode extends BinaryExprNode{
+public abstract class BoolBinaryExprNode extends BinaryExprNode {
 	
 	/**
 	 * constructor
@@ -28,6 +30,4 @@ public abstract class BoolBinaryExprNode extends BinaryExprNode{
 			this.children.get(1).generateIR(funcs);
 		}
 	}
-	
-	
 }

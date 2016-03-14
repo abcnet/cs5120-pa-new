@@ -45,6 +45,16 @@ public class LiteralExpr extends ExprNode {
 			// not implemented yet
 		}
 	}
+	
+	public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel) {
+		if (this.dimension==0 && this.type.getType() == Type.BOOL){
+			if (((String)this.symbol.value).equals("true")) {
+				this.irNode = new IRJump(new IRName(trueLabel));
+			} else if (((String)this.symbol.value).equals("false")) {
+				this.irNode = new IRJump(new IRName(falseLabel));
+			}
+		}
+	}
 
 	@Override
 	public boolean isConst() {
