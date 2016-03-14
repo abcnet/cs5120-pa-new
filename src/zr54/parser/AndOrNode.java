@@ -46,9 +46,9 @@ public class AndOrNode extends BoolBinaryExprNode {
 
 	}
 @Override
-public void generateIR() {
+public void generateIR(FuncSymbolTable funcs) {
 	// TODO Auto-generated method stub
-	super.generateIR();
+	super.generateIR(funcs);
 	if (this.symbol.sym == sym.AND) {
 		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_1", "L_f"),
                                 new IRLabel("L_1"),

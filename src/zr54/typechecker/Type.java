@@ -129,4 +129,33 @@ public class Type {
     	}
     	return s;
     }
+    public String toABIString(){
+    	String s="";
+    	for(int i=0;i<dimension;i++){
+    		s+="a";
+    	}
+    	if (type==NIL){
+    		s="nil";
+    	}else if (type==INT){
+    	
+    		s="i";
+    	}else if(type==BOOL){
+    		s="b";
+    	}else if (type==UNIT){
+    		s="unit";
+    	}else if(type==VOID){
+    		s="void";
+    		
+    	}else if(type==TUPLE){
+    		s="t"+this.getTuple().size();
+    		for(int i=0;i<tuple.size();i++){
+        		s+=tuple.get(i).toABIString();
+//        		if(i<=tuple.size()-2){
+//        			s+=", ";
+//        		}
+        	}
+    	}
+    	
+    	return s;
+    }
 }

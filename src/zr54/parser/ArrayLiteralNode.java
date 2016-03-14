@@ -63,7 +63,7 @@ public class ArrayLiteralNode extends ExprNode{
 	}
 	
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		super.generateIR();
 		int len = children.size();

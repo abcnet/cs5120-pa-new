@@ -42,8 +42,8 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
     }
 
 	@Override
-	public void generateIR() {
-		super.generateIR();
+	public void generateIR(FuncSymbolTable funcs) {
+		super.generateIR(funcs);
 		if (this.symbol.sym == sym.GT) {
 			this.irNode = new IRBinOp(OpType.GT,
 					(IRExpr)this.children.get(0).irNode,

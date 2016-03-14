@@ -34,7 +34,7 @@ public class VariableNode extends ExprNode{
 
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		this.irNode = new IRTemp((String) this.symbol.value);
 	}
 
