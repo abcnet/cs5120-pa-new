@@ -19,7 +19,15 @@ public abstract class BoolBinaryExprNode extends BinaryExprNode{
 		super(t, v, child1, child2);
 	}
 	
-	
+	@Override
+	public void generateIR() {
+		if(this.children.get(0).irNode==null){
+			this.children.get(0).generateIR();
+		}
+		if(this.children.get(1).irNode==null){
+			this.children.get(1).generateIR();
+		}
+	}
 	
 	
 }

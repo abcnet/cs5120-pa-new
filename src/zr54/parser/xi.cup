@@ -129,8 +129,8 @@ optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
                             |                      {: RESULT = new DefaultNode("forceParen", null); :}
                             ;
 
-statements  ::= statements:ms statement:s     {: RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
-                      | statement:s           {: RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(s); :}
+statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
+                      | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(s); :}
                       ;
 
 statement           ::= functionCall:f optionalSemicolon         {: RESULT = new DefaultNode("statement", null, f); :}

@@ -1068,7 +1068,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); 
+                 RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1080,7 +1080,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("statements", null); RESULT.addGrandChildren(s); 
+                 RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

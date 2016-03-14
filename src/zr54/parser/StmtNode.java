@@ -1,5 +1,10 @@
 package zr54.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.*;
 import zr54.main.XiException;
@@ -50,7 +55,9 @@ public abstract class StmtNode extends DefaultNode{
 	
 	@Override
 	public void generateIR() {
-		for(AstNode n : children)
+		for(AstNode n : children) {
+			System.out.println("Name = " + this.name + " child name = " + n.name);
 			n.generateIR();
+		}
 	}
 }

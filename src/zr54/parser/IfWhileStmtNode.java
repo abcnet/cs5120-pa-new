@@ -47,12 +47,13 @@ public class IfWhileStmtNode extends StmtNode{
     }
 	
 	public void generateIR() {
-		if (this.type.equals("ifStatement")) {
+		super.generateIR();
+		if (this.name.equals("ifStatement")) {
 			this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
 					                new IRLabel("L_t"),
 					                (IRStmt)this.children.get(1).irNode,
 					                new IRLabel("L_f"));
-		} else if (this.type.equals("whileStatement")) {
+		} else if (this.name.equals("whileStatement")) {
 			this.irNode = new IRSeq(new IRLabel("L"),
 					                new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
 					                new IRLabel("L_t"),
