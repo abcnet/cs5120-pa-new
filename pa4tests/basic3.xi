@@ -1,4 +1,4 @@
-f(str: int[]): int, bool{
+f(str: int[]): int, bool[]{
 a:bool = true
-	return 1, {false, true}[1]
+	return 1, {false, true}
 }
