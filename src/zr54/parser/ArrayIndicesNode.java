@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -37,5 +38,17 @@ public class ArrayIndicesNode extends BinaryExprNode{
 
 		return type;
 	} 
-
+	
+	
+	@Override 
+	public void generateIR(FuncSymbolTable funcs) {
+		super.generateIR(funcs);
+		AstNode arrName = children.get(0);
+		AstNode index = children.get(1);
+		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+											new IRTemp((String) arrName.symbol.value),
+											(IRExpr)index.getIRNode()));
+	}
+	
+	
 }

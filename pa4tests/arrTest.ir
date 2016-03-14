@@ -1,7 +1,7 @@
 (COMPUNIT
  arrTest
  (FUNC
-  main
+  _Imain_i
   (SEQ
    (MOVE
     (TEMP a)
@@ -14,5 +14,6 @@
       (MOVE (MEM (ADD (TEMP tempArr) (CONST 1))) (CONST 2))
       (MOVE (MEM (ADD (TEMP tempArr) (CONST 2))) (ADD (CONST 3) (CONST 4))))
      (TEMP tempArr)))
-   (MOVE (TEMP _RET0) (TEMP a))
+   (MOVE (TEMP b) (MEM (ADD (TEMP a) (CONST 2))))
+   (MOVE (TEMP _RET0) (TEMP b))
    (RETURN))))
