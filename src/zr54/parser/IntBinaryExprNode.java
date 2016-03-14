@@ -41,6 +41,9 @@ public class IntBinaryExprNode extends BinaryExprNode {
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
 		// not implemented yet
+		AstNode c1 = children.get(0);
+		AstNode c2 = children.get(1);
+		
 	}
 
 	@Override
