@@ -24,9 +24,9 @@ public abstract class ExprNode extends AstNode{
 	}
 	
 	@Override 
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		for(AstNode n : children)
-			n.generateIR();
+			n.generateIR(funcs);
 		
 	}
 }

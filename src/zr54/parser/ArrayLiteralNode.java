@@ -65,7 +65,7 @@ public class ArrayLiteralNode extends ExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		super.generateIR();
+		super.generateIR(funcs);
 		int len = children.size();
 		
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
