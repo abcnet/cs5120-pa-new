@@ -61,8 +61,8 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			String arrName = "_ARR" + arrNum;
 			arrNum++;
 			
-			String c1Name = "_ARR" + c1.getRegNum();
-			String c2Name = "_ARR" + c2.getRegNum();
+			String c1Name = c1.getRegName();
+			String c2Name = c2.getRegName();
 			
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 			
@@ -128,13 +128,13 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 											"L_t", "L_f"),
 								new IRLabel("L_t"),
 								new IRMove(new IRMem(new IRBinOp(OpType.ADD,
-													 new IRTemp(arrName),
-													 new IRBinOp(OpType.ADD, 
-															 	new IRTemp("_COUNT"),
-															 	new IRTemp("_LEN1")))),
+													 			 new IRTemp(arrName),
+													 			 new IRBinOp(OpType.ADD, 
+													 					 	 new IRTemp("_COUNT"),
+													 					 	 new IRTemp("_LEN1")))),
 										   new IRMem(new IRBinOp(OpType.ADD,
-												   	 new IRTemp(c2Name),
-													 new IRTemp("_COUNT")))),
+												   	 			 new IRTemp(c2Name),
+												   	 			 new IRTemp("_COUNT")))),
 								new IRMove(new IRTemp("_COUNT"),
 										   new IRBinOp(OpType.ADD,
 												   	   new IRTemp("_COUNT"),

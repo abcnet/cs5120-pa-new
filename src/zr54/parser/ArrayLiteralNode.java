@@ -100,11 +100,16 @@ public class ArrayLiteralNode extends ExprNode{
 		this.irNode = new IRESeq(new IRSeq(stmts), new IRTemp(arrName));
 		
 	}
+	
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 	
+	@Override
+	public String getRegName() {
+		return "_ARR" + getRegNum();
+	}
 
 }

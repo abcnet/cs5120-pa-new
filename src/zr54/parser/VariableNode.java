@@ -44,4 +44,9 @@ public class VariableNode extends ExprNode{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public String getRegName() {
+		return (String)symbol.value;
+	}
 }

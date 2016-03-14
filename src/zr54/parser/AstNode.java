@@ -255,5 +255,9 @@ public abstract class AstNode {
     public int getRegNum() {
     	return regNum;
     }
+    
+    public String getRegName() {
+    	return "reg";
+    }
 }
 

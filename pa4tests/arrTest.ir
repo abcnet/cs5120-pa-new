@@ -4,6 +4,16 @@
   _Imain_i
   (SEQ
    (MOVE
+    (TEMP c)
+    (ESEQ
+     (SEQ
+      (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 24)))
+      (MOVE (MEM (TEMP _ARR0)) (CONST 2))
+      (MOVE (TEMP _ARR0) (ADD (TEMP _ARR0) (CONST 1)))
+      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 0))) (CONST 2))
+      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 1))) (CONST 2)))
+     (TEMP _ARR0)))
+   (MOVE
     (TEMP a)
     (ESEQ
      (SEQ
@@ -13,28 +23,15 @@
         (SUB
          (ESEQ
           (SEQ
-           (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 32)))
-           (MOVE (MEM (TEMP _ARR0)) (CONST 3))
-           (MOVE (TEMP _ARR0) (ADD (TEMP _ARR0) (CONST 1)))
-           (MOVE (MEM (ADD (TEMP _ARR0) (CONST 0))) (CONST 1))
-           (MOVE (MEM (ADD (TEMP _ARR0) (CONST 1))) (CONST 2))
-           (MOVE (MEM (ADD (TEMP _ARR0) (CONST 2))) (CONST 4)))
-          (TEMP _ARR0))
-         (CONST 1))))
-      (MOVE
-       (TEMP _LEN2)
-       (MEM
-        (SUB
-         (ESEQ
-          (SEQ
            (MOVE (TEMP _ARR1) (CALL (NAME _I_alloc_i) (CONST 32)))
            (MOVE (MEM (TEMP _ARR1)) (CONST 3))
            (MOVE (TEMP _ARR1) (ADD (TEMP _ARR1) (CONST 1)))
-           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 0))) (CONST 3))
-           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 1))) (CONST 4))
-           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 2))) (CONST 2)))
+           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 0))) (CONST 1))
+           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 1))) (CONST 2))
+           (MOVE (MEM (ADD (TEMP _ARR1) (CONST 2))) (CONST 4)))
           (TEMP _ARR1))
          (CONST 1))))
+      (MOVE (TEMP _LEN2) (MEM (SUB (TEMP c) (CONST 1))))
       (MOVE (TEMP _LEN) (ADD (TEMP _LEN1) (TEMP _LEN2)))
       (MOVE (TEMP _ARR2) (CALL (NAME _I_alloc_i) (TEMP _LEN)))
       (MOVE (MEM (TEMP _ARR2)) (TEMP _LEN))
@@ -45,7 +42,7 @@
        (CJUMP (LT (TEMP _COUNT) (TEMP _LEN1)) L_t L_f)
        (LABEL L_t)
        (MOVE (MEM (ADD (TEMP _ARR2) (TEMP _COUNT)))
-        (MEM (ADD (TEMP _ARR0) (TEMP _COUNT))))
+        (MEM (ADD (TEMP _ARR1) (TEMP _COUNT))))
        (MOVE (TEMP _COUNT) (ADD (TEMP _COUNT) (CONST 1)))
        (JUMP (NAME L))
        (LABEL L_f))
@@ -55,7 +52,7 @@
        (CJUMP (LT (TEMP _COUNT) (TEMP _LEN2)) L_t L_f)
        (LABEL L_t)
        (MOVE (MEM (ADD (TEMP _ARR2) (ADD (TEMP _COUNT) (TEMP _LEN1))))
-        (MEM (ADD (TEMP _ARR1) (TEMP _COUNT))))
+        (MEM (ADD (TEMP c) (TEMP _COUNT))))
        (MOVE (TEMP _COUNT) (ADD (TEMP _COUNT) (CONST 1)))
        (JUMP (NAME L))
        (LABEL L_f)))
