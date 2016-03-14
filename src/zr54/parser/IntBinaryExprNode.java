@@ -40,7 +40,7 @@ public class IntBinaryExprNode extends BinaryExprNode {
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
-		
+		// not implemented yet
 	}
 	
 	@Override

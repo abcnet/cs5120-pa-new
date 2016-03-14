@@ -141,34 +141,37 @@ public class MethodNode extends AstNode{
 			}
 			if(curr.irNode instanceof IRSeq){
 				l.addAll(((IRSeq)curr.irNode).stmts());
-			}else{
+			}else if(curr.irNode instanceof IRExpr){
+				l.add(new IRExp((IRExpr)curr.irNode));
+			}
+			else {
 				l.add((IRStmt)curr.irNode);
 			}
 			
 		}
-		String functionName = "_I"+(String)this.symbol.value+"_";
-		int numRet = this.children.get(1).children.size();
-		ArrayList<Type> returnType = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
-		switch(numRet){
-		case 0:
-			functionName += "p";
-			break;
-		case 1:
-			functionName += returnType.get(0).toABIString();
-			break;
-		default:
-			functionName += "t"+numRet;
-			for(i=0;i<numRet;i++){
-				functionName += returnType.get(i).toABIString();
-			}
-			break;
-				
-		}
-		ArrayList<Type> argsType = funcs.lookup((String)symbol.value).getFunctionArgTypes().getTuple();
-		for(i=0;i<argsType.size();i++){
-			functionName+=argsType.get(i).toABIString();
-		}
-		this.irNode = new IRFuncDecl(functionName,new IRSeq(l));
+//		String functionName = "_I"+((String)this.symbol.value).replaceAll("_", "__")+"_";
+//		int numRet = this.children.get(1).children.size();
+//		ArrayList<Type> returnType = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
+//		switch(numRet){
+//		case 0:
+//			functionName += "p";
+//			break;
+//		case 1:
+//			functionName += returnType.get(0).toABIString();
+//			break;
+//		default:
+//			functionName += "t"+numRet;
+//			for(i=0;i<numRet;i++){
+//				functionName += returnType.get(i).toABIString();
+//			}
+//			break;
+//				
+//		}
+//		ArrayList<Type> argsType = funcs.lookup((String)symbol.value).getFunctionArgTypes().getTuple();
+//		for(i=0;i<argsType.size();i++){
+//			functionName+=argsType.get(i).toABIString();
+//		}
+		this.irNode = new IRFuncDecl(funcs.lookup((String)symbol.value).toString(),new IRSeq(l));
 	}
 
 	@Override
