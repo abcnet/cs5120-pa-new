@@ -22,4 +22,11 @@ public abstract class ExprNode extends AstNode{
 		type = new Type();
 		return type;
 	}
+	
+	@Override 
+	public void generateIR() {
+		for(AstNode n : children)
+			n.generateIR();
+		
+	}
 }
