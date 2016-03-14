@@ -1,0 +1,19 @@
+(COMPUNIT
+ arrTest
+ (FUNC
+  _Imain_i
+  (SEQ
+   (MOVE
+    (TEMP a)
+    (ESEQ
+     (SEQ
+      (MOVE (TEMP tempArr) (CALL (NAME _I_alloc_i) (CONST 32)))
+      (MOVE (MEM (TEMP tempArr)) (CONST 3))
+      (MOVE (TEMP tempArr) (ADD (TEMP tempArr) (CONST 1)))
+      (MOVE (MEM (ADD (TEMP tempArr) (CONST 0))) (CONST 1))
+      (MOVE (MEM (ADD (TEMP tempArr) (CONST 1))) (CONST 2))
+      (MOVE (MEM (ADD (TEMP tempArr) (CONST 2))) (ADD (CONST 3) (CONST 4))))
+     (TEMP tempArr)))
+   (MOVE (TEMP b) (MEM (ADD (TEMP a) (CONST 2))))
+   (MOVE (TEMP _RET0) (TEMP b))
+   (RETURN))))

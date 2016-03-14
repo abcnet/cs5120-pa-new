@@ -35,7 +35,7 @@ public class LiteralExpr extends ExprNode {
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		if (this.dimension==0 && this.type.getType() == Type.INT){
 			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));

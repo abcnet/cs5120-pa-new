@@ -39,14 +39,14 @@ public class ReturnNode extends StmtNode {
 	}
 	
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		AstNode curr;
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR();
+				curr.generateIR(funcs);
 			}
 			l.add(new IRMove(new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i), 
 					(IRExpr)curr.irNode));

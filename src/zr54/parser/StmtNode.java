@@ -54,10 +54,9 @@ public abstract class StmtNode extends DefaultNode{
 	}
 	
 	@Override
-	public void generateIR() {
-		for(AstNode n : children) {
-			System.out.println("Name = " + this.name + " child name = " + n.name);
-			n.generateIR();
-		}
+
+	public void generateIR(FuncSymbolTable funcs) {
+		for(AstNode n : children)
+			n.generateIR(funcs);
 	}
 }

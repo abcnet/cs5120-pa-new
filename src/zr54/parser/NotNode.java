@@ -38,7 +38,7 @@ public class NotNode extends UnaryExprNode{
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 	}
 

@@ -50,9 +50,9 @@ public class DefaultNode extends AstNode{
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		for(AstNode n : children)
-			n.generateIR();
+			n.generateIR(null);
 		// TODO Auto-generated method stub
 	}
 

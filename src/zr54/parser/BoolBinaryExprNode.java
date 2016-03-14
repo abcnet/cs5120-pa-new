@@ -20,12 +20,12 @@ public abstract class BoolBinaryExprNode extends BinaryExprNode{
 	}
 	
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		if(this.children.get(0).irNode==null){
-			this.children.get(0).generateIR();
+			this.children.get(0).generateIR(funcs);
 		}
 		if(this.children.get(1).irNode==null){
-			this.children.get(1).generateIR();
+			this.children.get(1).generateIR(funcs);
 		}
 	}
 	

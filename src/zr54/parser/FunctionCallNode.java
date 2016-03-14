@@ -69,14 +69,14 @@ public class FunctionCallNode extends ExprNode{
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		AstNode curr;
 		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR();
+				curr.generateIR(null);
 			}
 			l.add((IRExpr)curr.irNode);
 		}

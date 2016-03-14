@@ -40,7 +40,7 @@ public class DeclarationNode extends AstNode {
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		this.irNode = new IRTemp((String) symbol.value);
 	}

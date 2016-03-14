@@ -1,0 +1,18 @@
+(COMPUNIT
+ basic2
+ (FUNC
+  _If_t2ib
+  (SEQ
+   (MOVE (TEMP a) (CONST 1))
+   (MOVE (TEMP _RET0) (CONST 1))
+   (MOVE
+    (TEMP _RET1)
+    (ESEQ
+     (SEQ
+      (MOVE (TEMP tempArr) (CALL (NAME _I_alloc_i) (CONST 24)))
+      (MOVE (MEM (TEMP tempArr)) (CONST 2))
+      (MOVE (TEMP tempArr) (ADD (TEMP tempArr) (CONST 1)))
+      (MOVE (MEM (ADD (TEMP tempArr) (CONST 0))) (CONST 0))
+      (MOVE (MEM (ADD (TEMP tempArr) (CONST 1))) (CONST 1)))
+     (TEMP tempArr)))
+   (RETURN))))

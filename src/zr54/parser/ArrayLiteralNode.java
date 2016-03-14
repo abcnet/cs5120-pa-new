@@ -1,12 +1,15 @@
 package zr54.parser;
 
+import java.util.ArrayList;
+
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
+
 
 public class ArrayLiteralNode extends ExprNode{
 	/**
@@ -60,8 +63,38 @@ public class ArrayLiteralNode extends ExprNode{
 	}
 	
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		super.generateIR(funcs);
+		int len = children.size();
+		
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		//allocate memory and put is in a temp
+		stmts.add(new IRMove(new IRTemp("tempArr"), 
+							 new IRCall(new IRName("_I_alloc_i"), 
+										new IRConst(8 * (len + 1)))));
+
+		//store the length of the array
+		stmts.add(new IRMove(new IRMem(new IRTemp("tempArr")), 
+							 new IRConst(len)));
+
+		//the head of the array
+		stmts.add(new IRMove(new IRTemp("tempArr"), 
+							 new IRBinOp(IRBinOp.OpType.ADD, 
+							    		 new IRTemp("tempArr"),
+										 new IRConst(1))));
+
+		//put the values in the memory
+		for(int i = 0; i < children.size(); i++) {
+			stmts.add(new IRMove(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+														  new IRTemp("tempArr"),
+														  new IRConst(i))),
+									(IRExpr) children.get(i).getIRNode())
+						);
+		}
+				
+		this.irNode = new IRESeq(new IRSeq(stmts), new IRTemp("tempArr"));
+		
 	}
 	@Override
 	public boolean isConst() {

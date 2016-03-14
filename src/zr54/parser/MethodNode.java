@@ -120,14 +120,14 @@ public class MethodNode extends AstNode{
 	}
 
 	@Override
-	public void generateIR() {
+	public void generateIR(FuncSymbolTable funcs) {
 		AstNode curr;
 		
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
 		int i;
 		
 		for (i=0;i<this.children.get(0).children.size();i++){
-			curr=this.children.get(i);
+			curr=this.children.get(0).children.get(i);
 			
 			l.add(new IRMove(new IRTemp((String)curr.symbol.value), 
 					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i)));
@@ -137,7 +137,7 @@ public class MethodNode extends AstNode{
 			curr=this.children.get(2).children.get(i);
 			
 			if(curr.irNode==null){
-				curr.generateIR();
+				curr.generateIR(null);
 			}
 			if(curr.irNode instanceof IRSeq){
 				l.addAll(((IRSeq)curr.irNode).stmts());
@@ -146,8 +146,29 @@ public class MethodNode extends AstNode{
 			}
 			
 		}
-
-		this.irNode = new IRFuncDecl((String)this.symbol.value,new IRSeq(l));
+		String functionName = "_I"+(String)this.symbol.value+"_";
+		int numRet = this.children.get(1).children.size();
+		ArrayList<Type> returnType = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
+		switch(numRet){
+		case 0:
+			functionName += "p";
+			break;
+		case 1:
+			functionName += returnType.get(0).toABIString();
+			break;
+		default:
+			functionName += "t"+numRet;
+			for(i=0;i<numRet;i++){
+				functionName += returnType.get(i).toABIString();
+			}
+			break;
+				
+		}
+		ArrayList<Type> argsType = funcs.lookup((String)symbol.value).getFunctionArgTypes().getTuple();
+		for(i=0;i<argsType.size();i++){
+			functionName+=argsType.get(i).toABIString();
+		}
+		this.irNode = new IRFuncDecl(functionName,new IRSeq(l));
 	}
 
 	@Override

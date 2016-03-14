@@ -33,8 +33,8 @@ public class StmtsNode extends StmtNode{
 	}
 	
 	@Override
-	public void generateIR() {
-		super.generateIR();
+	public void generateIR(FuncSymbolTable funcs) {
+		super.generateIR(funcs);
 		List<IRStmt> stmts = new ArrayList<IRStmt>();
 		for (int i = 0; i < this.children.size(); i++) {
 			stmts.add((IRStmt)this.children.get(i).irNode);

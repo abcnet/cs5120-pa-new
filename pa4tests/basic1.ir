@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 (COMPUNIT
  basic1
  (FUNC
@@ -12,3 +13,6 @@
    (LABEL L_f)
    (MOVE (TEMP _RET0) (CONST 1))
    (RETURN))))
+=======
+(COMPUNIT basic1 (FUNC _If_i (SEQ (MOVE (TEMP _RET0) (CONST 1)) (RETURN))))
+>>>>>>> f0fededcbed0cde02209b762a3bc27e4ae5fd2bf

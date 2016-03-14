@@ -1,0 +1,1 @@
+(() ((f () (int) ((= (a bool) true) (return 1)))))
