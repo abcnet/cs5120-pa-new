@@ -59,7 +59,9 @@ public class DefaultNode extends AstNode{
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
-		return false;
+		for(AstNode n : children)
+			if( n.isConst()==false)return false;	
+		return true;
 	}
 	
 }

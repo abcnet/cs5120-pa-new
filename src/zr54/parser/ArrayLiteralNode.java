@@ -104,12 +104,16 @@ public class ArrayLiteralNode extends ExprNode{
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
-		return false;
+		for(AstNode n : children)
+			if( n.isConst()==false)return false;	
+		return true;
 	}
 	
 	@Override
 	public String getRegName() {
 		return "_ARR" + getRegNum();
 	}
+	
+	
 
 }

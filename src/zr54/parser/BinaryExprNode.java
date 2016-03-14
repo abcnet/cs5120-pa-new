@@ -31,6 +31,6 @@ public class BinaryExprNode extends ExprNode{
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
-		return false;
+		return this.children.get(0).isConst()&&this.children.get(1).isConst();
 	}
 }
