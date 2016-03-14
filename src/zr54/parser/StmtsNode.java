@@ -9,36 +9,15 @@ import java_cup.runtime.Symbol;
 import zr54.typechecker.*;
 import zr54.main.XiException;
 
-public abstract class StmtNode extends DefaultNode{
+public class StmtsNode extends StmtNode{
 
 	/**
 	 * constructor
 	 * @param t
 	 * @param v
 	 */
-	public StmtNode(String t, Symbol v) {
+	public StmtsNode(String t, Symbol v) {
 		super(t, v);
-	}
-
-	/**
-	 * constructor
-	 * @param t
-	 * @param v
-	 * @param c1
-	 */
-	public StmtNode(String t, Symbol v, AstNode c1) {
-		super(t, v, c1);
-	}
-
-	/**
-	 * constructor
-	 * @param t
-	 * @param v
-	 * @param c1
-	 * @param c2
-	 */
-	public StmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
-		super(t, v, c1, c2);
 	}
 
 	/**
@@ -54,9 +33,12 @@ public abstract class StmtNode extends DefaultNode{
 	}
 	
 	@Override
-
 	public void generateIR(FuncSymbolTable funcs) {
-		for(AstNode n : children)
-			n.generateIR(funcs);
+		super.generateIR(funcs);
+		List<IRStmt> stmts = new ArrayList<IRStmt>();
+		for (int i = 0; i < this.children.size(); i++) {
+			stmts.add((IRStmt)this.children.get(i).irNode);
+		}
+		this.irNode = new IRSeq(stmts);
 	}
 }

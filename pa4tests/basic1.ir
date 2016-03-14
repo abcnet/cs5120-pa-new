@@ -1,1 +1,14 @@
-(COMPUNIT basic1 (FUNC _If_i (SEQ (MOVE (TEMP _RET0) (CONST 1)) (RETURN))))
+(COMPUNIT
+ basic1
+ (FUNC
+  _If_i
+  (SEQ
+   (MOVE (TEMP x) (LT (CONST 2) (CONST 3)))
+   (MOVE (TEMP y) (CONST 5))
+   (MOVE (TEMP y) (CONST 10))
+   (CJUMP (LT (TEMP y) (CONST 6)) L_t L_f)
+   (LABEL L_t)
+   (SEQ (MOVE (TEMP y) (CONST 10)) (MOVE (TEMP y) (CONST 20)))
+   (LABEL L_f)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN))))
