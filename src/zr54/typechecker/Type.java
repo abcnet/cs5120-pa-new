@@ -135,19 +135,19 @@ public class Type {
     		s+="a";
     	}
     	if (type==NIL){
-    		s="nil";
+    		s+="n";
     	}else if (type==INT){
     	
-    		s="i";
+    		s+="i";
     	}else if(type==BOOL){
-    		s="b";
+    		s+="b";
     	}else if (type==UNIT){
-    		s="unit";
+    		s+="u";
     	}else if(type==VOID){
-    		s="void";
+    		s+="v";
     		
     	}else if(type==TUPLE){
-    		s="t"+this.getTuple().size();
+    		s+="t"+this.getTuple().size();
     		for(int i=0;i<tuple.size();i++){
         		s+=tuple.get(i).toABIString();
 //        		if(i<=tuple.size()-2){
