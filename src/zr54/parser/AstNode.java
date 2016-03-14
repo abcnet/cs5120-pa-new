@@ -15,7 +15,11 @@ import zr54.main.XiException;
  *
  */
 public abstract class AstNode {
-
+	public static int arrNum = 0;
+	
+	//ths number is used to distinguish different arrays 
+	protected int regNum = -1;
+	
 	protected String name = "";
 	protected Symbol symbol = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
@@ -242,6 +246,14 @@ public abstract class AstNode {
     public abstract boolean isConst();
     public IRNode getIRNode(){
     	return this.irNode;
+    }
+    
+    public Type getType() {
+    	return this.type;
+    }
+    
+    public int getRegNum() {
+    	return regNum;
     }
 }
 
