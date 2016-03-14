@@ -137,7 +137,7 @@ public class MethodNode extends AstNode{
 			curr=this.children.get(2).children.get(i);
 			
 			if(curr.irNode==null){
-				curr.generateIR(null);
+				curr.generateIR(funcs);
 			}
 			if(curr.irNode instanceof IRSeq){
 				l.addAll(((IRSeq)curr.irNode).stmts());
