@@ -48,8 +48,10 @@ public class BlockNode extends StmtNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
-		System.out.println(this.children.size());
-		this.irNode = this.children.get(0).irNode;
+		if (this.children.size() == 1) {
+			assert(this.irNode != null);
+			this.irNode = this.children.get(0).irNode;
+		}
 	}
 
 }

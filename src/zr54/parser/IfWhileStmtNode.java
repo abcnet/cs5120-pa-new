@@ -48,7 +48,7 @@ public class IfWhileStmtNode extends StmtNode{
 	
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
-		if (this.type.equals("ifStatement")) {
+		if (this.name.equals("ifStatement")) {
 			this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
 					                new IRLabel("L_t"),
 					                (IRStmt)this.children.get(1).irNode,
