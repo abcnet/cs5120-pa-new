@@ -50,5 +50,4 @@ public class ArrayIndicesNode extends BinaryExprNode{
 											(IRExpr)index.getIRNode()));
 	}
 	
-	
 }

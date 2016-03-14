@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java.io.*;
 import java.util.ArrayList;
+
 import edu.cornell.cs.cs4120.util.*;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
@@ -26,6 +27,8 @@ public abstract class AstNode {
 	protected AstNode parent = null;
 	protected Type type = null;
 	protected IRNode irNode = null;
+	
+	public static int counter = 0;
 	
 	/**
 	 * Default constructor
@@ -259,5 +262,7 @@ public abstract class AstNode {
     public String getRegName() {
     	return "reg";
     }
+    
+    public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel){}
 }
 

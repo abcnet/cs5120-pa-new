@@ -80,7 +80,7 @@ public class FunctionCallNode extends ExprNode{
 			}
 			l.add((IRExpr)curr.irNode);
 		}
-		this.irNode=new IRCall(new IRName((String)this.symbol.value),l);
+		this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);
 	}
 
 	@Override

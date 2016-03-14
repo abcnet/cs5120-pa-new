@@ -37,8 +37,7 @@ public class VariableNode extends ExprNode{
 	public void generateIR(FuncSymbolTable funcs) {
 		this.irNode = new IRTemp((String) this.symbol.value);
 	}
-
-
+	
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub

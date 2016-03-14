@@ -47,19 +47,49 @@ public class IfWhileStmtNode extends StmtNode{
     }
 	
 	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
+		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+		if (this.children.get(0).symbol.sym == sym.AND
+			|| this.children.get(0).symbol.sym == sym.OR
+			|| this.children.get(0).type.getType() == Type.BOOL) {
+			this.children.get(0).getIRControl(funcs, trueLabel, falseLabel);
+		} else {
+			this.children.get(0).generateIR(funcs);
+		}
+		this.children.get(1).generateIR(funcs);
 		if (this.name.equals("ifStatement")) {
-			this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
-					                new IRLabel("L_t"),
+			if (this.children.get(0).symbol.sym == sym.AND
+					|| this.children.get(0).symbol.sym == sym.OR
+					|| this.children.get(0).type.getType() == Type.BOOL) {
+				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+					                new IRLabel(trueLabel),
 					                (IRStmt)this.children.get(1).irNode,
-					                new IRLabel("L_f"));
+					                new IRLabel(falseLabel));
+			} else {
+				this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, falseLabel),
+		                new IRLabel(trueLabel),
+		                (IRStmt)this.children.get(1).irNode,
+		                new IRLabel(falseLabel));
+			}
 		} else if (this.name.equals("whileStatement")) {
-			this.irNode = new IRSeq(new IRLabel("L"),
-					                new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
-					                new IRLabel("L_t"),
+			String label = "L_"+Integer.toString(AstNode.counter++);
+			if (this.children.get(0).symbol.sym == sym.AND
+					|| this.children.get(0).symbol.sym == sym.OR
+					|| this.children.get(0).type.getType() == Type.BOOL) {
+			this.irNode = new IRSeq(new IRLabel(label),
+					                (IRStmt)this.children.get(0).irNode,
+					                new IRLabel(trueLabel),
 					                (IRStmt)this.children.get(1).irNode,
-					                new IRJump(new IRName("L")),
-					                new IRLabel("L_f"));
+					                new IRJump(new IRName(label)),
+					                new IRLabel(falseLabel));
+			} else {
+				this.irNode = new IRSeq(new IRLabel(label),
+						new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, falseLabel),
+		                new IRLabel(trueLabel),
+		                (IRStmt)this.children.get(1).irNode,
+		                new IRJump(new IRName(label)),
+		                new IRLabel(falseLabel));
+			}
 		}
 	}
 

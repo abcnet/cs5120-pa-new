@@ -113,4 +113,31 @@ public class FuncSignature {
     		return false;
     	
     }
+    @Override
+    public String toString(){
+    	String functionName = "_I"+this.name.replaceAll("_", "__")+"_";
+		int numRet = this.getFunctionReturnTypes().getTuple().size();
+		ArrayList<Type> returnType = this.getFunctionReturnTypes().getTuple();
+		int i;
+		switch(numRet){
+		case 0:
+			functionName += "p";
+			break;
+		case 1:
+			functionName += returnType.get(0).toABIString();
+			break;
+		default:
+			functionName += "t"+numRet;
+			for(i=0;i<numRet;i++){
+				functionName += returnType.get(i).toABIString();
+			}
+			break;
+				
+		}
+		ArrayList<Type> argsType = this.getFunctionArgTypes().getTuple();
+		for(i=0;i<argsType.size();i++){
+			functionName+=argsType.get(i).toABIString();
+		}
+		return functionName;
+    }
 }

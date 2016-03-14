@@ -42,7 +42,7 @@ public class MinusNode extends UnaryExprNode{
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 	}
-
+	
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub

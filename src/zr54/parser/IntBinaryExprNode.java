@@ -45,7 +45,7 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		AstNode c2 = children.get(1);
 		
 	}
-
+	
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub

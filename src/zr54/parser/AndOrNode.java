@@ -2,8 +2,11 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
+import edu.cornell.cs.cs4120.xic.ir.IRConst;
+import edu.cornell.cs.cs4120.xic.ir.IRESeq;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRLabel;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
@@ -43,26 +46,114 @@ public class AndOrNode extends BoolBinaryExprNode {
 		type = new Type(Type.BOOL, 0);
 
 		return type;
-
+ 
 	}
-@Override
-public void generateIR(FuncSymbolTable funcs) {
-	// TODO Auto-generated method stub
-	super.generateIR(funcs);
-	if (this.symbol.sym == sym.AND) {
-		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_1", "L_f"),
-                                new IRLabel("L_1"),
-                                new IRCJump((IRExpr)this.children.get(1).irNode, "L_t", "L_f"));
-	} else if (this.symbol.sym == sym.OR) {
-		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_1"),
-                                new IRLabel("L_1"),
-                                new IRCJump((IRExpr)this.children.get(1).irNode, "L_t", "L_f"));
+	
+	@Override
+	public void generateIR(FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		super.generateIR(funcs);
+		if (this.symbol.sym == sym.AND) {
+			String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+			String label1 = "L_"+Integer.toString(AstNode.counter++);
+			String label2 = "L_"+Integer.toString(AstNode.counter++);
+			String var = "var_"+Integer.toString(AstNode.counter++);
+			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(0)),
+					                 new IRCJump((IRExpr)this.children.get(0).irNode, label1, falseLabel),
+									 new IRLabel(label1),
+									 new IRCJump((IRExpr)this.children.get(1).irNode, label2, falseLabel),
+									 new IRLabel(label2),
+									 new IRMove(new IRTemp(var), new IRConst(1)),
+									 new IRLabel(falseLabel)),
+								new IRTemp(var));
+		} else if (this.symbol.sym == sym.OR) {
+			String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
+			String label1 = "L_"+Integer.toString(AstNode.counter++);
+			String label2 = "L_"+Integer.toString(AstNode.counter++);
+			String var = "var_"+Integer.toString(AstNode.counter++);
+			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(1)),
+	                 				 new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, label1),
+	                 				 new IRLabel(label1),
+	                 				 new IRCJump((IRExpr)this.children.get(1).irNode, trueLabel, label2),
+	                 				 new IRLabel(label2),
+	                 				 new IRMove(new IRTemp(var), new IRConst(0)),
+	                 				 new IRLabel(trueLabel)),
+	                 			new IRTemp(var));
+		}
 	}
-}
-@Override
-public boolean isConst() {
-	// TODO Auto-generated method stub
-	return false;
-}
+	
+	@Override
+	public boolean isConst() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel) {
+		
+		if (this.symbol.sym == sym.AND) {
+			String label = "L_"+Integer.toString(AstNode.counter++);
+			if ((this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+				&& !(this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+				System.out.println("HERE");
+				this.children.get(0).getIRControl(funcs, label, falseLabel);
+				this.children.get(1).generateIR(funcs);
+				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+				         				new IRLabel(label),
+				         				new IRCJump((IRExpr)this.children.get(1).irNode, trueLabel, falseLabel));
+			} else if (!(this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+					&& (this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+					this.children.get(0).generateIR(funcs);
+					this.children.get(1).getIRControl(funcs, trueLabel, falseLabel);
+					this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, label, falseLabel),
+					         				new IRLabel(label),
+					         				(IRStmt)this.children.get(1).irNode);
+			} else if ((this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+					&& (this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+					this.children.get(0).getIRControl(funcs, label, falseLabel);
+					this.children.get(1).getIRControl(funcs, trueLabel, falseLabel);
+					this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+					         				new IRLabel(label),
+					         				(IRStmt)this.children.get(1).irNode);
+			} else {
+				this.children.get(0).generateIR(funcs);
+				this.children.get(1).generateIR(funcs);
+				this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, label, falseLabel),
+		                 				new IRLabel(label),
+		                 				new IRCJump((IRExpr)this.children.get(1).irNode, trueLabel, falseLabel));
+			}
+			
+		} else if (this.symbol.sym == sym.OR) {
+			String label = "L_"+Integer.toString(AstNode.counter++);
+			if ((this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+				&& !(this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+				this.children.get(0).getIRControl(funcs, trueLabel, label);
+				this.children.get(1).generateIR(funcs);
+				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+				         				new IRLabel(label),
+				         				new IRCJump((IRExpr)this.children.get(1).irNode, trueLabel, falseLabel));
+			} else if (!(this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+					&& (this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+					this.children.get(0).generateIR(funcs);
+					this.children.get(1).getIRControl(funcs, trueLabel, falseLabel);
+					this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, label),
+					         				new IRLabel(label),
+					         				(IRStmt)this.children.get(1).irNode);
+			} else if ((this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
+					&& (this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
+					this.children.get(0).getIRControl(funcs, trueLabel, label);
+					this.children.get(1).getIRControl(funcs, trueLabel, falseLabel);
+					this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+					         				new IRLabel(label),
+					         				(IRStmt)this.children.get(1).irNode);
+			} else {
+				this.children.get(0).generateIR(funcs);
+				this.children.get(1).generateIR(funcs);
+				this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, label),
+		                 				new IRLabel(label),
+		                 				new IRCJump((IRExpr)this.children.get(1).irNode, trueLabel, falseLabel));
+			}
+		} 
+	}
 
 }
