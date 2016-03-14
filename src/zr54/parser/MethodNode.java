@@ -127,7 +127,7 @@ public class MethodNode extends AstNode{
 		int i;
 		
 		for (i=0;i<this.children.get(0).children.size();i++){
-			curr=this.children.get(i);
+			curr=this.children.get(0).children.get(i);
 			
 			l.add(new IRMove(new IRTemp((String)curr.symbol.value), 
 					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i)));
