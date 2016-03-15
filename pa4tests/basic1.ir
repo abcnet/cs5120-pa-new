@@ -7,18 +7,20 @@
    (MOVE (TEMP x) (EQ (CONST 6) (CONST 7)))
    (MOVE (TEMP y) (CONST 10))
    (CJUMP
-    (EQ
-     (GT (TEMP y) (CONST 10))
-     (ESEQ
-      (SEQ
-       (MOVE (TEMP var_5) (CONST 0))
-       (CJUMP (CONST 0) L_3 L_false_2)
-       (LABEL L_3)
-       (CJUMP (GT (TEMP y) (CONST 8)) L_4 L_false_2)
-       (LABEL L_4)
-       (MOVE (TEMP var_5) (CONST 1))
-       (LABEL L_false_2))
-      (TEMP var_5)))
+    (XOR
+     (EQ
+      (GT (TEMP y) (CONST 10))
+      (ESEQ
+       (SEQ
+        (MOVE (TEMP var_5) (CONST 0))
+        (CJUMP (CONST 0) L_3 L_false_2)
+        (LABEL L_3)
+        (CJUMP (GT (TEMP y) (CONST 8)) L_4 L_false_2)
+        (LABEL L_4)
+        (MOVE (TEMP var_5) (CONST 1))
+        (LABEL L_false_2))
+       (TEMP var_5)))
+     (CONST 1))
     L_true_0
     L_false_1)
    (LABEL L_true_0)

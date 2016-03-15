@@ -47,11 +47,6 @@ public class NotNode extends UnaryExprNode{
 	}
 	
 	@Override
-	public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel) {
-		// TODO need to implement this
-	}
-
-	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
 		return false;
