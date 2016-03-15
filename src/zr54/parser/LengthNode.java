@@ -1,6 +1,6 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -40,6 +40,10 @@ public class LengthNode extends ExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		super.generateIR(funcs);
+		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.SUB, 
+											(IRExpr) children.get(0).irNode,
+											new IRConst(8)));
 	}
 
 	@Override
