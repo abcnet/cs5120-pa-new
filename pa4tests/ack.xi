@@ -2,6 +2,7 @@ use io
 use conv
 
 usage() {
+	t:bool = !true;
     println("Please specify the input size")
 }
 
