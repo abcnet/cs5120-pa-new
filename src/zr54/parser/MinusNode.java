@@ -43,7 +43,7 @@ public class MinusNode extends UnaryExprNode{
 		// TODO Auto-generated method stub
 		super.generateIR(funcs);
 		AstNode child = children.get(0);
-		if(child.name.equals("STRING_LITERAL")) {
+		if(child.name.equals("INTEGER_LITERAL")) {
 			int value = Integer.parseInt("-" + (String)this.symbol.value);
 			this.irNode = new IRConst(value);
 		} else {
