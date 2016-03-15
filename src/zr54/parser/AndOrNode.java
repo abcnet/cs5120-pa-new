@@ -1,17 +1,14 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRConst;
 import edu.cornell.cs.cs4120.xic.ir.IRESeq;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRLabel;
 import edu.cornell.cs.cs4120.xic.ir.IRMove;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
-import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -57,7 +54,7 @@ public class AndOrNode extends BoolBinaryExprNode {
 			String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
 			String label1 = "L_"+Integer.toString(AstNode.counter++);
 			String label2 = "L_"+Integer.toString(AstNode.counter++);
-			String var = "var_"+Integer.toString(AstNode.counter++);
+			String var = "_var_"+Integer.toString(AstNode.counter++);
 			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(0)),
 					                 new IRCJump((IRExpr)this.children.get(0).irNode, label1, falseLabel),
 									 new IRLabel(label1),
@@ -70,7 +67,7 @@ public class AndOrNode extends BoolBinaryExprNode {
 			String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
 			String label1 = "L_"+Integer.toString(AstNode.counter++);
 			String label2 = "L_"+Integer.toString(AstNode.counter++);
-			String var = "var_"+Integer.toString(AstNode.counter++);
+			String var = "_var_"+Integer.toString(AstNode.counter++);
 			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(1)),
 	                 				 new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, label1),
 	                 				 new IRLabel(label1),
