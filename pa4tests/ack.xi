@@ -4,7 +4,9 @@ use conv
 usage() {
 	t:bool = !true;
 	a:int = -263;
-	b:int = -(a+1);
+	b:int = -(a+1)
+	c:int[3] = {1, 2, 3};
+	d:int = length(c);
     println("Please specify the input size")
 }
 
