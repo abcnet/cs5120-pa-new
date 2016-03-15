@@ -3,6 +3,8 @@ use conv
 
 usage() {
 	t:bool = !true;
+	a:int = -263;
+	b:int = -(a+1);
     println("Please specify the input size")
 }
 

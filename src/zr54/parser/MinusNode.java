@@ -1,6 +1,6 @@
 package zr54.parser;
 
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -41,6 +41,16 @@ public class MinusNode extends UnaryExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		super.generateIR(funcs);
+		AstNode child = children.get(0);
+		if(child.name.equals("STRING_LITERAL")) {
+			int value = Integer.parseInt("-" + (String)this.symbol.value);
+			this.irNode = new IRConst(value);
+		} else {
+			this.irNode = new IRBinOp(IRBinOp.OpType.SUB, 
+									   new IRConst(0),
+									   (IRExpr) child.getIRNode());
+		}
 	}
 	
 	@Override

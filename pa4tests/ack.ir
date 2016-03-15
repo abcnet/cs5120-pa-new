@@ -4,6 +4,14 @@
   _Iusage_p
   (SEQ
    (MOVE (TEMP t) (XOR (CONST 1) (CONST 1)))
+   (MOVE (TEMP a) (SUB (CONST 0) (CONST 263)))
+   (MOVE
+    (TEMP b)
+    (SUB
+     (CONST 0)
+     (ESEQ
+      (SEQ (MOVE (TEMP _LEFT) (TEMP a)) (MOVE (TEMP _RIGHT) (CONST 1)))
+      (ADD (TEMP _LEFT) (TEMP _RIGHT)))))
    (EXP
     (CALL
      (NAME _Iprintln_pai)
