@@ -50,8 +50,8 @@ public class ArrayIndicesNode extends BinaryExprNode{
 		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 											new IRTemp((String) arrName.symbol.value),
 											new IRBinOp(IRBinOp.OpType.MUL,
-													(IRExpr)index.getIRNode(),
-													new IRConst(8))));
+														(IRExpr)index.getIRNode(),
+														new IRConst(8))));
 	}
 	
 }

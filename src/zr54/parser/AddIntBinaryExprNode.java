@@ -91,7 +91,11 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			//allocate memory and put is in a temp
 			stmts.add(new IRMove(new IRTemp(arrName), 
 								 new IRCall(new IRName("_I_alloc_i"), 
-											new IRTemp("_LEN"))));
+											new IRBinOp(IRBinOp.OpType.MUL, 
+														new IRBinOp(IRBinOp.OpType.ADD, 
+																	new IRTemp("_LEN"),
+																	new IRConst(1)),
+														new IRConst(8)))));
 
 			//store the length of the array
 			stmts.add(new IRMove(new IRMem(new IRTemp(arrName)), 
