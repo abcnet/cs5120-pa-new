@@ -50,12 +50,33 @@ public class IfElseStmtNode extends StmtNode {
 
 
 	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
-		this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, "L_t", "L_f"),
-                				new IRLabel("L_t"),
-                				(IRStmt)this.children.get(1).irNode,
-                				new IRLabel("L_f"),
-                				(IRStmt)this.children.get(2).irNode);
+		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
+		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+		if (this.children.get(0).symbol.sym == sym.AND
+			|| this.children.get(0).symbol.sym == sym.OR
+			|| this.children.get(0).type.getType() == Type.BOOL) {
+			this.children.get(0).getIRControl(funcs, trueLabel, falseLabel);
+		} else {
+			this.children.get(0).generateIR(funcs);
+		}
+		this.children.get(1).generateIR(funcs);
+		this.children.get(2).generateIR(funcs);
+		if (this.name.equals("ifStatement")) {
+			if (this.children.get(0).symbol.sym == sym.AND
+					|| this.children.get(0).symbol.sym == sym.OR
+					|| this.children.get(0).type.getType() == Type.BOOL) {
+				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
+					                new IRLabel(trueLabel),
+					                (IRStmt)this.children.get(1).irNode,
+					                new IRLabel(falseLabel),
+					                (IRStmt)this.children.get(2).irNode);
+			} else {
+				this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, falseLabel),
+		                new IRLabel(trueLabel),
+		                (IRStmt)this.children.get(1).irNode,
+		                new IRLabel(falseLabel),
+		                (IRStmt)this.children.get(2).irNode);
+			}
+		}
 	}
-
 }

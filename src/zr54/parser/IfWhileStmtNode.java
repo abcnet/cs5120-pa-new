@@ -51,7 +51,8 @@ public class IfWhileStmtNode extends StmtNode{
 		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
 		if (this.children.get(0).symbol.sym == sym.AND
 			|| this.children.get(0).symbol.sym == sym.OR
-			|| this.children.get(0).type.getType() == Type.BOOL) {
+			|| ((String)this.children.get(0).symbol.value).equals("true")
+			|| ((String)this.children.get(0).symbol.value).equals("false")) {
 			this.children.get(0).getIRControl(funcs, trueLabel, falseLabel);
 		} else {
 			this.children.get(0).generateIR(funcs);
@@ -60,7 +61,8 @@ public class IfWhileStmtNode extends StmtNode{
 		if (this.name.equals("ifStatement")) {
 			if (this.children.get(0).symbol.sym == sym.AND
 					|| this.children.get(0).symbol.sym == sym.OR
-					|| this.children.get(0).type.getType() == Type.BOOL) {
+					|| ((String)this.children.get(0).symbol.value).equals("true")
+					|| ((String)this.children.get(0).symbol.value).equals("false")) {
 				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
 					                new IRLabel(trueLabel),
 					                (IRStmt)this.children.get(1).irNode,
@@ -75,7 +77,8 @@ public class IfWhileStmtNode extends StmtNode{
 			String label = "L_"+Integer.toString(AstNode.counter++);
 			if (this.children.get(0).symbol.sym == sym.AND
 					|| this.children.get(0).symbol.sym == sym.OR
-					|| this.children.get(0).type.getType() == Type.BOOL) {
+					|| ((String)this.children.get(0).symbol.value).equals("true")
+					|| ((String)this.children.get(0).symbol.value).equals("false")) {
 			this.irNode = new IRSeq(new IRLabel(label),
 					                (IRStmt)this.children.get(0).irNode,
 					                new IRLabel(trueLabel),
