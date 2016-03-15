@@ -4,26 +4,26 @@
   _If_i
   (SEQ
    (MOVE (TEMP y) (CONST 5))
-   (MOVE
-    (TEMP x)
-    (ESEQ
-     (SEQ
-      (MOVE (TEMP var_3) (CONST 0))
-      (CJUMP (LT (TEMP y) (CONST 5)) L_1 L_false_0)
-      (LABEL L_1)
-      (CJUMP (CONST 1) L_2 L_false_0)
-      (LABEL L_2)
-      (MOVE (TEMP var_3) (CONST 1))
-      (LABEL L_false_0))
-     (TEMP var_3)))
+   (MOVE (TEMP x) (EQ (CONST 6) (CONST 7)))
    (MOVE (TEMP y) (CONST 10))
-   (SEQ
-    (CJUMP (GT (TEMP y) (CONST 6)) L_6 L_false_5)
-    (LABEL L_6)
-    (CJUMP (LT (TEMP y) (CONST 7)) L_true_4 L_false_5))
-   (LABEL L_true_4)
+   (CJUMP
+    (EQ
+     (GT (TEMP y) (CONST 10))
+     (ESEQ
+      (SEQ
+       (MOVE (TEMP var_5) (CONST 0))
+       (CJUMP (CONST 0) L_3 L_false_2)
+       (LABEL L_3)
+       (CJUMP (GT (TEMP y) (CONST 8)) L_4 L_false_2)
+       (LABEL L_4)
+       (MOVE (TEMP var_5) (CONST 1))
+       (LABEL L_false_2))
+      (TEMP var_5)))
+    L_true_0
+    L_false_1)
+   (LABEL L_true_0)
    (SEQ (MOVE (TEMP y) (CONST 10)) (MOVE (TEMP y) (CONST 20)))
-   (LABEL L_false_5)
+   (LABEL L_false_1)
    (SEQ (MOVE (TEMP y) (CONST 17)))
    (MOVE (TEMP _RET0) (CONST 1))
    (RETURN))))

@@ -1,8 +1,8 @@
 f():int{
 	y:int = 5
-	x:bool = y < 5 & true
+	x:bool = 6 == 7
 	y = 10
-	if (y > 6 & y < 7) {
+	if (y > 10 == (false & y > 8)) {
 		y = 10
 		y = 20	
 	}
