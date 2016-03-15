@@ -5,7 +5,7 @@
   (SEQ
    (EXP
     (CALL
-     (NAME println)
+     (NAME _Iprintln_pai)
      (ESEQ
       (SEQ
        (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 256)))

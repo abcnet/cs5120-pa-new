@@ -41,7 +41,7 @@ public class IfWhileStmtNode extends StmtNode{
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
 		this.children.get(1).typeCheck(tempScope, funcs);
-
+		vars.returned = tempScope.returned;
 		type = new Type();
 		return type;
     }

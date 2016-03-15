@@ -40,6 +40,7 @@ public class BlockNode extends StmtNode{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 		this.children.get(0).typeCheck(tempScope, funcs);
+		vars.returned = tempScope.returned;
 		type = new Type();
 
 		return type;

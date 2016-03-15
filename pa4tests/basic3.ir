@@ -10,10 +10,10 @@
     (TEMP _RET1)
     (ESEQ
      (SEQ
-      (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 24)))
-      (MOVE (MEM (TEMP _ARR0)) (CONST 2))
-      (MOVE (TEMP _ARR0) (ADD (TEMP _ARR0) (CONST 1)))
-      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 0))) (CONST 0))
-      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 1))) (CONST 1)))
-     (TEMP _ARR0)))
+      (MOVE (TEMP _ARR5) (CALL (NAME _I_alloc_i) (CONST 24)))
+      (MOVE (MEM (TEMP _ARR5)) (CONST 2))
+      (MOVE (TEMP _ARR5) (ADD (TEMP _ARR5) (CONST 1)))
+      (MOVE (MEM (ADD (TEMP _ARR5) (CONST 0))) (CONST 0))
+      (MOVE (MEM (ADD (TEMP _ARR5) (CONST 1))) (CONST 1)))
+     (TEMP _ARR5)))
    (RETURN))))

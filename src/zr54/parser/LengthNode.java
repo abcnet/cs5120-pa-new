@@ -29,7 +29,7 @@ public class LengthNode extends ExprNode{
 
 		Type t1 = this.children.get(0).typeCheck(vars, funcs);
 		if  (t1.getDimension() >= 1) {
-			type = new Type(t1.getType(), t1.getDimension()-1);
+			type = new Type(Type.INT,0);
 		} else {
 			throw new XiException(this.symbol.left,this.symbol.right,"operand of 'length' must be array", "Semantic");
 		}

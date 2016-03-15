@@ -1,5 +1,7 @@
 package zr54.parser;
 
+import java.util.ArrayList;
+
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRLabel;
@@ -41,8 +43,21 @@ public class IfElseStmtNode extends StmtNode {
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
 		this.children.get(1).typeCheck(tempScope, funcs);
+		ArrayList<Type> returned1 = tempScope.returned;
 		this.children.get(2).typeCheck(tempScope, funcs);
-
+		ArrayList<Type> returned2 = tempScope.returned;
+		if(returned1.size()!=returned2.size()){
+			throw new XiException(this.children.get(2).symbol,"Mismatched return types", "Semantic");
+		
+		}else{
+			for(int i=0;i<returned1.size();i++){
+				if(returned1.get(i).matches(returned2.get(i))==false){
+					throw new XiException(this.children.get(2).symbol,"Mismatched return types", "Semantic");
+					
+				}
+			}
+		}
+		vars.returned = tempScope.returned;
 		type = new Type();
 		return type;
 	}

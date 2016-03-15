@@ -146,6 +146,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       ;
 
 optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new ReturnNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
+                      | RETURN:ret {: RESULT = new ReturnNode("optionalReturn", ret); :}
                       |
                       ;
 
