@@ -78,11 +78,11 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			stmts.add(new IRMove(new IRTemp("_LEN1"), 
 								 new IRMem(new IRBinOp(IRBinOp.OpType.SUB,
 										 			   (IRExpr) c1.getIRNode(),
-										 			   new IRConst(1)))));
+										 			   new IRConst(8)))));
 			stmts.add(new IRMove(new IRTemp("_LEN2"), 
 								 new IRMem(new IRBinOp(IRBinOp.OpType.SUB,
 										 			   (IRExpr) c2.getIRNode(),
-										 			   new IRConst(1)))));
+										 			   new IRConst(8)))));
 			stmts.add(new IRMove(new IRTemp("_LEN"), 
 								 new IRBinOp(IRBinOp.OpType.ADD,
 										     new IRTemp("_LEN1"),
@@ -101,7 +101,7 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			stmts.add(new IRMove(new IRTemp(arrName), 
 								 new IRBinOp(IRBinOp.OpType.ADD, 
 								    		 new IRTemp(arrName),
-											 new IRConst(1))));
+											 new IRConst(8))));
 			
 			//put the entries of the first child in the new array
 			stmts.add(new IRSeq(new IRMove(new IRTemp("_COUNT"),
@@ -114,10 +114,14 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 								new IRLabel("L_t"),
 								new IRMove(new IRMem(new IRBinOp(OpType.ADD,
 																 new IRTemp(arrName),
-																 new IRTemp("_COUNT"))),
+																 new IRBinOp(OpType.MUL, 
+																		 	 new IRTemp("_COUNT"), 
+																		 	 new IRConst(8)))),
 										   new IRMem(new IRBinOp(OpType.ADD,
 												   				 new IRTemp(c1Name),
-												   				 new IRTemp("_COUNT")))),
+												   				 new IRBinOp(OpType.MUL, 
+												   						 new IRTemp("_COUNT"),
+												   						 new IRConst(8))))),
 								new IRMove(new IRTemp("_COUNT"),
 										   new IRBinOp(OpType.ADD,
 												   	   new IRTemp("_COUNT"),
@@ -137,12 +141,16 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 								new IRLabel("L_t"),
 								new IRMove(new IRMem(new IRBinOp(OpType.ADD,
 													 			 new IRTemp(arrName),
-													 			 new IRBinOp(OpType.ADD, 
-													 					 	 new IRTemp("_COUNT"),
-													 					 	 new IRTemp("_LEN1")))),
+													 			 new IRBinOp(OpType.MUL, 
+													 					 	 new IRBinOp(OpType.ADD, 
+													 					 			 	 new IRTemp("_COUNT"),
+													 					 			 	 new IRTemp("_LEN1")),
+													 					 	 new IRConst(8)))),
 										   new IRMem(new IRBinOp(OpType.ADD,
 												   	 			 new IRTemp(c2Name),
-												   	 			 new IRTemp("_COUNT")))),
+												   	 			 new IRBinOp(OpType.MUL, 
+												   	 					 	 new IRTemp("_COUNT"),
+												   	 					 	 new IRConst(8))))),
 								new IRMove(new IRTemp("_COUNT"),
 										   new IRBinOp(OpType.ADD,
 												   	   new IRTemp("_COUNT"),

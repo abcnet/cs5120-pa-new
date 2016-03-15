@@ -86,13 +86,13 @@ public class ArrayLiteralNode extends ExprNode{
 		stmts.add(new IRMove(new IRTemp(arrName), 
 							 new IRBinOp(IRBinOp.OpType.ADD, 
 							    		 new IRTemp(arrName),
-										 new IRConst(1))));
+										 new IRConst(8))));
 
 		//put the values in the memory
 		for(int i = 0; i < children.size(); i++) {
 			stmts.add(new IRMove(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 														  new IRTemp(arrName),
-														  new IRConst(i))),
+														  new IRConst(i*8))),
 									(IRExpr) children.get(i).getIRNode())
 						);
 		}

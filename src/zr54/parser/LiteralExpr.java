@@ -67,13 +67,13 @@ public class LiteralExpr extends ExprNode {
 			stmts.add(new IRMove(new IRTemp(arrName), 
 								 new IRBinOp(IRBinOp.OpType.ADD, 
 								    		 new IRTemp(arrName),
-											 new IRConst(1))));
+											 new IRConst(8))));
 
 			//put the values in the memory
 			for(int i = 0; i < len; i++) {
 				stmts.add(new IRMove(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 															  new IRTemp(arrName),
-															  new IRConst(i))),
+															  new IRConst(i*8))),
 									 new IRConst((int)str.charAt(i)))
 							);
 			}

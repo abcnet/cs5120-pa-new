@@ -45,9 +45,13 @@ public class ArrayIndicesNode extends BinaryExprNode{
 		super.generateIR(funcs);
 		AstNode arrName = children.get(0);
 		AstNode index = children.get(1);
+	
+		//TODO: constant folding if 
 		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 											new IRTemp((String) arrName.symbol.value),
-											(IRExpr)index.getIRNode()));
+											new IRBinOp(IRBinOp.OpType.MUL,
+													(IRExpr)index.getIRNode(),
+													new IRConst(8))));
 	}
 	
 }
