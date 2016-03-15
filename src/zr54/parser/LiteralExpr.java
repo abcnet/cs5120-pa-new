@@ -39,11 +39,15 @@ public class LiteralExpr extends ExprNode {
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		if (this.dimension==0 && this.type.getType() == Type.INT){
+		if (this.name.equals("INTEGER_LITERAL")){
 			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));
-		}else if (this.dimension==0 && this.type.getType() == Type.BOOL){
+		}else if (this.name.equals("BOOLEAN_LITERAL")){
 			this.irNode = new IRConst(((String)this.symbol.value).equals("true")?1:0);
-		}else if(this.name.equals("STRING_LITERAL")){
+		}else if(this.name.equals("CHARACTER_LITERAL")){
+			String str = (String) this.symbol.value;
+			this.irNode = new IRConst(str.charAt(0));
+		}
+		else if(this.name.equals("STRING_LITERAL")){
 			//string literal: return a integer array
 			
 			regNum = arrNum;
