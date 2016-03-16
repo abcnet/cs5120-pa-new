@@ -65,14 +65,19 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		switch(this.symbol.sym) {
 		case sym.MINUS:
 			op = OpType.SUB;
+			break;
 		case sym.MULT:
 			op = OpType.MUL;
+			break;
 		case sym.HIGHMULT:
 			op = OpType.HMUL;
+			break;
 		case sym.DIV:
 			op = OpType.DIV;
+			break;
 		case sym.MOD:
 			op = OpType.MOD;
+			break;
 		}
 		
 		this.irNode = new IRESeq(new IRSeq(stmts), 

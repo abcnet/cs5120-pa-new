@@ -6,9 +6,10 @@ use conv
 gcd(a:int, b:int):int {
     while (a != 0) {
         if (a<b) b = b - a
-     //   else a = a - b
-	c:int[] = unparseInt(a)+"nima"
-	print(c+"nima")
+        else a = a - b
+	c:int[] = unparseInt(a)
+	print("c"+"nima")
+	print(c)
     }
     return b
 }
