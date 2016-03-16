@@ -1,0 +1,211 @@
+(COMPUNIT
+ primesTest
+ (FUNC
+  _Igcd_iii
+  (SEQ
+   (MOVE (TEMP a) (TEMP _ARG0))
+   (MOVE (TEMP b) (TEMP _ARG1))
+   (LABEL L_91)
+   (CJUMP (NEQ (TEMP a) (CONST 0)) L_true_86 L_false_87)
+   (LABEL L_true_86)
+   (SEQ
+    (SEQ
+     (CJUMP (LT (TEMP a) (TEMP b)) L_true_88 L_false_89)
+     (LABEL L_true_88)
+     (MOVE
+      (TEMP b)
+      (ESEQ
+       (SEQ (MOVE (TEMP _LEFT) (TEMP b)) (MOVE (TEMP _RIGHT) (TEMP a)))
+       (SUB (TEMP _LEFT) (TEMP _RIGHT))))
+     (JUMP (NAME L_end_90))
+     (LABEL L_false_89)
+     (MOVE
+      (TEMP a)
+      (ESEQ
+       (SEQ (MOVE (TEMP _LEFT) (TEMP a)) (MOVE (TEMP _RIGHT) (TEMP b)))
+       (SUB (TEMP _LEFT) (TEMP _RIGHT))))
+     (LABEL L_end_90)))
+   (JUMP (NAME L_91))
+   (LABEL L_false_87)
+   (MOVE (TEMP _RET0) (TEMP b))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _Iisprime_bi
+  (SEQ
+   (MOVE (TEMP n) (TEMP _ARG0))
+   (MOVE (TEMP i) (CONST 2))
+   (LABEL L_96)
+   (CJUMP
+    (LEQ
+     (ESEQ (SEQ (MOVE (TEMP _LEFT) (TEMP i)) (MOVE (TEMP _RIGHT) (TEMP i)))
+      (MUL (TEMP _LEFT) (TEMP _RIGHT)))
+     (TEMP n))
+    L_true_92
+    L_false_93)
+   (LABEL L_true_92)
+   (SEQ
+    (SEQ
+     (CJUMP (NEQ (CALL (NAME _Igcd_iii) (TEMP i) (TEMP n)) (CONST 1)) L_true_94
+      L_false_95)
+     (LABEL L_true_94)
+     (SEQ (MOVE (TEMP _RET0) (CONST 0)) (RETURN))
+     (LABEL L_false_95))
+    (MOVE
+     (TEMP i)
+     (ESEQ
+      (SEQ (MOVE (TEMP _LEFT) (TEMP i)) (MOVE (TEMP _RIGHT) (CONST 1)))
+      (ADD (TEMP _LEFT) (TEMP _RIGHT)))))
+   (JUMP (NAME L_96))
+   (LABEL L_false_93)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _Ilargestprime_ii
+  (SEQ
+   (MOVE (TEMP max) (TEMP _ARG0))
+   (MOVE (TEMP a) (CONST 1))
+   (MOVE (TEMP largest) (CONST 1))
+   (LABEL L_101)
+   (CJUMP (LT (TEMP a) (TEMP max)) L_true_97 L_false_98)
+   (LABEL L_true_97)
+   (SEQ
+    (SEQ
+     (CJUMP (CALL (NAME _Iisprime_bi) (TEMP a)) L_true_99 L_false_100)
+     (LABEL L_true_99)
+     (MOVE (TEMP largest) (TEMP a))
+     (LABEL L_false_100))
+    (MOVE
+     (TEMP a)
+     (ESEQ
+      (SEQ (MOVE (TEMP _LEFT) (TEMP a)) (MOVE (TEMP _RIGHT) (CONST 1)))
+      (ADD (TEMP _LEFT) (TEMP _RIGHT)))))
+   (JUMP (NAME L_101))
+   (LABEL L_false_98)
+   (MOVE (TEMP _RET0) (TEMP largest))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _Imain_paai
+  (SEQ
+   (MOVE (TEMP args) (TEMP _ARG0))
+   (CJUMP (CALL (NAME _Iisprime_bi) (CONST 18)) L_true_102 L_false_103)
+   (LABEL L_true_102)
+   (EXP
+    (CALL
+     (NAME _Iprint_pai)
+     (ESEQ
+      (SEQ
+       (MOVE (TEMP _ARR24) (CALL (NAME _I_alloc_i) (CONST 48)))
+       (MOVE (MEM (TEMP _ARR24)) (CONST 5))
+       (MOVE (TEMP _ARR24) (ADD (TEMP _ARR24) (CONST 8)))
+       (MOVE (MEM (ADD (TEMP _ARR24) (CONST 0))) (CONST 112))
+       (MOVE (MEM (ADD (TEMP _ARR24) (CONST 8))) (CONST 114))
+       (MOVE (MEM (ADD (TEMP _ARR24) (CONST 16))) (CONST 105))
+       (MOVE (MEM (ADD (TEMP _ARR24) (CONST 24))) (CONST 109))
+       (MOVE (MEM (ADD (TEMP _ARR24) (CONST 32))) (CONST 101)))
+      (TEMP _ARR24))))
+   (LABEL L_false_103)
+   (MOVE (TEMP c)
+    (CALL (NAME _IunparseInt_aii) (CALL (NAME _Ilargestprime_ii) (CONST 100))))
+   (EXP (CALL (NAME _Iprint_pai) (TEMP c)))
+   (EXP
+    (CALL
+     (NAME _Iprint_pai)
+     (ESEQ
+      (SEQ
+       (MOVE
+        (TEMP _LEN1)
+        (MEM
+         (SUB
+          (ESEQ
+           (SEQ
+            (MOVE (TEMP _ARR25) (CALL (NAME _I_alloc_i) (CONST 304)))
+            (MOVE (MEM (TEMP _ARR25)) (CONST 37))
+            (MOVE (TEMP _ARR25) (ADD (TEMP _ARR25) (CONST 8)))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 0))) (CONST 76))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 8))) (CONST 97))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 16))) (CONST 114))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 24))) (CONST 103))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 32))) (CONST 101))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 40))) (CONST 115))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 48))) (CONST 116))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 56))) (CONST 32))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 64))) (CONST 112))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 72))) (CONST 114))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 80))) (CONST 105))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 88))) (CONST 109))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 96))) (CONST 101))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 104))) (CONST 32))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 112))) (CONST 108))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 120))) (CONST 101))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 128))) (CONST 115))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 136))) (CONST 115))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 144))) (CONST 32))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 152))) (CONST 116))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 160))) (CONST 104))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 168))) (CONST 97))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 176))) (CONST 110))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 184))) (CONST 32))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 192))) (CONST 49))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 200))) (CONST 44))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 208))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 216))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 224))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 232))) (CONST 44))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 240))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 248))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 256))) (CONST 48))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 264))) (CONST 32))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 272))) (CONST 105))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 280))) (CONST 115))
+            (MOVE (MEM (ADD (TEMP _ARR25) (CONST 288))) (CONST 32)))
+           (TEMP _ARR25))
+          (CONST 8))))
+       (MOVE
+        (TEMP _LEN2)
+        (MEM
+         (SUB
+          (ESEQ
+           (SEQ
+            (MOVE (TEMP _ARR26) (CALL (NAME _I_alloc_i) (CONST 56)))
+            (MOVE (MEM (TEMP _ARR26)) (CONST 6))
+            (MOVE (TEMP _ARR26) (ADD (TEMP _ARR26) (CONST 8)))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 0))) (CONST 116))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 8))) (CONST 101))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 16))) (CONST 115))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 24))) (CONST 116))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 32))) (CONST 92))
+            (MOVE (MEM (ADD (TEMP _ARR26) (CONST 40))) (CONST 110)))
+           (TEMP _ARR26))
+          (CONST 8))))
+       (MOVE (TEMP _LEN) (ADD (TEMP _LEN1) (TEMP _LEN2)))
+       (MOVE (TEMP _ARR27)
+        (CALL (NAME _I_alloc_i) (MUL (ADD (TEMP _LEN) (CONST 1)) (CONST 8))))
+       (MOVE (MEM (TEMP _ARR27)) (TEMP _LEN))
+       (MOVE (TEMP _ARR27) (ADD (TEMP _ARR27) (CONST 8)))
+       (SEQ
+        (MOVE (TEMP _COUNT) (CONST 0))
+        (LABEL L104)
+        (CJUMP (LT (TEMP _COUNT) (TEMP _LEN1)) L_t105 L_f106)
+        (LABEL L_t105)
+        (MOVE (MEM (ADD (TEMP _ARR27) (MUL (TEMP _COUNT) (CONST 8))))
+         (MEM (ADD (TEMP _ARR25) (MUL (TEMP _COUNT) (CONST 8)))))
+        (MOVE (TEMP _COUNT) (ADD (TEMP _COUNT) (CONST 1)))
+        (JUMP (NAME L104))
+        (LABEL L_f106))
+       (SEQ
+        (MOVE (TEMP _COUNT) (CONST 0))
+        (LABEL L107)
+        (CJUMP (LT (TEMP _COUNT) (TEMP _LEN2)) L_t108 L_f109)
+        (LABEL L_t108)
+        (MOVE
+         (MEM
+          (ADD (TEMP _ARR27) (MUL (ADD (TEMP _COUNT) (TEMP _LEN1)) (CONST 8))))
+         (MEM (ADD (TEMP _ARR26) (MUL (TEMP _COUNT) (CONST 8)))))
+        (MOVE (TEMP _COUNT) (ADD (TEMP _COUNT) (CONST 1)))
+        (JUMP (NAME L107))
+        (LABEL L_f109)))
+      (TEMP _ARR27))))
+   (RETURN))))

@@ -92,6 +92,8 @@ public class IRGenerate {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					System.out.println("Error in "+dstFile);
+				}finally{
+					printer.flush();
 				}
 								
 //			}catch(Exception e){
