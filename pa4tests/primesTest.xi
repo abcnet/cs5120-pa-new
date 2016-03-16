@@ -5,11 +5,10 @@ use conv
 
 gcd(a:int, b:int):int {
     while (a != 0) {
-        if (a<b) b = b - a
-        else a = a - b
-	c:int[] = unparseInt(a)
-	print("c"+"nima")
-	print(c)
+        if (a<b)
+	    b = b - a 
+        else 
+	     a = a - b
     }
     return b
 }
@@ -39,7 +38,7 @@ gcd(a:int, b:int):int {
 //    print("Largest prime less than 1,000,000 is " + unparseInt(largestprime(1000000)))
 //}
 main(args:int[][]) {
-		   b:int = gcd(4,12)
+		   b:int = gcd(96,128)
 		   a:int[] = unparseInt(b)
 	print("Largest prime less than 1,000,000 is " + "test\n")		
 	print(a)
