@@ -19,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[7];
+        LongOpt[] longopts = new LongOpt[8];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -29,12 +29,13 @@ class XiCompiler {
         longopts[4] = new LongOpt("sourcepath", LongOpt.REQUIRED_ARGUMENT, null, 4);
         longopts[5] = new LongOpt("libpath", LongOpt.REQUIRED_ARGUMENT, null, 5);
         longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
+        longopts[7] = new LongOpt("irrun", LongOpt.NO_ARGUMENT, null, 7);
 
         Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
-            "options: --help | --lex | --parse | --typecheck | --irgen\n" +
+            "options: --help | --lex | --parse | --typecheck | --irgen | --irrun\n" +
             "libpath: -libpath <path>\n" +
             "srcpath: -sourcepath <path>\n" +
             "dstpath: -D <path>";
@@ -62,6 +63,8 @@ class XiCompiler {
                 		break;
                 case 6: op = (op == "") ? "irgen" : "error";
                 		break;
+                case 7: op = (op == "") ? "irrun" : "error";
+        				break;
                 case 'D': arg = g.getOptarg();
                           dstPath = arg;
                           break;
@@ -107,7 +110,10 @@ class XiCompiler {
                 TypeCheck.typeCheckAndPrint(src, dst, libPath+"/");
             } else if (op == "irgen") {
             	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/");
+            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", false);
+            } else if (op == "irrun") {
+            	dst = dst + ".ir";
+            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", true);
             }
         }
     }
