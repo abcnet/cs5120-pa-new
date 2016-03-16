@@ -5,24 +5,22 @@ use conv
 
 gcd(a:int, b:int):int {
     while (a != 0) {
-        if (a<b)
-	    b = b - a 
-        else 
-	     a = a - b
+        if (a<b) b = b - a 
+        else a = a - b
     }
     return b
 }
 
-//isprime(n:int):bool {
-//    i:int = 2
-//    while (i*i <= n) {
-//        if (gcd(i, n) != 1) {
-//            return false
-//        }
-//        i = i+1
-//    }
-//    return true
-//}
+isprime(n:int):bool {
+    i:int = 2
+    while (i*i <= n) {
+        if (gcd(i, n) != 1) {
+            return false
+        }
+        i = i+1
+    }
+    return true
+}
 
 //largestprime(max:int):int {
 //    a:int = 1
@@ -38,9 +36,7 @@ gcd(a:int, b:int):int {
 //    print("Largest prime less than 1,000,000 is " + unparseInt(largestprime(1000000)))
 //}
 main(args:int[][]) {
-		   b:int = gcd(96,128)
-		   a:int[] = unparseInt(b)
+		   if(isprime(7))
+			print("prime")
 	print("Largest prime less than 1,000,000 is " + "test\n")		
-	print(a)
-return
 }

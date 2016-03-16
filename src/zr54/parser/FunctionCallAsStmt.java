@@ -7,7 +7,7 @@ import zr54.typechecker.FuncSymbolTable;
 
 public class FunctionCallAsStmt extends FunctionCallNode {
 
-	public FunctionCallAsStmt(FunctionCallNode f) {
+	public FunctionCallAsStmt(AstNode f) {
 		super(f.name,f.symbol);
 		
 		this.children=f.children;
