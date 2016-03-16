@@ -48,7 +48,7 @@ public class ArrayIndicesNode extends BinaryExprNode{
 	
 		//TODO: constant folding if 
 		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
-											new IRTemp(arrName.getRegName()),
+											(IRExpr) arrName.irNode,
 											new IRBinOp(IRBinOp.OpType.MUL,
 														(IRExpr)index.getIRNode(),
 														new IRConst(8))));
