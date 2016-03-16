@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java.util.ArrayList;
 
+import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
@@ -26,6 +27,20 @@ public class LiteralExpr extends ExprNode {
 
 	}
 
+	@Override
+	public void print(CodeWriterSExpPrinter printer) {
+		if (this.name.equals("INTEGER_LITERAL")){
+			printer.printAtom((String) symbol.value);
+		}else if (this.name.equals("BOOLEAN_LITERAL")){
+			printer.printAtom((String) symbol.value);
+		}else if(this.name.equals("CHARACTER_LITERAL")){
+			printer.printAtom("\'"+(String) symbol.value+"\'");
+		}
+		else if(this.name.equals("STRING_LITERAL")){
+			printer.printAtom("\""+(String) symbol.value+"\"");
+		}
+	}
+	
 	/*
 	 * type checking
 	 */
