@@ -57,7 +57,7 @@ public class LiteralExpr extends ExprNode {
 		}else if (this.name.equals("BOOLEAN_LITERAL")){
 			this.irNode = new IRConst(((String)this.symbol.value).equals("true")?1:0);
 		}else if(this.name.equals("CHARACTER_LITERAL")){
-			String str = (String) this.symbol.value;
+			String str = ((Character) this.symbol.value).toString();
 			this.irNode = new IRConst(str.charAt(0));
 		}
 		else if(this.name.equals("STRING_LITERAL")){
