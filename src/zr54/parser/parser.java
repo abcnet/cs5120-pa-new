@@ -1160,7 +1160,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode f = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = f; 
+                 RESULT = new FunctionCallAsStmt(f); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

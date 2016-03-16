@@ -137,7 +137,7 @@ statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("stateme
                       | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addChild(s); :}
                       ;
 
-statement           ::= functionCall:f optionalSemicolon         {: RESULT = f; :}
+statement           ::= functionCall:f optionalSemicolon         {: RESULT = new FunctionCallAsStmt(f); :}
                       | assignment:a optionalSemicolon           {: RESULT = a; :}
                       | ifStatement:s                            {: RESULT = s; :}
                       | whileStatement:s                         {: RESULT = s; :}
