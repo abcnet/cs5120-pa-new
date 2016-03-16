@@ -79,10 +79,13 @@ public class AssignStmtNode extends StmtNode{
 		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
 		moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
 		
-		for(int i = 1; i < children.get(0).getChildren().size(); i++) {
-			moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 
-								 (IRExpr)new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i)));
+		if(children.get(0) instanceof MultiVariableNode) {
+			for(int i = 1; i < children.get(0).getChildren().size(); i++) {
+				moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 
+						(IRExpr)new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i)));
+			}
 		}
+		
 		if(moves.size() == 1)
 			this.irNode = moves.get(0);
 		else 

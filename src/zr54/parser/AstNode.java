@@ -21,6 +21,9 @@ public abstract class AstNode {
 	//ths number is used to distinguish different arrays 
 	protected int regNum = -1;
 	
+	//this is used to distinguish variables of the same name in different methods
+	public static String currMethod = "";
+	
 	protected String name = "";
 	protected Symbol symbol = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
@@ -260,7 +263,7 @@ public abstract class AstNode {
     }
     
     public String getRegName() {
-    	return "reg";
+    	return "ThisShouldNotBeCalled";
     }
     
     public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel){}

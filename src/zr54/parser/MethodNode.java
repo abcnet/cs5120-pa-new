@@ -121,6 +121,7 @@ public class MethodNode extends AstNode{
 
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
+		AstNode.currMethod = (String)this.symbol.value; 
 		AstNode curr;
 		
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
@@ -129,7 +130,7 @@ public class MethodNode extends AstNode{
 		for (i=0;i<this.children.get(0).children.size();i++){
 			curr=this.children.get(0).children.get(i);
 			
-			l.add(new IRMove(new IRTemp((String)curr.symbol.value), 
+			l.add(new IRMove(new IRTemp(curr.getRegName()), 
 					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i)));
 		}
 

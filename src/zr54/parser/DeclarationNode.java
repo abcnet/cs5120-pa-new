@@ -42,8 +42,8 @@ public class DeclarationNode extends AstNode {
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		this.irNode = new IRTemp((String) symbol.value);
-		// array declaration not finished a:int[2][];
+		this.irNode = new IRTemp(getRegName());
+		// TODO: array declaration not finished a:int[2][];
 	}
 
 	@Override
@@ -51,4 +51,11 @@ public class DeclarationNode extends AstNode {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	@Override
+	public String getRegName(){
+		return (String)symbol.value + "_" + AstNode.currMethod;
+
+	}
+	
 }

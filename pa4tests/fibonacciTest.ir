@@ -3,10 +3,10 @@
  (FUNC
   _Ifib_ii
   (SEQ
-   (MOVE (TEMP i) (TEMP _ARG0))
-   (CJUMP (LT (TEMP i) (CONST 2)) L_true_0 L_false_1)
+   (MOVE (TEMP i_fib) (TEMP _ARG0))
+   (CJUMP (LT (TEMP i_fib) (CONST 2)) L_true_0 L_false_1)
    (LABEL L_true_0)
-   (SEQ (MOVE (TEMP _RET0) (TEMP i)) (RETURN))
+   (SEQ (MOVE (TEMP _RET0) (TEMP i_fib)) (RETURN))
    (JUMP (NAME L_end_2))
    (LABEL L_false_1)
    (SEQ
@@ -19,14 +19,18 @@
         (CALL
          (NAME _Ifib_ii)
          (ESEQ
-          (SEQ (MOVE (TEMP _LEFT3) (TEMP i)) (MOVE (TEMP _RIGHT4) (CONST 1)))
+          (SEQ
+           (MOVE (TEMP _LEFT3) (TEMP i_fib))
+           (MOVE (TEMP _RIGHT4) (CONST 1)))
           (SUB (TEMP _LEFT3) (TEMP _RIGHT4)))))
        (MOVE
         (TEMP _RIGHT10)
         (CALL
          (NAME _Ifib_ii)
          (ESEQ
-          (SEQ (MOVE (TEMP _LEFT5) (TEMP i)) (MOVE (TEMP _RIGHT6) (CONST 2)))
+          (SEQ
+           (MOVE (TEMP _LEFT5) (TEMP i_fib))
+           (MOVE (TEMP _RIGHT6) (CONST 2)))
           (SUB (TEMP _LEFT5) (TEMP _RIGHT6))))))
       (ADD (TEMP _LEFT9) (TEMP _RIGHT10))))
     (RETURN))
@@ -35,7 +39,7 @@
  (FUNC
   _Imain_paai
   (SEQ
-   (MOVE (TEMP args) (TEMP _ARG0))
+   (MOVE (TEMP args_main) (TEMP _ARG0))
    (EXP
     (CALL
      (NAME _Iprint_pai)
@@ -78,10 +82,10 @@
        (MOVE (MEM (ADD (TEMP _ARR0) (CONST 248))) (CONST 58))
        (MOVE (MEM (ADD (TEMP _ARR0) (CONST 256))) (CONST 32)))
       (TEMP _ARR0))))
-   (MOVE (TEMP input) (CALL (NAME _Ireadln_ai)))
-   (MOVE (TEMP value) (CALL (NAME _IparseInt_t2ibai) (TEMP input)))
-   (MOVE (TEMP valid) (TEMP _RET1))
-   (CJUMP (XOR (TEMP valid) (CONST 1)) L_true_11 L_false_12)
+   (MOVE (TEMP input_main) (CALL (NAME _Ireadln_ai)))
+   (MOVE (TEMP value_main) (CALL (NAME _IparseInt_t2ibai) (TEMP input_main)))
+   (MOVE (TEMP valid_main) (TEMP _RET1))
+   (CJUMP (XOR (TEMP valid_main) (CONST 1)) L_true_11 L_false_12)
    (LABEL L_true_11)
    (SEQ
     (EXP
@@ -111,5 +115,5 @@
    (LABEL L_false_12)
    (EXP
     (CALL (NAME _Iprintln_pai)
-     (CALL (NAME _IunparseInt_aii) (CALL (NAME _Ifib_ii) (TEMP value)))))
+     (CALL (NAME _IunparseInt_aii) (CALL (NAME _Ifib_ii) (TEMP value_main)))))
    (RETURN))))

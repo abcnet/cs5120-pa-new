@@ -45,9 +45,9 @@
  (FUNC
   _Imain_paai
   (SEQ
-   (MOVE (TEMP args) (TEMP _ARG0))
-   (MOVE (TEMP n) (CONST 7))
-   (MOVE (TEMP r) (CALL (NAME _IAck_iii) (CONST 3) (TEMP n)))
+   (MOVE (TEMP args_main) (TEMP _ARG0))
+   (MOVE (TEMP n_main) (CONST 7))
+   (MOVE (TEMP r_main) (CALL (NAME _IAck_iii) (CONST 3) (TEMP n_main)))
    (EXP
     (CALL
      (NAME _Iprint_pai)
@@ -63,7 +63,7 @@
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 32))) (CONST 51))
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 40))) (CONST 44)))
       (TEMP _ARR1))))
-   (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP n))))
+   (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP n_main))))
    (EXP
     (CALL
      (NAME _Iprint_pai)
@@ -76,7 +76,7 @@
        (MOVE (MEM (ADD (TEMP _ARR2) (CONST 8))) (CONST 58))
        (MOVE (MEM (ADD (TEMP _ARR2) (CONST 16))) (CONST 32)))
       (TEMP _ARR2))))
-   (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP r))))
+   (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP r_main))))
    (EXP
     (CALL
      (NAME _Iprintln_pai)
@@ -90,21 +90,21 @@
  (FUNC
   _IAck_iii
   (SEQ
-   (MOVE (TEMP m) (TEMP _ARG0))
-   (MOVE (TEMP n) (TEMP _ARG1))
-   (CJUMP (EQ (TEMP m) (CONST 0)) L_true_0 L_false_1)
+   (MOVE (TEMP m_Ack) (TEMP _ARG0))
+   (MOVE (TEMP n_Ack) (TEMP _ARG1))
+   (CJUMP (EQ (TEMP m_Ack) (CONST 0)) L_true_0 L_false_1)
    (LABEL L_true_0)
    (SEQ
     (MOVE
      (TEMP _RET0)
      (ESEQ
-      (SEQ (MOVE (TEMP _LEFT5) (TEMP n)) (MOVE (TEMP _RIGHT6) (CONST 1)))
+      (SEQ (MOVE (TEMP _LEFT5) (TEMP n_Ack)) (MOVE (TEMP _RIGHT6) (CONST 1)))
       (ADD (TEMP _LEFT5) (TEMP _RIGHT6))))
     (RETURN))
    (JUMP (NAME L_end_2))
    (LABEL L_false_1)
    (SEQ
-    (CJUMP (EQ (TEMP n) (CONST 0)) L_true_7 L_false_8)
+    (CJUMP (EQ (TEMP n_Ack) (CONST 0)) L_true_7 L_false_8)
     (LABEL L_true_7)
     (SEQ
      (MOVE
@@ -112,7 +112,9 @@
       (CALL
        (NAME _IAck_iii)
        (ESEQ
-        (SEQ (MOVE (TEMP _LEFT10) (TEMP m)) (MOVE (TEMP _RIGHT11) (CONST 1)))
+        (SEQ
+         (MOVE (TEMP _LEFT10) (TEMP m_Ack))
+         (MOVE (TEMP _RIGHT11) (CONST 1)))
         (SUB (TEMP _LEFT10) (TEMP _RIGHT11)))
        (CONST 1)))
      (RETURN))
@@ -124,13 +126,17 @@
       (CALL
        (NAME _IAck_iii)
        (ESEQ
-        (SEQ (MOVE (TEMP _LEFT12) (TEMP m)) (MOVE (TEMP _RIGHT13) (CONST 1)))
+        (SEQ
+         (MOVE (TEMP _LEFT12) (TEMP m_Ack))
+         (MOVE (TEMP _RIGHT13) (CONST 1)))
         (SUB (TEMP _LEFT12) (TEMP _RIGHT13)))
        (CALL
         (NAME _IAck_iii)
-        (TEMP m)
+        (TEMP m_Ack)
         (ESEQ
-         (SEQ (MOVE (TEMP _LEFT14) (TEMP n)) (MOVE (TEMP _RIGHT15) (CONST 1)))
+         (SEQ
+          (MOVE (TEMP _LEFT14) (TEMP n_Ack))
+          (MOVE (TEMP _RIGHT15) (CONST 1)))
          (SUB (TEMP _LEFT14) (TEMP _RIGHT15))))))
      (RETURN))
     (LABEL L_end_9))
