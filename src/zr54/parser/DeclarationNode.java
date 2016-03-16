@@ -43,6 +43,7 @@ public class DeclarationNode extends AstNode {
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		this.irNode = new IRTemp((String) symbol.value);
+		// array declaration not finished a:int[2][];
 	}
 
 	@Override
