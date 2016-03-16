@@ -14,6 +14,10 @@ import zr54.typechecker.VarSymbolTable;
 
 public class BlockNode extends StmtNode{
 
+	public BlockNode(String t, Symbol v) {
+		super(t, v);
+	}
+	
 	/**
 	 * constructor
 	 * @param t

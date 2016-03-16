@@ -21,10 +21,10 @@ public class BinaryExprNode extends ExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		if(this.children.get(0).irNode==null){
-			this.children.get(0).generateIR(null);
+			this.children.get(0).generateIR(funcs);
 		}
 		if(this.children.get(1).irNode==null){
-			this.children.get(1).generateIR(null);
+			this.children.get(1).generateIR(funcs);
 		}
 	}
 

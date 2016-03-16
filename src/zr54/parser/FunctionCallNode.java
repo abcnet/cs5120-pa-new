@@ -7,7 +7,6 @@ import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
-
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.Type;
@@ -76,10 +75,18 @@ public class FunctionCallNode extends ExprNode{
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR(null);
+				curr.generateIR(funcs);
 			}
 			l.add((IRExpr)curr.irNode);
 		}
+		
+		if(symbol.value == null) 
+			System.out.println("test");
+		
+		funcs.lookup((String)symbol.value);
+		System.out.print(funcs.lookup((String)symbol.value).toString());
+		System.out.print(symbol.value);
+		System.out.print(l);
 		this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);
 	}
 

@@ -93,8 +93,8 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
 
 argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); :}
                       | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
-                      | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); :}
-                      | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); :}
+                      | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value), Type.INT, 0); :}
+                      | STRING_LITERAL:sl       {: RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1); :}
                       | IDENTIFIER:id           {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | functionCall:fc         {: RESULT = fc; :}
                       | arrayLiteral:al         {: RESULT = al; :}
@@ -133,15 +133,15 @@ optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
                             |                      {: RESULT = new DefaultNode("forceParen", null); :}
                             ;
 
-statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
-                      | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(s); :}
+statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
+                      | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addChild(s); :}
                       ;
 
-statement           ::= functionCall:f optionalSemicolon         {: RESULT = new DefaultNode("statement", null, f); :}
-                      | assignment:a optionalSemicolon           {: RESULT = new DefaultNode("statement", null, a); :}
-                      | ifStatement:s                            {: RESULT = new DefaultNode("statement", null, s); :}
-                      | whileStatement:s                         {: RESULT = new DefaultNode("statement", null, s); :}
-                      | argumentWithType:a optionalSemicolon     {: RESULT = new DefaultNode("statement", null, a); :}
+statement           ::= functionCall:f optionalSemicolon         {: RESULT = new FunctionCallAsStmt(f); :}
+                      | assignment:a optionalSemicolon           {: RESULT = a; :}
+                      | ifStatement:s                            {: RESULT = s; :}
+                      | whileStatement:s                         {: RESULT = s; :}
+                      | argumentWithType:a optionalSemicolon     {: RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
                       ;
 
@@ -158,7 +158,7 @@ ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statem
                       | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new IfWhileStmtNode("ifStatement", i, e, s); :}
                       ;
 
-whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatment", w, e, s); :}
+whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatement", w, e, s); :}
                       ;
 
 assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
@@ -222,5 +222,5 @@ methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("metho
                       | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
 
-block               ::= LBRACE:l optionalStatements:os optionalReturn:re RBRACE      {: RESULT = new BlockNode("block", l, os);  if(os != null) os.addChild(re); else RESULT.addChild(re); :}
+block               ::= LBRACE:l optionalStatements:os optionalReturn:re RBRACE      {: RESULT = new BlockNode("block", l);  if(!os.name.equals("forceParen")) {if(re != null) os.addChild(re); RESULT.addChild(os);} else { if(re != null) RESULT.addChild(re); else RESULT.addChild(os); }:}
                       ;

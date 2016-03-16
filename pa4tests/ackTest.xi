@@ -6,7 +6,7 @@ usage() {
 }
 
 main(args:int[][]) {
-    n: int = 11
+    n: int = 7
     r: int = Ack(3, n)
     
     print("Ack(3,")

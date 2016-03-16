@@ -2,11 +2,7 @@ package zr54.parser;
 
 import java.util.ArrayList;
 
-import edu.cornell.cs.cs4120.xic.ir.IRCJump;
-import edu.cornell.cs.cs4120.xic.ir.IRExpr;
-import edu.cornell.cs.cs4120.xic.ir.IRLabel;
-import edu.cornell.cs.cs4120.xic.ir.IRSeq;
-import edu.cornell.cs.cs4120.xic.ir.IRStmt;
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -67,6 +63,7 @@ public class IfElseStmtNode extends StmtNode {
 	public void generateIR(FuncSymbolTable funcs) {
 		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
 		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+		String endLabel = "L_end_"+Integer.toString(AstNode.counter++);
 		if (this.children.get(0).symbol.sym == sym.AND
 			|| this.children.get(0).symbol.sym == sym.OR
 			|| ((String)this.children.get(0).symbol.value).equals("true")
@@ -85,14 +82,18 @@ public class IfElseStmtNode extends StmtNode {
 				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
 					                new IRLabel(trueLabel),
 					                (IRStmt)this.children.get(1).irNode,
+					                new IRJump(new IRName(endLabel)),
 					                new IRLabel(falseLabel),
-					                (IRStmt)this.children.get(2).irNode);
+					                (IRStmt)this.children.get(2).irNode,
+					                new IRLabel(endLabel));
 			} else {
 				this.irNode = new IRSeq(new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, falseLabel),
 		                new IRLabel(trueLabel),
 		                (IRStmt)this.children.get(1).irNode,
+		                new IRJump(new IRName(endLabel)),
 		                new IRLabel(falseLabel),
-		                (IRStmt)this.children.get(2).irNode);
+		                (IRStmt)this.children.get(2).irNode,
+		                new IRLabel(endLabel));
 			}
 		}
 	}

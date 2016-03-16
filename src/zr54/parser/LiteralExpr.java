@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java.util.ArrayList;
 
+import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
@@ -26,6 +27,18 @@ public class LiteralExpr extends ExprNode {
 
 	}
 
+	@Override
+	public void print(CodeWriterSExpPrinter printer) {
+		if(this.name.equals("CHARACTER_LITERAL")){
+			printer.printAtom("\'"+(String) symbol.value+"\'");
+		}
+		else if(this.name.equals("STRING_LITERAL")){
+			printer.printAtom("\""+(String) symbol.value+"\"");
+		}else{
+			printer.printAtom((String) symbol.value);
+		}
+	}
+	
 	/*
 	 * type checking
 	 */
@@ -39,11 +52,15 @@ public class LiteralExpr extends ExprNode {
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		if (this.dimension==0 && this.type.getType() == Type.INT){
+		if (this.name.equals("INTEGER_LITERAL")){
 			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));
-		}else if (this.dimension==0 && this.type.getType() == Type.BOOL){
+		}else if (this.name.equals("BOOLEAN_LITERAL")){
 			this.irNode = new IRConst(((String)this.symbol.value).equals("true")?1:0);
-		}else if(this.name.equals("STRING_LITERAL")){
+		}else if(this.name.equals("CHARACTER_LITERAL")){
+			String str = ((Character) this.symbol.value).toString();
+			this.irNode = new IRConst(str.charAt(0));
+		}
+		else if(this.name.equals("STRING_LITERAL")){
 			//string literal: return a integer array
 			
 			regNum = arrNum;

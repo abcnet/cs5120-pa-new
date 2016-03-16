@@ -881,7 +881,7 @@ class CUP$parser$actions {
                 int clleft = CUP$parser$stack.peek().left;
                 int clright = CUP$parser$stack.peek().right;
                 Symbol cl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); 
+                 RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value), Type.INT, 0); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -893,7 +893,7 @@ class CUP$parser$actions {
                 int slleft = CUP$parser$stack.peek().left;
                 int slright = CUP$parser$stack.peek().right;
                 Symbol sl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); 
+                 RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1136,7 +1136,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); 
+                 RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addChild(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1148,7 +1148,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(s); 
+                 RESULT = new StmtsNode("statements", null); RESULT.addChild(s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statements",9, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1160,7 +1160,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode f = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new DefaultNode("statement", null, f); 
+                 RESULT = new FunctionCallAsStmt(f); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1172,7 +1172,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new DefaultNode("statement", null, a); 
+                 RESULT = a; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1184,7 +1184,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("statement", null, s); 
+                 RESULT = s; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1196,7 +1196,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new DefaultNode("statement", null, s); 
+                 RESULT = s; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1208,7 +1208,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new DefaultNode("statement", null, a); 
+                 RESULT = a; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",11, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1331,7 +1331,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new IfWhileStmtNode("whileStatment", w, e, s); 
+                 RESULT = new IfWhileStmtNode("whileStatement", w, e, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("whileStatement",15, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1969,7 +1969,7 @@ class CUP$parser$actions {
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new BlockNode("block", l, os);  if(os != null) os.addChild(re); else RESULT.addChild(re); 
+                 RESULT = new BlockNode("block", l);  if(!os.name.equals("forceParen")) {if(re != null) os.addChild(re); RESULT.addChild(os);} else { if(re != null) RESULT.addChild(re); else RESULT.addChild(os); }
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("block",25, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
