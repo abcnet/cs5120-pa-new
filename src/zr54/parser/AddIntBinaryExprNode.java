@@ -73,6 +73,13 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			String c2Name = c2.getRegName();
 			
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+			String label1 = "L" + Integer.toString(AstNode.counter++);
+			String tlabel1 = "L_t" + Integer.toString(AstNode.counter++);
+			String flabel1 = "L_f" + Integer.toString(AstNode.counter++);
+			String label2 = "L" + Integer.toString(AstNode.counter++);
+			String tlabel2 = "L_t" + Integer.toString(AstNode.counter++);
+			String flabel2 = "L_f" + Integer.toString(AstNode.counter++);
+			
 			
 			//compute the length of the array after concatenation
 			stmts.add(new IRMove(new IRTemp("_LEN1"), 
@@ -110,12 +117,12 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			//put the entries of the first child in the new array
 			stmts.add(new IRSeq(new IRMove(new IRTemp("_COUNT"),
 										   new IRConst(0)),
-								new IRLabel("L"),
+								new IRLabel(label1),
 								new IRCJump(new IRBinOp(OpType.LT, 
 														new IRTemp("_COUNT"),
 														new IRTemp("_LEN1")),
-											"L_t", "L_f"),
-								new IRLabel("L_t"),
+											tlabel1, flabel1),
+								new IRLabel(tlabel1),
 								new IRMove(new IRMem(new IRBinOp(OpType.ADD,
 																 new IRTemp(arrName),
 																 new IRBinOp(OpType.MUL, 
@@ -130,19 +137,19 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 										   new IRBinOp(OpType.ADD,
 												   	   new IRTemp("_COUNT"),
 												   	   new IRConst(1))),
-								new IRJump(new IRName("L")),
-								new IRLabel("L_f")
+								new IRJump(new IRName(label1)),
+								new IRLabel(flabel1)
 								));
 			
 			//put the entries of the second child in the new array
 			stmts.add(new IRSeq(new IRMove(new IRTemp("_COUNT"),
 										   new IRConst(0)),
-								new IRLabel("L"),
+								new IRLabel(label2),
 								new IRCJump(new IRBinOp(OpType.LT, 
 														new IRTemp("_COUNT"),
 														new IRTemp("_LEN2")),
-											"L_t", "L_f"),
-								new IRLabel("L_t"),
+											tlabel2, flabel2),
+								new IRLabel(tlabel2),
 								new IRMove(new IRMem(new IRBinOp(OpType.ADD,
 													 			 new IRTemp(arrName),
 													 			 new IRBinOp(OpType.MUL, 
@@ -159,8 +166,8 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 										   new IRBinOp(OpType.ADD,
 												   	   new IRTemp("_COUNT"),
 												   	   new IRConst(1))),
-								new IRJump(new IRName("L")),
-								new IRLabel("L_f")
+								new IRJump(new IRName(label2)),
+								new IRLabel(flabel2)
 								));
 			
 

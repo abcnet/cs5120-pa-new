@@ -133,15 +133,15 @@ optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
                             |                      {: RESULT = new DefaultNode("forceParen", null); :}
                             ;
 
-statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addGrandChildren(s); :}
-                      | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(s); :}
+statements  ::= statements:ms statement:s     {: RESULT = new StmtsNode("statements", null); RESULT.addGrandChildren(ms); RESULT.addChild(s); :}
+                      | statement:s           {: RESULT = new StmtsNode("statements", null); RESULT.addChild(s); :}
                       ;
 
-statement           ::= functionCall:f optionalSemicolon         {: RESULT = new DefaultNode("statement", null, f); :}
-                      | assignment:a optionalSemicolon           {: RESULT = new DefaultNode("statement", null, a); :}
-                      | ifStatement:s                            {: RESULT = new DefaultNode("statement", null, s); :}
-                      | whileStatement:s                         {: RESULT = new DefaultNode("statement", null, s); :}
-                      | argumentWithType:a optionalSemicolon     {: RESULT = new DefaultNode("statement", null, a); :}
+statement           ::= functionCall:f optionalSemicolon         {: RESULT = f; :}
+                      | assignment:a optionalSemicolon           {: RESULT = a; :}
+                      | ifStatement:s                            {: RESULT = s; :}
+                      | whileStatement:s                         {: RESULT = s; :}
+                      | argumentWithType:a optionalSemicolon     {: RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
                       ;
 
@@ -158,7 +158,7 @@ ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statem
                       | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new IfWhileStmtNode("ifStatement", i, e, s); :}
                       ;
 
-whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatment", w, e, s); :}
+whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatement", w, e, s); :}
                       ;
 
 assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);

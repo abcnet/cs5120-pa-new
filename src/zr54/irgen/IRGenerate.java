@@ -10,6 +10,7 @@ import java.io.StringWriter;
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
+import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator;
 import java_cup.runtime.Symbol;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
@@ -22,7 +23,7 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
 
-	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath) throws IOException {
+	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
@@ -41,7 +42,7 @@ public class IRGenerate {
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				
-				try {
+//				try {
 					//first need load all interface files and register function signatures
 					AstNode useNode = root.getChildren().get(0);
 					for(AstNode useSpec : useNode.getChildren()) {
@@ -81,7 +82,11 @@ public class IRGenerate {
 			            program.printSExp(sp);
 			        }
 			        System.out.println(sw);
-					
+			        
+			        {
+			            IRSimulator sim = new IRSimulator(program);
+			            long result = sim.call("_Imain_paai");
+			        }
 					
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
@@ -89,13 +94,13 @@ public class IRGenerate {
 					System.out.println("Error in "+dstFile);
 				}
 								
-			}catch(Exception e){
-				System.out.println(e.getMessage());
-				s = l.next_token();
-			}finally{
-				printer.flush();
+//			}catch(Exception e){
+//				System.out.println(e.getMessage());
+//				s = l.next_token();
+//			}finally{
+//				printer.flush();
 //				System.out.println("Type checking result written to: " + dstFile);
-			}
+//			}
 			
 
 		} else {
