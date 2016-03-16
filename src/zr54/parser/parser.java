@@ -881,7 +881,7 @@ class CUP$parser$actions {
                 int clleft = CUP$parser$stack.peek().left;
                 int clright = CUP$parser$stack.peek().right;
                 Symbol cl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, "\'"+cl.value+"\'"), Type.INT, 0); 
+                 RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value), Type.INT, 0); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -893,7 +893,7 @@ class CUP$parser$actions {
                 int slleft = CUP$parser$stack.peek().left;
                 int slright = CUP$parser$stack.peek().right;
                 Symbol sl = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1); 
+                 RESULT = new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",28, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

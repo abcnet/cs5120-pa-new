@@ -75,7 +75,7 @@ public class FunctionCallNode extends ExprNode{
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR(null);
+				curr.generateIR(funcs);
 			}
 			l.add((IRExpr)curr.irNode);
 		}
