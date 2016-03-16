@@ -22,21 +22,23 @@ isprime(n:int):bool {
     return true
 }
 
-//largestprime(max:int):int {
-//    a:int = 1
-//    largest:int = 1
-//    while (a < max) {
-//      if (isprime(a)) largest = a
-//      a = a+1
-//    }
-//    return largest
-//}
+largestprime(max:int):int {
+    a:int = 1
+    largest:int = 1
+    while (a < max) {
+      if (isprime(a)) largest = a
+      a = a+1
+    }
+    return largest
+}
 
 //main(args:int[][]) {
 //    print("Largest prime less than 1,000,000 is " + unparseInt(largestprime(1000000)))
 //}
 main(args:int[][]) {
-		   if(isprime(7))
+		   if(isprime(18))
 			print("prime")
+			c:int[] = unparseInt(largestprime(100))
+			print(c)
 	print("Largest prime less than 1,000,000 is " + "test\n")		
 }

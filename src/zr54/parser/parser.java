@@ -1969,7 +1969,7 @@ class CUP$parser$actions {
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new BlockNode("block", l, os);  if(os != null) os.addChild(re); else RESULT.addChild(re); 
+                 RESULT = new BlockNode("block", l);  if(!os.name.equals("forceParen")) {if(re != null) os.addChild(re); RESULT.addChild(os);} else { if(re != null) RESULT.addChild(re); else RESULT.addChild(os); }
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("block",25, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

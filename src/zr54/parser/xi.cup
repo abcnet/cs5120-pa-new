@@ -222,5 +222,5 @@ methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("metho
                       | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
 
-block               ::= LBRACE:l optionalStatements:os optionalReturn:re RBRACE      {: RESULT = new BlockNode("block", l, os);  if(os != null) os.addChild(re); else RESULT.addChild(re); :}
+block               ::= LBRACE:l optionalStatements:os optionalReturn:re RBRACE      {: RESULT = new BlockNode("block", l);  if(!os.name.equals("forceParen")) {if(re != null) os.addChild(re); RESULT.addChild(os);} else { if(re != null) RESULT.addChild(re); else RESULT.addChild(os); }:}
                       ;
