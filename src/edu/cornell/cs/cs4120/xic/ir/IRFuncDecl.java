@@ -11,8 +11,10 @@ public class IRFuncDecl extends IRNode {
     private IRStmt body;
 
     public IRFuncDecl(String name, IRStmt stmt) {
+    	super();
         this.name = name;
         body = stmt;
+        this.children.add(stmt);
     }
 
     public String name() {

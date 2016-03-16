@@ -14,6 +14,7 @@ public class IRConst extends IRExpr {
      * @param value value of this constant
      */
     public IRConst(long value) {
+    	super();
         this.value = value;
     }
 

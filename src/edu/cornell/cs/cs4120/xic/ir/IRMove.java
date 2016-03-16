@@ -18,8 +18,11 @@ public class IRMove extends IRStmt {
      * @param expr the expression whose value is to be moved
      */
     public IRMove(IRExpr target, IRExpr expr) {
+    	super();
         this.target = target;
         this.expr = expr;
+        this.children.add(target);
+        this.children.add(expr);
     }
 
     public IRExpr target() {

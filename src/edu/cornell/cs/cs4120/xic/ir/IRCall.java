@@ -23,7 +23,12 @@ public class IRCall extends IRExpr {
      * @param args arguments of this function call
      */
     public IRCall(IRExpr target, IRExpr... args) {
-        this(target, Arrays.asList(args));
+    	super();
+    	this.target = target;
+        this.args = Arrays.asList(args);
+        this.children.add(target);
+        for (int i = 0; i < this.args.size(); i++)
+        	this.children.add(this.args.get(i));
     }
 
     /**
@@ -32,8 +37,12 @@ public class IRCall extends IRExpr {
      * @param args arguments of this function call
      */
     public IRCall(IRExpr target, List<IRExpr> args) {
+    	super();
         this.target = target;
         this.args = args;
+        this.children.add(target);
+        for (int i = 0; i < this.args.size(); i++)
+        	this.children.add(this.args.get(i));
     }
 
     public IRExpr target() {

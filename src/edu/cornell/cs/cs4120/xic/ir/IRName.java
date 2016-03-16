@@ -14,6 +14,7 @@ public class IRName extends IRExpr {
      * @param name name of this memory address
      */
     public IRName(String name) {
+    	super();
         this.name = name;
     }
 

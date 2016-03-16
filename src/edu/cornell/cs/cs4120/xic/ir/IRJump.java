@@ -15,7 +15,9 @@ public class IRJump extends IRStmt {
      * @param expr the destination of the jump
      */
     public IRJump(IRExpr expr) {
+    	super();
         target = expr;
+        this.children.add(expr);
     }
 
     public IRExpr target() {

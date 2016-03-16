@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
@@ -20,6 +21,14 @@ public abstract class IRNode {
      * @param v the visitor
      * @return the result of visiting children of this node
      */
+	
+	public IRNode parent;
+	public ArrayList<IRNode> children;
+	
+	public IRNode() {
+		this.children = new ArrayList<IRNode>();
+	}
+	
     public IRNode visitChildren(IRVisitor v) {
         return this;
     }

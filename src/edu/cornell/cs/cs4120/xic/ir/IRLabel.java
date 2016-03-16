@@ -14,6 +14,7 @@ public class IRLabel extends IRStmt {
      * @param name name of this memory address
      */
     public IRLabel(String name) {
+    	super();
         this.name = name;
     }
 
