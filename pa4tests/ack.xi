@@ -2,27 +2,22 @@ use io
 use conv
 
 usage() {
-	t:bool = !true;
-	a:int = -263;
-	b:int = -(a+1)
-	c:int[3] = {1, 2, 3};
-	d:int = length(c);
     println("Please specify the input size")
 }
 
-//main(args:int[][]) {
-//    n: int = 11
-//    r: int = Ack(3, n)
+main(args:int[][]) {
+    n: int = 11
+    r: int = Ack(3, n)
     
-//    print("Ack(3,")
-//    print(unparseInt(n))
-//    print("): ")
-//    print(unparseInt(r))
-//    println("")
-//}
+    print("Ack(3,")
+    print(unparseInt(n))
+    print("): ")
+    print(unparseInt(r))
+    println("")
+}
 
-//Ack(m:int, n:int):int {
-//    if (m == 0) { return n+1 }
-//    else if (n == 0) { return Ack(m-1, 1) }
-//    else { return Ack(m-1, Ack(m, n-1)) }
-//}
+Ack(m:int, n:int):int {
+    if (m == 0) { return n+1 }
+    else if (n == 0) { return Ack(m-1, 1) }
+    else { return Ack(m-1, Ack(m, n-1)) }
+}

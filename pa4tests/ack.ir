@@ -1,4 +1,1 @@
-(COMPUNIT
- ack
- (FUNC _Iusage_p
-  (SEQ (MOVE (TEMP t) (XOR (CONST 1) (CONST 1))) (MOVE (TEMP a) (CONST -3)))))
+
