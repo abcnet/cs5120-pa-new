@@ -171,6 +171,7 @@ public class MethodNode extends AstNode{
 //		for(i=0;i<argsType.size();i++){
 //			functionName+=argsType.get(i).toABIString();
 //		}
+		l.add(new IRReturn());
 		this.irNode = new IRFuncDecl(funcs.lookup((String)symbol.value).toString(),new IRSeq(l));
 	}
 
