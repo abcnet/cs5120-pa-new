@@ -3,6 +3,8 @@ package zr54.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.cornell.cs.cs4120.xic.ir.IRExp;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
@@ -37,7 +39,11 @@ public class StmtsNode extends StmtNode{
 		super.generateIR(funcs);
 		List<IRStmt> stmts = new ArrayList<IRStmt>();
 		for (int i = 0; i < this.children.size(); i++) {
-			stmts.add((IRStmt)this.children.get(i).irNode);
+			if(this.children.get(i).irNode instanceof IRExpr){
+				stmts.add(new IRExp((IRExpr)this.children.get(i).irNode));
+			}else{
+				stmts.add((IRStmt)this.children.get(i).irNode);
+			}
 		}
 		this.irNode = new IRSeq(stmts);
 	}
