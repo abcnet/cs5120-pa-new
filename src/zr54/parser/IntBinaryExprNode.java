@@ -56,9 +56,11 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		AstNode c2 = children.get(1);
 
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-		stmts.add(new IRMove(new IRTemp("_LEFT"), 
+		String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
+		String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
+		stmts.add(new IRMove(new IRTemp(leftReg), 
 				(IRExpr)c1.getIRNode()));
-		stmts.add(new IRMove(new IRTemp("_RIGHT"),
+		stmts.add(new IRMove(new IRTemp(rightReg),
 				(IRExpr)c2.getIRNode()));
 
 		IRBinOp.OpType op = OpType.ADD;
@@ -82,8 +84,8 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		
 		this.irNode = new IRESeq(new IRSeq(stmts), 
 				new IRBinOp(op, 
-						new IRTemp("_LEFT"), 
-						new IRTemp("_RIGHT")));
+						new IRTemp(leftReg), 
+						new IRTemp(rightReg)));
 
 	}
 	

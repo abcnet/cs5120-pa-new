@@ -38,7 +38,7 @@ largestprime(max:int):int {
 main(args:int[][]) {
 		   if(isprime(18))
 			print("prime")
-			c:int[] = unparseInt(largestprime(100))
+			c:int[] = unparseInt(largestprime(1000))
 			print(c)
 	print("Largest prime less than 1,000,000 is " + "test\n")		
 }

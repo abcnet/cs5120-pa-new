@@ -50,16 +50,19 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		AstNode c1 = children.get(0);
 		AstNode c2 = children.get(1);
 		if(c1.getType().getDimension() == 0) {
+			
+			String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
+			String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-			stmts.add(new IRMove(new IRTemp("_LEFT"), 
+			stmts.add(new IRMove(new IRTemp(leftReg), 
 								 (IRExpr)c1.getIRNode()));
-			stmts.add(new IRMove(new IRTemp("_RIGHT"),
+			stmts.add(new IRMove(new IRTemp(rightReg),
 								 (IRExpr)c2.getIRNode()));
 			
 			this.irNode = new IRESeq(new IRSeq(stmts), 
 									 new IRBinOp(OpType.ADD, 
-											 	 new IRTemp("_LEFT"), 
-											 	 new IRTemp("_RIGHT")));
+											 	 new IRTemp(leftReg), 
+											 	 new IRTemp(rightReg)));
 				                  
 		}
 		else {
