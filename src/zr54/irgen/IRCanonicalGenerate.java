@@ -6,24 +6,25 @@ import zr54.parser.AstNode;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRCall;
+import edu.cornell.cs.cs4120.xic.ir.IRCompUnit;
 import edu.cornell.cs.cs4120.xic.ir.IRConst;
 import edu.cornell.cs.cs4120.xic.ir.IRESeq;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
+import edu.cornell.cs.cs4120.xic.ir.IRJump;
+import edu.cornell.cs.cs4120.xic.ir.IRLabel;
 import edu.cornell.cs.cs4120.xic.ir.IRMem;
 import edu.cornell.cs.cs4120.xic.ir.IRMove;
+import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRReturn;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 
 public class IRCanonicalGenerate {
 	
-	public void addParentstoIRTree(IRNode node, IRNode parent) {
-		node.parent = parent;
-		for (int i = 0; i < node.children.size(); i++) {
-			addParentstoIRTree(node.children.get(i), node);
-		}
-	}
+	public static boolean changed = false;
 	
 	public void printIRTree(IRNode node) {
 		if (node != null) {
@@ -35,9 +36,9 @@ public class IRCanonicalGenerate {
 			System.out.println();
 		}
 			
-		//for (int i = 0; i < node.children.size(); i++) {
-		//	printIRTree(node.children.get(i));
-		//}
+		for (int i = 0; i < node.children.size(); i++) {
+			printIRTree(node.children.get(i));
+		}
 	}
 	
 	public IRNode moveESEQup(IRNode node) {
@@ -54,7 +55,7 @@ public class IRCanonicalGenerate {
 				stmts.add((IRStmt) s1);
 				stmts.add((IRStmt) s2);
 				node = new IRESeq(new IRSeq(stmts), (IRExpr) e1);
-				node = moveESEQup(node);
+				changed = true;
 			}
 		}
 		
@@ -62,29 +63,25 @@ public class IRCanonicalGenerate {
 		if (node instanceof IRBinOp) {
 			IRNode e1 = node.children.get(0);
 			IRNode e2 = node.children.get(1);
-			System.out.println("Obj type = " + node.label());
-			node = new IRMove((IRExpr)e1, (IRExpr)e2);
-			node = moveESEQup(node);
-			System.out.println("Obj type = " + node.label());  
-			/*if (e1 instanceof IRESeq) {
+			if (e1 instanceof IRESeq) {
 				IRNode s = e1.children.get(0);
 				IRNode e3 = e1.children.get(1);
 				node = new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), (IRExpr) e2, (IRExpr) e3));
-				node = moveESEQup(node);
+				changed = true;
 			}
 			if (e2 instanceof IRESeq) {
 				IRNode s = e2.children.get(0);
 				IRNode e3 = e2.children.get(1);
 				if (e3 instanceof IRConst) { //s and e3 commute
 					node = new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), (IRExpr) e2, (IRExpr) e3));
-					node = moveESEQup(node);
+					changed = true;
 				} else {
 					String var = "_var_" + Integer.toString(AstNode.counter++);
 					node = new IRESeq(new IRMove(new IRTemp(var), (IRExpr) e1),
 							new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), new IRTemp(var), (IRExpr) e3)));
-					node = moveESEQup(node);
+					changed = true;
 				}
-			}*/
+			}
 		}
 		
 		//case-3
@@ -94,7 +91,7 @@ public class IRCanonicalGenerate {
 				IRNode s = e.children.get(0);
 				IRNode e1 = e.children.get(1);
 				node = new IRESeq((IRStmt) s, new IRMem((IRExpr) e1));
-				node = moveESEQup(node);
+				changed = true;
 			}
 		}
 		
@@ -107,18 +104,18 @@ public class IRCanonicalGenerate {
 				
 				ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 				stmts.add((IRStmt) s);
-				if (((IRCJump) e).hasFalseLabel()) {
-					stmts.add(new IRCJump( (IRExpr) e1, ((IRCJump) e).trueLabel(), ((IRCJump) e).falseLabel()));
+				if (((IRCJump) node).hasFalseLabel()) {
+					stmts.add(new IRCJump( (IRExpr) e1, ((IRCJump) node).trueLabel(), ((IRCJump) node).falseLabel()));
 				} else {
-					stmts.add(new IRCJump( (IRExpr) e1, ((IRCJump) e).trueLabel()));
+					stmts.add(new IRCJump( (IRExpr) e1, ((IRCJump) node).trueLabel()));
 				}
 				node = new IRSeq(stmts);
-				node = moveESEQup(node);
+				changed = true;
 			}
 		}
 		
 		//case-5
-		/*if (node instanceof IRMove) {
+		if (node instanceof IRMove) {
 			IRNode e1 = node.children.get(0);
 			IRNode e2 = node.children.get(1);
 			if (e2 instanceof IRESeq) {
@@ -128,17 +125,29 @@ public class IRCanonicalGenerate {
 				stmts.add((IRStmt) s);
 				stmts.add(new IRMove((IRExpr) e1, (IRExpr) e3));
 				node = new IRSeq(stmts);
-				node = moveESEQup(node);
+				changed = true;
 			}
-		}*/
-		
-		for (int i = 0; i < node.children.size(); i++) {
-			System.out.println("BEFORE Node = " + node.label() + " child = " + node.children.get(i).label());
-			node.children.set(i, moveESEQup(node.children.get(i)));
-			System.out.println("AFTER Node = " + node.label() + " child = " + node.children.get(i).label());
 		}
 		
-		System.out.println("Returning NODE = " + node.label());
+		//case-6
+		if (node instanceof IRJump) {
+			IRNode e = node.children.get(0);
+			if (e instanceof IRESeq) {
+				IRNode s = e.children.get(0);
+				IRNode e1 = e.children.get(1);
+				ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+				stmts.add((IRStmt) s);
+				stmts.add(new IRJump((IRExpr) e1));
+				node = new IRSeq(stmts);
+				changed = true;
+			}
+		}
+		
+		for (int i = 0; i < node.children.size(); i++) {
+			node.children.set(i, moveESEQup(node.children.get(i)));
+			node.updateChildren();
+		}
+		
 		return node;
 	}
 	
@@ -147,32 +156,79 @@ public class IRCanonicalGenerate {
 			for (int i = 0; i < node.children.size(); i++) {
 				for (int j = 0; j < node.children.get(i).children.size(); j++) {
 					node.children.get(i).children.set(j, convertCALLtoESEQ(node.children.get(i).children.get(j)));
+					node.children.get(i).children.get(j).updateChildren();
 				}
 			}
-		} else if (node instanceof IRCall) {
-			String var = "_var_" + Integer.toString(AstNode.counter++);
-			node = new IRESeq(new IRMove(new IRTemp(var),
-					                     new IRCall(((IRCall) node).target(), ((IRCall) node).args())),
-					          new IRTemp(var));
-		}
-		
-		for (int i = 0; i < node.children.size(); i++) {
-			node.children.set(i, convertCALLtoESEQ(node.children.get(i)));
+		} else {
+			if (node instanceof IRCall) {
+				String var = "_var_" + Integer.toString(AstNode.counter++);
+				node = new IRESeq(new IRMove(new IRTemp(var),
+						                     new IRCall(((IRCall) node).target(), ((IRCall) node).args())),
+						          new IRTemp(var));
+			}
+			for (int i = 0; i < node.children.size(); i++) {
+				node.children.set(i, convertCALLtoESEQ(node.children.get(i)));
+				node.updateChildren();
+			}
 		}
 		
 		return node;
 	}
 	
+	public IRNode modifyCJUMPS(IRNode node) {
+		if (node instanceof IRCJump && ((IRCJump) node).hasFalseLabel()) {
+			IRNode e = node.children.get(0);
+			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+			stmts.add(new IRCJump((IRExpr) e, ((IRCJump) node).trueLabel()));
+			stmts.add(new IRJump(new IRName(((IRCJump) node).falseLabel())));
+			node = new IRSeq(stmts);
+		}
+		
+		for (int i = 0; i < node.children.size(); i++) {
+			node.children.set(i, modifyCJUMPS(node.children.get(i)));
+			node.updateChildren();
+		}
+		
+		return node;
+	}
+	
+	public void collectAllSEQStmts(IRNode node, ArrayList<IRStmt> stmts) {
+		if (node instanceof IRSeq || node instanceof IRCompUnit || node instanceof IRFuncDecl) {
+			for (int i = 0; i < node.children.size(); i++) {
+				collectAllSEQStmts(node.children.get(i), stmts);
+			}
+		} else if (node instanceof IRCJump
+				   || node instanceof IRJump
+				   || node instanceof IRLabel
+				   || node instanceof IRMove
+				   || node instanceof IRReturn) {
+			stmts.add((IRStmt) node);
+		} 
+	}
+	
+	public IRNode removeNestedSEQ(IRNode node, ArrayList<IRStmt> stmts) {
+		if (node instanceof IRSeq) {
+			node = new IRSeq(stmts);
+		} else {
+			for (int i = 0; i < node.children.size(); i++) {
+				node.children.set(i, removeNestedSEQ(node.children.get(i), stmts));
+				node.updateChildren();
+			}
+		}
+		return node;
+	}
+	
 	public IRNode generateCanonicalIR(IRNode root) {
-		//addParentstoIRTree(root, null);
-		System.out.println("IRTREE before any lowering ROOT = " + root.label() + "\n");
-		//printIRTree(root);
+		root = modifyCJUMPS(root);
 		root = convertCALLtoESEQ(root);
-		System.out.println("\n\nIRTREE after CALL lowering ROOT = " + root.label() + "\n");
-		//printIRTree(root);
 		root = moveESEQup(root);
-		System.out.println("\n\nIRTREE after ESEQ lowering ROOT = " + root.label() + "\n");
-		//printIRTree(root);
+		while (changed) {
+			changed = false;
+			root = moveESEQup(root);
+		}
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		collectAllSEQStmts(root, stmts);
+		root = removeNestedSEQ(root, stmts);
 		return root;
 	}
 

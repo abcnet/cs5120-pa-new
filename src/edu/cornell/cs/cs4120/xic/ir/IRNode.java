@@ -23,12 +23,13 @@ public abstract class IRNode {
      * @return the result of visiting children of this node
      */
 	
-	public IRNode parent;
 	public ArrayList<IRNode> children;
 	
 	public IRNode() {
 		this.children = new ArrayList<IRNode>();
 	}
+	
+	public void updateChildren() {}
 	
     public IRNode visitChildren(IRVisitor v) {
         return this;

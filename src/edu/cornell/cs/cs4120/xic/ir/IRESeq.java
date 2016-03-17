@@ -25,6 +25,11 @@ public class IRESeq extends IRExpr {
         this.children.add(stmt);
         this.children.add(expr);
     }
+    
+    public void updateChildren() {
+    	this.stmt = (IRStmt) this.children.get(0);
+    	this.expr = (IRExpr) this.children.get(1);
+    }
 
     public IRStmt stmt() {
         return stmt;

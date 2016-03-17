@@ -24,6 +24,11 @@ public class IRMove extends IRStmt {
         this.children.add(target);
         this.children.add(expr);
     }
+    
+    public void updateChildren() {
+    	this.target = (IRExpr) this.children.get(0);
+    	this.expr = (IRExpr) this.children.get(1);
+    }
 
     public IRExpr target() {
         return target;

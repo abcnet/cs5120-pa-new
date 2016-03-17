@@ -44,6 +44,12 @@ public class IRCall extends IRExpr {
         for (int i = 0; i < this.args.size(); i++)
         	this.children.add(this.args.get(i));
     }
+    
+    public void updateChildren() {
+    	this.target = (IRExpr) this.children.get(0);
+    	for (int i = 1; i < this.children.size(); i++)
+        	this.args.add((IRExpr) this.children.get(i));
+    }
 
     public IRExpr target() {
         return target;

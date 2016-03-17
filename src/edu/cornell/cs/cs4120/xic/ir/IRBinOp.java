@@ -1,5 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.util.ArrayList;
+
 import edu.cornell.cs.cs4120.util.InternalCompilerError;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -73,6 +75,11 @@ public class IRBinOp extends IRExpr {
         this.right = right;
         this.children.add(left);
         this.children.add(right);
+    }
+    
+    public void updateChildren() {
+    	this.left = (IRExpr) this.children.get(0);
+    	this.right = (IRExpr) this.children.get(1);
     }
 
     public OpType opType() {

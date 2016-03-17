@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator;
+import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import java_cup.runtime.Symbol;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
@@ -96,6 +97,13 @@ public class IRGenerate {
 			            program.printSExp(sp);
 			        }
 			        System.out.println(sw1);
+			        
+			        // IR canonical checker demo
+			        {
+			            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
+			            System.out.print("Canonical?: ");
+			            System.out.println(cv.visit(program));
+			        }
 			        
 			        if(run){
 			            IRSimulator sim = new IRSimulator(program);

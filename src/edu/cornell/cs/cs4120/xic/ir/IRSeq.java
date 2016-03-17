@@ -34,7 +34,13 @@ public class IRSeq extends IRStmt {
     	super();
         this.stmts = stmts;
         for (int i = 0; i < this.stmts.size(); i++)
-    		this.children.add(this.stmts.get(i));
+        	this.children.add(this.stmts.get(i));
+    		
+    }
+    
+    public void updateChildren() {
+    	for (int i = 0; i < this.children.size(); i++)
+    		this.stmts.set(i, (IRStmt) this.children.get(i));
     }
 
     public List<IRStmt> stmts() {

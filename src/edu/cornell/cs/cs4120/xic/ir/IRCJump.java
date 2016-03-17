@@ -41,6 +41,10 @@ public class IRCJump extends IRStmt {
         this.falseLabel = falseLabel;
         this.children.add(expr);
     }
+    
+    public void updateChildren() {
+    	this.expr = (IRExpr) this.children.get(0);
+    }
 
     public IRExpr expr() {
         return expr;

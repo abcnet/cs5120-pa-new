@@ -16,6 +16,10 @@ public class IRFuncDecl extends IRNode {
         body = stmt;
         this.children.add(stmt);
     }
+    
+    public void updateChildren() {
+    	this.body = (IRStmt) this.children.get(0);
+    }
 
     public String name() {
         return name;

@@ -29,6 +29,14 @@ public class IRCompUnit extends IRNode {
         	this.children.add(functions.get(key));
         }
     }
+    
+    public void updateChildren() {
+    	Set<String> keys = functions.keySet();
+    	int index = 0;
+    	for (String key : keys) {
+    		this.functions.put(key, (IRFuncDecl) this.children.get(index++));
+    	}
+    }
 
     public void appendFunc(IRFuncDecl func) {
         functions.put(func.name(), func);
