@@ -12,4 +12,8 @@ public abstract class IRExpr extends IRNode {
             CheckCanonicalIRVisitor v) {
         return v.enterExpr();
     }
+
+    public boolean isConstant() {
+        return false;
+    }
 }

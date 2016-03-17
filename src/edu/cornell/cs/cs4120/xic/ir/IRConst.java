@@ -27,6 +27,11 @@ public class IRConst extends IRExpr {
     }
 
     @Override
+    public boolean isConstant() {
+        return true;
+    }
+
+    @Override
     public void printSExp(SExpPrinter p) {
         p.startList();
         p.printAtom("CONST");

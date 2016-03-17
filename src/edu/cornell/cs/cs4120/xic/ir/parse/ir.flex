@@ -1,5 +1,8 @@
 package edu.cornell.cs.cs4120.xic.ir.parse;
 
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.Symbol;
 
 import java.math.BigInteger;
@@ -17,41 +20,67 @@ import java.math.BigInteger;
 
 %line
 %column
-%char
 
 %{
+    private static ComplexSymbolFactory csf = new ComplexSymbolFactory();
+
+    private Symbol sym(String name, int id) {
+        return csf.newSymbol(name, id, beginPos(), endPos());
+    }
+
+    private Symbol name(String s) {
+        return new Name(s, beginPos(), endPos());
+    }
+
     private Symbol number(String s) {
         BigInteger x = new BigInteger(s);
         if (x.bitLength() > 64) {
             return lexError("Number literal \"" +
                         yytext() + "\" out of range.");
         }
-        return new Number(x.longValue());
+        return new Number(x.longValue(), beginPos(), endPos());
     }
 
     private Symbol lexError(String msg) {
         System.err.println(msg);
-        return new LexErrorToken();
+        return new LexErrorToken(beginPos(), endPos());
     }
 
-static class Name extends Symbol {
-    protected String name;
+    private Position beginPos() {
+        return new Position(yyline+1, yycolumn+1);
+    }
 
-    public Name(String name) {
-        super(IRSym.ATOM, name);
-        this.name = name;
+    private Position endPos() {
+        int len = yytext().length();
+        return new Position(yyline+1, yycolumn+1+len);
+    }
+
+private static class Position extends Location {
+    public Position(int line, int column) {
+        super(line, column);
+    }
+
+    @Override
+    public String toString() {
+        return getLine() + ":" + getColumn();
     }
 }
 
-static class Number extends Symbol {
-    public Number(long val) {
-        super(IRSym.NUMBER, val);
+static class Name extends ComplexSymbol {
+    public Name(String name, Position left, Position right) {
+        super("NAME", IRSym.ATOM, left, right, name);
     }
 }
 
-static class LexErrorToken extends Symbol {
-    public LexErrorToken() {
-        super(IRSym.error);
+static class Number extends ComplexSymbol {
+    public Number(long val, Position left, Position right) {
+        super("NUMBER", IRSym.NUMBER, left, right, val);
+    }
+}
+
+static class LexErrorToken extends ComplexSymbol {
+    public LexErrorToken(Position left, Position right) {
+        super("error", IRSym.error, left, right);
     }
 
     @Override
@@ -62,7 +91,7 @@ static class LexErrorToken extends Symbol {
 %}
 
 %eofval{
-    return new Symbol(IRSym.EOF);
+    return sym("EOF", IRSym.EOF);
 %eofval}
 
 LineTerminator = \n|\r|\r\n
@@ -77,49 +106,49 @@ DecimalNumeral = 0 | "-"?[1-9][0-9]*
 
 %%
 
-"COMPUNIT"          { return new Symbol(IRSym.COMPUNIT);   }
-"FUNC"              { return new Symbol(IRSym.FUNC);       }
-"MOVE"              { return new Symbol(IRSym.MOVE);       }
-"EXP"               { return new Symbol(IRSym.EXP);        }
-"SEQ"               { return new Symbol(IRSym.SEQ);        }
-"JUMP"              { return new Symbol(IRSym.JUMP);       }
-"CJUMP"             { return new Symbol(IRSym.CJUMP);      }
-"LABEL"             { return new Symbol(IRSym.LABEL);      }
-"RETURN"            { return new Symbol(IRSym.RETURN);     }
-"CONST"             { return new Symbol(IRSym.CONST);      }
-"TEMP"              { return new Symbol(IRSym.TEMP);       }
-"MEM"               { return new Symbol(IRSym.MEM);        }
-"CALL"              { return new Symbol(IRSym.CALL);       }
-"NAME"              { return new Symbol(IRSym.NAME);       }
-"ESEQ"              { return new Symbol(IRSym.ESEQ);       }
+"COMPUNIT"          { return sym("COMPUNIT", IRSym.COMPUNIT); }
+"FUNC"              { return sym("FUNC", IRSym.FUNC);         }
+"MOVE"              { return sym("MOVE", IRSym.MOVE);         }
+"EXP"               { return sym("EXP", IRSym.EXP);           }
+"SEQ"               { return sym("SEQ", IRSym.SEQ);           }
+"JUMP"              { return sym("JUMP", IRSym.JUMP);         }
+"CJUMP"             { return sym("CJUMP", IRSym.CJUMP);       }
+"LABEL"             { return sym("LABEL", IRSym.LABEL);       }
+"RETURN"            { return sym("RETURN", IRSym.RETURN);     }
+"CONST"             { return sym("CONST", IRSym.CONST);       }
+"TEMP"              { return sym("TEMP", IRSym.TEMP);         }
+"MEM"               { return sym("MEM", IRSym.MEM);           }
+"CALL"              { return sym("CALL", IRSym.CALL);         }
+"NAME"              { return sym("NAME", IRSym.NAME);         }
+"ESEQ"              { return sym("ESEQ", IRSym.ESEQ);         }
 
-"ADD"               { return new Symbol(IRSym.ADD);        }
-"SUB"               { return new Symbol(IRSym.SUB);        }
-"MUL"               { return new Symbol(IRSym.MUL);        }
-"HMUL"              { return new Symbol(IRSym.HMUL);       }
-"DIV"               { return new Symbol(IRSym.DIV);        }
-"MOD"               { return new Symbol(IRSym.MOD);        }
-"AND"               { return new Symbol(IRSym.AND);        }
-"OR"                { return new Symbol(IRSym.OR);         }
-"XOR"               { return new Symbol(IRSym.XOR);        }
-"LSHIFT"            { return new Symbol(IRSym.LSHIFT);     }
-"RSHIFT"            { return new Symbol(IRSym.RSHIFT);     }
-"ARSHIFT"           { return new Symbol(IRSym.ARSHIFT);    }
-"EQ"                { return new Symbol(IRSym.EQ);         }
-"NEQ"               { return new Symbol(IRSym.NEQ);        }
-"LT"                { return new Symbol(IRSym.LT);         }
-"GT"                { return new Symbol(IRSym.GT);         }
-"LEQ"               { return new Symbol(IRSym.LEQ);        }
-"GEQ"               { return new Symbol(IRSym.GEQ);        }
+"ADD"               { return sym("ADD", IRSym.ADD);           }
+"SUB"               { return sym("SUB", IRSym.SUB);           }
+"MUL"               { return sym("MUL", IRSym.MUL);           }
+"HMUL"              { return sym("HMUL", IRSym.HMUL);         }
+"DIV"               { return sym("DIV", IRSym.DIV);           }
+"MOD"               { return sym("MOD", IRSym.MOD);           }
+"AND"               { return sym("AND", IRSym.AND);           }
+"OR"                { return sym("OR", IRSym.OR);             }
+"XOR"               { return sym("XOR", IRSym.XOR);           }
+"LSHIFT"            { return sym("LSHIFT", IRSym.LSHIFT);     }
+"RSHIFT"            { return sym("RSHIFT", IRSym.RSHIFT);     }
+"ARSHIFT"           { return sym("ARSHIFT", IRSym.ARSHIFT);   }
+"EQ"                { return sym("EQ", IRSym.EQ);             }
+"NEQ"               { return sym("NEQ", IRSym.NEQ);           }
+"LT"                { return sym("LT", IRSym.LT);             }
+"GT"                { return sym("GT", IRSym.GT);             }
+"LEQ"               { return sym("LEQ", IRSym.LEQ);           }
+"GEQ"               { return sym("GEQ", IRSym.GEQ);           }
 
-"("                 { return new Symbol(IRSym.LPAREN);     }
-")"                 { return new Symbol(IRSym.RPAREN);     }
+"("                 { return sym("(", IRSym.LPAREN);          }
+")"                 { return sym(")", IRSym.RPAREN);          }
 
-{Identifier}        { return new Name(yytext()); }
+{Identifier}        { return name(yytext()); }
 {DecimalNumeral}    { return number(yytext()); }
 
 {WhiteSpace}        { /* ignore */ }
  
 /* Fallthrough case: anything not matched above is an error */
-[^]                 { return lexError("Illegal character \"" +
+[^]                 { return lexError(beginPos() + ": Illegal character \"" +
                                  yytext() + "\""); }
