@@ -25,7 +25,7 @@ public class ParsePrint {
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
 
-			System.out.println("Parsing "+srcFile);
+//			System.out.println("Parsing "+srcFile);
 			Symbol s;
 			try{
 				s = p.parse();
@@ -35,9 +35,9 @@ public class ParsePrint {
 				s = l.next_token();
 			}
 			printer.flush();
-			System.out.println("Parsed AST written to "+dstFile);
+//			System.out.println("Parsed AST written to "+dstFile);
 		} else {
-			System.out.println("error: '" + srcFile + "' does not exist");
+//			System.out.println("error: '" + srcFile + "' does not exist");
 		}
 	}
 }

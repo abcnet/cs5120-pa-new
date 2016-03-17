@@ -40,4 +40,10 @@ public class IRLabel extends IRStmt {
         p.printAtom(name);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	return null;
+    }
+
 }

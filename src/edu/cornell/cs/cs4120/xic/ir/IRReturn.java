@@ -16,4 +16,9 @@ public class IRReturn extends IRStmt {
         p.printAtom("RETURN");
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	return null;
+    }
 }

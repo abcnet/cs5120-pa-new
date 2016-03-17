@@ -12,6 +12,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
+import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import java_cup.runtime.Symbol;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
@@ -77,27 +78,28 @@ public class IRGenerate {
 					}
 					
 					program.printSExp(printer);
-					System.out.println("Code:");
+//					System.out.println("Code:");
 			        StringWriter sw = new StringWriter();
 			        try (PrintWriter pw = new PrintWriter(sw);
 			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
 			            program.printSExp(sp);
 			        }
-			        System.out.println(sw);
+//			        System.out.println(sw);
 					
 					//Generate canonical IR
-					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					//IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
+					//program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
-					program.printSExp(printer);
-					System.out.println("After code:");
-			        StringWriter sw1 = new StringWriter();
-			        try (PrintWriter pw = new PrintWriter(sw1);
-			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
-			            program.printSExp(sp);
-			        }
-			        System.out.println(sw1);
-			        
+//					program.printSExp(printer);
+//					System.out.println("After code:");
+//			        StringWriter sw1 = new StringWriter();
+//			        try (PrintWriter pw = new PrintWriter(sw1);
+//			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+//			            program.printSExp(sp);
+//			        }
+//			        System.out.println(sw1);
+					
+
 			        // IR canonical checker demo
 			        {
 			            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
@@ -105,11 +107,33 @@ public class IRGenerate {
 			            System.out.println(cv.visit(program));
 			        }
 			        
+					
+					{
+			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
+			            System.out.print("Constant-folded?: ");
+			            System.out.println(cv.visit(program));
+			        }
+					
 			        if(run){
 			            IRSimulator sim = new IRSimulator(program);
 			            long result = sim.call("_Imain_paai");
 			        }
 					
+			        program.doConstFolding();
+			        {
+			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
+			            System.out.print("Constant-folded?: ");
+			            System.out.println(cv.visit(program));
+			        }
+					
+//					program.printSExp(printer);
+//					System.out.println("After code:");
+//			        StringWriter sw1 = new StringWriter();
+//			        try (PrintWriter pw = new PrintWriter(sw1);
+//			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+//			            program.printSExp(sp);
+//			        }
+//			        System.out.println(sw1);
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());

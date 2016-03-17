@@ -97,4 +97,15 @@ public class IRCJump extends IRStmt {
         if (hasFalseLabel()) p.printAtom(falseLabel);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	IRConst result = expr.doConstFolding();
+    	if(result != null) {
+    		expr = result;
+    		children.set(0, result);
+    	}
+    	
+    	return null;
+    }
 }

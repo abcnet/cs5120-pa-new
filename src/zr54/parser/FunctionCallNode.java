@@ -80,13 +80,13 @@ public class FunctionCallNode extends ExprNode{
 			l.add((IRExpr)curr.irNode);
 		}
 		
-		if(symbol.value == null) 
-			System.out.println("test");
+//		if(symbol.value == null) 
+//			System.out.println("test");
 		
 		funcs.lookup((String)symbol.value);
-		System.out.print(funcs.lookup((String)symbol.value).toString());
-		System.out.print(symbol.value);
-		System.out.print(l);
+//		System.out.print(funcs.lookup((String)symbol.value).toString());
+//		System.out.print(symbol.value);
+//		System.out.print(l);
 		this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);
 	}
 

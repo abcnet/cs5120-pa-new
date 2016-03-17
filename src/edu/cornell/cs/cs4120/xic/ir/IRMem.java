@@ -86,4 +86,15 @@ public class IRMem extends IRExpr {
         expr.printSExp(p);
         p.endList();
     }
+    
+     @Override
+     public IRConst doConstFolding() {
+    	 IRConst result = expr.doConstFolding();
+    	 if(result != null) {
+    		 expr = result;
+    		 children.set(0, result);
+    	 }
+    	 
+    	 return null;
+     }
 }

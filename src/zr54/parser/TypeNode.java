@@ -41,6 +41,8 @@ public class TypeNode extends AstNode {
 			if(children.size() > 0) {
 				type = children.get(0).typeCheck(vars, funcs);
 				type.incDimension();
+				for(int i = 1; i < children.size(); i++)
+					children.get(i).typeCheck(vars, funcs);
 			}
 			else
 				throw new XiException(symbol.left,symbol.right, "Array without INT/BOOL type", "Semantic");

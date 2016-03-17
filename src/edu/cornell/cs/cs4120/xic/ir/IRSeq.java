@@ -95,4 +95,12 @@ public class IRSeq extends IRStmt {
             stmt.printSExp(p);
         p.endList();
     }
+    
+    @Override 
+    public IRConst doConstFolding() {
+    	for(IRNode n : stmts) {
+    		n.doConstFolding();
+    	}
+    	return null;
+    }
 }

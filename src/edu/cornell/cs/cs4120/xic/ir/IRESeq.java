@@ -76,4 +76,15 @@ public class IRESeq extends IRExpr {
         expr.printSExp(p);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding(){
+    	IRConst result = expr.doConstFolding();
+    	if(result != null) {
+    		expr = result;
+    		children.set(1, result);
+    	}
+    		
+    	return null;
+    }
 }

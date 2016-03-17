@@ -69,6 +69,14 @@ public abstract class IRNode {
      */
     public abstract void printSExp(SExpPrinter p);
 
+    /**
+     * Do constant folding. 
+     * @return if this node can be folded into a constant, return the IRConst node
+     * 		   otherwise return null
+     */
+    public abstract IRConst doConstFolding(); 
+
+    
     @Override
     public String toString() {
         StringWriter sw = new StringWriter();
