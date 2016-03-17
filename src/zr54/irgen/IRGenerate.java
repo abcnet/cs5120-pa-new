@@ -22,21 +22,6 @@ import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
-	
-	public static void addParentstoIRTree(IRNode node, IRNode parent) {
-		node.parent = parent;
-		for (int i = 0; i < node.children.size(); i++) {
-			addParentstoIRTree(node.children.get(i), node);
-		}
-	}
-	
-	public static void printParents(IRNode node) {
-		if (node != null && node.parent != null)
-			System.out.println("node = " + node.label() + "  parent = " + node.parent.label());
-		for (int i = 0; i < node.children.size(); i++) {
-			printParents(node.children.get(i));
-		}
-	}
 
 	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run) throws Exception {
 		
@@ -90,9 +75,6 @@ public class IRGenerate {
 						program.appendFunc((IRFuncDecl)curr.getIRNode());
 					}
 					
-					addParentstoIRTree(program, null);
-					//printParents(program);
-					
 					program.printSExp(printer);
 					System.out.println("Code:");
 			        StringWriter sw = new StringWriter();
@@ -101,6 +83,19 @@ public class IRGenerate {
 			            program.printSExp(sp);
 			        }
 			        System.out.println(sw);
+					
+					//Generate canonical IR
+					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
+					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					
+					program.printSExp(printer);
+					System.out.println("After code:");
+			        StringWriter sw1 = new StringWriter();
+			        try (PrintWriter pw = new PrintWriter(sw1);
+			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+			            program.printSExp(sp);
+			        }
+			        System.out.println(sw1);
 			        
 			        if(run){
 			            IRSimulator sim = new IRSimulator(program);
