@@ -20,7 +20,11 @@ public class IRCJump extends IRStmt {
      *          to true
      */
     public IRCJump(IRExpr expr, String trueLabel) {
-        this(expr, trueLabel, null);
+    	super();
+    	this.expr = expr;
+    	this.trueLabel = trueLabel;
+    	this.falseLabel = null;
+    	this.children.add(expr);
     }
 
     /**
@@ -35,6 +39,7 @@ public class IRCJump extends IRStmt {
         this.expr = expr;
         this.trueLabel = trueLabel;
         this.falseLabel = falseLabel;
+        this.children.add(expr);
     }
 
     public IRExpr expr() {

@@ -33,12 +33,17 @@ public class IRMem extends IRExpr {
      * @param expr the address of this memory location
      */
     public IRMem(IRExpr expr) {
-        this(expr, MemType.NORMAL);
+    	super();
+    	this.expr = expr;
+    	this.memType = MemType.NORMAL;
+    	this.children.add(expr);
     }
 
     public IRMem(IRExpr expr, MemType memType) {
+    	super();
         this.expr = expr;
         this.memType = memType;
+        this.children.add(expr);
     }
 
     public IRExpr expr() {

@@ -14,6 +14,7 @@ public class IRTemp extends IRExpr {
      * @param name name of this temporary register
      */
     public IRTemp(String name) {
+    	super();
         this.name = name;
     }
 

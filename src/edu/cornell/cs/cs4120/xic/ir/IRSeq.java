@@ -20,7 +20,10 @@ public class IRSeq extends IRStmt {
      * @param stmts the statements
      */
     public IRSeq(IRStmt... stmts) {
-        this(Arrays.asList(stmts));
+    	super();
+    	this.stmts = Arrays.asList(stmts);
+    	for (int i = 0; i < this.stmts.size(); i++)
+    		this.children.add(this.stmts.get(i));
     }
 
     /**
@@ -28,7 +31,10 @@ public class IRSeq extends IRStmt {
      * @param stmts the sequence of statements
      */
     public IRSeq(List<IRStmt> stmts) {
+    	super();
         this.stmts = stmts;
+        for (int i = 0; i < this.stmts.size(); i++)
+    		this.children.add(this.stmts.get(i));
     }
 
     public List<IRStmt> stmts() {

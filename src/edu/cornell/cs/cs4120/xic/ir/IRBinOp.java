@@ -67,9 +67,12 @@ public class IRBinOp extends IRExpr {
     private IRExpr left, right;
 
     public IRBinOp(OpType type, IRExpr left, IRExpr right) {
+    	super();
         this.type = type;
         this.left = left;
         this.right = right;
+        this.children.add(left);
+        this.children.add(right);
     }
 
     public OpType opType() {

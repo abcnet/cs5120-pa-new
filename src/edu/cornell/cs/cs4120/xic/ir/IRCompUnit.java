@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -15,6 +16,7 @@ public class IRCompUnit extends IRNode {
     private Map<String, IRFuncDecl> functions;
 
     public IRCompUnit(String name) {
+    	super();
         this.name = name;
         functions = new LinkedHashMap<>();
     }
@@ -22,10 +24,15 @@ public class IRCompUnit extends IRNode {
     public IRCompUnit(String name, Map<String, IRFuncDecl> functions) {
         this.name = name;
         this.functions = functions;
+        Set<String> keys = functions.keySet();
+        for (String key : keys) {
+        	this.children.add(functions.get(key));
+        }
     }
 
     public void appendFunc(IRFuncDecl func) {
         functions.put(func.name(), func);
+        this.children.add(func);
     }
 
     public String name() {

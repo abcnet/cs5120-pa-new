@@ -17,7 +17,9 @@ public class IRExp extends IRStmt {
      * @param expr the expression to be evaluated and result discarded
      */
     public IRExp(IRExpr expr) {
+    	super();
         this.expr = expr;
+        this.children.add(expr);
     }
 
     public IRExpr expr() {

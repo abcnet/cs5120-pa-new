@@ -44,7 +44,6 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
 		if (this.symbol.sym == sym.EQEQ) {
-			System.out.println("HERE");
 			this.irNode = new IRBinOp(OpType.EQ,
 									(IRExpr)this.children.get(0).irNode,
 									(IRExpr)this.children.get(1).irNode);

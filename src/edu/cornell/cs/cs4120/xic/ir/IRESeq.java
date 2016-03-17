@@ -19,8 +19,11 @@ public class IRESeq extends IRExpr {
      * @param expr IR expression to be evaluated after {@code stmt}
      */
     public IRESeq(IRStmt stmt, IRExpr expr) {
+    	super();
         this.stmt = stmt;
         this.expr = expr;
+        this.children.add(stmt);
+        this.children.add(expr);
     }
 
     public IRStmt stmt() {

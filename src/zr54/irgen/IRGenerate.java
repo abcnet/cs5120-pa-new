@@ -22,6 +22,21 @@ import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
+	
+	public static void addParentstoIRTree(IRNode node, IRNode parent) {
+		node.parent = parent;
+		for (int i = 0; i < node.children.size(); i++) {
+			addParentstoIRTree(node.children.get(i), node);
+		}
+	}
+	
+	public static void printParents(IRNode node) {
+		if (node != null && node.parent != null)
+			System.out.println("node = " + node.label() + "  parent = " + node.parent.label());
+		for (int i = 0; i < node.children.size(); i++) {
+			printParents(node.children.get(i));
+		}
+	}
 
 	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run) throws Exception {
 		
@@ -65,6 +80,7 @@ public class IRGenerate {
 					}else{
 						program = new IRCompUnit(srcFile.substring(slash+1,dot));
 					}
+					
 					AstNode methods = root.getChildren().get(1), curr;
 					for(int i=0;i<methods.getChildren().size();i++){
 						curr = methods.getChildren().get(i);
@@ -73,6 +89,9 @@ public class IRGenerate {
 						}
 						program.appendFunc((IRFuncDecl)curr.getIRNode());
 					}
+					
+					addParentstoIRTree(program, null);
+					//printParents(program);
 					
 					program.printSExp(printer);
 					System.out.println("Code:");

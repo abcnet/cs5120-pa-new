@@ -6,6 +6,10 @@ import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
  * An intermediate representation for expressions
  */
 public abstract class IRExpr extends IRNode {
+	
+	public IRExpr() {
+		super();
+	}
 
     @Override
     public CheckCanonicalIRVisitor checkCanonicalEnter(
