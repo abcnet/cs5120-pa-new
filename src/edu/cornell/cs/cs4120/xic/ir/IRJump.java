@@ -52,4 +52,15 @@ public class IRJump extends IRStmt {
         target.printSExp(p);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	IRConst result = target.doConstFolding();
+    	if(result != null) {
+    		target = result;
+    		children.set(0, result);
+    	}
+    	
+    	return null;
+    }
 }

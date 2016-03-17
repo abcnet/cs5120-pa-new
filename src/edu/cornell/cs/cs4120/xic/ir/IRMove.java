@@ -65,4 +65,20 @@ public class IRMove extends IRStmt {
         expr.printSExp(p);
         p.endList();
     }
+    
+    @Override 
+    public IRConst doConstFolding() {
+    	IRConst result = target.doConstFolding();
+    	if(result != null) {
+    		target = result;
+    		children.set(0, result);
+    	}
+    		
+    	result = expr.doConstFolding();
+    	if(result != null) {
+    		expr = result;
+    		children.set(1, result);
+    	}
+    	return null;
+    }
 }

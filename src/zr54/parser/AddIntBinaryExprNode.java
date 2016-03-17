@@ -51,19 +51,20 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		AstNode c2 = children.get(1);
 		if(c1.getType().getDimension() == 0) {
 			
-			String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
-			String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
-			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-			stmts.add(new IRMove(new IRTemp(leftReg), 
-								 (IRExpr)c1.getIRNode()));
-			stmts.add(new IRMove(new IRTemp(rightReg),
-								 (IRExpr)c2.getIRNode()));
-			
-			this.irNode = new IRESeq(new IRSeq(stmts), 
-									 new IRBinOp(OpType.ADD, 
-											 	 new IRTemp(leftReg), 
-											 	 new IRTemp(rightReg)));
-				                  
+//			String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
+//			String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
+//			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+//			stmts.add(new IRMove(new IRTemp(leftReg), 
+//								 (IRExpr)c1.getIRNode()));
+//			stmts.add(new IRMove(new IRTemp(rightReg),
+//								 (IRExpr)c2.getIRNode()));
+//			
+//			this.irNode = new IRESeq(new IRSeq(stmts), 
+//									 new IRBinOp(OpType.ADD, 
+//											 	 new IRTemp(leftReg), 
+//											 	 new IRTemp(rightReg)));
+
+			this.irNode = new IRBinOp(OpType.ADD, (IRExpr)c1.getIRNode(), (IRExpr)c2.getIRNode());
 		}
 		else {
 			

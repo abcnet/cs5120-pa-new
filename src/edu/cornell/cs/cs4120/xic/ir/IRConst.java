@@ -31,6 +31,11 @@ public class IRConst extends IRExpr {
     public boolean isConstant() {
         return true;
     }
+    
+    @Override 
+    public IRConst doConstFolding() {
+    	return this;
+    }
 
     @Override
     public void printSExp(SExpPrinter p) {

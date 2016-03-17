@@ -82,11 +82,14 @@ public class IntBinaryExprNode extends BinaryExprNode {
 			break;
 		}
 		
-		this.irNode = new IRESeq(new IRSeq(stmts), 
-				new IRBinOp(op, 
-						new IRTemp(leftReg), 
-						new IRTemp(rightReg)));
+//		this.irNode = new IRESeq(new IRSeq(stmts), 
+//				new IRBinOp(op, 
+//						new IRTemp(leftReg), 
+//						new IRTemp(rightReg)));
 
+		this.irNode = new IRBinOp(op, (IRExpr)c1.getIRNode(), (IRExpr)c2.getIRNode());
+
+		
 	}
 	
 	@Override

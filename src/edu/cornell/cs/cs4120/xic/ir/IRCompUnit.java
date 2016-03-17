@@ -85,4 +85,12 @@ public class IRCompUnit extends IRNode {
             func.printSExp(p);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	for(IRNode child : children)
+    		child.doConstFolding();
+    	
+    	return null;
+    }
 }

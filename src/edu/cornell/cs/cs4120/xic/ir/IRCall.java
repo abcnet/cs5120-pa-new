@@ -100,4 +100,16 @@ public class IRCall extends IRExpr {
             arg.printSExp(p);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	for(int	i = 0; i < args.size(); i++) {
+    		IRConst result = args.get(i).doConstFolding();
+    		if(result != null) {
+    			args.set(i, result);
+    			children.set(i+1, result);
+    		}
+    	}
+    	return null;
+    }
 }

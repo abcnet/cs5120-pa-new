@@ -34,4 +34,9 @@ public class IRName extends IRExpr {
         p.printAtom(name);
         p.endList();
     }
+    
+    @Override
+    public IRConst doConstFolding() {
+    	return null;
+    }
 }

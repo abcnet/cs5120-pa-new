@@ -66,4 +66,10 @@ public class IRFuncDecl extends IRNode {
         body.printSExp(p);
         p.endList();
     }
+    
+    @Override 
+    public IRConst doConstFolding() {
+    	body.doConstFolding();
+    	return null;
+    }
 }
