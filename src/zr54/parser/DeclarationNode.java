@@ -41,7 +41,7 @@ public class DeclarationNode extends AstNode {
 
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
-		System.out.println((String) this.symbol.value);
+//		System.out.println((String) this.symbol.value);
 			
 		// TODO: array declaration not finished a:int[2][];
 		if(this.type.getDimension() > 0) {
