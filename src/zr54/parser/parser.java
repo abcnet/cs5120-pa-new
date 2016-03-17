@@ -740,7 +740,7 @@ class CUP$parser$actions {
                 int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int lbright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
-                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  
+                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("bracket",16, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

@@ -41,9 +41,25 @@ public class DeclarationNode extends AstNode {
 
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		this.irNode = new IRTemp(getRegName());
+		System.out.println((String) this.symbol.value);
+			
 		// TODO: array declaration not finished a:int[2][];
+		if(this.type.getDimension() > 0) {
+			for(AstNode child : children) 
+				child.generateIR(funcs);
+			if(children.get(0).irNode != null)
+				this.irNode = new IRESeq(new IRMove(new IRTemp(getRegName()),
+													(IRExpr)children.get(0).irNode),
+										 new IRTemp(getRegName()));
+			else
+				this.irNode = new IRTemp(getRegName());
+				
+			
+		}
+		else {
+			this.irNode = new IRTemp(getRegName());
+		}
+		
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import edu.cornell.cs.cs4120.util.InternalCompilerError;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
+import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 
 /**
@@ -108,6 +109,16 @@ public class IRBinOp extends IRExpr {
         result = v.bind(result, v.visit(left));
         result = v.bind(result, v.visit(right));
         return result;
+    }
+
+    @Override
+    public boolean isConstFolded(CheckConstFoldedIRVisitor v) {
+        return !isConstant();
+    }
+
+    @Override
+    public boolean isConstant() {
+        return left.isConstant() && right.isConstant();
     }
 
     @Override
