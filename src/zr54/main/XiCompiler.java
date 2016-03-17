@@ -31,19 +31,22 @@ class XiCompiler {
         longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
         longopts[7] = new LongOpt("irrun", LongOpt.NO_ARGUMENT, null, 7);
 
-        Getopt g = new Getopt("XiCompiler", argv, "D:", longopts, true);
+        Getopt g = new Getopt("XiCompiler", argv, "OD:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
             "options: --help | --lex | --parse | --typecheck | --irgen | --irrun\n" +
             "libpath: -libpath <path>\n" +
             "srcpath: -sourcepath <path>\n" +
-            "dstpath: -D <path>";
+            "dstpath: -D <path>" +
+            "disable optimizations: -O";
 
         String op = "";
         String srcPath = System.getProperty("user.dir");
         String dstPath = System.getProperty("user.dir");
         String libPath = System.getProperty("user.dir");
+        
+        boolean optimization = true;
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -67,6 +70,8 @@ class XiCompiler {
         				break;
                 case 'D': arg = g.getOptarg();
                           dstPath = arg;
+                          break;
+                case 'O': optimization = false;
                           break;
                 case '?': System.out.println("error: invalid option entered");
                           System.out.println(usage);
@@ -110,10 +115,10 @@ class XiCompiler {
                 TypeCheck.typeCheckAndPrint(src, dst, libPath+"/");
             } else if (op == "irgen") {
             	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", false);
+            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", false, optimization);
             } else if (op == "irrun") {
             	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", true);
+            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", true, optimization);
             }
         }
     }

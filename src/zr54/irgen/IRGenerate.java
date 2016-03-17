@@ -25,7 +25,7 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
 
-	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run) throws Exception {
+	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(dstFile);
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
