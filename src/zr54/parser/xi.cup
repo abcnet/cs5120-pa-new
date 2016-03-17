@@ -72,7 +72,7 @@ arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new 
                       ;
 
 bracket             ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
-                      | LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("", null));  :}
+                      | LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  :}
                       ;
 
 brackets            ::= bracket:b brackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}

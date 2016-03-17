@@ -46,8 +46,8 @@
   _Imain_paai
   (SEQ
    (MOVE (TEMP args_main) (TEMP _ARG0))
-   (MOVE (TEMP n_main) (CONST 7))
-   (MOVE (TEMP r_main) (CALL (NAME _IAck_iii) (CONST 3) (TEMP n_main)))
+   (MOVE (TEMP n_main) (CONST 11))
+   (MOVE (TEMP r_main) (CALL (NAME _IAck_iii) (CONST 2) (TEMP n_main)))
    (EXP
     (CALL
      (NAME _Iprint_pai)
@@ -60,7 +60,7 @@
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 8))) (CONST 99))
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 16))) (CONST 107))
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 24))) (CONST 40))
-       (MOVE (MEM (ADD (TEMP _ARR1) (CONST 32))) (CONST 51))
+       (MOVE (MEM (ADD (TEMP _ARR1) (CONST 32))) (CONST 50))
        (MOVE (MEM (ADD (TEMP _ARR1) (CONST 40))) (CONST 44)))
       (TEMP _ARR1))))
    (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP n_main))))
