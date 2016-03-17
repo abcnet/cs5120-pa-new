@@ -72,9 +72,9 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			String arrName = "_ARR" + arrNum;
 			arrNum++;
 			
-			String c1Name = c1.getRegName();
-			String c2Name = c2.getRegName();
-			
+			String c1Name = "_C1_" + Integer.toString(AstNode.counter++);
+			String c2Name = "_C2_" + Integer.toString(AstNode.counter++);
+							
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 			String label1 = "L" + Integer.toString(AstNode.counter++);
 			String tlabel1 = "L_t" + Integer.toString(AstNode.counter++);
@@ -87,14 +87,19 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			String len2Label = "_LEN2_" + Integer.toString(AstNode.counter++);
 			String countLabel = "_COUNT_" + Integer.toString(AstNode.counter++);
 			
+			stmts.add(new IRMove(new IRTemp(c1Name),
+								 (IRExpr) c1.getIRNode()));
+			stmts.add(new IRMove(new IRTemp(c2Name),
+								 (IRExpr) c2.getIRNode()));
+			
 			//compute the length of the array after concatenation
 			stmts.add(new IRMove(new IRTemp(len1Label), 
 								 new IRMem(new IRBinOp(IRBinOp.OpType.SUB,
-										 			   (IRExpr) c1.getIRNode(),
+										 			   new IRTemp(c1Name),
 										 			   new IRConst(8)))));
 			stmts.add(new IRMove(new IRTemp(len2Label), 
 								 new IRMem(new IRBinOp(IRBinOp.OpType.SUB,
-										 			   (IRExpr) c2.getIRNode(),
+										 			   new IRTemp(c2Name),
 										 			   new IRConst(8)))));
 			stmts.add(new IRMove(new IRTemp(lenLabel), 
 								 new IRBinOp(IRBinOp.OpType.ADD,
