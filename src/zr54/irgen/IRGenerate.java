@@ -119,7 +119,7 @@ public class IRGenerate {
 			            long result = sim.call("_Imain_paai");
 			        }
 					
-			        program.doConstFolding();
+			        if(optimization)program.doConstFolding();
 			        {
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
 			            System.out.print("Constant-folded?: ");
