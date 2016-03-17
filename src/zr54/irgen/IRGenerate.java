@@ -87,8 +87,8 @@ public class IRGenerate {
 //			        System.out.println(sw);
 					
 					//Generate canonical IR
-					//IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-					//program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
+					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 //					program.printSExp(printer);
 //					System.out.println("After code:");
