@@ -49,6 +49,7 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		super.generateIR(funcs);
 		AstNode c1 = children.get(0);
 		AstNode c2 = children.get(1);
+
 		if(c1.getType().getDimension() == 0) {
 			
 //			String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
