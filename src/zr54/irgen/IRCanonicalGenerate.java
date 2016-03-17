@@ -186,6 +186,7 @@ public class IRCanonicalGenerate {
 		
 		for (int i = 0; i < node.children.size(); i++) {
 			node.children.set(i, modifyCJUMPS(node.children.get(i)));
+			System.out.println("Node = " + node.label());
 			node.updateChildren();
 		}
 		
