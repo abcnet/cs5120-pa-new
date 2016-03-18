@@ -586,7 +586,8 @@ public class parser
 
 
     public CodeWriterSExpPrinter printer;
-    public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
+    public parser(CodeWriterSExpPrinter printer, String file){ this.printer = printer; this.file = file;}
+    public String file;
 
     @Override
     public void syntax_error(Symbol cur_token) {
@@ -603,7 +604,7 @@ public class parser
 	       }
     	}
     	catch(XiException e) {
-    		System.out.println(e.errorMessage());
+    		System.out.println(e.errorMessage(file));
     	}
     }
 

@@ -21,7 +21,7 @@ public class ParsePrint {
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer);
+			parser p = new parser(printer, srcFile);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
 

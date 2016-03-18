@@ -34,7 +34,7 @@ public class IRGenerate {
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer);
+			parser p = new parser(printer, srcFile);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
  
@@ -57,7 +57,7 @@ public class IRGenerate {
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
 					
-					TypeCheck.registerAllFunctions(funcs, root);
+					TypeCheck.registerAllFunctions(funcs, root, srcFile);
 					root.typeCheck(vars, funcs);
 					
 					

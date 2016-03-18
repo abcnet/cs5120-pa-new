@@ -26,11 +26,12 @@ public class TypeCheck {
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer);
+			parser p = new parser(printer, srcFile);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
  
 			Symbol s;
+			String errFile = srcFile;
 			try{
 				s = p.parse();
 				AstNode root = s.value();
@@ -46,15 +47,16 @@ public class TypeCheck {
 						
 						String ixiFile = libPath + interfaceName + ".ixi";
 						String ixiDstFile = libPath + interfaceName + ".typed";
+						errFile = ixiFile;
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
-					
-					registerAllFunctions(funcs, root);
+					errFile = srcFile;
+					registerAllFunctions(funcs, root, srcFile);
 					root.typeCheck(vars, funcs);
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
-					System.out.println(e.errorMessage());
+					System.out.println(e.errorMessage(errFile));
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					System.out.println("Error in "+dstFile);
 				}
@@ -81,8 +83,8 @@ public class TypeCheck {
 	 * @param root: root node of the program
 	 * @throws XiException
 	 */
-	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root) throws XiException{
-		root.registerFunctionSignature(funcs, false);
+	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root, String file) throws XiException{
+		root.registerFunctionSignature(funcs, false, file);
 	}
 	
 }

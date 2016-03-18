@@ -10,6 +10,8 @@ import zr54.main.XiException;
 
 public class LexerOutput {
 	
+	public static boolean debug = false;
+	
 	
 	/**
 	 * A map from integer number to the name of the symbol
@@ -75,7 +77,7 @@ public class LexerOutput {
         Lexer L = new Lexer(reader);
         PrintWriter writer = new PrintWriter(outFile, "UTF-8");
        
-        System.out.println("Lexing file: " + inFile + "  " + "Output file: " + outFile);
+        if(debug)System.out.println("Lexing file: " + inFile + "  " + "Output file: " + outFile);
         while (true) {
             Symbol tok = (Symbol) L.next_token().value;
 	        String errorMessage = L.getErrorMessage();
@@ -83,7 +85,7 @@ public class LexerOutput {
 	        if(errorMessage != null) {
 	        	
 	        	XiException e = new XiException(tok, errorMessage, "Lexical");
-	        	 System.out.println(e.errorMessage());
+	        	 System.out.println(e.errorMessage(inFile));
 //	        	 writer.write(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 	        	 writer.write(errorMessage);
 		        writer.close();

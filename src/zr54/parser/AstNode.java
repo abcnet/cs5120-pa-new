@@ -220,9 +220,9 @@ public abstract class AstNode {
      * @param isInterface
      * @throws XiException
      */
-    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws XiException {
+    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String ixiFile) throws XiException {
     	for(AstNode child : children)
-    		child.registerFunctionSignature(funcs, isInterface);
+    		child.registerFunctionSignature(funcs, isInterface, ixiFile);
     }
     
     /**

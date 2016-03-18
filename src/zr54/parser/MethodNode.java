@@ -76,7 +76,7 @@ public class MethodNode extends AstNode{
 	 * @param isInterface: true if this is an unimplemented function in interface file, false if this is an implemented function  
 	 */
 	@Override
-	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface) throws XiException{
+	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String file) throws XiException{
 		String funcName = (String) symbol.value;
 		FuncSignature funcSig = funcs.lookup(funcName);
 		

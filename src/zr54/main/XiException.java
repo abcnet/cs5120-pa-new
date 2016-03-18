@@ -5,7 +5,8 @@ import java_cup.runtime.Symbol;
 public class XiException extends Exception{ 
 	private int line;
 	private int column;
-	String type;
+	String kind;
+	
 	/**
 	 * constructor
 	 * @param sym: java cup symbol
@@ -21,7 +22,7 @@ public class XiException extends Exception{
 			this.line = 0;
 			this.column = 0;
 		}
-		type = t;
+		kind = t;
 	}
 	
 	/**
@@ -34,7 +35,7 @@ public class XiException extends Exception{
     	super(msg);
     	this.line = line;
     	this.column = column;
-    	type = t;
+    	kind = t;
     }
     
     /**
@@ -54,10 +55,10 @@ public class XiException extends Exception{
     }
 
     public String getType() {
-    	return type;
+    	return kind;
     }
     
-    public String errorMessage() {
-    	return type + " error begin at " + line +":"+ column +": " + getMessage();
+    public String errorMessage(String filename) {
+    	return kind + " error at " + filename + ": " + line + ":" + column + ": " + getMessage();
     }
 }

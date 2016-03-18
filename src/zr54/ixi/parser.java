@@ -141,8 +141,8 @@ public class parser
 
 
     public CodeWriterSExpPrinter printer;
-    public parser(CodeWriterSExpPrinter printer){ this.printer=printer; }
-
+    public parser(CodeWriterSExpPrinter printer){ this.printer = printer; }
+    
     @Override
     public void syntax_error(Symbol cur_token){
         if (cur_token.value!=null){

@@ -33,7 +33,7 @@ public class ixiAnalyze {
 			Symbol s;
 			s = p.parse();
 			AstNode root = s.value();
-			registerAllFunctions(root, funcs);
+			registerAllFunctions(root, funcs, ixiFile);
 //			printer.flush();
 
 		} else {
@@ -49,8 +49,8 @@ public class ixiAnalyze {
 	 * @param funcs: current function symbol table
 	 * @throws XiException
 	 */
-	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs) throws XiException{
-		root.registerFunctionSignature(funcs, true);		
+	public static void registerAllFunctions(AstNode root, FuncSymbolTable funcs, String ixiFile) throws XiException{
+		root.registerFunctionSignature(funcs, true, ixiFile);		
 	}
 	
 	
