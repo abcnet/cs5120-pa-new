@@ -3,6 +3,8 @@ package zr54.lexer;
 import java.io.*;
 import zr54.parser.sym;
 import java.util.*;
+
+import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
 
@@ -72,15 +74,20 @@ public class LexerOutput {
         Reader reader = new InputStreamReader(inp, "UTF-8");
         Lexer L = new Lexer(reader);
         PrintWriter writer = new PrintWriter(outFile, "UTF-8");
+       
         System.out.println("Lexing file: " + inFile + "  " + "Output file: " + outFile);
         while (true) {
             Symbol tok = (Symbol) L.next_token().value;
 	        String errorMessage = L.getErrorMessage();
 	        
 	        if(errorMessage != null) {
-	        	writer.write(errorMessage);
-	        	writer.close();
-	        	throw new XiException(tok, errorMessage, "Lexical");
+	        	
+	        	XiException e = new XiException(tok, errorMessage, "Lexical");
+	        	 System.out.println(e.errorMessage());
+//	        	 writer.write(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+	        	 writer.write(errorMessage);
+		        writer.close();
+		        return;
 	        }
             
 	        
