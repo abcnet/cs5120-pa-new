@@ -1001,7 +1001,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, "\""+sl.value+"\""), Type.INT, 1), a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",29, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

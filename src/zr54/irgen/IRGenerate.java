@@ -86,9 +86,16 @@ public class IRGenerate {
 			        }
 			        System.out.println(sw);
 					
+			        if(optimization)program.doConstFolding();
+			        {
+			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
+			            System.out.print("Constant-folded?: ");
+			            System.out.println(cv.visit(program));
+			        }
+			        
 					//Generate canonical IR
 					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+//					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 					program.printSExp(printer);
 					System.out.println("After code:");
