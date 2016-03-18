@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRCall;
 import edu.cornell.cs.cs4120.xic.ir.IRCompUnit;
 import edu.cornell.cs.cs4120.xic.ir.IRConst;
 import edu.cornell.cs.cs4120.xic.ir.IRESeq;
+import edu.cornell.cs.cs4120.xic.ir.IRExp;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import edu.cornell.cs.cs4120.xic.ir.IRJump;
@@ -155,7 +156,7 @@ public class IRCanonicalGenerate {
 						if (j == i) {
 							arg_list.add((IRExpr) e1);
 						} else {
-							arg_list.add((IRExpr) e.children.get(j));
+							arg_list.add((IRExpr) node.children.get(j));
 						}
 						
 					}
@@ -163,6 +164,17 @@ public class IRCanonicalGenerate {
 					changed = true;
 					break;
 				}
+			}
+		}
+		
+		//case-8
+		if (node instanceof IRExp) {
+			IRNode e = node.children.get(0);
+			if (e instanceof IRESeq) {
+				IRNode s = e.children.get(0);
+				IRNode e1 = e.children.get(1);
+				node = new IRSeq((IRStmt) s);
+				changed = true;
 			}
 		}
 		
@@ -179,12 +191,12 @@ public class IRCanonicalGenerate {
 			for (int i = 0; i < node.children.size(); i++) {
 				for (int j = 0; j < node.children.get(i).children.size(); j++) {
 					node.children.get(i).children.set(j, convertCALLtoESEQ(node.children.get(i).children.get(j)));
-					node.children.get(i).children.get(j).updateChildren();
+					node.children.get(i).updateChildren();
 				}
 			}
 		} else {
 			if (node instanceof IRCall) {
-				String var = "_var_" + Integer.toString(AstNode.counter++);
+				String var = "__var_" + Integer.toString(AstNode.counter++);
 				node = new IRESeq(new IRMove(new IRTemp(var),
 						                     new IRCall(((IRCall) node).target(), ((IRCall) node).args())),
 						          new IRTemp(var));
@@ -209,7 +221,6 @@ public class IRCanonicalGenerate {
 		
 		for (int i = 0; i < node.children.size(); i++) {
 			node.children.set(i, modifyCJUMPS(node.children.get(i)));
-			System.out.println("Node = " + node.label());
 			node.updateChildren();
 		}
 		
@@ -217,7 +228,7 @@ public class IRCanonicalGenerate {
 	}
 	
 	public void collectAllSEQStmts(IRNode node, ArrayList<IRStmt> stmts) {
-		if (node instanceof IRSeq || node instanceof IRCompUnit || node instanceof IRFuncDecl) {
+		if (node instanceof IRSeq || node instanceof IRFuncDecl) {
 			for (int i = 0; i < node.children.size(); i++) {
 				collectAllSEQStmts(node.children.get(i), stmts);
 			}
@@ -250,9 +261,13 @@ public class IRCanonicalGenerate {
 			changed = false;
 			root = moveESEQup(root);
 		}
-		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-		collectAllSEQStmts(root, stmts);
-		root = removeNestedSEQ(root, stmts);
+		
+		for (int i = 0; i < root.children.size(); i++) {
+			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+			collectAllSEQStmts(root.children.get(i), stmts);
+			root.children.set(i, removeNestedSEQ(root.children.get(i), stmts));
+		}
+	
 		return root;
 	}
 
