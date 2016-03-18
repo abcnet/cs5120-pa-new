@@ -71,7 +71,7 @@ public class LiteralExpr extends ExprNode {
 			arrNum++;
 			
 			String str = StringEscapeUtils.unescapeJava((String)this.symbol.value);
-			System.out.print(str);
+			if(debug)System.out.print(str);
 			int len = str.length();
 			
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();

@@ -91,8 +91,8 @@ public class IRGenerate {
 			        if(optimization)program.doConstFolding();
 			        {
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            System.out.print("Constant-folded?: ");
-			            System.out.println(cv.visit(program));
+			            if (debug)System.out.print("Constant-folded?: ");
+			            if (debug)System.out.println(cv.visit(program));
 			        }
 			        
 					//Generate canonical IR
@@ -112,15 +112,15 @@ public class IRGenerate {
 			        // IR canonical checker demo
 			        {
 			            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
-			            System.out.print("Canonical?: ");
-			            System.out.println(cv.visit(program));
+			            if (debug)System.out.print("Canonical?: ");
+			            if (debug)System.out.println(cv.visit(program));
 			        }
 			        
 					
 					{
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            System.out.print("Constant-folded?: ");
-			            System.out.println(cv.visit(program));
+			            if (debug)System.out.print("Constant-folded?: ");
+			            if (debug)System.out.println(cv.visit(program));
 			        }
 					
 			        if(run){
@@ -131,8 +131,8 @@ public class IRGenerate {
 			        if(optimization)program.doConstFolding();
 			        {
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            System.out.print("Constant-folded?: ");
-			            System.out.println(cv.visit(program));
+			            if (debug)System.out.print("Constant-folded?: ");
+			            if (debug)System.out.println(cv.visit(program));
 			        }
 					
 				}catch(XiException e) {
