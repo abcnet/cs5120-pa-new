@@ -3,15 +3,43 @@
  (FUNC
   _Imain_i
   (SEQ
-   (MOVE (TEMP a) (CONST 1))
-   (MOVE (TEMP b) (CALL (NAME _Ifoo_t2ii)))
-   (MOVE (TEMP c) (TEMP _RET1))
+   (MOVE (TEMP a_main) (CONST 1))
+   (MOVE (TEMP b_main) (CALL (NAME _Ifoo_t2ii)))
+   (MOVE (TEMP c_main) (TEMP _RET1))
    (MOVE (TEMP _RET0) (CONST 1))
    (RETURN)
    (RETURN)))
  (FUNC
   _Ifoo_t2ii
   (SEQ
+   (MOVE (TEMP _RET0) (CONST 1))
+   (MOVE (TEMP _RET1) (CONST 2))
+   (RETURN)
+   (RETURN))))
+(COMPUNIT
+ simpleAssign
+ (FUNC
+  _Imain_i
+  (SEQ
+   (MOVE (TEMP a_main) (CONST 1))
+   (MOVE (TEMP b_main) (CALL (NAME _Ifoo_t2ii)))
+   (MOVE (TEMP c_main) (TEMP _RET1))
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (MOVE (TEMP _RET1) (CONST 2))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _Ifoo_t2ii
+  (SEQ
+   (MOVE (TEMP a_main) (CONST 1))
+   (MOVE (TEMP b_main) (CALL (NAME _Ifoo_t2ii)))
+   (MOVE (TEMP c_main) (TEMP _RET1))
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)
    (MOVE (TEMP _RET0) (CONST 1))
    (MOVE (TEMP _RET1) (CONST 2))
    (RETURN)
