@@ -30,11 +30,14 @@ public class LiteralExpr extends ExprNode {
 	@Override
 	public void print(CodeWriterSExpPrinter printer) {
 		if(this.name.equals("CHARACTER_LITERAL")){
-			printer.printAtom("\'"+(String) symbol.value+"\'");
+			if (debug) System.out.print("\'"+((Character) this.symbol.value).toString()+"\'");
+			printer.printAtom("\'"+((Character) this.symbol.value).toString()+"\'");
 		}
 		else if(this.name.equals("STRING_LITERAL")){
+			if (debug) System.out.print("\""+(String) symbol.value+"\"");
 			printer.printAtom("\""+(String) symbol.value+"\"");
 		}else{
+			if (debug) System.out.print((String) symbol.value);
 			printer.printAtom((String) symbol.value);
 		}
 	}

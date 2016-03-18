@@ -16,6 +16,7 @@ import zr54.main.XiException;
  *
  */
 public abstract class AstNode {
+	public static boolean debug=true;
 	public static int arrNum = 0;
 	
 	//ths number is used to distinguish different arrays 
@@ -146,20 +147,29 @@ public abstract class AstNode {
 	public void print(CodeWriterSExpPrinter printer) {
 		if(this.children.size()>0 || this.name.equals("forceParen")){
 
-			if(!(this.name.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1)){
+				if (debug) System.out.print("(");
 				printer.startList();
-
-			if(symbol != null)
+				
+			}
+			if(symbol != null){
+				if (debug) System.out.print((String) symbol.value);
 				printer.printAtom((String) symbol.value);
-
+				
+			}
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
 			
-			if(!(this.name.equals("statement") && this.children.size() == 1))
+			if(!(this.name.equals("statement") && this.children.size() == 1)){
+				
+				if (debug) System.out.print(")");
 				printer.endList();
+			}
 		}else{
-			if(symbol != null)
+			if(symbol != null){
+				if (debug) System.out.print((String) symbol.value);
 				printer.printAtom((String) symbol.value);
+			}
 			
 	        for (int i = 0; i < this.children.size(); i++) {
 	            this.children.get(i).print(printer);
