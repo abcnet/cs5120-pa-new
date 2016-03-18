@@ -24,6 +24,8 @@ import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
+	
+	public static boolean debug = false;
 
 	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization) throws Exception {
 		
@@ -77,14 +79,14 @@ public class IRGenerate {
 						program.appendFunc((IRFuncDecl)curr.getIRNode());
 					}
 					
-					program.printSExp(printer);
-					System.out.println("Code:");
-			        StringWriter sw = new StringWriter();
-			        try (PrintWriter pw = new PrintWriter(sw);
-			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
-			            program.printSExp(sp);
-			        }
-			        System.out.println(sw);
+//					program.printSExp(printer);
+//					if (debug) System.out.println("Code:");
+//			        StringWriter sw = new StringWriter();
+//			        try (PrintWriter pw = new PrintWriter(sw);
+//			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+//			            program.printSExp(sp);
+//			        }
+//			        if (debug) System.out.println(sw);
 					
 			        if(optimization)program.doConstFolding();
 			        {
@@ -95,16 +97,16 @@ public class IRGenerate {
 			        
 					//Generate canonical IR
 					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-//					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 					program.printSExp(printer);
-					System.out.println("After code:");
+					if (debug) System.out.println("After code:");
 			        StringWriter sw1 = new StringWriter();
 			        try (PrintWriter pw = new PrintWriter(sw1);
 			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
 			            program.printSExp(sp);
 			        }
-			        System.out.println(sw1);
+			        if (debug) System.out.println(sw1);
 					
 
 			        // IR canonical checker demo

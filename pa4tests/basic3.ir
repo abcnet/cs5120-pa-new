@@ -6,31 +6,11 @@
    (MOVE (TEMP str_f_g) (TEMP _ARG0))
    (MOVE (TEMP a_f_g) (CONST 1))
    (MOVE (TEMP _RET0) (CONST 1))
-   (MOVE
-    (TEMP _RET1)
-    (ESEQ
-     (SEQ
-      (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 24)))
-      (MOVE (MEM (TEMP _ARR0)) (CONST 2))
-      (MOVE (TEMP _ARR0) (ADD (TEMP _ARR0) (CONST 8)))
-      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 0))) (CONST 0))
-      (MOVE (MEM (ADD (TEMP _ARR0) (CONST 8))) (CONST 1)))
-     (TEMP _ARR0)))
-   (RETURN)
-   (RETURN))))
-(COMPUNIT
- basic3
- (FUNC
-  _If__g_t2iabai
-  (SEQ
-   (MOVE (TEMP str_f_g) (TEMP _ARG0))
-   (MOVE (TEMP a_f_g) (CONST 1))
-   (MOVE (TEMP _RET0) (CONST 1))
-   (MOVE (TEMP _ARR0) (CALL (NAME _I_alloc_i) (CONST 24)))
-   (MOVE (MEM (TEMP _ARR0)) (CONST 2))
-   (MOVE (TEMP _ARR0) (ADD (TEMP _ARR0) (CONST 8)))
-   (MOVE (MEM (ADD (TEMP _ARR0) (CONST 0))) (CONST 0))
-   (MOVE (MEM (ADD (TEMP _ARR0) (CONST 8))) (CONST 1))
-   (MOVE (TEMP _RET1) (TEMP _ARR0))
+   (MOVE (TEMP _ARR29) (CALL (NAME _I_alloc_i) (CONST 24)))
+   (MOVE (MEM (TEMP _ARR29)) (CONST 2))
+   (MOVE (TEMP _ARR29) (ADD (TEMP _ARR29) (CONST 8)))
+   (MOVE (MEM (ADD (TEMP _ARR29) (CONST 0))) (CONST 0))
+   (MOVE (MEM (ADD (TEMP _ARR29) (CONST 8))) (CONST 1))
+   (MOVE (TEMP _RET1) (TEMP _ARR29))
    (RETURN)
    (RETURN))))
