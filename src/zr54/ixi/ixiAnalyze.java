@@ -26,7 +26,7 @@ public class ixiAnalyze {
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 		File f = new File(ixiFile);
 		if (f.exists()) {
-			parser p = new parser(printer);
+			parser p = new parser(printer, ixiFile);
 			Lexer l = new Lexer(new FileReader(ixiFile));
 			p.setScanner(l);
 
