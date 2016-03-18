@@ -16,7 +16,7 @@ import zr54.main.XiException;
  *
  */
 public abstract class AstNode {
-	public static boolean debug=true;
+	public static boolean debug = false;
 	public static int arrNum = 0;
 	
 	//ths number is used to distinguish different arrays 
