@@ -233,7 +233,8 @@ public class IRSimulator {
             put(frame, Configuration.ABSTRACT_ARG_PREFIX + i, args[i]);
 
         // Simulate!
-        while (frame.advance());
+        while (frame.advance())
+            ;
 
         return get(frame, Configuration.ABSTRACT_RET_PREFIX + 0);
     }
@@ -270,13 +271,18 @@ public class IRSimulator {
                 store(ptr, len);
                 for (int i = 0; i < len; ++i)
                     store(ptr + (i + 1) * ws, line.charAt(i));
+                put(null, Configuration.ABSTRACT_RET_PREFIX + 0, ptr + ws);
                 return ptr + ws;
             }
             case "_Igetchar_i": {
-                return inReader.read();
+                long result = inReader.read();
+                put(null, Configuration.ABSTRACT_RET_PREFIX + 0, result);
+                return result;
             }
             case "_Ieof_b": {
-                return inReader.ready() ? 0 : 1;
+                long result = inReader.ready() ? 0 : 1;
+                put(null, Configuration.ABSTRACT_RET_PREFIX + 0, result);
+                return result;
             }
                 // conv declarations
             case "_IunparseInt_aii": {
@@ -286,6 +292,7 @@ public class IRSimulator {
                 store(ptr, len);
                 for (int i = 0; i < len; ++i)
                     store(ptr + (i + 1) * ws, line.charAt(i));
+                put(null, Configuration.ABSTRACT_RET_PREFIX + 0, ptr + ws);
                 return ptr + ws;
             }
             case "_IparseInt_t2ibai": {
@@ -306,7 +313,9 @@ public class IRSimulator {
             }
                 // special declarations
             case "_I_alloc_i": {
-                return malloc(args[0]);
+                long result = malloc(args[0]);
+                put(null, Configuration.ABSTRACT_RET_PREFIX + 0, result);
+                return result;
             }
             case "_I_outOfBounds_p": {
                 throw new Trap("Out of bounds!");
