@@ -7,8 +7,7 @@ mkMatrix(n:int): int[][] {
 }
 
 main(args:int[][]) {
-		   arr:int[2][2];
-		   arr[1][1] = 12;
+		   arr:int[2][2] = {{1, 2}, {3, 4}};
 		   println(unparseInt(arr[1][1]));
 
 		   n:int = 2;
