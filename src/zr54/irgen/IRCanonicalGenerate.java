@@ -69,7 +69,7 @@ public class IRCanonicalGenerate {
 				node = new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), (IRExpr) e2, (IRExpr) e3));
 				changed = true;
 			}
-			if (e2 instanceof IRESeq) {
+			else if (e2 instanceof IRESeq) {
 				IRNode s = e2.children.get(0);
 				IRNode e3 = e2.children.get(1);
 				if (e3 instanceof IRConst) { //s and e3 commute
@@ -140,6 +140,29 @@ public class IRCanonicalGenerate {
 				stmts.add(new IRJump((IRExpr) e1));
 				node = new IRSeq(stmts);
 				changed = true;
+			}
+		}
+		
+		//case-7
+		if (node instanceof IRCall) {
+			for (int i = 1; i < node.children.size(); i++) {
+				IRNode e = node.children.get(i);
+				if (e instanceof IRESeq) {
+					IRNode s = e.children.get(0);
+					IRNode e1 = e.children.get(1);
+					ArrayList<IRExpr> arg_list = new ArrayList<IRExpr>();
+					for (int j = 1; j < node.children.size(); j++) {
+						if (j == i) {
+							arg_list.add((IRExpr) e1);
+						} else {
+							arg_list.add((IRExpr) e.children.get(j));
+						}
+						
+					}
+					node = new IRESeq((IRStmt) s, new IRCall(((IRCall) node).target(), arg_list));
+					changed = true;
+					break;
+				}
 			}
 		}
 		
