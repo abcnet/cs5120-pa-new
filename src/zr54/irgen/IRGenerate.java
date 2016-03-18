@@ -95,7 +95,7 @@ public class IRGenerate {
 			        
 					//Generate canonical IR
 					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-//					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 					program.printSExp(printer);
 					System.out.println("After code:");

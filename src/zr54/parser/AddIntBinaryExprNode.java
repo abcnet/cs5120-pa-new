@@ -71,19 +71,19 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 			
 			//use a different name for each array
 			regNum = arrNum;
-			String arrName = "_ARR" + arrNum;
+			String arrName = "_ARR_" + arrNum;
 			arrNum++;
 			
 			String c1Name = "_C1_" + Integer.toString(AstNode.counter++);
 			String c2Name = "_C2_" + Integer.toString(AstNode.counter++);
 							
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-			String label1 = "L" + Integer.toString(AstNode.counter++);
-			String tlabel1 = "L_t" + Integer.toString(AstNode.counter++);
-			String flabel1 = "L_f" + Integer.toString(AstNode.counter++);
-			String label2 = "L" + Integer.toString(AstNode.counter++);
-			String tlabel2 = "L_t" + Integer.toString(AstNode.counter++);
-			String flabel2 = "L_f" + Integer.toString(AstNode.counter++);
+			String label1 = "_L_" + Integer.toString(AstNode.counter++);
+			String tlabel1 = "_L_t_" + Integer.toString(AstNode.counter++);
+			String flabel1 = "_L_f_" + Integer.toString(AstNode.counter++);
+			String label2 = "_L_" + Integer.toString(AstNode.counter++);
+			String tlabel2 = "_L_t_" + Integer.toString(AstNode.counter++);
+			String flabel2 = "_L_f_" + Integer.toString(AstNode.counter++);
 			String lenLabel = "_LEN_" + Integer.toString(AstNode.counter++);
 			String len1Label = "_LEN1_" + Integer.toString(AstNode.counter++);
 			String len2Label = "_LEN2_" + Integer.toString(AstNode.counter++);

@@ -56,8 +56,8 @@ public class IntBinaryExprNode extends BinaryExprNode {
 		AstNode c2 = children.get(1);
 
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
-		String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
-		String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
+		String leftReg = "_LEFT_" + Integer.toString(AstNode.counter++);
+		String rightReg = "_RIGHT_" + Integer.toString(AstNode.counter++);
 		stmts.add(new IRMove(new IRTemp(leftReg), 
 				(IRExpr)c1.getIRNode()));
 		stmts.add(new IRMove(new IRTemp(rightReg),
