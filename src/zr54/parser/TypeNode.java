@@ -69,7 +69,7 @@ public class TypeNode extends AstNode {
 				ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 				
 				String lenLabel = "_LEN_" + Integer.toString(AstNode.counter++);
-				String arrName = "_ARR" + Integer.toString(AstNode.arrNum);
+				String arrName = "_ARR_" + Integer.toString(AstNode.arrNum);
 				regNum = AstNode.arrNum;
 				AstNode.arrNum++;
 				
@@ -143,6 +143,6 @@ public class TypeNode extends AstNode {
 	
 	@Override
 	public String getRegName() {
-		return "_ARR" + getRegNum();
+		return "_ARR_" + getRegNum();
 	}
 }

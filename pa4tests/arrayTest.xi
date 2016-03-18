@@ -25,7 +25,7 @@ main(args:int[][]) {
 
 		   n = 10;
 		   drr:int[][] = mkMatrix(n);
-		   println(unparseInt(drr[9][9]))
+		   println("This piece of memory is not initialized: " +unparseInt(drr[9][9]))
 		   
 		   c1:int = 0;
 		   c2:int = 0;
@@ -58,4 +58,6 @@ main(args:int[][]) {
   		   println(unparseInt(loops[2][3]))
 		   println(unparseInt(loops[0][3]))
 
+		   frr:int[] = "string.";
+		   println("Let's " + "concatenate " + unparseInt(1) + {65, 32} + frr)
 }

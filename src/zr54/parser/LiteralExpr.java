@@ -67,7 +67,7 @@ public class LiteralExpr extends ExprNode {
 			//string literal: return a integer array
 			
 			regNum = arrNum;
-			String arrName = "_ARR" + arrNum;
+			String arrName = "_ARR_" + arrNum;
 			arrNum++;
 			
 			String str = StringEscapeUtils.unescapeJava((String)this.symbol.value);
@@ -122,7 +122,7 @@ public class LiteralExpr extends ExprNode {
 	
 	@Override
 	public String getRegName() {
-		return "_ARR" + getRegNum();
+		return "_ARR_" + getRegNum();
 	}
 	
 }

@@ -51,9 +51,9 @@ public class AndOrNode extends BoolBinaryExprNode {
 		// TODO Auto-generated method stub
 		super.generateIR(funcs);
 		if (this.symbol.sym == sym.AND) {
-			String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
-			String label1 = "L_"+Integer.toString(AstNode.counter++);
-			String label2 = "L_"+Integer.toString(AstNode.counter++);
+			String falseLabel = "_L_false_"+Integer.toString(AstNode.counter++);
+			String label1 = "_L_"+Integer.toString(AstNode.counter++);
+			String label2 = "_L_"+Integer.toString(AstNode.counter++);
 			String var = "_var_"+Integer.toString(AstNode.counter++);
 			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(0)),
 					                 new IRCJump((IRExpr)this.children.get(0).irNode, label1, falseLabel),
@@ -64,9 +64,9 @@ public class AndOrNode extends BoolBinaryExprNode {
 									 new IRLabel(falseLabel)),
 								new IRTemp(var));
 		} else if (this.symbol.sym == sym.OR) {
-			String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
-			String label1 = "L_"+Integer.toString(AstNode.counter++);
-			String label2 = "L_"+Integer.toString(AstNode.counter++);
+			String trueLabel = "_L_true_"+Integer.toString(AstNode.counter++);
+			String label1 = "_L_"+Integer.toString(AstNode.counter++);
+			String label2 = "_L_"+Integer.toString(AstNode.counter++);
 			String var = "_var_"+Integer.toString(AstNode.counter++);
 			this.irNode = new IRESeq(new IRSeq(new IRMove(new IRTemp(var), new IRConst(1)),
 	                 				 new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, label1),

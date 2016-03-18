@@ -69,7 +69,7 @@ public class ArrayLiteralNode extends ExprNode{
 		
 		//use a different name for each array
 		regNum = arrNum;
-		String arrName = "_ARR" + arrNum;
+		String arrName = "_ARR_" + arrNum;
 		arrNum++;
 		
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
@@ -111,7 +111,7 @@ public class ArrayLiteralNode extends ExprNode{
 	
 	@Override
 	public String getRegName() {
-		return "_ARR" + getRegNum();
+		return "_ARR_" + getRegNum();
 	}
 	
 	
