@@ -8,7 +8,7 @@ import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
-
+import org.apache.commons.lang3.StringEscapeUtils;
 public class LiteralExpr extends ExprNode {
 	private int literalType;
 	private int dimension;
@@ -70,7 +70,8 @@ public class LiteralExpr extends ExprNode {
 			String arrName = "_ARR" + arrNum;
 			arrNum++;
 			
-			String str = (String)this.symbol.value;
+			String str = StringEscapeUtils.unescapeJava((String)this.symbol.value);
+			System.out.print(str);
 			int len = str.length();
 			
 			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();

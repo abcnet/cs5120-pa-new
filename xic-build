@@ -25,5 +25,5 @@ echo "Done processing ixi.cup"
 
 echo "Start compiling .java files"
 mkdir "${DIR}"/bin
-javac -d "${DIR}"/bin -cp "${DIR}"/src:"${DIR}"/lib/java_cup.jar:"${DIR}"/lib/java-getopt-1.0.14.jar "${DIR}"/src/zr54/*/*.java "${DIR}"/src/polyglot/*/*.java  "${DIR}"/src/edu/cornell/cs/cs4120/*/*.java "${DIR}"/src/edu/cornell/cs/cs4120/xic/*/*.java "${DIR}"/src/edu/cornell/cs/cs4120/xic/ir/*/*.java
+javac -d "${DIR}"/bin -cp "${DIR}"/src:"${DIR}"/lib/java_cup.jar:"${DIR}"/lib/java-getopt-1.0.14.jar:"${DIR}"/lib/commons-lang3-3.4.jar "${DIR}"/src/zr54/*/*.java "${DIR}"/src/polyglot/*/*.java  "${DIR}"/src/edu/cornell/cs/cs4120/*/*.java "${DIR}"/src/edu/cornell/cs/cs4120/xic/*/*.java "${DIR}"/src/edu/cornell/cs/cs4120/xic/ir/*/*.java
 echo "Done compiling .java files"
