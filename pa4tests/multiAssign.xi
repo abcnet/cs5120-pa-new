@@ -8,8 +8,7 @@ foo():int, int[], bool {
 }
 
 main(args:int[][]) {
-		   b:bool = false
-		   a:int, arr:int[], b = foo()
+		   a:int, arr:int[], b:bool = foo()
 		   if(b)
 			println("the function returns true")
 		   println(unparseInt(a))
