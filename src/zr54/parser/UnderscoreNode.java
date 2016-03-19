@@ -27,6 +27,10 @@ public class UnderscoreNode extends ExprNode{
 		return type;
 	}
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub

@@ -67,9 +67,12 @@ public class FunctionCallNode extends ExprNode{
 
 	}
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
 		AstNode curr;
 		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
 		for (int i=0;i<this.children.size();i++){

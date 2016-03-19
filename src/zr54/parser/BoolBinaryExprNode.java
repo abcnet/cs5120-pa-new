@@ -21,6 +21,10 @@ public abstract class BoolBinaryExprNode extends BinaryExprNode {
 		super(t, v, child1, child2);
 	}
 	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		if(this.children.get(0).irNode==null){

@@ -139,6 +139,11 @@ public class IRBinOp extends IRExpr {
         p.endList();
     }
     
+    /**
+     * Do constant folding. If any children can be folded, replace it with a IRConst node.
+     * @return if this node can be folded into a constant, return the IRConst node
+     * 		   otherwise return null
+     */
     @Override
     public IRConst doConstFolding() {
     	IRConst lConst = left.doConstFolding();
@@ -155,7 +160,7 @@ public class IRBinOp extends IRExpr {
     	
     	if(lConst == null || rConst == null)
     		return null;
-    	else {
+    	else { //if both children are constant, this node is constant-foldable and we return the IRConst after folding
     		long l = lConst.value();
     		long r = rConst.value();
     		long result;

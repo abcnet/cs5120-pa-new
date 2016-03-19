@@ -73,12 +73,18 @@ public class AssignStmtNode extends StmtNode{
 		return type;
 	}
 	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
 		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
 		moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
 		
+		
+		//if there are multiple assignments, get the values in the return registers
 		if(children.get(0) instanceof MultiVariableNode) {
 			for(int i = 1; i < children.get(0).getChildren().size(); i++) {
 				moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 

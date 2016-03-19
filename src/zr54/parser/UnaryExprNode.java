@@ -14,7 +14,10 @@ public abstract class UnaryExprNode extends ExprNode{
 		addChild(child);
 	}
 
-	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override 
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);

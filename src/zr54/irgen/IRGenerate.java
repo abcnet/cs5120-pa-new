@@ -27,6 +27,16 @@ public class IRGenerate {
 	
 	public static boolean debug = false;
 
+	
+	/**
+	 * Generete the IR
+	 * @param srcFile: input file path
+	 * @param dstFile: output file path
+	 * @param libPath: ixi file path
+	 * @param run: true if doing irrun, false if doing irgen
+	 * @param optimization: true if doing constant folding
+	 * @throws Exception
+	 */
 	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(dstFile);

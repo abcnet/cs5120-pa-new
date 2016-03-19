@@ -59,7 +59,10 @@ public class IfElseStmtNode extends StmtNode {
 	}
 	
 
-
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	public void generateIR(FuncSymbolTable funcs) {
 		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
 		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);

@@ -41,6 +41,10 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 
     }
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);

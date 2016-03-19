@@ -61,9 +61,12 @@ public class ArrayLiteralNode extends ExprNode{
 		return type;
 	}
 	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
 		super.generateIR(funcs);
 		int len = children.size();
 		
@@ -109,6 +112,9 @@ public class ArrayLiteralNode extends ExprNode{
 		return true;
 	}
 	
+	/**
+	 * get the register name of this array
+	 */
 	@Override
 	public String getRegName() {
 		return "_ARR_" + getRegNum();

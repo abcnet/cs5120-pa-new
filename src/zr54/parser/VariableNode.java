@@ -33,7 +33,10 @@ public class VariableNode extends ExprNode{
 	}
 
 
-	// TODO can be removed for efficiency
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		this.irNode = new IRTemp(getRegName());

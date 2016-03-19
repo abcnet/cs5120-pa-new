@@ -258,20 +258,42 @@ public abstract class AstNode {
     	}
     }
     
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
     public abstract void generateIR(FuncSymbolTable funcs);
+    
     public abstract boolean isConst();
+    
+    /**
+     * get the IR node
+     * @return the IR node
+     */
     public IRNode getIRNode(){
     	return this.irNode;
     }
     
+    /**
+     * get the type of this node
+     * @return
+     */
     public Type getType() {
     	return this.type;
     }
     
+    /**
+     * get the register id of this node
+     * @return
+     */
     public int getRegNum() {
     	return regNum;
     }
     
+    /**
+     * get the register name
+     * @return
+     */
     public String getRegName() {
     	return "ThisShouldNotBeCalled";
     }

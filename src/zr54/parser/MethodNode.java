@@ -118,7 +118,11 @@ public class MethodNode extends AstNode{
 		}
 		
 	}
-
+	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		AstNode.currMethod = (String)this.symbol.value; 
@@ -150,28 +154,6 @@ public class MethodNode extends AstNode{
 			}
 			
 		}
-//		String functionName = "_I"+((String)this.symbol.value).replaceAll("_", "__")+"_";
-//		int numRet = this.children.get(1).children.size();
-//		ArrayList<Type> returnType = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
-//		switch(numRet){
-//		case 0:
-//			functionName += "p";
-//			break;
-//		case 1:
-//			functionName += returnType.get(0).toABIString();
-//			break;
-//		default:
-//			functionName += "t"+numRet;
-//			for(i=0;i<numRet;i++){
-//				functionName += returnType.get(i).toABIString();
-//			}
-//			break;
-//				
-//		}
-//		ArrayList<Type> argsType = funcs.lookup((String)symbol.value).getFunctionArgTypes().getTuple();
-//		for(i=0;i<argsType.size();i++){
-//			functionName+=argsType.get(i).toABIString();
-//		}
 		l.add(new IRReturn());
 		this.irNode = new IRFuncDecl(funcs.lookup((String)symbol.value).toString(),new IRSeq(l));
 	}

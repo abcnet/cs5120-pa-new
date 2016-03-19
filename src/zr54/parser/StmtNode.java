@@ -53,8 +53,12 @@ public abstract class StmtNode extends DefaultNode{
 		return type;
 	}
 	
+	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
-
 	public void generateIR(FuncSymbolTable funcs) {
 		for(AstNode n : children)
 			n.generateIR(funcs);
