@@ -1,0 +1,55 @@
+(COMPUNIT
+ funccall+
+ (FUNC
+  _Imain_paai
+  (SEQ
+   (MOVE (TEMP args_main) (TEMP _ARG0))
+   (MOVE (TEMP a_main) (ADD (CALL (NAME _If_i)) (CALL (NAME _Ig_i))))
+   (EXP (CALL (NAME _Iprint_pai) (CALL (NAME _IunparseInt_aii) (TEMP a_main))))
+   (RETURN)))
+ (FUNC _If_i (SEQ (MOVE (TEMP _RET0) (CONST 1)) (RETURN) (RETURN)))
+ (FUNC _Ig_i (SEQ (MOVE (TEMP _RET0) (CONST 2)) (RETURN) (RETURN))))
+(COMPUNIT
+ funccall+
+ (FUNC
+  _Imain_paai
+  (SEQ
+   (MOVE (TEMP args_main) (TEMP _ARG0))
+   (MOVE (TEMP _var_2) (CALL (NAME _If_i)))
+   (MOVE (TEMP _var_3) (CALL (NAME _Ig_i)))
+   (MOVE (TEMP a_main) (ADD (TEMP _var_2) (TEMP _var_3)))
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 2))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _If_i
+  (SEQ
+   (MOVE (TEMP args_main) (TEMP _ARG0))
+   (MOVE (TEMP _var_2) (CALL (NAME _If_i)))
+   (MOVE (TEMP _var_3) (CALL (NAME _Ig_i)))
+   (MOVE (TEMP a_main) (ADD (TEMP _var_2) (TEMP _var_3)))
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 2))
+   (RETURN)
+   (RETURN)))
+ (FUNC
+  _Ig_i
+  (SEQ
+   (MOVE (TEMP args_main) (TEMP _ARG0))
+   (MOVE (TEMP _var_2) (CALL (NAME _If_i)))
+   (MOVE (TEMP _var_3) (CALL (NAME _Ig_i)))
+   (MOVE (TEMP a_main) (ADD (TEMP _var_2) (TEMP _var_3)))
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 1))
+   (RETURN)
+   (RETURN)
+   (MOVE (TEMP _RET0) (CONST 2))
+   (RETURN)
+   (RETURN))))
