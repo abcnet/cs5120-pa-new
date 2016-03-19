@@ -40,6 +40,10 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 		return type;
 	}
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);

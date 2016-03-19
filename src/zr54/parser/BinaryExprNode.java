@@ -18,6 +18,10 @@ public class BinaryExprNode extends ExprNode{
 		addChild(child2);
 	}
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		if(this.children.get(0).irNode==null){

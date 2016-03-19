@@ -85,9 +85,9 @@ public class LexerOutput {
 	        if(errorMessage != null) {
 	        	
 	        	XiException e = new XiException(tok, errorMessage, "Lexical");
-	        	 System.out.println(e.errorMessage(inFile));
-//	        	 writer.write(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
-	        	 writer.write(errorMessage);
+	        	 System.err.println(e.errorMessage(inFile));
+	        	 writer.write(e.getMessage());
+//	        	 writer.write(e.errorMessage(inFile));
 		        writer.close();
 		        return;
 	        }

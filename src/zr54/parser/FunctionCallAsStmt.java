@@ -11,9 +11,12 @@ public class FunctionCallAsStmt extends FunctionCallNode {
 		super(f.name,f.symbol);
 		
 		this.children=f.children;
-		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override 
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);

@@ -46,6 +46,10 @@ public class NotNode extends UnaryExprNode{
 								  new IRConst(1));
 	}
 	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub

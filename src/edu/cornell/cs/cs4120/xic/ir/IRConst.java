@@ -32,6 +32,11 @@ public class IRConst extends IRExpr {
         return true;
     }
     
+    /**
+     * Do constant folding. If any children can be folded, replace it with a IRConst node.
+     * @return if this node can be folded into a constant, return the IRConst node
+     * 		   otherwise return null
+     */
     @Override 
     public IRConst doConstFolding() {
     	return this;

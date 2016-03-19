@@ -39,14 +39,17 @@ public class ArrayIndicesNode extends BinaryExprNode{
 		return type;
 	} 
 	
-	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override 
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
 		AstNode arrName = children.get(0);
 		AstNode index = children.get(1);
-	
-		//TODO: constant folding if 
+
+		//accessing the memory
 		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 											(IRExpr) arrName.irNode,
 											new IRBinOp(IRBinOp.OpType.MUL,

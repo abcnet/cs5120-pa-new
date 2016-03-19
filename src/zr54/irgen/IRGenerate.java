@@ -27,6 +27,16 @@ public class IRGenerate {
 	
 	public static boolean debug = false;
 
+	
+	/**
+	 * Generete the IR
+	 * @param srcFile: input file path
+	 * @param dstFile: output file path
+	 * @param libPath: ixi file path
+	 * @param run: true if doing irrun, false if doing irgen
+	 * @param optimization: true if doing constant folding
+	 * @throws Exception
+	 */
 	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(dstFile);
@@ -39,6 +49,7 @@ public class IRGenerate {
 			p.setScanner(l);
  
 			Symbol s;
+			String errFile = srcFile;
 			try{
 				s = p.parse();
 				AstNode root = s.value();
@@ -46,7 +57,7 @@ public class IRGenerate {
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
 				
-//				try {
+				try {
 					//first need load all interface files and register function signatures
 					AstNode useNode = root.getChildren().get(0);
 					for(AstNode useSpec : useNode.getChildren()) {
@@ -54,9 +65,10 @@ public class IRGenerate {
 						
 						String ixiFile = libPath + interfaceName + ".ixi";
 						String ixiDstFile = libPath + interfaceName + ".typed";
+						errFile = ixiFile;
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
 					}
-					
+					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile);
 					root.typeCheck(vars, funcs);
 					
@@ -137,19 +149,19 @@ public class IRGenerate {
 					
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
-					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
-					System.out.println("Error in "+dstFile);
+					printer.printAtom(e.errorMessage(errFile));
+					System.err.println(e.errorMessage(errFile));
 				}finally{
 					printer.flush();
 				}
 								
-//			}catch(Exception e){
-//				System.out.println(e.getMessage());
-//				s = l.next_token();
-//			}finally{
-//				printer.flush();
+			}catch(Exception e){
+				System.err.println(e.getMessage());
+				s = l.next_token();
+			}finally{
+				printer.flush();
 //				System.out.println("Type checking result written to: " + dstFile);
-//			}
+			}
 			
 
 		} else {

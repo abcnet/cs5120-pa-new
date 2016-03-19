@@ -11,6 +11,7 @@ import polyglot.util.*;
 import zr54.lexer.*;
 import zr54.parser.*;
 import zr54.typechecker.Type;
+import zr54.main.XiException;
 
 /** CUP v0.11b 20150326 generated parser.
   */
@@ -146,6 +147,16 @@ public class parser
     
     @Override
     public void syntax_error(Symbol cur_token){
+    try{
+     String errorMessage = ((Lexer)this.getScanner()).getErrorMessage();
+      if(errorMessage != null) {
+            
+            XiException e = new XiException(cur_token, errorMessage, "Lexical");
+            
+//             writer.write(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+             printer.printAtom(e.errorMessage(file));
+           throw e;
+          }
         if (cur_token.value!=null){
         	Symbol tok = (Symbol) cur_token.value;
             printer.printAtom(cur_token.left + ":" +
@@ -154,6 +165,11 @@ public class parser
             printer.printAtom(cur_token.left + ":" + cur_token.right +
             " error:Unexpected token " + LexerOutput.terminalName.get(cur_token.sym));
         }
+        }
+      catch(XiException e) {
+      //printer.printAtom(e.errorMessage(file));
+        System.out.println(e.errorMessage(file));
+      }
     }
 
 

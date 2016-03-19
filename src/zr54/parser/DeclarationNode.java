@@ -39,11 +39,15 @@ public class DeclarationNode extends AstNode {
 
 	}
 
+	
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 //		System.out.println((String) this.symbol.value);
-			
-		// TODO: array declaration not finished a:int[2][];
+
 		if(this.type.getDimension() > 0) {
 			for(AstNode child : children) 
 				child.generateIR(funcs);
@@ -68,6 +72,9 @@ public class DeclarationNode extends AstNode {
 		return false;
 	}
 	
+	/**
+	 * get the register name for this node
+	 */
 	@Override
 	public String getRegName(){
 		return (String)symbol.value + "_" + AstNode.currMethod;
