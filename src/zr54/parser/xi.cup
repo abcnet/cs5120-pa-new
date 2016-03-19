@@ -54,7 +54,7 @@ nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
             statements, optionalStatements, statement, typesList, assignment,
             ifStatement, whileStatement, bracket, brackets, variables,
             variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
-            block, optionalReturn;
+            block, optionalReturn, minusExpression;
 nonterminal AstNode expression, argument, arrayIndices, functionCall;            
 
 precedence nonassoc ELSE;
@@ -205,11 +205,13 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new An
                       | expression:e1 MOD:md expression:e2				 {: RESULT = new IntBinaryExprNode("MOD", md, e1, e2); :}
                       | LPAREN expression:e RPAREN				     {: RESULT = e; :}
                       | argument:a                   				   {: RESULT = a; :}
-                      | MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new MinusNode("MINUS", mi, e); :}
-                      | MINUS:mi INTEGER_LITERAL:il            	 {: RESULT = new MinusNode("MINUS", mi, new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0)); :}
+                      | minusExpression:m {: RESULT = m; :}
                       | NOT:n expression:e		                   {: RESULT = new NotNode("NOT", n, e); :}
                       ;
-
+minusExpression     ::= MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new MinusNode("MINUS", mi, e); :}
+                      | MINUS:mi argument:a               {: RESULT = new MinusNode("MINUS", mi, a); :}
+                      | MINUS:mi minusExpression:m   {: RESULT = new MinusNode("MINUS", mi, m); :}
+                      ;
 expressions         ::= expression:e                           {: RESULT = new DefaultNode("expressions", null, e); :}
                       | expressions:es COMMA expression:e      {: RESULT = new DefaultNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
                       ;
