@@ -118,7 +118,7 @@ arrayIndices        ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = 
                       |functionCall:fc  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), fc, a); :}
                      
                       |STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
-                      
+                      |LPAREN expression:e RPAREN LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); :}
                       ;
 
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
