@@ -592,6 +592,15 @@ public class parser
     @Override
     public void syntax_error(Symbol cur_token) {
     	try{
+      String errorMessage = ((Lexer)this.getScanner()).getErrorMessage();
+      if(errorMessage != null) {
+            
+            XiException e = new XiException(cur_token, errorMessage, "Lexical");
+            
+//             writer.write(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
+             printer.printAtom(e.errorMessage(file));
+           throw e;
+          }
    	    	if (cur_token.value!=null){
         		Symbol tok = (Symbol) cur_token.value;
          	 	printer.printAtom(cur_token.left + ":" +
@@ -604,6 +613,7 @@ public class parser
 	       }
     	}
     	catch(XiException e) {
+      printer.printAtom(e.errorMessage(file));
     		System.out.println(e.errorMessage(file));
     	}
     }

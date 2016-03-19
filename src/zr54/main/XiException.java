@@ -59,6 +59,9 @@ public class XiException extends Exception{
     }
     
     public String errorMessage(String filename) {
+    	if (kind.equals("Lexical")){
+    		return kind + " error at " + filename + ": " + getMessage();
+    	}else
     	return kind + " error at " + filename + ": " + line + ":" + column + ": " + getMessage();
     }
 }
