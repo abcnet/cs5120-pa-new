@@ -613,7 +613,7 @@ public class parser
 	       }
     	}
     	catch(XiException e) {
-      printer.printAtom(e.errorMessage(file));
+      //printer.printAtom(e.errorMessage(file));
     		System.out.println(e.errorMessage(file));
     	}
     }
