@@ -46,9 +46,14 @@ public class AndOrNode extends BoolBinaryExprNode {
  
 	}
 	
+
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
+
 		super.generateIR(funcs);
 		if (this.symbol.sym == sym.AND) {
 			String falseLabel = "_L_false_"+Integer.toString(AstNode.counter++);

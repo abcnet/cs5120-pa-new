@@ -53,6 +53,10 @@ public class TypeNode extends AstNode {
 
 	}
 
+	/**
+	 * Generate IR
+	 * @param funcs: function symbol table
+	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
@@ -141,6 +145,9 @@ public class TypeNode extends AstNode {
 		return false;
 	}
 	
+	/**
+	 * get the register name for the array
+	 */
 	@Override
 	public String getRegName() {
 		return "_ARR_" + getRegNum();
