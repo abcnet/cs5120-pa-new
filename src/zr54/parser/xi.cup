@@ -209,7 +209,8 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new An
                       | NOT:n expression:e		                   {: RESULT = new NotNode("NOT", n, e); :}
                       ;
 minusExpression     ::= MINUS:mi LPAREN expression:e RPAREN       {: RESULT = new MinusNode("MINUS", mi, e); :}
-                      | MINUS:mi argument:a               {: RESULT = new MinusNode("MINUS", mi, a, Type.INT, 0); :}
+                      | MINUS:mi argument:a               {: RESULT = new MinusNode("MINUS", mi, a); :}
+                      | MINUS:mi minusExpression:m   {: RESULT = new MinusNode("MINUS", mi, m); :}
                       ;
 expressions         ::= expression:e                           {: RESULT = new DefaultNode("expressions", null, e); :}
                       | expressions:es COMMA expression:e      {: RESULT = new DefaultNode("expressions", null); RESULT.addGrandChildren(es); RESULT.addChild(e); :}
