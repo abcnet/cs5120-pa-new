@@ -59,4 +59,8 @@ main(args:int[][]) {
 
 		   frr:int[] = "string.";
 		   println("Let's " + "concatenate " + unparseInt(1) + {65, 32} + frr)
+
+		   println(unparseInt("ABCDA"[4]))
+		   
+		   
 }
