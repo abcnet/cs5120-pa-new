@@ -86,7 +86,6 @@ public class AndOrNode extends BoolBinaryExprNode {
 	
 	@Override
 	public boolean isConst() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -97,7 +96,6 @@ public class AndOrNode extends BoolBinaryExprNode {
 			String label = "L_"+Integer.toString(AstNode.counter++);
 			if ((this.children.get(0).symbol.sym == sym.AND ||this.children.get(0).symbol.sym == sym.OR || ((String)this.children.get(0).symbol.value).equals("true") || ((String)this.children.get(0).symbol.value).equals("false"))
 				&& !(this.children.get(1).symbol.sym == sym.AND ||this.children.get(1).symbol.sym == sym.OR || ((String)this.children.get(1).symbol.value).equals("true") || ((String)this.children.get(1).symbol.value).equals("false"))) {
-//				System.out.println("HERE");
 				this.children.get(0).getIRControl(funcs, label, falseLabel);
 				this.children.get(1).generateIR(funcs);
 				this.irNode = new IRSeq((IRStmt)this.children.get(0).irNode,
