@@ -150,13 +150,13 @@ public class IRGenerate {
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.errorMessage(errFile));
-					System.err.println(e.errorMessage(errFile));
+					System.out.println(e.errorMessage(errFile));
 				}finally{
 					printer.flush();
 				}
 								
 			}catch(Exception e){
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 				s = l.next_token();
 			}finally{
 				printer.flush();

@@ -42,7 +42,7 @@ public class ixiAnalyze {
 //			printer.flush();
 
 		} else {
-			System.err.println("error: '" + ixiFile + "' does not exist");
+			System.out.println("error: '" + ixiFile + "' does not exist");
 		}
 		
 

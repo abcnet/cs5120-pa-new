@@ -56,13 +56,13 @@ public class TypeCheck {
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
-					System.err.println(e.errorMessage(errFile));
+					System.out.println(e.errorMessage(errFile));
 					printer.printAtom(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 //					System.err.println("Error in "+dstFile);
 				}
 								
 			}catch(Exception e){
-				System.err.println(e.getMessage());
+				System.out.println(e.getMessage());
 				s = l.next_token();
 			}finally{
 				printer.flush();
