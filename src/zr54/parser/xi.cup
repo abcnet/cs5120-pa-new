@@ -118,6 +118,7 @@ arrayIndices        ::= arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = 
                       |functionCall:fc  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), fc, a); :}
                      
                       |STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
+                      |arrayLiteral:al  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); :}
                       
                       ;
 varArrayIndices     ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
@@ -197,7 +198,7 @@ expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new An
 		                  | expression:e1 NOTEQ:neq expression:e2		 {: RESULT = new EqNotEqNode("NOTEQ", neq, e1, e2); :}
 		                  | expression:e1 LT:lt expression:e2				 {: RESULT = new GtLtGeLeNode("LT", lt, e1, e2); :}
 		                  | expression:e1 LTEQ:leq expression:e2		 {: RESULT = new GtLtGeLeNode("LTEQ", leq, e1, e2); :}
-		                  | expression:e1 GTEQ:geq expression:e			 {: RESULT = new GtLtGeLeNode("GTEQ", geq, e1, e2); :}
+		                  | expression:e1 GTEQ:geq expression:e2		 {: RESULT = new GtLtGeLeNode("GTEQ", geq, e1, e2); :}
                       | expression:e1 GT:gt expression:e2				 {: RESULT = new GtLtGeLeNode("GT", gt, e1, e2); :}
                       |	expression:e1 PLUS:pl expression:e2			 {: RESULT = new AddIntBinaryExprNode("PLUS", pl, e1, e2); :}
                       | expression:e1 MINUS:mi expression:e2		 {: RESULT = new IntBinaryExprNode("MINUS", mi, e1, e2); :}
