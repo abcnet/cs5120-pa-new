@@ -119,6 +119,7 @@ arrayIndices        ::= arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = 
                      
                       |STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
                       |arrayLiteral:al  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); :}
+                      |LPAREN expression:e RPAREN  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); :}
                       
                       ;
 varArrayIndices     ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
