@@ -55,7 +55,7 @@ nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
             ifStatement, whileStatement, bracket, brackets, variables,
             variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn, minusExpression;
-nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, functionCall;            
+nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, emptyArrayIndices, nonEmptyArrayIndices, functionCall;            
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -117,14 +117,21 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
 arrayIndices        ::= arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
                       
                      
-                      |STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
-                      |arrayLiteral:al  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); :}
-                      |LPAREN expression:e RPAREN  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); :}
+                      | STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
+                      | arrayLiteral:al  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); :}
+                      | LPAREN expression:e RPAREN  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); :}
                       
                       ;
-varArrayIndices     ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
-                      | varArrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
+varArrayIndices     ::= emptyArrayIndices:e    {: RESULT = e; :}
+                      | nonEmptyArrayIndices:n {: RESULT = n; :}
                       |functionCall:fc  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), fc, a); :}
+                      ;
+emptyArrayIndices   ::= IDENTIFIER:id LBRACK RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id)); :}
+                      | emptyArrayIndices:e LBRACK RBRACK  {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), e); :}
+                      | nonEmptyArrayIndices:n LBRACK RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), n); :}
+                      ;
+nonEmptyArrayIndices::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
+                      | nonEmptyArrayIndices:n LBRACK expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), n, a); :}
                       ;
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
