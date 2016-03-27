@@ -90,13 +90,13 @@ arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new 
 
 emptyBracket        ::= LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  :}
                       ;
-emptyBrackets       ::= emptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+emptyBrackets       ::= emptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | emptyBracket:b               {: RESULT = b; :}
                       ;
 nonEmptyBracket     ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
                       ;
-nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
-                      | nonEmptyBracket:b nonEmptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+                      | nonEmptyBracket:b nonEmptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | nonEmptyBracket:b               {: RESULT = b; :}
                       ;
                     
