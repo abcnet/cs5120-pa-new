@@ -50,11 +50,11 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK;
 
 nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty,
-            argumentsWithType, optionalArgumentsWithType, functionReturnType ,
+            argumentsWithType, optionalArgumentsWithType, functionReturnType,
             statements, optionalStatements, statement, typesList, assignment,
             ifStatement, whileStatement, bracket, brackets, nonEmptyBracket, nonEmptyBrackets,
-            emptyBracket, emptyBrackets, variables,
-            variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
+            emptyBracket, emptyBrackets, variables, freshVariables,
+            variable, freshVariable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn, minusExpression;
 nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, emptyArrayIndices, nonEmptyArrayIndices, functionCall;            
 
@@ -206,7 +206,7 @@ ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statem
 whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatement", w, e, s); :}
                       ;
 
-assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
+assignment          ::= freshVariables:vs COMMA freshVariable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
                                                                            RESULT = new AssignStmtNode("assignment", eq, node, e); :}
                       | variable:v EQ:eq expression:e                      {: RESULT = new AssignStmtNode("assignment", eq, v, e); :}
@@ -215,13 +215,19 @@ assignment          ::= variables:vs COMMA variable:v EQ:eq expression:e   {: De
 variables           ::= variables:vs COMMA variable:v     {: RESULT = new DefaultNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
                       | variable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
                       ;
-
+freshVariables       ::= freshVariables:vs COMMA freshVariable:v     {: RESULT = new DefaultNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | freshVariable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
+                      ;
 variable            ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                       | IDENTIFIER:id                     {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a                {: RESULT = a; :}
                       | varArrayIndices:a                 {: RESULT = a; :}
                       ;
-
+freshVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
+                     
+                      | argumentWithType:a                {: RESULT = a; :}
+                      
+                      ;
 expression          ::= expression:e1 OR:or expression:e2				 {: RESULT = new AndOrNode("OR", or, e1, e2); :}
 		                  | expression:e1 AND:and expression:e2			 {: RESULT = new AndOrNode("AND", and, e1, e2); :}
 		                  | expression:e1 EQEQ:eq expression:e2			 {: RESULT = new EqNotEqNode("EQEQ", eq, e1, e2); :}
