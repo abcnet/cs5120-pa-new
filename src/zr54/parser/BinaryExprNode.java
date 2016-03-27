@@ -2,8 +2,11 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import java_cup.runtime.Symbol;
+import zr54.main.XiException;
 import zr54.typechecker.FuncSymbolTable;
-public class BinaryExprNode extends ExprNode{
+import zr54.typechecker.Type;
+import zr54.typechecker.VarSymbolTable;
+public abstract class BinaryExprNode extends ExprNode{
 
 	/**
 	 * Constructor
@@ -37,4 +40,7 @@ public class BinaryExprNode extends ExprNode{
 		// TODO Auto-generated method stub
 		return this.children.get(0).isConst()&&this.children.get(1).isConst();
 	}
+
+	@Override
+	public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException;
 }
