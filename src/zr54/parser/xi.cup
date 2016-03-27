@@ -53,8 +53,8 @@ nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type
             argumentsWithType, optionalArgumentsWithType, functionReturnType,
             statements, optionalStatements, statement, typesList, assignment,
             ifStatement, whileStatement, nonEmptyBracket, nonEmptyBrackets,
-            emptyBracket, emptyBrackets, freshVariables,
-            variable, freshVariable, expressions, methods, method, arrayLiteral, optionalSemicolon,
+            emptyBracket, emptyBrackets, newVariables,
+            variable, newVariable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn, minusExpression;
 nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, emptyArrayIndices, nonEmptyArrayIndices, functionCall;            
 
@@ -199,22 +199,22 @@ ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statem
 whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatement", w, e, s); :}
                       ;
 
-assignment          ::= freshVariables:vs COMMA freshVariable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
+assignment          ::= newVariables:vs COMMA newVariable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);
                                                                            node.addGrandChildren(vs); node.addChild(v);
                                                                            RESULT = new AssignStmtNode("assignment", eq, node, e); :}
                       | variable:v EQ:eq expression:e                      {: RESULT = new AssignStmtNode("assignment", eq, v, e); :}
                       ;
 
 
-freshVariables       ::= freshVariables:vs COMMA freshVariable:v     {: RESULT = new DefaultNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
-                      | freshVariable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
+newVariables       ::= newVariables:vs COMMA newVariable:v     {: RESULT = new DefaultNode("variables", null); RESULT.addGrandChildren(vs); RESULT.addChild(v); :}
+                      | newVariable:v                        {: RESULT = new DefaultNode("variables", null); RESULT.addChild(v); :}
                       ;
 variable            ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                       | IDENTIFIER:id                     {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a                {: RESULT = a; :}
                       | varArrayIndices:a                 {: RESULT = a; :}
                       ;
-freshVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
+newVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                      
                       | argumentWithType:a                {: RESULT = a; :}
                       
