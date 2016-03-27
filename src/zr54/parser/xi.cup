@@ -49,10 +49,11 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK;
 
-nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType,
+nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty,
             argumentsWithType, optionalArgumentsWithType, functionReturnType ,
             statements, optionalStatements, statement, typesList, assignment,
-            ifStatement, whileStatement, bracket, brackets, variables,
+            ifStatement, whileStatement, bracket, brackets, nonEmptyBracket, nonEmptyBrackets,
+            emptyBracket, emptyBrackets, variables,
             variable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn, minusExpression;
 nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, emptyArrayIndices, nonEmptyArrayIndices, functionCall;            
@@ -77,7 +78,9 @@ singleUse           ::= USE:u IDENTIFIER:id optionalSemicolon  {: RESULT = new D
 arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
                       ;
-
+arrayTypeNonEmpty   ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
+                      | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
+                      ;
 arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
                       | LBRACE:l expressions:es COMMA RBRACE    {: RESULT = new ArrayLiteralNode("arrayLiteral", l); RESULT.addGrandChildren(es); :}
                       | LBRACE:l RBRACE  {: RESULT = new ArrayLiteralNode("arrayLiteral", l); :}
@@ -90,15 +93,30 @@ bracket             ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode
 brackets            ::= bracket:b brackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
                       | bracket:b               {: RESULT = b; :}
                       ;
-
+emptyBracket        ::= LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  :}
+                      ;
+emptyBrackets       ::= emptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+                      | emptyBracket:b               {: RESULT = b; :}
+                      ;
+nonEmptyBracket     ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
+                      ;
+nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+                      | nonEmptyBracket:b nonEmptyBrackets:bs   {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+                      | nonEmptyBracket:b               {: RESULT = b; :}
+                      ;
+                    
 type                ::= arrayType:a     {: RESULT = a; :}
                       | INT:i             {: RESULT = new TypeNode("INT", i); :}
                       | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
                       ;
-
+typeNonEmpty        ::= arrayType:a     {: RESULT = a; :}
+                      | INT:i             {: RESULT = new TypeNode("INT", i); :}
+                      | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
+                      ;
 argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
                       ;
-
+argumentWithTypeNonEmpty::=IDENTIFIER:id COLON typeNonEmpty:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
+                      ;
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
@@ -166,7 +184,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | assignment:a optionalSemicolon           {: RESULT = a; :}
                       | ifStatement:s                            {: RESULT = s; :}
                       | whileStatement:s                         {: RESULT = s; :}
-                      | argumentWithType:a optionalSemicolon     {: RESULT = a; :}
+                      | argumentWithTypeNonEmpty:a optionalSemicolon     {: RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
                       ;
 
