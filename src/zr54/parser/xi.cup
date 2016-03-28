@@ -244,9 +244,9 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT 
                       ;
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
-                      | uses:us               {: RESULT = new DefaultNode("program", null, us, new DefaultNode("forceParen", null)); :}
+                     
                       | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
-                      |                       {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), new DefaultNode("forceParen", null)); :}
+                      
                       | error:e               {:  :}
                       ;
 
