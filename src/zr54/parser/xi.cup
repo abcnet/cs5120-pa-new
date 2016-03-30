@@ -240,7 +240,7 @@ expressions         ::= expression:e                             {: RESULT = new
 
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
                       | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("forceParen", id);:}
-                      | LENGTH:l LPAREN IDENTIFIER:id RPAREN            {: RESULT = new LengthNode("length", l, new VariableNode("IDENTIFIER", id)); :}
+                      | LENGTH:l LPAREN expression:e RPAREN            {: RESULT = new LengthNode("length", l, e); :}
                       ;
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}

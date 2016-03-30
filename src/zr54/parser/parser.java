@@ -480,19 +480,23 @@ public class parser
     "\141\040\134\041\132\044\uffbc\045\uffbc\046\uffbc\047\uffbc" +
     "\050\136\052\uffbc\001\002\000\022\004\uffcc\013\uffcc\014" +
     "\uffcc\034\uffcc\045\uffcc\046\uffcc\047\uffcc\052\uffcc\001\002" +
-    "\000\004\004\274\001\002\000\004\012\275\001\002\000" +
-    "\072\004\uff99\012\uff99\013\uff99\014\uff99\015\uff99\016\uff99" +
-    "\017\uff99\020\uff99\023\uff99\024\uff99\026\uff99\027\uff99\030" +
-    "\uff99\031\uff99\032\uff99\033\uff99\034\uff99\035\uff99\036\uff99" +
-    "\037\uff99\040\uff99\041\uff99\044\uff99\045\uff99\046\uff99\047" +
-    "\uff99\050\uff99\052\uff99\001\002\000\024\004\uffc9\013\uffc9" +
-    "\014\uffc9\034\uffc9\044\uffc9\045\uffc9\046\uffc9\047\uffc9\052" +
-    "\uffc9\001\002\000\024\004\uffc6\013\uffc6\014\uffc6\034\uffc6" +
-    "\044\uffc6\045\uffc6\046\uffc6\047\uffc6\052\uffc6\001\002\000" +
-    "\004\002\001\001\002\000\006\004\uff95\051\uff95\001\002" +
-    "\000\006\002\uff98\004\012\001\002\000\006\002\uff93\004" +
-    "\uff93\001\002\000\010\004\uffc0\017\113\051\uffc0\001\002" +
-    "\000\006\004\000\051\000\001\002" });
+    "\000\026\004\117\005\106\006\116\007\102\010\112\011" +
+    "\105\013\120\025\111\030\110\046\052\001\002\000\040" +
+    "\012\275\023\133\024\131\026\137\027\144\030\135\031" +
+    "\140\032\127\033\130\035\142\036\143\037\141\040\134" +
+    "\041\132\050\136\001\002\000\072\004\uff99\012\uff99\013" +
+    "\uff99\014\uff99\015\uff99\016\uff99\017\uff99\020\uff99\023\uff99" +
+    "\024\uff99\026\uff99\027\uff99\030\uff99\031\uff99\032\uff99\033" +
+    "\uff99\034\uff99\035\uff99\036\uff99\037\uff99\040\uff99\041\uff99" +
+    "\044\uff99\045\uff99\046\uff99\047\uff99\050\uff99\052\uff99\001" +
+    "\002\000\024\004\uffc9\013\uffc9\014\uffc9\034\uffc9\044\uffc9" +
+    "\045\uffc9\046\uffc9\047\uffc9\052\uffc9\001\002\000\024\004" +
+    "\uffc6\013\uffc6\014\uffc6\034\uffc6\044\uffc6\045\uffc6\046\uffc6" +
+    "\047\uffc6\052\uffc6\001\002\000\004\002\001\001\002\000" +
+    "\006\004\uff95\051\uff95\001\002\000\006\002\uff98\004\012" +
+    "\001\002\000\006\002\uff93\004\uff93\001\002\000\010\004" +
+    "\uffc0\017\113\051\uffc0\001\002\000\006\004\000\051\000" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   @Override
@@ -615,11 +619,12 @@ public class parser
     "\006\011\266\033\264\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\020\037\102\043\077\044" +
     "\270\045\075\046\103\047\100\050\113\001\001\000\002" +
+    "\001\001\000\002\001\001\000\020\037\102\043\077\044" +
+    "\273\045\075\046\103\047\100\050\113\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\004\036\302\001" +
-    "\001\000\002\001\001\000\004\040\304\001\001\000\002" +
-    "\001\001" });
+    "\001\000\002\001\001\000\002\001\001\000\004\036\302" +
+    "\001\001\000\002\001\001\000\004\040\304\001\001\000" +
+    "\002\001\001" });
 
   /** Access to {@code reduce_goto} table. */
   @Override
@@ -2192,16 +2197,16 @@ class CUP$parser$actions {
             return CUP$parser$result;
 
         /*. . . . . . . . . . . . . . . . . . . .*/
-        case 104: // functionCall ::= LENGTH LPAREN IDENTIFIER RPAREN 
+        case 104: // functionCall ::= LENGTH LPAREN expression RPAREN 
             {
                 AstNode RESULT = null;
                 int lleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int lright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 Symbol l = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
-                int idleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
-                int idright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
-                Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
-                 RESULT = new LengthNode("length", l, new VariableNode("IDENTIFIER", id)); 
+                int eleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int eright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                AstNode e = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
+                 RESULT = new LengthNode("length", l, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",38, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
