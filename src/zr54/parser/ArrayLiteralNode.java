@@ -19,33 +19,21 @@ public class ArrayLiteralNode extends ExprNode{
 	public ArrayLiteralNode(String t, Symbol v) {
 		super(t, v);
 	}
-	/**
-	 * Type-checking method for array literal nodes
-	 */
+	
 	@Override
 	public void print(CodeWriterSExpPrinter printer) {
-		if(this.children.size()>0 || this.name.equals("forceParen")){
-
-			if(!(this.name.equals("statement") && this.children.size() == 1))
-				printer.startList();
+		printer.startList();
 
 			for (int i = 0; i < this.children.size(); i++) 
 				this.children.get(i).print(printer);
 			
-			if(!(this.name.equals("statement") && this.children.size() == 1))
-				printer.endList();
-		}else{
-			if(symbol != null)
-				printer.printAtom((String) symbol.value);
-			
-	        for (int i = 0; i < this.children.size(); i++) {
-	            this.children.get(i).print(printer);
-	        }
-
-		}
+		printer.endList();
+		
 		
 	}
-
+	/**
+	 * Type-checking method for array literal nodes
+	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
 
