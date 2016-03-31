@@ -36,7 +36,9 @@ public class ArrayLiteralNode extends ExprNode{
 	 */
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
-
+		if(this.children.size()==0){
+			return new Type(Type.INT, 1);
+		}
 		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
 		for (int i=1; i<this.children.size();i++){
 			t=this.children.get(i).typeCheck(vars, funcs);
