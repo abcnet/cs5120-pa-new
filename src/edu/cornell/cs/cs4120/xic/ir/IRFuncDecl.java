@@ -91,10 +91,18 @@ public class IRFuncDecl extends IRNode {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		sw.write("	.globl	FUNC("+name+
-				")\n	.align	4\nFUNC("+name+
-				"):\n	pushq	%rbp\n");
-		this.body.genAssem(sw, this);
-		return tempIndex;
+		sw.write("	.globl	FUNC("+name+")\n"
+				+"	.align	4\n"
+				+"FUNC("+name+"):\n"
+				+"	pushq	%rbp\n"
+				+"	movq	%rsp, %rbp");
+		StringWriter bodyWriter = new StringWriter();
+		this.body.genAssem(bodyWriter, this);
+		bodyWriter.flush();
+		sw.write("	subq	$"+count*8+", %rsp\n");
+		sw.write(bodyWriter.toString());
+		sw.write("	addq	$"+count*8+", %rsp\n");
+		sw.write("	popq	%rbp\n");
+		return -1;
 	}
 }
