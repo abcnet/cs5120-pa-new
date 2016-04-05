@@ -1,6 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -12,7 +13,9 @@ public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
     public int count;
+    public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
 
+    
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
         this.name = name;
