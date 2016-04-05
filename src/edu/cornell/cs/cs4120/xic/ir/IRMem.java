@@ -116,9 +116,9 @@ public class IRMem extends IRExpr {
 		}
 		else {
 			int src = expr.genAssem(sw, f);
-			sw.write("movq -" + 8*src + "(%rsp), %rax\n"
+			sw.write("movq -" + 8*src + "(%rbp), %rax\n"
 					+"movq (%rax), %rbx\n"
-					+"movq %rbx, -" + 8*tempIndex + "(%rsp)\n");
+					+"movq %rbx, -" + 8*tempIndex + "(%rbp)\n");
 		}
 		
 		return tempIndex;

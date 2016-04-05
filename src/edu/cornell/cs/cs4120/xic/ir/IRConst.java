@@ -55,6 +55,10 @@ public class IRConst extends IRExpr {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		f.count++;
+		tempIndex = f.count;
+		sw.write("movq $" + value + ", -" + 8*tempIndex + "(%rbp)\n");
+		
 		return tempIndex;
 	}
 }
