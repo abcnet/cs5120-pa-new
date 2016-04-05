@@ -239,7 +239,25 @@ public class IRBinOp extends IRExpr {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		
+		f.count++;
+		tempIndex = f.count;
+		switch(this.opType()) {
+		case ADD:
+			if(false) {
+				//match tiles
+			}
+			else {
+				int l = left.genAssem(sw, f);
+				int r = right.genAssem(sw, f);
+				sw.write("movq -" + 8*l + "(%rbp), %rax\n"
+						+"addq -" + 8*r + "(%rbp), %rax\n"
+						+"movq %rax, -" + 8*tempIndex + "(%rbp)\n");
+				
+			}
+			break;
+		default:
+				
+		}
 		
 		return tempIndex;
 	}
