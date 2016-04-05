@@ -50,6 +50,15 @@ public class IRTemp extends IRExpr {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		if(f.tempNodeTable.containsKey(this.name)) {
+			tempIndex = f.tempNodeTable.get(this.name);
+		} 
+		else {
+			f.count++;
+			tempIndex = f.count;
+			f.tempNodeTable.put(this.name, tempIndex);
+		}
+		
 		return tempIndex;
 	}
 }
