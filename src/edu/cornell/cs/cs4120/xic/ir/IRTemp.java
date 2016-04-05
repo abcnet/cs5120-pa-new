@@ -10,7 +10,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
  */
 public class IRTemp extends IRExpr {
     private String name;
-
+    
     /**
      *
      * @param name name of this temporary register
@@ -50,6 +50,6 @@ public class IRTemp extends IRExpr {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		return 0;
+		return tempIndex;
 	}
 }

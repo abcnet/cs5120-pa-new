@@ -92,6 +92,6 @@ public class IRFuncDecl extends IRNode {
 				")\n	.align	4\nFUNC("+name+
 				"):\n	pushq	%rbp\n");
 		this.body.genAssem(sw, this);
-		return 0;
+		return tempIndex;
 	}
 }

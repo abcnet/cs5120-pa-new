@@ -119,6 +119,6 @@ public class IRCJump extends IRStmt {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		return 0;
+		return tempIndex;
 	}
 }

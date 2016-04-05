@@ -113,6 +113,6 @@ public class IRCompUnit extends IRNode {
 		// TODO Auto-generated method stub
 		sw.write("#include \"defs.h\"\n\t.text\n");
 		
-		return 0;
+		return tempIndex;
 	}
 }

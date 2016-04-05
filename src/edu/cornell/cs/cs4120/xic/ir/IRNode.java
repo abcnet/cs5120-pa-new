@@ -16,7 +16,8 @@ import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
  * A node in an intermediate-representation abstract syntax tree.
  */
 public abstract class IRNode {
-
+	
+	int tempIndex = -1;
     /**
      * Visit the children of this IR node.
      * @param v the visitor
