@@ -103,8 +103,8 @@ public class IRMove extends IRStmt {
 		else {
 			int src = expr.genAssem(sw, f);
 			int dst = target.genAssem(sw, f);
-			sw.write("movq -" + 8*src + "(%rbp), %rax\n"
-					+"movq %rax, -" + 8*dst + "(%rbp)\n");
+			sw.write("	movq -" + 8*src + "(%rbp), %rax\n"
+					+"	movq %rax, -" + 8*dst + "(%rbp)\n");
 		}
 
 		return tempIndex;

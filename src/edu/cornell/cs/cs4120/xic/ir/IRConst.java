@@ -57,7 +57,7 @@ public class IRConst extends IRExpr {
 		// TODO Auto-generated method stub
 		f.count++;
 		tempIndex = f.count;
-		sw.write("movq $" + value + ", -" + 8*tempIndex + "(%rbp)\n");
+		sw.write("	movq $" + value + ", -" + 8*tempIndex + "(%rbp)\n");
 		
 		return tempIndex;
 	}

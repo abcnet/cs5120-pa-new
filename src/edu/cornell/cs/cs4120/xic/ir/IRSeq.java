@@ -113,6 +113,8 @@ public class IRSeq extends IRStmt {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		for(IRStmt s : stmts) 
+			s.genAssem(sw, f);
 		return tempIndex;
 	}
 }
