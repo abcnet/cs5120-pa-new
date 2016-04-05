@@ -88,6 +88,10 @@ public class IRFuncDecl extends IRNode {
 	@Override
 	public int GenAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		sw.write("	.globl	FUNC("+name+
+				")\n	.align	4\nFUNC("+name+
+				"):\n	pushq	%rbp\n");
+		this.body.GenAssem(sw, this);
 		return 0;
 	}
 }
