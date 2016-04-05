@@ -87,6 +87,6 @@ public abstract class IRNode {
         return sw.toString();
     }
     
-    public abstract int GenAssem(StringWriter sw, IRFuncDecl f);
+    public abstract int genAssem(StringWriter sw, IRFuncDecl f);
     
 }

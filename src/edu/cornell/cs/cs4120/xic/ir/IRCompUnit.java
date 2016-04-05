@@ -109,7 +109,7 @@ public class IRCompUnit extends IRNode {
     }
 
 	@Override
-	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("#include \"defs.h\"\n\t.text\n");
 		

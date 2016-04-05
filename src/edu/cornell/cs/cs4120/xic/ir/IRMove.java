@@ -95,7 +95,7 @@ public class IRMove extends IRStmt {
     }
 
 	@Override
-	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

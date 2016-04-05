@@ -139,7 +139,7 @@ public class GenerateAssembly {
 			        }
 			        
 			        StringWriter assemStringWriter = new StringWriter();
-			        program.GenAssem(assemStringWriter, null);
+			        program.genAssem(assemStringWriter, null);
 			        assemStringWriter.flush();
 			        if (debug) System.out.println(assemStringWriter);
 			        printer.printAtom(assemStringWriter.toString());
