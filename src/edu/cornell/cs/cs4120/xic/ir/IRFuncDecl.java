@@ -1,5 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.StringWriter;
+
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
@@ -9,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
+    public int count;
 
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -81,4 +84,10 @@ public class IRFuncDecl extends IRNode {
     	body.doConstFolding();
     	return null;
     }
+
+	@Override
+	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

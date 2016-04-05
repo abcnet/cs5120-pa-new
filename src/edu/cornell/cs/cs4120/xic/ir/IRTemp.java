@@ -1,5 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.StringWriter;
+
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 
 /**
@@ -44,4 +46,10 @@ public class IRTemp extends IRExpr {
     public IRConst doConstFolding() {
     	return null;
     }
+
+	@Override
+	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

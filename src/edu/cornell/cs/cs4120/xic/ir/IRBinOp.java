@@ -1,6 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.util.ArrayList;
+import java.io.StringWriter;
 import java.math.BigInteger;
 
 import edu.cornell.cs.cs4120.util.InternalCompilerError;
@@ -234,6 +235,12 @@ public class IRBinOp extends IRExpr {
     		
     	
     }
+
+	@Override
+	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
    
     
 }

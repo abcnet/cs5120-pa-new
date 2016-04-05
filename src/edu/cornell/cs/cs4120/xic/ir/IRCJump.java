@@ -1,5 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.StringWriter;
+
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
@@ -113,4 +115,10 @@ public class IRCJump extends IRStmt {
     	
     	return null;
     }
+
+	@Override
+	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

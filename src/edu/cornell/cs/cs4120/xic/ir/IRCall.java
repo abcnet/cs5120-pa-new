@@ -1,5 +1,6 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -125,4 +126,10 @@ public class IRCall extends IRExpr {
     	}
     	return null;
     }
+
+	@Override
+	public int GenAssem(StringWriter sw, IRFuncDecl f) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
