@@ -108,6 +108,19 @@ public class IRMem extends IRExpr {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		f.count++;
+		tempIndex = f.count;
+
+		if(false) {
+			
+		}
+		else {
+			int src = expr.genAssem(sw, f);
+			sw.write("movq -" + 8*src + "(%rsp), %rax\n"
+					+"movq (%rax), %rbx\n"
+					+"movq %rbx, -" + 8*tempIndex + "(%rsp)\n");
+		}
+		
 		return tempIndex;
 	}
 }

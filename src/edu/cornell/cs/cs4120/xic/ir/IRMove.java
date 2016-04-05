@@ -97,6 +97,16 @@ public class IRMove extends IRStmt {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
+		if(false) {
+		
+		}
+		else {
+			int src = expr.genAssem(sw, f);
+			int dst = target.genAssem(sw, f);
+			sw.write("movq -" + 8*src + "(%rsp), %rax\n"
+					+"movq %rax, -" + 8*dst + "(%rsp)\n");
+		}
+
 		return tempIndex;
 	}
 }
