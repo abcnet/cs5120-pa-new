@@ -32,6 +32,7 @@ public class IRReturn extends IRStmt {
 	@Override
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		return tempIndex;
+		sw.write("	retq\n");
+		return -1;
 	}
 }
