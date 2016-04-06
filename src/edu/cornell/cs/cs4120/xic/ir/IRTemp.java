@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import java.io.StringWriter;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import zr54.assembly.OpTarget;
 
 /**
@@ -51,16 +52,25 @@ public class IRTemp extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		if(f.tempNodeTable.containsKey(this.name)) {
-			int tempIndex = f.tempNodeTable.get(this.name);
-			operand = new OpTarget(tempIndex);
-		} 
-		else {
-			f.count++;
-			operand = new OpTarget(f.count);
-			f.tempNodeTable.put(this.name, f.count);
+		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
+			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
+			operand = new OpTarget(OpTarget.TempType.ARGS, idx);
 		}
-		
+		else if(name.startsWith(Configuration.ABSTRACT_RET_PREFIX)) {
+			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_RET_PREFIX.length()));
+			operand = new OpTarget(OpTarget.TempType.RET, idx);
+		}
+		else {
+			if(f.tempNodeTable.containsKey(this.name)) {
+				int tempIndex = f.tempNodeTable.get(this.name);
+				operand = new OpTarget(tempIndex);
+			} 
+			else {
+				f.count++;
+				operand = new OpTarget(f.count);
+				f.tempNodeTable.put(this.name, f.count);
+			}
+		}
 		return operand;
 	}
 }
