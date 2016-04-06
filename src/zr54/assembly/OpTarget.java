@@ -4,6 +4,7 @@ public class OpTarget {
 	public enum TempType {TEMP, ARGS, RET, NIL};
 	public TempType type;
 	public int num;
+	public boolean retGt2;
 
 	
 	public OpTarget(){
@@ -12,6 +13,11 @@ public class OpTarget {
 	public OpTarget(int tempNum){
 		type = TempType.TEMP;
 		num = tempNum;
+	}
+	public OpTarget(int num, boolean gt2){
+		this.type = TempType.ARGS;
+		this.num = num;
+		this.retGt2 = gt2;
 	}
 	public OpTarget(TempType type, int num){
 		this.type = type;
@@ -24,7 +30,8 @@ public class OpTarget {
 		case TEMP:
 			return "-"+8*num+"(%rbp)";
 		case ARGS:
-			switch(num){
+			int num2 = retGt2?1+num:num;
+			switch(num2){
 			case 0:
 				return "%rdi";
 			case 1:
@@ -38,7 +45,7 @@ public class OpTarget {
 			case 5:
 				return "%r9";	
 			default:
-				return 8*(num-5)+"(%rbp)";
+				return 8*(num2-5)+"(%rbp)";
 			}
 		case RET:
 			switch(num){

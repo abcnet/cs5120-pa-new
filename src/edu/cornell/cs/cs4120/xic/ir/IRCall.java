@@ -133,15 +133,57 @@ public class IRCall extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		if(this.args().size()>f.maxNumArgs){
-			f.maxNumArgs=this.args().size();
-		}
-		FuncSignature sign = funcs.lookup(((IRName)this.target).name());
+		String callee = ((IRName)this.target).name();
+		FuncSignature sign = funcs.lookup(callee);
 		int nRet = sign.getFunctionReturnTypes().getTuple().size();
+		boolean gt2 = nRet>2;
+		int nArgs = this.args().size()+(gt2?1:0);
+		if(nArgs > f.maxNumArgs){
+			f.maxNumArgs = nArgs;
+		}
+		
 		if(nRet>f.maxNumRet){
 			f.maxNumRet=nRet;
 		}
 		//todo
+		if(nRet>2){
+			sw.write("	movq	-"+8*(f.count+f.maxNumRet)+"(%rbp), %rdi\n");
+		}
+		OpTarget t;
+		String argTarg;
+		int i;
+		for(i = 0; i < this.args.size(); i++){
+			t = args.get(i).genAssem(sw, f, funcs);
+			int num2 = gt2?i+1:i;
+			switch(gt2?1:0+i){
+			case 0:
+				argTarg = "%rdi";
+				break;
+			case 1:
+				argTarg = "%rsi";
+				break;
+			case 2:
+				argTarg = "%rdx";
+				break;
+			case 3:
+				argTarg = "%rcx";
+				break;
+			case 4:
+				argTarg = "%r8";
+				break;
+			case 5:
+				argTarg = "%r9";	
+				break;
+			default:
+				argTarg = "-"+8*(f.count+f.maxNumRet+f.maxNumArgs-num2)+"(%rbp)";
+				break;
+			}
+			
+			sw.write("	movq " + t.getTarget() + ", %r12\n"
+					+"	movq %r12, " + argTarg + "\n");
+		}
+		
+		sw.write("	callq	FUNC("+callee+")\n");
 		return operand;
 	}
 }
