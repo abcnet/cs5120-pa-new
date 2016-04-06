@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a compilation unit
@@ -110,11 +111,11 @@ public class IRCompUnit extends IRNode {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		sw.write("#include \"defs.h\"\n\t.text\n");
 		for (IRFuncDecl func : functions.values()){
-			func.genAssem(sw, func);
+			func.genAssem(sw, func, funcs);
 		}
 		return operand;
 	}

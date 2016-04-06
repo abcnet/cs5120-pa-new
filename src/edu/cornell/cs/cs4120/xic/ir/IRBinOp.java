@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a binary operation
@@ -238,7 +239,7 @@ public class IRBinOp extends IRExpr {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		f.count++;
 		operand = new OpTarget(f.count);
@@ -261,8 +262,8 @@ public class IRBinOp extends IRExpr {
 				//match tiles
 			}
 			else {
-				OpTarget l = left.genAssem(sw, f);
-				OpTarget r = right.genAssem(sw, f);
+				OpTarget l = left.genAssem(sw, f, funcs);
+				OpTarget r = right.genAssem(sw, f, funcs);
 				sw.write("	movq " + l.getTarget() + ", %rax\n"
 						+" 	" + opStr + r.getTarget() + ", %rax\n"
 						+"	movq %rax, " + operand.getTarget() + "\n");

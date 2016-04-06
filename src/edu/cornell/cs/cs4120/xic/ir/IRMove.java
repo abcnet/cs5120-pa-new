@@ -6,6 +6,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a move statement
@@ -96,14 +97,14 @@ public class IRMove extends IRStmt {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		if(false) {
 			//matching tiles
 		}
 		else {
-			OpTarget src = expr.genAssem(sw, f);
-			OpTarget dst = target.genAssem(sw, f);
+			OpTarget src = expr.genAssem(sw, f, funcs);
+			OpTarget dst = target.genAssem(sw, f, funcs);
 			sw.write("	movq " + src.getTarget() + ", %rax\n"
 					+"	movq %rax, " + dst.getTarget() + "\n");
 		}

@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a temporary register
@@ -50,7 +51,7 @@ public class IRTemp extends IRExpr {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
 			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));

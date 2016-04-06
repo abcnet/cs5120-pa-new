@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a memory location
@@ -107,7 +108,7 @@ public class IRMem extends IRExpr {
      }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		f.count++;
 		operand = new OpTarget(f.count);
@@ -116,7 +117,7 @@ public class IRMem extends IRExpr {
 			//matching tiles
 		}
 		else {
-			OpTarget src = expr.genAssem(sw, f);
+			OpTarget src = expr.genAssem(sw, f, funcs);
 			sw.write("	movq " + src.getTarget() + ", %rax\n"
 					+"	movq (%rax), %rbx\n"
 					+"	movq %rbx, " + operand.getTarget() + "\n");

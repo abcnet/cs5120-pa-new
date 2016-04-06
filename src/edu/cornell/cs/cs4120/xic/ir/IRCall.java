@@ -10,6 +10,8 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSignature;
+import zr54.typechecker.FuncSymbolTable;
 
 /**
  * An intermediate representation for a function call
@@ -129,8 +131,17 @@ public class IRCall extends IRExpr {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		if(this.args().size()>f.maxNumArgs){
+			f.maxNumArgs=this.args().size();
+		}
+		FuncSignature sign = funcs.lookup(((IRName)this.target).name());
+		int nRet = sign.getFunctionReturnTypes().getTuple().size();
+		if(nRet>f.maxNumRet){
+			f.maxNumRet=nRet;
+		}
+		//todo
 		return operand;
 	}
 }

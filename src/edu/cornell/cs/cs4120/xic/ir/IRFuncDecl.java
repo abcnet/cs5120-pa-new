@@ -8,12 +8,15 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
     public int count;
+    public int maxNumRet;
+    public int maxNumArgs;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
 
     
@@ -90,19 +93,23 @@ public class IRFuncDecl extends IRNode {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		int c=count+(maxNumRet>2?maxNumRet-2:0)+(maxNumArgs>6?maxNumArgs-6:0);
+		if(c%2==1){
+			c++;
+		}
 		sw.write("	.globl	FUNC("+name+")\n"
 				+"	.align	4\n"
 				+"FUNC("+name+"):\n"
 				+"	pushq	%rbp\n"
 				+"	movq	%rsp, %rbp");
 		StringWriter bodyWriter = new StringWriter();
-		this.body.genAssem(bodyWriter, this);
+		this.body.genAssem(bodyWriter, this, funcs);
 		bodyWriter.flush();
-		sw.write("	subq	$"+count*8+", %rsp\n");
+		sw.write("	subq	$"+c*8+", %rsp\n");
 		sw.write(bodyWriter.toString());
-		sw.write("	addq	$"+count*8+", %rsp\n");
+		sw.write("	addq	$"+c*8+", %rsp\n");
 		sw.write("	popq	%rbp\n");
 		return operand;
 	}

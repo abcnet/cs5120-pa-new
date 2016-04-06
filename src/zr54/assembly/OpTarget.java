@@ -4,6 +4,7 @@ public class OpTarget {
 	public enum TempType {TEMP, ARGS, RET, NIL};
 	public TempType type;
 	public int num;
+	public int numArgs;
 	
 	public OpTarget(){
 		type = TempType.NIL;
@@ -15,6 +16,11 @@ public class OpTarget {
 	public OpTarget(TempType type, int num){
 		this.type = type;
 		this.num = num;
+	}
+	public OpTarget(int numArgs, int num){
+		this.type = TempType.RET;
+		this.num = num;
+		this.numArgs = numArgs;
 	}
 	
 	public String getTarget(){

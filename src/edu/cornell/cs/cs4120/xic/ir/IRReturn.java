@@ -4,6 +4,7 @@ import java.io.StringWriter;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.FuncSymbolTable;
 
 /** RETURN statement */
 public class IRReturn extends IRStmt {
@@ -31,7 +32,7 @@ public class IRReturn extends IRStmt {
     }
 
 	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		sw.write("	retq\n");
 		return operand;
