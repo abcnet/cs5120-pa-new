@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -184,6 +185,6 @@ public class IRCall extends IRExpr {
 		}
 		
 		sw.write("	callq	FUNC("+callee+")\n");
-		return operand;
+		return new OpTarget(TempType.RET, 0);
 	}
 }
