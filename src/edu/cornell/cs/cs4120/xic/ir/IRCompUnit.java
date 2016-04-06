@@ -112,7 +112,9 @@ public class IRCompUnit extends IRNode {
 	public int genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("#include \"defs.h\"\n\t.text\n");
-		
+		for (IRFuncDecl func : functions.values()){
+			func.genAssem(sw, func);
+		}
 		return tempIndex;
 	}
 }
