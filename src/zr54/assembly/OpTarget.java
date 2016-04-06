@@ -4,7 +4,7 @@ public class OpTarget {
 	public enum TempType {TEMP, ARGS, RET, NIL};
 	public TempType type;
 	public int num;
-	public int numArgs;
+
 	
 	public OpTarget(){
 		type = TempType.NIL;
@@ -17,12 +17,8 @@ public class OpTarget {
 		this.type = type;
 		this.num = num;
 	}
-	public OpTarget(int numArgs, int num){
-		this.type = TempType.RET;
-		this.num = num;
-		this.numArgs = numArgs;
-	}
-	
+
+
 	public String getTarget(){
 		switch(type){
 		case TEMP:
@@ -45,8 +41,15 @@ public class OpTarget {
 				return 8*(num-5)+"(%rbp)";
 			}
 		case RET:
-			//todo
-			return "";
+			switch(num){
+			case 0:
+				return "%rax";
+			case 1:
+				return "%rdx";
+			default:
+				return 8*(num-2)+"(%rdi)";
+			}
+			
 		default:
 			//todo
 			return "";
