@@ -116,6 +116,6 @@ public class IRCompUnit extends IRNode {
 		for (IRFuncDecl func : functions.values()){
 			func.genAssem(sw, func);
 		}
-		return tempIndex;
+		return operand;
 	}
 }

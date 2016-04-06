@@ -102,12 +102,12 @@ public class IRMove extends IRStmt {
 			//matching tiles
 		}
 		else {
-			int src = expr.genAssem(sw, f);
-			int dst = target.genAssem(sw, f);
-			sw.write("	movq -" + 8*src + "(%rbp), %rax\n"
-					+"	movq %rax, -" + 8*dst + "(%rbp)\n");
+			OpTarget src = expr.genAssem(sw, f);
+			OpTarget dst = target.genAssem(sw, f);
+			sw.write("	movq " + src.getTarget() + ", %rax\n"
+					+"	movq %rax, " + dst.getTarget() + "\n");
 		}
 
-		return tempIndex;
+		return operand;
 	}
 }

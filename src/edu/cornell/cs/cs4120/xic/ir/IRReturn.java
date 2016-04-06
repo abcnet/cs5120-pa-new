@@ -34,6 +34,6 @@ public class IRReturn extends IRStmt {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("	retq\n");
-		return -1;
+		return operand;
 	}
 }

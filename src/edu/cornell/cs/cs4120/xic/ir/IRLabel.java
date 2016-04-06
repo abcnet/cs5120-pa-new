@@ -59,7 +59,7 @@ public class IRLabel extends IRStmt {
 		// TODO Auto-generated method stub
 		sw.write(name + ":\n");
 
-		return tempIndex;
+		return operand;
 	}
 
 }

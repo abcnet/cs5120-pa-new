@@ -110,18 +110,18 @@ public class IRMem extends IRExpr {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		f.count++;
-		tempIndex = f.count;
+		operand = new OpTarget(f.count);
 
 		if(false) {
 			//matching tiles
 		}
 		else {
-			int src = expr.genAssem(sw, f);
-			sw.write("	movq -" + 8*src + "(%rbp), %rax\n"
+			OpTarget src = expr.genAssem(sw, f);
+			sw.write("	movq " + src.getTarget() + ", %rax\n"
 					+"	movq (%rax), %rbx\n"
-					+"	movq %rbx, -" + 8*tempIndex + "(%rbp)\n");
+					+"	movq %rbx, " + operand.getTarget() + "\n");
 		}
 		
-		return tempIndex;
+		return operand;
 	}
 }

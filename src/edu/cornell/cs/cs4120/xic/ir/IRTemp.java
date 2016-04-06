@@ -52,14 +52,15 @@ public class IRTemp extends IRExpr {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		if(f.tempNodeTable.containsKey(this.name)) {
-			tempIndex = f.tempNodeTable.get(this.name);
+			int tempIndex = f.tempNodeTable.get(this.name);
+			operand = new OpTarget(tempIndex);
 		} 
 		else {
 			f.count++;
-			tempIndex = f.count;
-			f.tempNodeTable.put(this.name, tempIndex);
+			operand = new OpTarget(f.count);
+			f.tempNodeTable.put(this.name, f.count);
 		}
 		
-		return tempIndex;
+		return operand;
 	}
 }

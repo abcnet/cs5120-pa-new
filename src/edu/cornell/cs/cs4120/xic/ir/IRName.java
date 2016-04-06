@@ -51,6 +51,6 @@ public class IRName extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		return tempIndex;
+		return operand;
 	}
 }

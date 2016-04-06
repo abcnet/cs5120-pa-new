@@ -18,7 +18,7 @@ import zr54.assembly.OpTarget;
  */
 public abstract class IRNode {
 	
-	int tempIndex = -1;
+	OpTarget operand = null;
     /**
      * Visit the children of this IR node.
      * @param v the visitor

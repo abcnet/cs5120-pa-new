@@ -241,7 +241,7 @@ public class IRBinOp extends IRExpr {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		f.count++;
-		tempIndex = f.count;
+		operand = new OpTarget(f.count);
 		
 		String opStr = "";
 		switch(this.opType()) {
@@ -265,7 +265,7 @@ public class IRBinOp extends IRExpr {
 				OpTarget r = right.genAssem(sw, f);
 				sw.write("	movq " + l.getTarget() + ", %rax\n"
 						+" 	" + opStr + r.getTarget() + ", %rax\n"
-						+"	movq %rax, -" + 8*tempIndex + "(%rbp)\n");
+						+"	movq %rax, " + operand.getTarget() + "\n");
 				
 			}
 			break;
@@ -273,7 +273,7 @@ public class IRBinOp extends IRExpr {
 				
 		}
 		
-		return new OpTarget(tempIndex);
+		return operand;
 	}
    
     

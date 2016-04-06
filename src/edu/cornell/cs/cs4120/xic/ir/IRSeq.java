@@ -116,6 +116,6 @@ public class IRSeq extends IRStmt {
 		// TODO Auto-generated method stub
 		for(IRStmt s : stmts) 
 			s.genAssem(sw, f);
-		return tempIndex;
+		return operand;
 	}
 }

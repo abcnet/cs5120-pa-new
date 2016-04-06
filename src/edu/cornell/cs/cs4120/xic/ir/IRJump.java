@@ -79,6 +79,6 @@ public class IRJump extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
-		return tempIndex;
+		return operand;
 	}
 }

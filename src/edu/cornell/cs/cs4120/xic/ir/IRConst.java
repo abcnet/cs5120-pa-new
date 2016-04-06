@@ -57,9 +57,9 @@ public class IRConst extends IRExpr {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		f.count++;
-		tempIndex = f.count;
-		sw.write("	movq $" + value + ", -" + 8*tempIndex + "(%rbp)\n");
+		operand = new OpTarget(f.count);
+		sw.write("	movq $" + value + ", " + operand.getTarget() + "\n");
 		
-		return tempIndex;
+		return operand;
 	}
 }

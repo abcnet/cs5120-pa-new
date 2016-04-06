@@ -104,6 +104,6 @@ public class IRFuncDecl extends IRNode {
 		sw.write(bodyWriter.toString());
 		sw.write("	addq	$"+count*8+", %rsp\n");
 		sw.write("	popq	%rbp\n");
-		return -1;
+		return operand;
 	}
 }
