@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator.Trap;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.OpTarget;
 
 /**
  * An intermediate representation for a binary operation
@@ -237,7 +238,7 @@ public class IRBinOp extends IRExpr {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		f.count++;
 		tempIndex = f.count;
@@ -260,10 +261,10 @@ public class IRBinOp extends IRExpr {
 				//match tiles
 			}
 			else {
-				int l = left.genAssem(sw, f);
-				int r = right.genAssem(sw, f);
-				sw.write("	movq -" + 8*l + "(%rbp), %rax\n"
-						+" 	" + opStr + " -" + 8*r + "(%rbp), %rax\n"
+				OpTarget l = left.genAssem(sw, f);
+				OpTarget r = right.genAssem(sw, f);
+				sw.write("	movq " + l.getTarget() + ", %rax\n"
+						+" 	" + opStr + r.getTarget() + ", %rax\n"
 						+"	movq %rax, -" + 8*tempIndex + "(%rbp)\n");
 				
 			}
@@ -272,7 +273,7 @@ public class IRBinOp extends IRExpr {
 				
 		}
 		
-		return tempIndex;
+		return new OpTarget(tempIndex);
 	}
    
     

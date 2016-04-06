@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
+import zr54.assembly.OpTarget;
 
 /**
  * A node in an intermediate-representation abstract syntax tree.
@@ -88,6 +89,6 @@ public abstract class IRNode {
         return sw.toString();
     }
     
-    public abstract int genAssem(StringWriter sw, IRFuncDecl f);
+    public abstract OpTarget genAssem(StringWriter sw, IRFuncDecl f);
     
 }

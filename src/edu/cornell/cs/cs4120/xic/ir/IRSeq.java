@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.OpTarget;
 
 /**
  * An intermediate representation for a sequence of statements
@@ -111,7 +112,7 @@ public class IRSeq extends IRStmt {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		for(IRStmt s : stmts) 
 			s.genAssem(sw, f);

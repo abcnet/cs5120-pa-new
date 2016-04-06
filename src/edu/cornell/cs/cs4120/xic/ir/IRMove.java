@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.OpTarget;
 
 /**
  * An intermediate representation for a move statement
@@ -95,7 +96,7 @@ public class IRMove extends IRStmt {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		if(false) {
 			//matching tiles

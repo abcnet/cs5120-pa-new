@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import java.io.StringWriter;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
+import zr54.assembly.OpTarget;
 
 /** RETURN statement */
 public class IRReturn extends IRStmt {
@@ -30,7 +31,7 @@ public class IRReturn extends IRStmt {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("	retq\n");
 		return -1;

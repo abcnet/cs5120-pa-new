@@ -8,6 +8,7 @@ import java.util.Set;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.OpTarget;
 
 /**
  * An intermediate representation for a compilation unit
@@ -109,7 +110,7 @@ public class IRCompUnit extends IRNode {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("#include \"defs.h\"\n\t.text\n");
 		for (IRFuncDecl func : functions.values()){

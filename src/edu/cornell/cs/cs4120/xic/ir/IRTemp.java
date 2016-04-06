@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import java.io.StringWriter;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
+import zr54.assembly.OpTarget;
 
 /**
  * An intermediate representation for a temporary register
@@ -48,7 +49,7 @@ public class IRTemp extends IRExpr {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		if(f.tempNodeTable.containsKey(this.name)) {
 			tempIndex = f.tempNodeTable.get(this.name);

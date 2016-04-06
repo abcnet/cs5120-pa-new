@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
+import zr54.assembly.OpTarget;
 
 /** An IR function declaration */
 public class IRFuncDecl extends IRNode {
@@ -89,7 +90,7 @@ public class IRFuncDecl extends IRNode {
     }
 
 	@Override
-	public int genAssem(StringWriter sw, IRFuncDecl f) {
+	public OpTarget genAssem(StringWriter sw, IRFuncDecl f) {
 		// TODO Auto-generated method stub
 		sw.write("	.globl	FUNC("+name+")\n"
 				+"	.align	4\n"
