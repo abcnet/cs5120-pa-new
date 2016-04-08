@@ -59,7 +59,7 @@ public class IRConst extends IRExpr {
 		// TODO Auto-generated method stub
 		f.count++;
 		operand = new OpTarget(f.count);
-		sw.write("	movq $" + value + ", " + operand.getTarget() + "\n");
+		sw.write("	movq	$" + value + ", " + operand.getTarget() + "\n");
 		
 		return operand;
 	}
