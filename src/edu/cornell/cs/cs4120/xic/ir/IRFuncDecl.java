@@ -16,8 +16,8 @@ public class IRFuncDecl extends IRNode {
     private IRStmt body;
     public static final int RESERVED = 1;
     public int count = RESERVED;
-    public int maxNumRet;
-    public int maxNumArgs;
+    public int maxNumRet = 0;
+    public int maxNumArgs = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
 
     

@@ -134,6 +134,7 @@ public class IRCall extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		sw.write("	movq	%rdi, -8(%rbp)");
 		String callee = ((IRName)this.target).name();
 		FuncSignature sign = funcs.lookup(callee);
 		int nRet = sign.getFunctionReturnTypes().getTuple().size();
@@ -185,6 +186,7 @@ public class IRCall extends IRExpr {
 		}
 		
 		sw.write("	callq	FUNC("+callee+")\n");
+		sw.write("	movq	-8(%rbp), %rdi");
 		return new OpTarget(TempType.RET, 0);
 	}
 }
