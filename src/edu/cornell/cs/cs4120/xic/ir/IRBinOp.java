@@ -271,6 +271,11 @@ public class IRBinOp extends IRExpr {
 			opStr = "xorq";
 			break;
 		case EQ:
+		case NEQ:
+		case LT:
+		case GT:
+		case LEQ:
+		case GEQ:
 			opStr = "cmpq";
 			break;
 		default:
@@ -340,6 +345,11 @@ public class IRBinOp extends IRExpr {
 			}
 			break;
 		case EQ:
+		case NEQ:
+		case LT:
+		case GT:
+		case LEQ:
+		case GEQ:
 			if(false) {
 				
 			}
@@ -349,7 +359,32 @@ public class IRBinOp extends IRExpr {
 				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
 						+"	" + opStr + "	" + r.getTarget() + ",	%rax\n");
 				
-				sw.write("");
+				switch(this.opType()) {
+				case EQ:
+					sw.write("	je	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
+				case NEQ:
+					sw.write("	jne	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");			
+					break;
+				case LT:
+					sw.write("	jg	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
+				case GT:
+					sw.write("	jl	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
+				case LEQ:
+					sw.write("	jge	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
+				case GEQ:
+					sw.write("	jle	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
+				}
+				
+				sw.write("	movq	$0,	" + operand.getTarget() + "\n"
+						+"	jmp	L_BINOP_CMP_END_" + cmpLabelCount + "\n"
+						+"L_BINOP_CMP_T_" + cmpLabelCount + ":\n"
+						+"	movq	$1,	" + operand.getTarget() + "\n"
+						+"L_BINOP_CMP_END_" + cmpLabelCount + ":\n");
 			}
 			break;
 		default:
