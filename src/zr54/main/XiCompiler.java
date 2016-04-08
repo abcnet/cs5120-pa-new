@@ -46,9 +46,13 @@ class XiCompiler {
             "-target <OS>: Specify the operating system for which to generate code";
 
         String op = "";
+        boolean srcPathSet = false;
         String srcPath = System.getProperty("user.dir");
+        boolean diagPathSet = false;
         String diagPath = System.getProperty("user.dir");
+        boolean dPathSet = false;
         String dPath = System.getProperty("user.dir");
+        boolean libPathSet = false;
         String libPath = System.getProperty("user.dir");
         
         boolean optimization = true;
@@ -81,9 +85,11 @@ class XiCompiler {
 						break;
                 case 'D': arg = g.getOptarg();
                           diagPath = arg;
+                          diagPathSet = true;
                           break;
                 case 'd': arg = g.getOptarg();
 			              dPath = arg;
+			              dPathSet = true;
 			              break;
                 case 'O': optimization = false;
                           break;
@@ -94,11 +100,7 @@ class XiCompiler {
                           System.exit(0);
             }
         }
-        if (op == "") {
-            System.out.println("error: no options provided");
-            System.out.println(usage);
-            System.exit(0);
-        } else if (op == "error") {
+        if (op == "error") {
             System.out.println("error: can only specify one of --help --lex --parse --typecheck or --irgen");
             System.out.println(usage);
             System.exit(0);
@@ -116,23 +118,29 @@ class XiCompiler {
                 System.out.println("error: '" + argv[i] + "' not a .xi file");
                 continue;
             }
+            String tmp;
             String src = srcPath + "/" + argv[i];
-            String dst = diagPath + "/" + argv[i].substring(0, argv[i].lastIndexOf("."));
+            tmp = diagPathSet?argv[i].substring(argv[i].lastIndexOf('/')+1):argv[i];
+            String diagDst = diagPath + "/" + tmp.substring(0, tmp.lastIndexOf("."));
+            String dDst = dPath + "/" + argv[i].substring(0, argv[i].lastIndexOf("."));
+            
             if (op == "lex") {
-                dst = dst + ".lexed";
-                LexerOutput.writeLexAnalysis(src, dst);
+                diagDst = diagDst + ".lexed";
+                LexerOutput.writeLexAnalysis(src, diagDst);
             } else if (op == "parse") {
-                dst = dst + ".parsed";
-                ParsePrint.parseAndPrint(src, dst);
+                diagDst = diagDst + ".parsed";
+                ParsePrint.parseAndPrint(src, diagDst);
             } else if (op == "typecheck") {
-            	dst = dst + ".typed";
-                TypeCheck.typeCheckAndPrint(src, dst, libPath+"/");
+            	diagDst = diagDst + ".typed";
+                TypeCheck.typeCheckAndPrint(src, diagDst, libPath+"/");
             } else if (op == "irgen") {
-            	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", false, optimization);
+            	diagDst = diagDst + ".ir";
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization);
             } else if (op == "irrun") {
-            	dst = dst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, dst, libPath+"/", true, optimization);
+            	diagDst = diagDst + ".ir";
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization);
+            } else if (op.equals("")){
+            	
             }
         }
     }
