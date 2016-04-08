@@ -60,7 +60,7 @@ public class LiteralExpr extends ExprNode {
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		if (this.name.equals("INTEGER_LITERAL")){
-			this.irNode = new IRConst(Integer.parseInt((String)this.symbol.value));
+			this.irNode = new IRConst(Long.parseLong((String)this.symbol.value));
 		}else if (this.name.equals("BOOLEAN_LITERAL")){
 			this.irNode = new IRConst(((String)this.symbol.value).equals("true")?1:0);
 		}else if(this.name.equals("CHARACTER_LITERAL")){

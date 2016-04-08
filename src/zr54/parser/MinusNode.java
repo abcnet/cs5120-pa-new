@@ -48,7 +48,7 @@ public class MinusNode extends UnaryExprNode{
 		super.generateIR(funcs);
 		AstNode child = children.get(0);
 		if(child.name.equals("INTEGER_LITERAL")) {
-			int value = Integer.parseInt("-" + (String)child.symbol.value);
+			long value = Long.parseLong("-" + (String)child.symbol.value);
 			this.irNode = new IRConst(value);
 		} else {
 			this.irNode = new IRBinOp(IRBinOp.OpType.SUB, 
