@@ -136,7 +136,8 @@ public class IRCall extends IRExpr {
 		// TODO Auto-generated method stub
 		sw.write("	movq	%rdi, -8(%rbp)");
 		String callee = ((IRName)this.target).name();
-		FuncSignature sign = funcs.lookup(callee);
+		String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
+		FuncSignature sign = funcs.lookup(rawFuncName);
 		int nRet = sign.getFunctionReturnTypes().getTuple().size();
 		boolean gt2 = nRet>2;
 		int nArgs = this.args().size()+(gt2?1:0);
