@@ -97,7 +97,7 @@ public class IRFuncDecl extends IRNode {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		String name2 = name.substring(1);
-		sw.write("	.global	FUNC("+name2+")\n"
+		sw.write("	.globl	FUNC("+name2+")\n"
 				+"	.align	4\n"
 				+"FUNC("+name2+"):\n"
 				+"	pushq	%rbp\n"
