@@ -19,6 +19,7 @@ import zr54.typechecker.FuncSymbolTable;
  */
 public class IRBinOp extends IRExpr {
 
+	public static int cmpLabelCount = 0;
     /**
      * Binary operators
      */
@@ -252,6 +253,26 @@ public class IRBinOp extends IRExpr {
 		case SUB:
 			opStr = "subq";
 			break;
+		case MUL:
+		case HMUL:
+			opStr = "imulq";
+			break;
+		case DIV:
+		case MOD:
+			opStr = "idivq";
+			break;
+		case AND:
+			opStr = "andq";
+			break;
+		case OR:
+			opStr = "orq";
+			break;
+		case XOR:
+			opStr = "xorq";
+			break;
+		case EQ:
+			opStr = "cmpq";
+			break;
 		default:
 		}
 		
@@ -264,10 +285,71 @@ public class IRBinOp extends IRExpr {
 			else {
 				OpTarget l = left.genAssem(sw, f, funcs);
 				OpTarget r = right.genAssem(sw, f, funcs);
-				sw.write("	movq " + l.getTarget() + ", %rax\n"
-						+" 	" + opStr + r.getTarget() + ", %rax\n"
-						+"	movq %rax, " + operand.getTarget() + "\n");
+				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
+						+" 	" + opStr + "	" + r.getTarget() + ",	%rax\n"
+						+"	movq	%rax,	" + operand.getTarget() + "\n");
+			}
+			break;
+		case MUL:
+		case HMUL:
+			if(false) {
+				//match tiles
+			}
+			else {
+				OpTarget l = left.genAssem(sw, f, funcs);
+				OpTarget r = right.genAssem(sw, f, funcs);
+				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
+						+" 	" + opStr + "	" + r.getTarget() + "\n");
+				if(this.opType() == OpType.MUL)
+					sw.write("	movq %rax,	" + operand.getTarget() + "\n");
+				else
+					sw.write("	movq %rdx,	" + operand.getTarget() + "\n");
+			}
+			break;
+		case DIV:
+		case MOD:
+			if(false) {
+				//match tiles
+			}
+			else {
+				OpTarget l = left.genAssem(sw, f, funcs);
+				OpTarget r = right.genAssem(sw, f, funcs);
+				sw.write("	xorq	%rdx,	%rdx\n"
+						+"	movq	" + l.getTarget() + ",	%rax\n"
+						+" 	" + opStr + "	" + r.getTarget() + "\n");
 				
+				if(this.opType() == OpType.DIV)
+					sw.write("	movq	%rax,	" + operand.getTarget() + "\n");
+				else
+					sw.write("	movq	%rdx,	" + operand.getTarget() + "\n");
+			}
+			break;
+		case AND:
+		case OR:
+		case XOR:
+			if(false) {
+				
+			}
+			else {
+				OpTarget l = left.genAssem(sw, f, funcs);
+				OpTarget r = right.genAssem(sw, f, funcs);
+				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
+						+" 	" + opStr + "	" + r.getTarget() + ",	%rax\n"
+						+"	movq	%rax,	" + operand.getTarget() + "\n");
+
+			}
+			break;
+		case EQ:
+			if(false) {
+				
+			}
+			else {
+				OpTarget l = left.genAssem(sw, f, funcs);
+				OpTarget r = right.genAssem(sw, f, funcs);
+				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
+						+"	" + opStr + "	" + r.getTarget() + ",	%rax\n");
+				
+				sw.write("");
 			}
 			break;
 		default:
