@@ -105,9 +105,15 @@ public class IRMove extends IRStmt {
 		else {
 			OpTarget src = expr.genAssem(sw, f, funcs);
 			OpTarget dst = target.genAssem(sw, f, funcs);
+			String s = src.getTarget();
+			String d = dst.getTarget() ;
+			if(s.contains("(")&&d.contains("(")){
+				sw.write("	movq	" + s + ", %r12\n"
+						+"	movq	%r12, " + d + "\n");
+			}else{
+				sw.write("	movq	" + s + ", " + d + "\n");
+			}
 			
-			sw.write("	movq	" + src.getTarget() + ", %r12\n"
-					+"	movq	%r12, " + dst.getTarget() + "\n");
 		}
 
 		return operand;

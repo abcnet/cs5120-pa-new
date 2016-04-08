@@ -189,9 +189,14 @@ public class IRCall extends IRExpr {
 				argTarg = "-"+8*(f.count+f.maxNumRet+f.maxNumArgs-num2)+"(%rbp)\n";
 				break;
 			}
+			String s = t.getTarget();
+			if(s.contains("(")&&argTarg.contains("(")){
+				sw.write("	movq	" + s + ", %r12\n"
+						+"	movq	%r12, " + argTarg + "\n");
+			}else{
+				sw.write("	movq	" + s + ", " + argTarg + "\n");
+			}
 			
-			sw.write("	movq	" + t.getTarget() + ", %r12\n"
-					+"	movq	%r12, " + argTarg + "\n");
 		}
 		
 		sw.write("	callq	FUNC("+callee+")\n");
