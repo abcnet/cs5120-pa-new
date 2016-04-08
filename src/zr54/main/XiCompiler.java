@@ -19,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[9];
+        LongOpt[] longopts = new LongOpt[11];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -31,8 +31,10 @@ class XiCompiler {
         longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
         longopts[7] = new LongOpt("irrun", LongOpt.NO_ARGUMENT, null, 7);
         longopts[8] = new LongOpt("target", LongOpt.REQUIRED_ARGUMENT, null, 8);
+        longopts[9] = new LongOpt("D", LongOpt.REQUIRED_ARGUMENT, null, 9);
+        longopts[10] = new LongOpt("d", LongOpt.REQUIRED_ARGUMENT, null, 10);
 
-        Getopt g = new Getopt("XiCompiler", argv, "OD:", longopts, true);
+        Getopt g = new Getopt("XiCompiler", argv, "O:", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [libpath] [diagpath] [dpath] <source files>\n" +
@@ -83,11 +85,11 @@ class XiCompiler {
                 	System.exit(0);
                 }
 						break;
-                case 'D': arg = g.getOptarg();
+                case 9: arg = g.getOptarg();
                           diagPath = arg;
                           diagPathSet = true;
                           break;
-                case 'd': arg = g.getOptarg();
+                case 10: arg = g.getOptarg();
 			              dPath = arg;
 			              dPathSet = true;
 			              break;
