@@ -45,12 +45,13 @@ public class MinusNode extends UnaryExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		super.generateIR(funcs);
+		
 		AstNode child = children.get(0);
 		if(child.name.equals("INTEGER_LITERAL")) {
 			long value = Long.parseLong("-" + (String)child.symbol.value);
 			this.irNode = new IRConst(value);
 		} else {
+			super.generateIR(funcs);
 			this.irNode = new IRBinOp(IRBinOp.OpType.SUB, 
 									   new IRConst(0),
 									   (IRExpr) child.getIRNode());
