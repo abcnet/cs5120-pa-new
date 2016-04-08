@@ -99,14 +99,29 @@ public class IRMove extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		if(false) {
+		if(target instanceof IRMem) {
+			OpTarget src = expr.genAssem(sw, f, funcs);
+			IRMem memTarget = (IRMem) target;
+			OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
+			
+			if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
+				sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+			}
+			sw.write("	movq	" + src.getTarget() + ", %r12\n" 
+					+"	movq	" + addr.getTarget() + ", %r13\n"
+					+"	movq	%r12, (%r13)\n");
+			
 			//matching tiles
 		}
 		else {
 			OpTarget src = expr.genAssem(sw, f, funcs);
 			OpTarget dst = target.genAssem(sw, f, funcs);
 			String s = src.getTarget();
-			String d = dst.getTarget() ;
+			String d = dst.getTarget();
+			if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
+				sw.write("# MOVE from t" + src.num + " to t" + dst.num + "\n");
+			}
+
 			if(s.contains("(")&&d.contains("(")){
 				sw.write("	movq	" + s + ", %r12\n"
 						+"	movq	%r12, " + d + "\n");

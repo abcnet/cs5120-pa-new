@@ -70,6 +70,7 @@ public class IRTemp extends IRExpr {
 			} 
 			else {
 				f.count++;
+				sw.write("# TEMP " + this.name + " is t" + f.count + " on stack.\n");
 				operand = new OpTarget(f.count);
 				f.tempNodeTable.put(this.name, f.count);
 			}

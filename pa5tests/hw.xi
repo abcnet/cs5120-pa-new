@@ -1,5 +1,5 @@
 use io
 
 main(args:int[][]) {
-	println("h!")
+	println("Hello World!")
 }

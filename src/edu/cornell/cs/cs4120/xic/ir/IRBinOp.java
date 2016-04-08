@@ -290,6 +290,8 @@ public class IRBinOp extends IRExpr {
 			else {
 				OpTarget l = left.genAssem(sw, f, funcs);
 				OpTarget r = right.genAssem(sw, f, funcs);
+				if(l.type == OpTarget.TempType.TEMP && r.type == OpTarget.TempType.TEMP)
+					sw.write("# BINOP t" + l.num + " and t" + r.num + "\n");
 				sw.write("	movq	" + l.getTarget() + ", %rax\n"
 						+" 	" + opStr + "	" + r.getTarget() + ", %rax\n"
 						+"	movq	%rax, " + operand.getTarget() + "\n");
