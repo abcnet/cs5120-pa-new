@@ -19,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[8];
+        LongOpt[] longopts = new LongOpt[9];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -30,6 +30,7 @@ class XiCompiler {
         longopts[5] = new LongOpt("libpath", LongOpt.REQUIRED_ARGUMENT, null, 5);
         longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
         longopts[7] = new LongOpt("irrun", LongOpt.NO_ARGUMENT, null, 7);
+        longopts[8] = new LongOpt("target", LongOpt.NO_ARGUMENT, null, 8);
 
         Getopt g = new Getopt("XiCompiler", argv, "OD:", longopts, true);
         g.setOpterr(false);
@@ -43,7 +44,8 @@ class XiCompiler {
 
         String op = "";
         String srcPath = System.getProperty("user.dir");
-        String dstPath = System.getProperty("user.dir");
+        String diagPath = System.getProperty("user.dir");
+        String dPath = System.getProperty("user.dir");
         String libPath = System.getProperty("user.dir");
         
         boolean optimization = true;
@@ -68,9 +70,14 @@ class XiCompiler {
                 		break;
                 case 7: op = (op == "") ? "irrun" : "error";
         				break;
+                case 8: 
+						break;
                 case 'D': arg = g.getOptarg();
-                          dstPath = arg;
+                          diagPath = arg;
                           break;
+                case 'd': arg = g.getOptarg();
+			              dPath = arg;
+			              break;
                 case 'O': optimization = false;
                           break;
                 case '?': System.out.println("error: invalid option entered");
@@ -103,7 +110,7 @@ class XiCompiler {
                 continue;
             }
             String src = srcPath + "/" + argv[i];
-            String dst = dstPath + "/" + argv[i].substring(0, argv[i].lastIndexOf("."));
+            String dst = diagPath + "/" + argv[i].substring(0, argv[i].lastIndexOf("."));
             if (op == "lex") {
                 dst = dst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, dst);
