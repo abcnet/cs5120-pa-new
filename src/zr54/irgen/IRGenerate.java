@@ -33,6 +33,7 @@ public class IRGenerate {
 	/**
 	 * Generete the IR
 	 * @param assemFile TODO
+	 * @param errOutput TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -41,16 +42,16 @@ public class IRGenerate {
 	 * @param optimization: true if doing constant folding
 	 * @throws Exception
 	 */
-	public static boolean IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization, boolean silentMode, String assemFile) throws Exception {
+	public static boolean IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization, boolean disableDiagFileWrite, String assemFile, boolean errOutput) throws Exception {
 		
-		FileOutputStream fs = new FileOutputStream(silentMode?"/dev/null":dstFile);
+		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
 		
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer, srcFile, silentMode);
+			parser p = new parser(printer, srcFile, disableDiagFileWrite);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
  
@@ -117,7 +118,7 @@ public class IRGenerate {
 					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
 					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
-					if(!silentMode){
+					if(!disableDiagFileWrite){
 						program.printSExp(printer);
 						if (debug) System.out.println("After code:");
 				        StringWriter sw1 = new StringWriter();
@@ -177,14 +178,14 @@ public class IRGenerate {
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.errorMessage(errFile));
-					if(!silentMode)System.out.println(e.errorMessage(errFile));
+					if(errOutput)System.out.println(e.errorMessage(errFile));
 					return false;
 				}finally{
 					printer.flush();
 				}
 								
 			}catch(Exception e){
-				if(!silentMode)System.out.println(e.getMessage());
+				if(errOutput)System.out.println(e.getMessage());
 				s = l.next_token();
 				return false;
 			}finally{

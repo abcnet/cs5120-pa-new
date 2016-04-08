@@ -128,23 +128,23 @@ class XiCompiler {
             if (op.equals("lex")) {
                 diagDst = diagDst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
             } else if (op.equals("parse")) {
                 diagDst = diagDst + ".parsed";
                 ParsePrint.parseAndPrint(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
             } else if (op.equals("typecheck")) {
             	diagDst = diagDst + ".typed";
                 TypeCheck.typeCheckAndPrint(src, diagDst, libPath+"/");
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
             } else if (op.equals("irgen")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst, true);
             } else if (op.equals("irrun")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst, true);
             } else if (op.equals("")){
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, true);
             }
         }
     }
