@@ -96,10 +96,10 @@ public class IRFuncDecl extends IRNode {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		
-		sw.write("	.globl	FUNC("+name+")\n"
+		String name2 = name.substring(1);
+		sw.write("	.globl	FUNC("+name2+")\n"
 				+"	.align	4\n"
-				+"FUNC("+name+"):\n"
+				+"FUNC("+name2+"):\n"
 				+"	pushq	%rbp\n"
 				+"	movq	%rsp, %rbp\n");
 		StringWriter bodyWriter = new StringWriter();
@@ -111,8 +111,10 @@ public class IRFuncDecl extends IRNode {
 		}
 		sw.write("	subq	$"+c*8+", %rsp\n");
 		sw.write(bodyWriter.toString());
+		sw.write(name2 + "_EPILOGUE:\n");
 		sw.write("	addq	$"+c*8+", %rsp\n");
 		sw.write("	popq	%rbp\n");
+		sw.write("	retq\n");
 		return operand;
 	}
 }

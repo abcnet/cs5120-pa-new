@@ -135,14 +135,14 @@ public class IRCall extends IRExpr {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		sw.write("	movq	%rdi, -8(%rbp)\n");
-		String callee = ((IRName)this.target).name();
+		String callee = ((IRName)this.target).name().substring(1);
 		boolean gt2;
 		int nRet;
-		if(callee.contentEquals("_I_alloc_i")){
+		if(callee.contentEquals("I_alloc_i")){
 			gt2 = false;
 			nRet = 1;
 		}else{
-			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
+			String rawFuncName = callee.substring(1, callee.lastIndexOf('_'));
 			FuncSignature sign = funcs.lookup(rawFuncName);
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;

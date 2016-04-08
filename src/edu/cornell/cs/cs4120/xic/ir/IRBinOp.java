@@ -306,9 +306,9 @@ public class IRBinOp extends IRExpr {
 				sw.write("	movq	" + l.getTarget() + ",	%rax\n"
 						+" 	" + opStr + "	" + r.getTarget() + "\n");
 				if(this.opType() == OpType.MUL)
-					sw.write("	movq %rax,	" + operand.getTarget() + "\n");
+					sw.write("	movq	%rax,	" + operand.getTarget() + "\n");
 				else
-					sw.write("	movq %rdx,	" + operand.getTarget() + "\n");
+					sw.write("	movq	%rdx,	" + operand.getTarget() + "\n");
 			}
 			break;
 		case DIV:
