@@ -123,7 +123,7 @@ class XiCompiler {
             tmp = diagPathSet?argv[i].substring(argv[i].lastIndexOf('/')+1):argv[i];
             String diagDst = diagPath + "/" + tmp.substring(0, tmp.lastIndexOf("."));
             tmp = dPathSet?argv[i].substring(argv[i].lastIndexOf('/')+1):argv[i];
-            String dDst = dPath + "/" + tmp.substring(0, tmp.lastIndexOf(".")) + ".s";
+            String dDst = dPath + "/" + tmp.substring(0, tmp.lastIndexOf(".")) + ".S";
             
             if (op.equals("lex")) {
                 diagDst = diagDst + ".lexed";
