@@ -101,7 +101,7 @@ public class IRFuncDecl extends IRNode {
 				+"	.align	4\n"
 				+"FUNC("+name+"):\n"
 				+"	pushq	%rbp\n"
-				+"	movq	%rsp, %rbp");
+				+"	movq	%rsp, %rbp\n");
 		StringWriter bodyWriter = new StringWriter();
 		this.body.genAssem(bodyWriter, this, funcs);
 		bodyWriter.flush();

@@ -106,8 +106,8 @@ public class IRMove extends IRStmt {
 			OpTarget src = expr.genAssem(sw, f, funcs);
 			OpTarget dst = target.genAssem(sw, f, funcs);
 			
-			sw.write("	movq " + src.getTarget() + ", %r12\n"
-					+"	movq %r12, " + dst.getTarget() + "\n");
+			sw.write("	movq	" + src.getTarget() + ", %r12\n"
+					+"	movq	%r12, " + dst.getTarget() + "\n");
 		}
 
 		return operand;

@@ -134,7 +134,7 @@ public class IRCall extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		sw.write("	movq	%rdi, -8(%rbp)");
+		sw.write("	movq	%rdi, -8(%rbp)\n");
 		String callee = ((IRName)this.target).name();
 		boolean gt2;
 		int nRet;
@@ -186,16 +186,16 @@ public class IRCall extends IRExpr {
 				argTarg = "%r9";	
 				break;
 			default:
-				argTarg = "-"+8*(f.count+f.maxNumRet+f.maxNumArgs-num2)+"(%rbp)";
+				argTarg = "-"+8*(f.count+f.maxNumRet+f.maxNumArgs-num2)+"(%rbp)\n";
 				break;
 			}
 			
-			sw.write("	movq " + t.getTarget() + ", %r12\n"
-					+"	movq %r12, " + argTarg + "\n");
+			sw.write("	movq	" + t.getTarget() + ", %r12\n"
+					+"	movq	%r12, " + argTarg + "\n");
 		}
 		
 		sw.write("	callq	FUNC("+callee+")\n");
-		sw.write("	movq	-8(%rbp), %rdi");
+		sw.write("	movq	-8(%rbp), %rdi\n");
 		return new OpTarget(TempType.RET, 0);
 	}
 }
