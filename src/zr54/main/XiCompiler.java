@@ -59,13 +59,13 @@ class XiCompiler {
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
-                case 0: op = (op == "") ? "help" : "error";
+                case 0: op = (op.equals("")) ? "help" : "error";
                         break;
-                case 1: op = (op == "") ? "lex" : "error";
+                case 1: op = (op.equals("")) ? "lex" : "error";
                         break;
-                case 2: op = (op == "") ? "parse" : "error";
+                case 2: op = (op.equals("")) ? "parse" : "error";
                         break;
-                case 3: op = (op == "") ? "typecheck" : "error";
+                case 3: op = (op.equals("")) ? "typecheck" : "error";
                         break;
                 case 4: arg = g.getOptarg();
                         srcPath = arg;
@@ -73,9 +73,9 @@ class XiCompiler {
                 case 5: arg = g.getOptarg();
                 		libPath = arg;
                 		break;
-                case 6: op = (op == "") ? "irgen" : "error";
+                case 6: op = (op.equals("")) ? "irgen" : "error";
                 		break;
-                case 7: op = (op == "") ? "irrun" : "error";
+                case 7: op = (op.equals("")) ? "irrun" : "error";
         				break;
                 case 8: arg = g.getOptarg();
                 if(!arg.equalsIgnoreCase("linux")){
@@ -100,11 +100,11 @@ class XiCompiler {
                           System.exit(0);
             }
         }
-        if (op == "error") {
+        if (op.equals("error")) {
             System.out.println("error: can only specify one of --help --lex --parse --typecheck or --irgen");
             System.out.println(usage);
             System.exit(0);
-        } else if (op == "help") {
+        } else if (op.equals("help")) {
             System.out.println(usage);
             System.exit(0);
         }
@@ -125,22 +125,22 @@ class XiCompiler {
             tmp = dPathSet?argv[i].substring(argv[i].lastIndexOf('/')+1):argv[i];
             String dDst = dPath + "/" + tmp.substring(0, tmp.lastIndexOf(".")) + ".s";
             
-            if (op == "lex") {
+            if (op.equals("lex")) {
                 diagDst = diagDst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, diagDst);
                 IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
-            } else if (op == "parse") {
+            } else if (op.equals("parse")) {
                 diagDst = diagDst + ".parsed";
                 ParsePrint.parseAndPrint(src, diagDst);
                 IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
-            } else if (op == "typecheck") {
+            } else if (op.equals("typecheck")) {
             	diagDst = diagDst + ".typed";
                 TypeCheck.typeCheckAndPrint(src, diagDst, libPath+"/");
                 IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst);
-            } else if (op == "irgen") {
+            } else if (op.equals("irgen")) {
             	diagDst = diagDst + ".ir";
             	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst);
-            } else if (op == "irrun") {
+            } else if (op.equals("irrun")) {
             	diagDst = diagDst + ".ir";
             	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst);
             } else if (op.equals("")){

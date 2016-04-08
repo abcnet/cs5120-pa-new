@@ -136,18 +136,26 @@ public class IRCall extends IRExpr {
 		// TODO Auto-generated method stub
 		sw.write("	movq	%rdi, -8(%rbp)");
 		String callee = ((IRName)this.target).name();
-		String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
-		FuncSignature sign = funcs.lookup(rawFuncName);
-		int nRet = sign.getFunctionReturnTypes().getTuple().size();
-		boolean gt2 = nRet>2;
-		int nArgs = this.args().size()+(gt2?1:0);
-		if(nArgs > f.maxNumArgs){
-			f.maxNumArgs = nArgs;
+		boolean gt2;
+		int nRet;
+		if(callee.contentEquals("_I_alloc_i")){
+			gt2 = false;
+			nRet = 1;
+		}else{
+			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
+			FuncSignature sign = funcs.lookup(rawFuncName);
+			nRet = sign.getFunctionReturnTypes().getTuple().size();
+			gt2 = nRet>2;
+			int nArgs = this.args().size()+(gt2?1:0);
+			if(nArgs > f.maxNumArgs){
+				f.maxNumArgs = nArgs;
+			}
+			
+			if(nRet>f.maxNumRet){
+				f.maxNumRet=nRet;
+			}
 		}
 		
-		if(nRet>f.maxNumRet){
-			f.maxNumRet=nRet;
-		}
 		//todo
 		if(nRet>2){
 			sw.write("	movq	-"+8*(f.count+f.maxNumRet)+"(%rbp), %rdi\n");
