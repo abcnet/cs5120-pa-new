@@ -30,17 +30,20 @@ class XiCompiler {
         longopts[5] = new LongOpt("libpath", LongOpt.REQUIRED_ARGUMENT, null, 5);
         longopts[6] = new LongOpt("irgen", LongOpt.NO_ARGUMENT, null, 6);
         longopts[7] = new LongOpt("irrun", LongOpt.NO_ARGUMENT, null, 7);
-        longopts[8] = new LongOpt("target", LongOpt.NO_ARGUMENT, null, 8);
+        longopts[8] = new LongOpt("target", LongOpt.REQUIRED_ARGUMENT, null, 8);
 
         Getopt g = new Getopt("XiCompiler", argv, "OD:", longopts, true);
         g.setOpterr(false);
 
-        String usage = "usage: ./xic [options] [srcpath] [dstpath] <source files>\n" +
+        String usage = "usage: ./xic [options] [srcpath] [libpath] [diagpath] [dpath] <source files>\n" +
             "options: --help | --lex | --parse | --typecheck | --irgen | --irrun\n" +
-            "libpath: -libpath <path>\n" +
+           
             "srcpath: -sourcepath <path>\n" +
-            "dstpath: -D <path>" +
-            "disable optimizations: -O";
+            "libpath: -libpath <path>\n" +
+            "diagpath: -D <path>\n" +
+            "dpath: -d <path>\n" +
+            "disable optimizations: -O\n" +
+            "-target <OS>: Specify the operating system for which to generate code";
 
         String op = "";
         String srcPath = System.getProperty("user.dir");
@@ -70,7 +73,11 @@ class XiCompiler {
                 		break;
                 case 7: op = (op == "") ? "irrun" : "error";
         				break;
-                case 8: 
+                case 8: arg = g.getOptarg();
+                if(!arg.equalsIgnoreCase("linux")){
+                	System.out.println("error: cannot support OS other than Linux");
+                	System.exit(0);
+                }
 						break;
                 case 'D': arg = g.getOptarg();
                           diagPath = arg;
