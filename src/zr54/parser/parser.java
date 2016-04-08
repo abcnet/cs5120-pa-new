@@ -671,7 +671,8 @@ public class parser
 
 
     public CodeWriterSExpPrinter printer;
-    public parser(CodeWriterSExpPrinter printer, String file){ this.printer = printer; this.file = file;}
+    public boolean silent;
+    public parser(CodeWriterSExpPrinter printer, String file, boolean silent){ this.printer = printer; this.file = file; this.silent = silent;}
     public String file;
 
     @Override
@@ -699,7 +700,7 @@ public class parser
     	}
     	catch(XiException e) {
       //printer.printAtom(e.errorMessage(file));
-    		System.out.println(e.errorMessage(file));
+    		if(!silent)System.out.println(e.errorMessage(file));
     	}
     }
 

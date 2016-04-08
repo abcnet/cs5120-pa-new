@@ -3,7 +3,9 @@ package zr54.irgen;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -26,10 +28,12 @@ import zr54.typechecker.VarSymbolTable;
 public class IRGenerate {
 	
 	public static boolean debug = false;
-
+	public static boolean debugAssem = true;
 	
 	/**
 	 * Generete the IR
+	 * @param assemFile TODO
+	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
 	 * @param libPath: ixi file path
@@ -37,14 +41,16 @@ public class IRGenerate {
 	 * @param optimization: true if doing constant folding
 	 * @throws Exception
 	 */
-	public static void IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization) throws Exception {
+	public static boolean IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization, boolean silentMode, String assemFile) throws Exception {
 		
-		FileOutputStream fs = new FileOutputStream(dstFile);
+		FileOutputStream fs = new FileOutputStream(silentMode?"/dev/null":dstFile);
+		
+		
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer, srcFile);
+			parser p = new parser(printer, srcFile, silentMode);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
  
@@ -111,34 +117,37 @@ public class IRGenerate {
 					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
 					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
-					program.printSExp(printer);
-					if (debug) System.out.println("After code:");
-			        StringWriter sw1 = new StringWriter();
-			        try (PrintWriter pw = new PrintWriter(sw1);
-			             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
-			            program.printSExp(sp);
-			        }
-			        if (debug) System.out.println(sw1);
-					
+					if(!silentMode){
+						program.printSExp(printer);
+						if (debug) System.out.println("After code:");
+				        StringWriter sw1 = new StringWriter();
+				        try (PrintWriter pw = new PrintWriter(sw1);
+				             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+				            program.printSExp(sp);
+				        }
+				        if (debug) System.out.println(sw1);
+						
 
-			        // IR canonical checker demo
-			        {
-			            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
-			            if (debug)System.out.print("Canonical?: ");
-			            if (debug)System.out.println(cv.visit(program));
-			        }
-			        
+				        // IR canonical checker demo
+				        {
+				            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
+				            if (debug)System.out.print("Canonical?: ");
+				            if (debug)System.out.println(cv.visit(program));
+				        }
+				        
+						
+						{
+				            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
+				            if (debug)System.out.print("Constant-folded?: ");
+				            if (debug)System.out.println(cv.visit(program));
+				        }
+						
+				        if(run){
+				            IRSimulator sim = new IRSimulator(program);
+				            long result = sim.call("_Imain_paai");
+				        }
+					}
 					
-					{
-			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            if (debug)System.out.print("Constant-folded?: ");
-			            if (debug)System.out.println(cv.visit(program));
-			        }
-					
-			        if(run){
-			            IRSimulator sim = new IRSimulator(program);
-			            long result = sim.call("_Imain_paai");
-			        }
 					
 			        if(optimization)program.doConstFolding();
 			        {
@@ -146,18 +155,38 @@ public class IRGenerate {
 			            if (debug)System.out.print("Constant-folded?: ");
 			            if (debug)System.out.println(cv.visit(program));
 			        }
+			        
+			        StringWriter assemStringWriter = new StringWriter();
+			        program.genAssem(assemStringWriter, null, funcs);
+			        assemStringWriter.flush();
+			        if (debugAssem) System.out.println(assemStringWriter);
+			        try{
+			        	FileWriter as = new FileWriter(assemFile, false);
+			        	as.write(assemStringWriter.toString());
+			        	as.flush();
+				        as.close();
+			        }catch(IOException e){
+			        	System.out.println("Cannot write to " + assemFile);
+			        	return false;
+			        }finally{
+			        	assemStringWriter.close();
+			        }
+			        
+			        return true;
 					
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.errorMessage(errFile));
-					System.out.println(e.errorMessage(errFile));
+					if(!silentMode)System.out.println(e.errorMessage(errFile));
+					return false;
 				}finally{
 					printer.flush();
 				}
 								
 			}catch(Exception e){
-				System.out.println(e.getMessage());
+				if(!silentMode)System.out.println(e.getMessage());
 				s = l.next_token();
+				return false;
 			}finally{
 				printer.flush();
 //				System.out.println("Type checking result written to: " + dstFile);
@@ -166,7 +195,8 @@ public class IRGenerate {
 
 		} else {
 			System.out.println("error: '" + srcFile + "' does not exist");
-			System.exit(1);
+			printer.close();
+			return false;
 		}
 		
 	}

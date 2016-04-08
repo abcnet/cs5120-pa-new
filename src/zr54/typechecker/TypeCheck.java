@@ -26,7 +26,7 @@ public class TypeCheck {
 
 		File f = new File(srcFile);
 		if (f.exists()) {
-			parser p = new parser(printer, srcFile);
+			parser p = new parser(printer, srcFile, false);
 			Lexer l = new Lexer(new FileReader(srcFile));
 			p.setScanner(l);
  
