@@ -53,7 +53,8 @@ public class IRTemp extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		boolean gt2 = funcs.lookup(f.name()).getFunctionReturnTypes().getTuple().size() > 2;
+		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_'));
+		boolean gt2 = funcs.lookup(rawFuncName).getFunctionReturnTypes().getTuple().size() > 2;
 		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
 			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
 			operand = new OpTarget(idx, gt2);

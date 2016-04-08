@@ -96,10 +96,7 @@ public class IRFuncDecl extends IRNode {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		int c=count+(maxNumRet>2?maxNumRet-2:0)+(maxNumArgs>6?maxNumArgs-6:0);
-		if(c%2==1){
-			c++;
-		}
+		
 		sw.write("	.globl	FUNC("+name+")\n"
 				+"	.align	4\n"
 				+"FUNC("+name+"):\n"
@@ -108,6 +105,10 @@ public class IRFuncDecl extends IRNode {
 		StringWriter bodyWriter = new StringWriter();
 		this.body.genAssem(bodyWriter, this, funcs);
 		bodyWriter.flush();
+		int c=count+(maxNumRet>2?maxNumRet-2:0)+(maxNumArgs>6?maxNumArgs-6:0);
+		if(c%2==1){
+			c++;
+		}
 		sw.write("	subq	$"+c*8+", %rsp\n");
 		sw.write(bodyWriter.toString());
 		sw.write("	addq	$"+c*8+", %rsp\n");
