@@ -14,7 +14,8 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
-    public int count = 0;
+    public static final int RESERVED = 1;
+    public int count = RESERVED;
     public int maxNumRet;
     public int maxNumArgs;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
