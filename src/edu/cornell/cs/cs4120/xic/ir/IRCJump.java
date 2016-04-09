@@ -126,6 +126,8 @@ public class IRCJump extends IRStmt {
 		}
 		else {
 			OpTarget cond = expr.genAssem(sw, f, funcs);
+			if(cond.type == OpTarget.TempType.TEMP)
+				sw.write("# CJUMP t" + cond.num + "\n");
 			
 			sw.write("	movq	" + cond.getTarget() + ", %rax\n"
 					+"	cmpq	$1, %rax\n"

@@ -369,16 +369,16 @@ public class IRBinOp extends IRExpr {
 					sw.write("	jne	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");			
 					break;
 				case LT:
-					sw.write("	jg	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
-					break;
-				case GT:
 					sw.write("	jl	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
 					break;
+				case GT:
+					sw.write("	jg	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					break;
 				case LEQ:
-					sw.write("	jge	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					sw.write("	jle	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
 					break;
 				case GEQ:
-					sw.write("	jle	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
+					sw.write("	jge	L_BINOP_CMP_T_" + (++cmpLabelCount) + "\n");
 					break;
 				}
 				
