@@ -34,7 +34,7 @@ public class IRReturn extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		sw.write("	jmp	" + f.name().substring(1) + "_EPILOGUE\n");
+		sw.write("	jmp	" + f.name() + "_EPILOGUE\n");
 		
 		return operand;
 	}

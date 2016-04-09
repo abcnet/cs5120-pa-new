@@ -113,7 +113,7 @@ public class IRCompUnit extends IRNode {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		sw.write("#include \"defs.h\"\n\t.text\n");
+//		sw.write("#include \"defs.h\"\n\t.text\n");
 		for (IRFuncDecl func : functions.values()){
 			func.genAssem(sw, func, funcs);
 		}
