@@ -19,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[11];
+        LongOpt[] longopts = new LongOpt[12];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -33,8 +33,9 @@ class XiCompiler {
         longopts[8] = new LongOpt("target", LongOpt.REQUIRED_ARGUMENT, null, 8);
         longopts[9] = new LongOpt("D", LongOpt.REQUIRED_ARGUMENT, null, 9);
         longopts[10] = new LongOpt("d", LongOpt.REQUIRED_ARGUMENT, null, 10);
+        longopts[11] = new LongOpt("O", LongOpt.NO_ARGUMENT, null, 11);
 
-        Getopt g = new Getopt("XiCompiler", argv, "O:", longopts, true);
+        Getopt g = new Getopt("XiCompiler", argv, ":", longopts, true);
         g.setOpterr(false);
 
         String usage = "usage: ./xic [options] [srcpath] [libpath] [diagpath] [dpath] <source files>\n" +
@@ -93,7 +94,7 @@ class XiCompiler {
 			              dPath = arg;
 			              dPathSet = true;
 			              break;
-                case 'O': optimization = false;
+                case 11: optimization = false;
                           break;
                 case '?': System.out.println("error: invalid option entered");
                           System.out.println(usage);
