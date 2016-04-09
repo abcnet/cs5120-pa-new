@@ -60,7 +60,12 @@ public class IRConst extends IRExpr {
 		f.count++;
 		operand = new OpTarget(f.count);
 		sw.write("# CONST " + value + " in t" + operand.num + "\n");
-		sw.write("	movq	$" + value + ", " + operand.getTarget() + "\n");
+		if(value > Integer.MAX_VALUE || value < Integer.MIN_VALUE){
+			sw.write("	movq	$" + value + ", %r11\n");
+			sw.write("	movq	%r11, "  + operand.getTarget() + "\n");
+		}else{
+			sw.write("	movq	$" + value + ", " + operand.getTarget() + "\n");
+		}
 		
 		return operand;
 	}
