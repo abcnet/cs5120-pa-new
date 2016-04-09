@@ -121,6 +121,20 @@ public class IRCJump extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		if(false) {
+			//match tiles here
+		}
+		else {
+			OpTarget cond = expr.genAssem(sw, f, funcs);
+			
+			sw.write("	movq	" + cond.getTarget() + ", %rax\n"
+					+"	cmpq	$1, %rax\n"
+					+"	je	" + trueLabel + "\n");
+			if(falseLabel != null) {
+				sw.write("	jmp	" + falseLabel + "\n");
+			}
+		}
+		
 		return operand;
 	}
 }

@@ -80,6 +80,10 @@ public class IRJump extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		if(target instanceof IRName) {
+			IRName label = (IRName) target;
+			sw.write("	jmp	" + label.name() + "\n");
+		}
 		return operand;
 	}
 }

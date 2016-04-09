@@ -1,5 +1,13 @@
 use io
 
 main(args:int[][]) {
-	println("Hello World!")
+	i:int = 1
+	
+	if(i == 0) {
+		println("Hello World!")
+	}
+	else {
+		println("Good morning!")
+	}
+	
 }

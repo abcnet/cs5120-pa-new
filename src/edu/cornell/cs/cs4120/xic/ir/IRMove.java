@@ -110,8 +110,7 @@ public class IRMove extends IRStmt {
 			sw.write("	movq	" + src.getTarget() + ", %r12\n" 
 					+"	movq	" + addr.getTarget() + ", %r13\n"
 					+"	movq	%r12, (%r13)\n");
-			
-			//matching tiles
+
 		}
 		else {
 			OpTarget src = expr.genAssem(sw, f, funcs);
