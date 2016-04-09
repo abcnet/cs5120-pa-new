@@ -115,7 +115,7 @@ class XiCompiler {
 //            System.out.println("No source file names provided");
 //            System.out.println(usage);
 //        }
-        for (int i = g.getOptind(); i < argv.length ; i++) {
+        for (int i = g.getOptind()-1; i < argv.length ; i++) {
             if (argv[i].indexOf(".") == -1 || !argv[i].endsWith(".xi")) {
                 System.out.println("error: '" + argv[i] + "' not a .xi file");
                 continue;

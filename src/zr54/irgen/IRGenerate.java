@@ -28,7 +28,7 @@ import zr54.typechecker.VarSymbolTable;
 public class IRGenerate {
 	
 	public static boolean debug = false;
-	public static boolean debugAssem = false;
+	public static boolean debugAssem = true;
 	
 	/**
 	 * Generete the IR
