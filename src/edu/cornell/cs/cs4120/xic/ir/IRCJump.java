@@ -171,8 +171,8 @@ public class IRCJump extends IRStmt {
 				sw.write("# CJUMP t" + cond.num + "\n");
 			
 			sw.write("	movq	" + cond.getTarget() + ", %rax\n"
-					+"	cmpq	$1, %rax\n"
-					+"	je	" + trueLabel + "\n");
+					+"	testq	%rax, %rax\n"
+					+"	jnz	" + trueLabel + "\n");
 			if(falseLabel != null) {
 				sw.write("	jmp	" + falseLabel + "\n");
 			}
