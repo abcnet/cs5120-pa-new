@@ -26,7 +26,9 @@ public class DeclarationNode extends AstNode {
 		if(symbol != null) {
 			if(vars.lookup((String) symbol.value) != null) {
 				throw new XiException(this.symbol.left,this.symbol.right,"Duplicate Variable " + (String)symbol.value, "Semantic");
-			}			
+			}else if(funcs.lookup((String) symbol.value) != null)	{
+				throw new XiException(this.symbol.left,this.symbol.right,"Cannot declare funciton name as variable " + (String)symbol.value, "Semantic");
+			}
 			else {
 				type = children.get(0).typeCheck(vars, funcs);
 				vars.add((String) symbol.value, type);
