@@ -287,7 +287,7 @@ public class IRBinOp extends IRExpr {
             if (
                 left instanceof IRBinOp && 
                 (((IRBinOp) left).opType() == IRBinOp.OpType.MUL) &&
-                this.opType() == ADD
+                this.opType() == OpType.ADD
             ) {
                 IRBinOp _left = (IRBinOp) left;
                 OpTarget _r = right.genAssem(sw, f, funcs);
@@ -328,7 +328,7 @@ public class IRBinOp extends IRExpr {
                     IRConst _const = (IRConst) (_right.left());
                     OpTarget r = _right.right().genAssem(sw, f, funcs);
                     sw.write("  movq    " + r.getTarget() + ", %r12\n");
-                    sw.write("  lea     (%r11, %r12, " + (this.opType() == ADD ? _const.value() : -_const.value()) + "), %r13\n");
+                    sw.write("  lea     (%r11, %r12, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r13\n");
                     sw.write("  movq    %r13, " + operand.getTarget() + "\n");
                 }
                 else if (_right.right() instanceof IRConst) {
@@ -336,7 +336,7 @@ public class IRBinOp extends IRExpr {
                     IRConst _const = (IRConst) (_right.right());
                     OpTarget l = _right.left().genAssem(sw, f, funcs);
                     sw.write("  movq    " + l.getTarget() + ", %r12\n");
-                    sw.write("  lea     (%r11, %r12, " + (this.opType() == ADD ? _const.value() : -_const.value()) + "), %r13\n");
+                    sw.write("  lea     (%r11, %r12, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r13\n");
                     sw.write("  movq    %r13, " + operand.getTarget() + "\n");
                 } 
                 else {
