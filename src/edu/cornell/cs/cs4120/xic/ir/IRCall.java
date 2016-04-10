@@ -194,8 +194,8 @@ public class IRCall extends IRExpr {
 			}
 			String s = t.getTarget();
 			if(s.contains("(")&&argTarg.contains("(")){
-				sw.write("	movq	" + s + ", %r12\n"
-						+"	movq	%r12, " + argTarg + "\n");
+				sw.write("	movq	" + s + ", %r10\n"
+						+"	movq	%r10, " + argTarg + "\n");
 			}else{
 				sw.write("	movq	" + s + ", " + argTarg + "\n");
 			}

@@ -293,19 +293,19 @@ public class IRBinOp extends IRExpr {
                 OpTarget _r = right.genAssem(sw, f, funcs);
 
                 if (_left.left() instanceof IRConst) {
-                    sw.write("  movq    " + _r.getTarget() + ", %r12\n");
+                    sw.write("  movq    " + _r.getTarget() + ", %r10\n");
                     IRConst _const = (IRConst) (_left.left());
                     OpTarget r = _left.right().genAssem(sw, f, funcs);
                     sw.write("  movq    " + r.getTarget() + ", %r11\n");
-                    sw.write("  lea     (%r12, %r11, " + _const.value() + "), %r13\n");
-                    sw.write("  movq    %r13, " + operand.getTarget() + "\n");
+                    sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
+                    sw.write("  movq    %r11, " + operand.getTarget() + "\n");
                 } else if (_left.right() instanceof IRConst) {
-                    sw.write("  movq    " + _r.getTarget() + ", %r12\n");
+                    sw.write("  movq    " + _r.getTarget() + ", %r10\n");
                     IRConst _const = (IRConst) (_left.right());
                     OpTarget l = _left.left().genAssem(sw, f, funcs);
                     sw.write("  movq    " + l.getTarget() + ", %r11\n");
-                    sw.write("  lea     (%r12, %r11, " + _const.value() + "), %r13\n");
-                    sw.write("  movq    %r13, " + operand.getTarget() + "\n");
+                    sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
+                    sw.write("  movq    %r11, " + operand.getTarget() + "\n");
                 } else {
                     OpTarget l = left.genAssem(sw, f, funcs);
                     OpTarget r = right.genAssem(sw, f, funcs);
@@ -327,17 +327,17 @@ public class IRBinOp extends IRExpr {
                     sw.write("  movq    " + _l.getTarget() + ", %r11\n");
                     IRConst _const = (IRConst) (_right.left());
                     OpTarget r = _right.right().genAssem(sw, f, funcs);
-                    sw.write("  movq    " + r.getTarget() + ", %r12\n");
-                    sw.write("  lea     (%r11, %r12, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r13\n");
-                    sw.write("  movq    %r13, " + operand.getTarget() + "\n");
+                    sw.write("  movq    " + r.getTarget() + ", %r10\n");
+                    sw.write("  lea     (%r11, %r10, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r11\n");
+                    sw.write("  movq    %r11, " + operand.getTarget() + "\n");
                 }
                 else if (_right.right() instanceof IRConst) {
                     sw.write("  movq    " + _l.getTarget() + ", %r11\n");
                     IRConst _const = (IRConst) (_right.right());
                     OpTarget l = _right.left().genAssem(sw, f, funcs);
-                    sw.write("  movq    " + l.getTarget() + ", %r12\n");
-                    sw.write("  lea     (%r11, %r12, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r13\n");
-                    sw.write("  movq    %r13, " + operand.getTarget() + "\n");
+                    sw.write("  movq    " + l.getTarget() + ", %r10\n");
+                    sw.write("  lea     (%r11, %r10, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r11\n");
+                    sw.write("  movq    %r11, " + operand.getTarget() + "\n");
                 } 
                 else {
                     OpTarget l = left.genAssem(sw, f, funcs);

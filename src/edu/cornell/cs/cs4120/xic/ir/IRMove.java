@@ -114,15 +114,15 @@ public class IRMove extends IRStmt {
 				
 				if(expr instanceof IRConst) {	//(MOVE (MEM (ADD (XX XX) (CONST XX))) (CONST XX))
 					sw.write("# MOVE CONST " + ((IRConst)expr).value() + " to MEM\n");
-					sw.write("	movq	" + addr.getTarget() + ", %r13\n"
-							+"	movq	$" + ((IRConst)expr).value() + ", " + offset.value() + "(%r13)\n");
+					sw.write("	movq	" + addr.getTarget() + ", %r11\n"
+							+"	movq	$" + ((IRConst)expr).value() + ", " + offset.value() + "(%r11)\n");
 				}
 				else {	//(MOVE (MEM (ADD (XX XX) (CONST XX))) (XX XX))
 					OpTarget src = expr.genAssem(sw, f, funcs);
 					sw.write("# MOVE t" + src.num + " to MEM\n");
-					sw.write("	movq	" + src.getTarget() + ", %r12\n"
-							+"	movq	" + addr.getTarget() + ", %r13\n"
-							+"	movq	%r12, " + offset.value() + "(%r13)\n");
+					sw.write("	movq	" + src.getTarget() + ", %r10\n"
+							+"	movq	" + addr.getTarget() + ", %r11\n"
+							+"	movq	%r10, " + offset.value() + "(%r11)\n");
 
 				}
 			}
@@ -133,9 +133,9 @@ public class IRMove extends IRStmt {
 				if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
 					sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
 				}
-				sw.write("	movq	" + src.getTarget() + ", %r12\n" 
-						+"	movq	" + addr.getTarget() + ", %r13\n"
-						+"	movq	%r12, (%r13)\n");
+				sw.write("	movq	" + src.getTarget() + ", %r10\n" 
+						+"	movq	" + addr.getTarget() + ", %r11\n"
+						+"	movq	%r10, (%r11)\n");
 			}
 		}
 		else {
@@ -148,8 +148,8 @@ public class IRMove extends IRStmt {
 			}
 
 			if(s.contains("(")&&d.contains("(")){
-				sw.write("	movq	" + s + ", %r12\n"
-						+"	movq	%r12, " + d + "\n");
+				sw.write("	movq	" + s + ", %r10\n"
+						+"	movq	%r10, " + d + "\n");
 			}else{
 				sw.write("	movq	" + s + ", " + d + "\n");
 			}
