@@ -89,15 +89,15 @@ arrayLiteral        ::= LBRACE:l expressions:es RBRACE          {: RESULT = new 
                       | LBRACE:l RBRACE  {: RESULT = new ArrayLiteralNode("arrayLiteral", l); :}
                       ;
 
-emptyBracket        ::= LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  :}
+emptyBracket        ::= LBRACK:lb RBRACK                {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new DefaultNode("emptyBrack", null));  :}
                       ;
-emptyBrackets       ::= emptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+emptyBrackets       ::= emptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); :}
                       | emptyBracket:b               {: RESULT = b; :}
                       ;
-nonEmptyBracket     ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); :}
+nonEmptyBracket     ::= LBRACK:lb expression:es  RBRACK {: RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), es); :}
                       ;
-nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
-                      | nonEmptyBracket:b nonEmptyBrackets:bs   {: RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); :}
+nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); :}
+                      | nonEmptyBracket:b nonEmptyBrackets:bs   {: RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); :}
                       | nonEmptyBracket:b               {: RESULT = b; :}
                       ;
                     
@@ -128,17 +128,17 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | varArrayIndices:v  {: RESULT = v; :}
                       ;
 
-arrayIndices        ::= arrayIndices:ai LBRACK expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); :}
+arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); :}
                       
                      
-                      | STRING_LITERAL:sl  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
-                      | arrayLiteral:al  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); :}
-                      | LPAREN expression:e RPAREN  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); :}
+                      | STRING_LITERAL:sl  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); :}
+                      | arrayLiteral:al  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), al, a); :}
+                      | LPAREN expression:e RPAREN  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), e, a); :}
                       
                       ;
-varArrayIndices     ::= IDENTIFIER:id LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); :}
-                      | functionCall:fc  LBRACK expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), fc, a); :}
-                      | varArrayIndices:v LBRACK expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), v, a); :}
+varArrayIndices     ::= IDENTIFIER:id LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new VariableNode("IDENTIFIER", id), a); :}
+                      | functionCall:fc  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fc, a); :}
+                      | varArrayIndices:v LBRACK:lb expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), v, a); :}
                       ;
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}

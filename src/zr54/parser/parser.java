@@ -894,7 +894,7 @@ class CUP$parser$actions {
                 int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int lbright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
-                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), new DefaultNode("emptyBrack", null));  
+                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new DefaultNode("emptyBrack", null));  
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("emptyBracket",21, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -909,7 +909,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
+                 RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("emptyBrackets",22, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -936,7 +936,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, "[]"), es); 
+                 RESULT = new TypeNode("bracket", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("nonEmptyBracket",19, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -951,7 +951,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
+                 RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("nonEmptyBrackets",20, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -966,7 +966,7 @@ class CUP$parser$actions {
                 int bsleft = CUP$parser$stack.peek().left;
                 int bsright = CUP$parser$stack.peek().right;
                 AstNode bs = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new TypeNode("brackets", new Symbol(sym.LRBRACK, "[]"), bs); RESULT.addGrandChildren(b); 
+                 RESULT = new TypeNode("brackets", b.symbol, bs); RESULT.addGrandChildren(b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("nonEmptyBrackets",20, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1227,10 +1227,13 @@ class CUP$parser$actions {
                 int aileft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int airight = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 AstNode ai = CUP$parser$stack.elementAt(CUP$parser$top-3).<AstNode> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), ai, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",36, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1242,10 +1245,13 @@ class CUP$parser$actions {
                 int slleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int slright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 Symbol sl = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new LiteralExpr("STRING_LITERAL", new Symbol(sl.sym, sl.left, sl.right, sl.value), Type.INT, 1), a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",36, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1257,10 +1263,13 @@ class CUP$parser$actions {
                 int alleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int alright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 AstNode al = CUP$parser$stack.elementAt(CUP$parser$top-3).<AstNode> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), al, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), al, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",36, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1272,10 +1281,13 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
                 int eright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
                 AstNode e = CUP$parser$stack.elementAt(CUP$parser$top-4).<AstNode> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), e, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), e, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("arrayIndices",36, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1287,10 +1299,13 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), new VariableNode("IDENTIFIER", id), a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new VariableNode("IDENTIFIER", id), a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("varArrayIndices",37, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1302,10 +1317,13 @@ class CUP$parser$actions {
                 int fcleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int fcright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 AstNode fc = CUP$parser$stack.elementAt(CUP$parser$top-3).<AstNode> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), fc, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fc, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("varArrayIndices",37, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1317,10 +1335,13 @@ class CUP$parser$actions {
                 int vleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
                 int vright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
                 AstNode v = CUP$parser$stack.elementAt(CUP$parser$top-3).<AstNode> value();
+                int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, "[]"), v, a); 
+                 RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), v, a); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("varArrayIndices",37, CUP$parser$stack.elementAt(CUP$parser$top-3), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
