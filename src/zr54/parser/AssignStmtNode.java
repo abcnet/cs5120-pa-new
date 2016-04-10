@@ -31,8 +31,8 @@ public class AssignStmtNode extends StmtNode{
 
 		Type left, right;
 
-		left=this.children.get(0).typeCheck(vars, funcs);
 		right=this.children.get(1).typeCheck(vars, funcs);
+		left=this.children.get(0).typeCheck(vars, funcs);
 
 		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
 			throw new XiException(this.children.get(1).symbol,"Expected function call", "Semantic");
