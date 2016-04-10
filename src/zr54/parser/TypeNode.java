@@ -41,8 +41,14 @@ public class TypeNode extends AstNode {
 			if(children.size() > 0) {
 				type = children.get(0).typeCheck(vars, funcs);
 				type.incDimension();
-				for(int i = 1; i < children.size(); i++)
-					children.get(i).typeCheck(vars, funcs);
+				if(children.size()==2){
+					Type t = children.get(1).typeCheck(vars, funcs);
+					if (t.getType()!=Type.INT||t.getDimension()!=0){
+						throw new XiException(symbol.left,symbol.right, "Expect int inside [], but found " + t, "Semantic");
+					}
+				}
+//				for(int i = 1; i < children.size(); i++)
+//					children.get(i).typeCheck(vars, funcs);
 			}
 			else
 				throw new XiException(symbol.left,symbol.right, "Array without INT/BOOL type", "Semantic");
