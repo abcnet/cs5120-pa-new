@@ -5,3 +5,7 @@ bin/
 .classpath
 .project
 *.lexed
+*.typed
+*.parsed
+*.ir
+*.s
