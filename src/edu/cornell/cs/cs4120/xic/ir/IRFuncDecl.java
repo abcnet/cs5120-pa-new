@@ -14,7 +14,7 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
-    public static final int RESERVED = 1;
+    public static final int RESERVED = 2;
     public int count = RESERVED;
     public int maxNumRet = 0;
     public int maxNumArgs = 0;
@@ -110,10 +110,13 @@ public class IRFuncDecl extends IRNode {
 			c++;
 		}
 		sw.write("	subq	$"+c*8+", %rsp\n"
-				+ "	movq	%rdi, -8(%rbp)\n");
+				+ "	movq	%rdi, -8(%rbp)\n"
+				+ "	movq	%rsi, -16(%rbp)\n");
 		sw.write(bodyWriter.toString());
 		sw.write(name + "_EPILOGUE:\n");
 		sw.write("	addq	$"+c*8+", %rsp\n");
+		sw.write("	movq	-8(%rbp), %rdi\n"
+		       + "	movq	-16(%rbp), %rsi\n");
 		sw.write("	popq	%rbp\n");
 		sw.write("	retq\n");
 		return operand;
