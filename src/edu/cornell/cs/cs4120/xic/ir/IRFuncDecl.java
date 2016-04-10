@@ -114,11 +114,11 @@ public class IRFuncDecl extends IRNode {
 				+ "	movq	%rsi, -16(%rbp)\n");
 		sw.write(bodyWriter.toString());
 		sw.write(name + "_EPILOGUE:\n");
-		sw.write("	addq	$"+c*8+", %rsp\n");
-		sw.write("	movq	-8(%rbp), %rdi\n"
-		       + "	movq	-16(%rbp), %rsi\n");
-		sw.write("	popq	%rbp\n");
-		sw.write("	retq\n");
+		sw.write("	addq	$"+c*8+", %rsp\n"
+				+ "	movq	-8(%rbp), %rdi\n"
+				+ "	movq	-16(%rbp), %rsi\n"
+				+ "	popq	%rbp\n"
+				+ "	retq\n");
 		return operand;
 	}
 }

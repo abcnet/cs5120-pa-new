@@ -43,7 +43,7 @@ public class TypeNode extends AstNode {
 				type.incDimension();
 				if(children.size()==2){
 					Type t = children.get(1).typeCheck(vars, funcs);
-					if (t.getType()!=Type.INT||t.getDimension()!=0){
+					if (t.getType()==Type.BOOL||t.getDimension()!=0){
 						throw new XiException(symbol.left,symbol.right, "Expect int inside [], but found " + t, "Semantic");
 					}
 				}
