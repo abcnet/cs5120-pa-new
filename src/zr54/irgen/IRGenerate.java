@@ -184,11 +184,12 @@ public class IRGenerate {
 					printer.flush();
 				}
 								
-			}catch(Exception e){
-				if(errOutput)System.out.println(e.getMessage());
-				s = l.next_token();
-				return false;
-			}finally{
+			}//catch(Exception e){
+			//	if(errOutput)System.out.println(e.getMessage());
+			//	s = l.next_token();
+			//	return false;
+			//}
+			finally{
 				printer.flush();
 //				System.out.println("Type checking result written to: " + dstFile);
 			}
