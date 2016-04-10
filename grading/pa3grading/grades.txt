@@ -1,0 +1,20 @@
+10: Overview
+	Good overview. 
+
+35.4/40: Correctness
+
+	5: PA2 (Gratis) 
+	30.4/35: PA3 -- (See attached report).  
+		I modified your command-line processing to accept (but do nothing with) the -libpath arg.
+		This improved the number of passed tests significantly, but you may have failed some when the
+		interface coud not be found.
+		
+
+27/30: Completeness
+	No support for -libpath
+
+10/10: Test plan in Overview & Submitted test cases
+	Good overview of tests.
+
+10/10: Style
+	Good use of design patterns. Good documentation!
