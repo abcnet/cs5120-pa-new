@@ -121,6 +121,7 @@ public class IRCJump extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		
 		if(expr instanceof IRBinOp &&
 			( (((IRBinOp) expr).opType() == IRBinOp.OpType.EQ) 
 			||(((IRBinOp) expr).opType() == IRBinOp.OpType.NEQ)
@@ -151,7 +152,18 @@ public class IRCJump extends IRStmt {
 				jmpStr = "jge";
 				break;
 			}
-						
+			
+			sw.write("# CJUMP BinOp " + jmpStr + "\n");
+			OpTarget l = binExpr.left().genAssem(sw, f, funcs);
+			OpTarget r = binExpr.right().genAssem(sw, f, funcs);
+			sw.write("	movq	" + l.getTarget() + ", %rax\n"
+					+"	cmpq	" + r.getTarget() + ", %rax\n");
+
+			if(trueLabel != null) 
+				sw.write("	" + jmpStr + "	" + trueLabel + "\n");
+			if(falseLabel != null)
+				sw.write("	jmp	" + falseLabel + "\n");
+									
 		}
 		else {
 			OpTarget cond = expr.genAssem(sw, f, funcs);
