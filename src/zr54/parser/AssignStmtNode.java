@@ -34,8 +34,48 @@ public class AssignStmtNode extends StmtNode{
 		right=this.children.get(1).typeCheck(vars, funcs);
 		left=this.children.get(0).typeCheck(vars, funcs);
 
-		if(left.getType()==Type.UNIT && !right.isFunctionCall()){
+		
+		if(left.getType()!=Type.TUPLE){
+			if(right.getType()==Type.TUPLE){
+				if(right.getTuple().size()==0){
+					throw new XiException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function", "Semantic");
+				}else{
+					throw new XiException(this.children.get(0).getFirstSymbol(),"Mismatched number of values", "Semantic");
+				}
+			}else{
+				//left 1, right 1 check
+				if(!left.matches(right)){
+					throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
+				}
+			}
+			
+		}
+		if(left.getType()==Type.UNIT && !right.isFunctionCall()){			
 			throw new XiException(this.children.get(1).symbol,"Expected function call", "Semantic");
+		}
+		if(left.getType()==Type.TUPLE){
+			if(right.getType()!=Type.TUPLE){
+				throw new XiException(this.children.get(0).getFirstSymbol(),"Mismatched number of values", "Semantic");
+			}else if (right.getTuple().size()==0){
+				throw new XiException(this.children.get(1).getFirstSymbol(),this.children.get(1).symbol.value+" is not a function", "Semantic");
+			}else{
+				// left tuple , right tuple
+				if(left.getTuple().size()!=right.getTuple().size()){
+					throw new XiException(this.children.get(0).getFirstSymbol(),"Mismatched number of values", "Semantic");
+				}else{
+					for(int i=0;i<left.getTuple().size();i++){
+
+
+						Type l=left.getTuple().get(i);
+						Type r=right.getTuple().get(i);
+						if(l.matches(r)==false){
+							AstNode node = this.children.get(0).getChildren().get(i);
+							throw new XiException(node.symbol,"Expected "+r+", but found "+l, "Semantic");
+
+						}
+					}
+				}
+			}
 		}
 		if(left.matches(right)==false && (right.getType()!=Type.TUPLE ||right.getTuple().size()==0|| left.matches(right.getTuple().get(0))==false)){
 
