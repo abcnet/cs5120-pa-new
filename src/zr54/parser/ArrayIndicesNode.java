@@ -79,7 +79,7 @@ public class ArrayIndicesNode extends BinaryExprNode{
 													new IRTemp(lenLabel)),
 										tLabel, endLabel),
 							new IRLabel(tLabel),
-							new IRExp(new IRCall(new IRName(" _I_outOfBounds_p"))),
+							new IRExp(new IRCall(new IRName("_I_outOfBounds_p"))),
 							new IRLabel(endLabel)
 		));
 		
