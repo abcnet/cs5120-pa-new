@@ -99,18 +99,44 @@ public class IRMove extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		
 		if(target instanceof IRMem) {
-			OpTarget src = expr.genAssem(sw, f, funcs);
 			IRMem memTarget = (IRMem) target;
-			OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
 			
-			if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
-				sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
-			}
-			sw.write("	movq	" + src.getTarget() + ", %r12\n" 
-					+"	movq	" + addr.getTarget() + ", %r13\n"
-					+"	movq	%r12, (%r13)\n");
+			//(MOVE (MEM (ADD (XX XX) (CONST XX))) (XX XX))			
+			if(memTarget.expr() instanceof IRBinOp
+					&& ((IRBinOp) memTarget.expr()).opType() == IRBinOp.OpType.ADD 
+					&& ((IRBinOp) memTarget.expr()).right() instanceof IRConst) {
+				
+				OpTarget addr = ((IRBinOp) memTarget.expr()).left().genAssem(sw, f, funcs);
+				IRConst offset = (IRConst) ((IRBinOp) memTarget.expr()).right();
+				
+				
+				if(expr instanceof IRConst) {	//(MOVE (MEM (ADD (XX XX) (CONST XX))) (CONST XX))
+					sw.write("# MOVE CONST " + ((IRConst)expr).value() + " to MEM\n");
+					sw.write("	movq	" + addr.getTarget() + ", %r13\n"
+							+"	movq	$" + ((IRConst)expr).value() + ", " + offset.value() + "(%r13)\n");
+				}
+				else {	//(MOVE (MEM (ADD (XX XX) (CONST XX))) (XX XX))
+					OpTarget src = expr.genAssem(sw, f, funcs);
+					sw.write("# MOVE t" + src.num + " to MEM\n");
+					sw.write("	movq	" + src.getTarget() + ", %r12\n"
+							+"	movq	" + addr.getTarget() + ", %r13\n"
+							+"	movq	%r12, " + offset.value() + "(%r13)\n");
 
+				}
+			}
+			else {
+				OpTarget src = expr.genAssem(sw, f, funcs);
+				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
+
+				if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
+					sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+				}
+				sw.write("	movq	" + src.getTarget() + ", %r12\n" 
+						+"	movq	" + addr.getTarget() + ", %r13\n"
+						+"	movq	%r12, (%r13)\n");
+			}
 		}
 		else {
 			OpTarget src = expr.genAssem(sw, f, funcs);
