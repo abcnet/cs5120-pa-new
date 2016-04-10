@@ -134,7 +134,7 @@ public class IRCall extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		sw.write("	movq	%rdi, -8(%rbp)\n");
+//		sw.write("	movq	%rdi, -8(%rbp)\n");
 		String callee = ((IRName)this.target).name();
 		boolean gt2;
 		int nRet;

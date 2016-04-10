@@ -109,7 +109,8 @@ public class IRFuncDecl extends IRNode {
 		if(c%2==1){
 			c++;
 		}
-		sw.write("	subq	$"+c*8+", %rsp\n");
+		sw.write("	subq	$"+c*8+", %rsp\n"
+				+ "	movq	%rdi, -8(%rbp)\n");
 		sw.write(bodyWriter.toString());
 		sw.write(name + "_EPILOGUE:\n");
 		sw.write("	addq	$"+c*8+", %rsp\n");
