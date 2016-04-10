@@ -84,7 +84,7 @@ public class Type {
     * @return
     */
     public boolean matches(Type t){
-    	if(this.type==UNIT||t.type==UNIT)return true;
+    	if((this.type==UNIT && t.type!=Type.TUPLE)||(t.type==UNIT && this.type!=Type.TUPLE))return true;
     	if(this.type!=t.type||this.dimension!=t.dimension)return false;
     	
     	if(this.type==TUPLE){
