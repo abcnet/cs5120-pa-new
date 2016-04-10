@@ -47,7 +47,7 @@ with open(sys.argv[1], 'r') as f:
 				# print '---------------STATE FROM XI TO READ=------------------'
 				# print line
 				read=1
-				filename=line.replace('/','-')
+				filename=line.replace('/','-').replace(' ', '')
 				# i = line.rfind('/')
 				# if i>-1:
 				# 	filename=line[i+1:indexxi+3]
