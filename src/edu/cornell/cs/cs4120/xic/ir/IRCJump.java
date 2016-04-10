@@ -121,8 +121,37 @@ public class IRCJump extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		if(false) {
-			//match tiles here
+		if(expr instanceof IRBinOp &&
+			( (((IRBinOp) expr).opType() == IRBinOp.OpType.EQ) 
+			||(((IRBinOp) expr).opType() == IRBinOp.OpType.NEQ)
+			||(((IRBinOp) expr).opType() == IRBinOp.OpType.LT) 
+			||(((IRBinOp) expr).opType() == IRBinOp.OpType.GT) 
+			||(((IRBinOp) expr).opType() == IRBinOp.OpType.LEQ) 
+			||(((IRBinOp) expr).opType() == IRBinOp.OpType.GEQ) )) {
+			
+			IRBinOp binExpr = (IRBinOp) expr;
+			String jmpStr = "";
+			switch(binExpr.opType()) {
+			case EQ:
+				jmpStr = "je";
+				break;
+			case NEQ:
+				jmpStr = "jne";			
+				break;
+			case LT:
+				jmpStr = "jl";
+				break;
+			case GT:
+				jmpStr = "jg";
+				break;
+			case LEQ:
+				jmpStr = "jle";
+				break;
+			case GEQ:
+				jmpStr = "jge";
+				break;
+			}
+						
 		}
 		else {
 			OpTarget cond = expr.genAssem(sw, f, funcs);

@@ -18,7 +18,8 @@ import zr54.typechecker.FuncSymbolTable;
  * A node in an intermediate-representation abstract syntax tree.
  */
 public abstract class IRNode {
-	
+	public static int cmpLabelCount = 0;
+
 	OpTarget operand = null;
     /**
      * Visit the children of this IR node.

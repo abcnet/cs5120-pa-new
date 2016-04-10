@@ -19,7 +19,6 @@ import zr54.typechecker.FuncSymbolTable;
  */
 public class IRBinOp extends IRExpr {
 
-	public static int cmpLabelCount = 0;
     /**
      * Binary operators
      */
