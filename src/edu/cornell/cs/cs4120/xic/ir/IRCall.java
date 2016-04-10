@@ -141,6 +141,9 @@ public class IRCall extends IRExpr {
 		if(callee.contentEquals("_I_alloc_i")){
 			gt2 = false;
 			nRet = 1;
+		}else if(callee.contentEquals("_I_outOfBounds_p")){
+			gt2 = false;
+			nRet = 0;
 		}else{
 			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
 			FuncSignature sign = funcs.lookup(rawFuncName);
