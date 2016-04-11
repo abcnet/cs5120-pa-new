@@ -59,7 +59,7 @@ public class OpTarget {
 			case 5:
 				return "%r9";	
 			default:
-				return 8*(num2-5)+"(%rbp)";
+				return 8*(num2-4)+"(%rbp)";
 			}
 		case RET:
 			switch(num){
