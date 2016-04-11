@@ -23,9 +23,23 @@ public class OpTarget {
 		this.type = type;
 		this.num = num;
 	}
+	
+	public String toString(){
+		switch(type){
+		case TEMP:
+			return "TEMP " + num;
+		case ARGS:
+			return "ARG " + num;
+		case RET:
+			return "RET " + num;
+			
+		default:
+			return "NIL";
+		}
+	}
 
 
-	public String getTarget(){
+	public String getTarget(boolean isDest){
 		switch(type){
 		case TEMP:
 			return "-"+8*num+"(%rbp)";
@@ -54,7 +68,7 @@ public class OpTarget {
 			case 1:
 				return "%rdx";
 			default:
-				return 8*(num-2)+"(%rdi)";
+				return 8*(num-2)+(isDest?"(%rdi)":"(%rcx)");
 			}
 			
 		default:

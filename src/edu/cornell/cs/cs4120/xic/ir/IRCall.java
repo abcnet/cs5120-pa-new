@@ -194,7 +194,7 @@ public class IRCall extends IRExpr {
 				argTarg = "-"+8*(f.count+f.retSpace+f.argSpace-num2)+"(%rbp)\n";
 				break;
 			}
-			String s = t.getTarget();
+			String s = t.getTarget(false);
 			if(s.contains("(")&&argTarg.contains("(")){
 				sw.write("	movq	" + s + ", %r10\n"
 						+"	movq	%r10, " + argTarg + "\n");
@@ -205,7 +205,8 @@ public class IRCall extends IRExpr {
 		}
 		
 		sw.write("	callq	"+callee+"\n");
-		sw.write("	movq	-8(%rbp), %rdi\n");
+		sw.write("	movq	%rdi, %rcx\n"
+				+"	movq	-8(%rbp), %rdi\n");
 		return new OpTarget(TempType.RET, 0);
 	}
 }

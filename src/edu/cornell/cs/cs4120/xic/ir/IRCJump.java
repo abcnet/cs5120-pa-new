@@ -156,8 +156,8 @@ public class IRCJump extends IRStmt {
 			sw.write("# CJUMP BinOp " + jmpStr + "\n");
 			OpTarget l = binExpr.left().genAssem(sw, f, funcs);
 			OpTarget r = binExpr.right().genAssem(sw, f, funcs);
-			sw.write("	movq	" + l.getTarget() + ", %rax\n"
-					+"	cmpq	" + r.getTarget() + ", %rax\n");
+			sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
+					+"	cmpq	" + r.getTarget(false) + ", %rax\n");
 
 			if(trueLabel != null) 
 				sw.write("	" + jmpStr + "	" + trueLabel + "\n");
@@ -170,7 +170,7 @@ public class IRCJump extends IRStmt {
 			if(cond.type == OpTarget.TempType.TEMP)
 				sw.write("# CJUMP t" + cond.num + "\n");
 			
-			sw.write("	movq	" + cond.getTarget() + ", %rax\n"
+			sw.write("	movq	" + cond.getTarget(false) + ", %rax\n"
 					+"	testq	%rax, %rax\n"
 					+"	jnz	" + trueLabel + "\n");
 			if(falseLabel != null) {
