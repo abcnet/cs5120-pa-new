@@ -14,8 +14,8 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
-    public static final int RESERVED = 2;
-    public int count = RESERVED;
+    private static final int RESERVED = 2;
+    public int count = getReserved();
     public int retSpace = 0;
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
@@ -105,8 +105,8 @@ public class IRFuncDecl extends IRNode {
 		StringWriter bodyWriter = new StringWriter();
 		this.body.genAssem(bodyWriter, this, funcs);
 		bodyWriter.flush();
-		int c=count+retSpace+argSpace;
-		if(c%2==1){
+		int c=getReserved()+count+retSpace+argSpace;
+		if(c%2==0){
 			c++;
 		}
 		sw.write("	subq	$"+c*8+", %rsp\n"
@@ -120,5 +120,9 @@ public class IRFuncDecl extends IRNode {
 				+ "	popq	%rbp\n"
 				+ "	retq\n");
 		return operand;
+	}
+
+	public static int getReserved() {
+		return RESERVED;
 	}
 }

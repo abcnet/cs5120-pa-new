@@ -138,6 +138,8 @@ public class IRCall extends IRExpr {
 		String callee = ((IRName)this.target).name();
 		boolean gt2;
 		int nRet;
+		int argSpace = 0;
+		int retSpace = 0;
 		if(callee.contentEquals("_I_alloc_i")){
 			gt2 = false;
 			nRet = 1;
@@ -150,8 +152,8 @@ public class IRCall extends IRExpr {
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;
 			int nArgs = this.args().size()+(gt2?1:0);
-			int argSpace = nArgs>6?(nArgs-6):0;
-			int retSpace = nRet>2?(nRet-2):0;
+			argSpace = nArgs>6?(nArgs-6):0;
+			retSpace = nRet>2?(nRet-2):0;
 			if(argSpace > f.argSpace){
 				f.argSpace = argSpace;
 			}
@@ -162,9 +164,10 @@ public class IRCall extends IRExpr {
 		}
 		
 		//todo
-		int extra1for16align = (f.count+f.retSpace+f.argSpace)%2;
+//		int extra1for16align = (f.getReserved()+f.count+f.retSpace+f.argSpace+1)%2;
 		if(nRet>2){
-			sw.write("	movq	-"+8*(f.count+f.retSpace+extra1for16align)+"(%rbp), %rdi\n");
+			sw.write("	movq	%rsp, %rdi\n"
+					+"	addq	$"+8*argSpace+", %rdi\n");
 		}
 		OpTarget t;
 		String argTarg;
@@ -192,7 +195,7 @@ public class IRCall extends IRExpr {
 				argTarg = "%r9";	
 				break;
 			default:
-				argTarg = "-"+8*(f.count+f.retSpace+f.argSpace-num2+extra1for16align)+"(%rbp)\n";
+				argTarg = 8*(num2-7)+"(%rsp)\n";
 				break;
 			}
 			String s = t.getTarget(false);
