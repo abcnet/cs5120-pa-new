@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.*;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 import zr54.parser.*;
 import zr54.typechecker.*;
@@ -297,6 +298,16 @@ public abstract class AstNode {
     public String getRegName() {
     	return "ThisShouldNotBeCalled";
     }
+    
+    /**
+     * get the precomputations for array lengths
+     * only used for TypeNode
+     * @return
+     */
+    public IRStmt getLenPrecomp() {
+    	return null;
+    }
+    
     
     public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel){}
 }

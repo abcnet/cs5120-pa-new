@@ -9,6 +9,12 @@ import zr54.main.XiException;
 import java.util.*;
 public class TypeNode extends AstNode {
 
+	//the register name for storing the length of an array
+	String lenRegName = null;
+	
+	//used to store the precomputations for array lengths
+	public IRStmt lenPrecomp = null;
+	
 	/**
 	 * constructor
 	 * @param t
@@ -78,26 +84,34 @@ public class TypeNode extends AstNode {
 				
 				ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 				
-				String lenLabel = "_LEN_" + Integer.toString(AstNode.counter++);
+				//String lenLabel = "_LEN_" + Integer.toString(AstNode.counter++);
 				String arrName = "_ARR_" + Integer.toString(AstNode.arrNum);
 				regNum = AstNode.arrNum;
 				AstNode.arrNum++;
 				
 				//the length of the array is put in a register
-				stmts.add(new IRMove(new IRTemp(lenLabel), (IRExpr)arrSize.irNode)); 
+				//stmts.add(new IRMove(new IRTemp(lenLabel), (IRExpr)arrSize.irNode)); 
+				IRStmt precompute = precompArrLen();
+				if(!(parent instanceof TypeNode)) {
+					stmts.add(this.getLenPrecomp());
+				}
+				
+				//if(precompute != null)
+				//	stmts.add(precompute);
+				
 				
 				//allocate memory and put is in a temp
 				stmts.add(new IRMove(new IRTemp(arrName), 
 									 new IRCall(new IRName("_I_alloc_i"), 
 											  	new IRBinOp(IRBinOp.OpType.MUL, 
 												new IRBinOp(IRBinOp.OpType.ADD, 
-															new IRTemp(lenLabel),
+															new IRTemp(lenRegName),
 															new IRConst(1)),
 												new IRConst(8)))));
 
 				//store the length of the array
 				stmts.add(new IRMove(new IRMem(new IRTemp(arrName)), 
-									 new IRTemp(lenLabel)));
+									 new IRTemp(lenRegName)));
 
 				//the head of the array
 				stmts.add(new IRMove(new IRTemp(arrName), 
@@ -119,7 +133,7 @@ public class TypeNode extends AstNode {
 			    							new IRLabel(label),
 			    							new IRCJump(new IRBinOp(OpType.LT, 
 			    													new IRTemp(countLabel),
-			    													new IRTemp(lenLabel)),		
+			    													new IRTemp(lenRegName)),		
 			    										tlabel, flabel),
 			    							new IRLabel(tlabel),
 			    							new IRMove(new IRMem(new IRBinOp(OpType.ADD,
@@ -158,4 +172,44 @@ public class TypeNode extends AstNode {
 	public String getRegName() {
 		return "_ARR_" + getRegNum();
 	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public IRStmt getLenPrecomp() {
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		if(lenPrecomp != null)
+			stmts.add(lenPrecomp);
+		
+		if(children.size() > 0) {
+			IRStmt subLenPrecomp = children.get(0).getLenPrecomp();
+			if(subLenPrecomp != null)
+				stmts.add(subLenPrecomp);
+		}
+			
+		
+		if(stmts.size() > 0)
+			return new IRSeq(stmts);
+		else
+			return null;
+    }
+	
+	public IRStmt precompArrLen() {
+		if(lenRegName == null && lenPrecomp == null) {
+									
+			if(children.size() > 1) {
+				AstNode arrSize = children.get(1);
+				if(!arrSize.name.equals("emptyBrack")) {
+					lenRegName = "_PRECOMPUTED_LEN_" + Integer.toString(AstNode.counter++);	
+					lenPrecomp = new IRMove(new IRTemp(lenRegName), (IRExpr)arrSize.irNode); 
+				}
+			}
+			
+		}
+		return lenPrecomp;
+	}
+	
+	
+	
 }
