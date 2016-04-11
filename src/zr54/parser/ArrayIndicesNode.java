@@ -57,15 +57,15 @@ public class ArrayIndicesNode extends BinaryExprNode{
 		String addrLabel = "_ARR_ADDR_" + Integer.toString(AstNode.counter++);
 		String lenLabel = "_ARR_LEN_" + Integer.toString(AstNode.counter++);
 		
-		//put the index in a temp
-		stmts.add(new IRMove(new IRTemp(idxLabel), (IRExpr) index.getIRNode()));
 		//put the address in a temp 
 		stmts.add(new IRMove(new IRTemp(addrLabel), (IRExpr) arrName.irNode));
 		//put the length in a temp
 		stmts.add(new IRMove(new IRTemp(lenLabel), new IRMem(new IRBinOp(IRBinOp.OpType.ADD,
 				   											 new IRTemp(addrLabel),
 				   											 new IRConst(-8)))));
-		
+		//put the index in a temp
+		stmts.add(new IRMove(new IRTemp(idxLabel), (IRExpr) index.getIRNode()));
+				
 		String tLabel = "_tLabel_" + Integer.toString(AstNode.counter++);
 		String fLabel1 = "_fLabel1_" + Integer.toString(AstNode.counter++);
 		String endLabel = "_endLabel_" + Integer.toString(AstNode.counter++);
