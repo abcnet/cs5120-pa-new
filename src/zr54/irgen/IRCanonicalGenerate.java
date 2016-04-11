@@ -127,6 +127,14 @@ public class IRCanonicalGenerate {
 				stmts.add(new IRMove((IRExpr) e1, (IRExpr) e3));
 				node = new IRSeq(stmts);
 				changed = true;
+			} else if (e1 instanceof IRESeq) {
+				IRNode s = e1.children.get(0);
+				IRNode e3 = e1.children.get(1);
+				ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+				stmts.add((IRStmt) s);
+				stmts.add(new IRMove((IRExpr) e3, (IRExpr) e2));
+				node = new IRSeq(stmts);
+				changed = true;
 			}
 		}
 		
