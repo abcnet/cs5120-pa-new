@@ -67,7 +67,7 @@ public class IRCanonicalGenerate {
 			if (e1 instanceof IRESeq) {
 				IRNode s = e1.children.get(0);
 				IRNode e3 = e1.children.get(1);
-				node = new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), (IRExpr) e2, (IRExpr) e3));
+				node = new IRESeq((IRStmt) s, new IRBinOp(((IRBinOp) node).opType(), (IRExpr) e3, (IRExpr) e2));
 				changed = true;
 			}
 			else if (e2 instanceof IRESeq) {
