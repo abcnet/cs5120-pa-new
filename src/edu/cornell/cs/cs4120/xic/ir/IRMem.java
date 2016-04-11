@@ -121,8 +121,8 @@ public class IRMem extends IRExpr {
 			if(src.type == OpTarget.TempType.TEMP)
 				sw.write("# MEM in t" + src.num + "\n");
 			sw.write("	movq	" + src.getTarget() + ", %rax\n"
-					+"	movq	(%rax), %rbx\n"
-					+"	movq	%rbx, " + operand.getTarget() + "\n");
+					+"	movq	(%rax), %r11\n"
+					+"	movq	%r11, " + operand.getTarget() + "\n");
 		}
 		
 		return operand;
