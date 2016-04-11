@@ -150,18 +150,20 @@ public class IRCall extends IRExpr {
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;
 			int nArgs = this.args().size()+(gt2?1:0);
-			if(nArgs > f.maxNumArgs){
-				f.maxNumArgs = nArgs;
+			int argSpace = nArgs>6?(nArgs-6):0;
+			int retSpace = nRet>6?(nRet-6):0;
+			if(argSpace > f.argSpace){
+				f.argSpace = argSpace;
 			}
 			
-			if(nRet>f.maxNumRet){
-				f.maxNumRet=nRet;
+			if(retSpace>f.retSpace){
+				f.retSpace=retSpace;
 			}
 		}
 		
 		//todo
 		if(nRet>2){
-			sw.write("	movq	-"+8*(f.count+f.maxNumRet)+"(%rbp), %rdi\n");
+			sw.write("	movq	-"+8*(f.count+f.retSpace)+"(%rbp), %rdi\n");
 		}
 		OpTarget t;
 		String argTarg;
@@ -189,7 +191,7 @@ public class IRCall extends IRExpr {
 				argTarg = "%r9";	
 				break;
 			default:
-				argTarg = "-"+8*(f.count+f.maxNumRet+f.maxNumArgs-num2)+"(%rbp)\n";
+				argTarg = "-"+8*(f.count+f.retSpace+f.argSpace-num2)+"(%rbp)\n";
 				break;
 			}
 			String s = t.getTarget();

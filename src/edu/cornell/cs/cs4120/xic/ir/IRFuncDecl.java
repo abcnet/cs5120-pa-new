@@ -16,8 +16,8 @@ public class IRFuncDecl extends IRNode {
     private IRStmt body;
     public static final int RESERVED = 2;
     public int count = RESERVED;
-    public int maxNumRet = 0;
-    public int maxNumArgs = 0;
+    public int retSpace = 0;
+    public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
 
     
@@ -105,7 +105,7 @@ public class IRFuncDecl extends IRNode {
 		StringWriter bodyWriter = new StringWriter();
 		this.body.genAssem(bodyWriter, this, funcs);
 		bodyWriter.flush();
-		int c=count+(maxNumRet>2?maxNumRet-2:0)+(maxNumArgs>6?maxNumArgs-6:0);
+		int c=count+retSpace+argSpace;
 		if(c%2==1){
 			c++;
 		}
