@@ -54,7 +54,8 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 		AstNode c1 = children.get(0);
 		AstNode c2 = children.get(1);
 
-		if(c1.getType().getDimension() == 0) {
+		if((c1.getType().getType() != Type.TUPLE && c1.getType().getDimension() == 0)
+		 ||(c1.getType().getType() == Type.TUPLE && c1.getType().getTuple().get(0).getDimension() == 0)) {
 			
 //			String leftReg = "_LEFT" + Integer.toString(AstNode.counter++);
 //			String rightReg = "_RIGHT" + Integer.toString(AstNode.counter++);
