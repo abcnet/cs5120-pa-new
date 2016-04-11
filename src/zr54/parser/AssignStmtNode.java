@@ -91,13 +91,20 @@ public class AssignStmtNode extends StmtNode{
 	public void generateIR(FuncSymbolTable funcs) {
 		super.generateIR(funcs);
 		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
-		moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
+		
+		if((children.get(0) instanceof UnderscoreNode)
+		 ||(children.get(0) instanceof MultiVariableNode && children.get(0).getChildren().get(0) instanceof UnderscoreNode)) {
+			moves.add(new IRExp((IRExpr) children.get(1).getIRNode()));
+		}
+		else
+			moves.add(new IRMove((IRExpr)children.get(0).getIRNode(), (IRExpr)children.get(1).getIRNode()));
 		
 		
 		//if there are multiple assignments, get the values in the return registers
 		if(children.get(0) instanceof MultiVariableNode) {
 			for(int i = 1; i < children.get(0).getChildren().size(); i++) {
-				moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 
+				if(!(children.get(0).getChildren().get(i) instanceof UnderscoreNode) )
+					moves.add(new IRMove((IRExpr)children.get(0).getChildren().get(i).getIRNode(), 
 						(IRExpr)new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i)));
 			}
 		}
