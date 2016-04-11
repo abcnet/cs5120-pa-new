@@ -151,7 +151,7 @@ public class IRCall extends IRExpr {
 			gt2 = nRet>2;
 			int nArgs = this.args().size()+(gt2?1:0);
 			int argSpace = nArgs>6?(nArgs-6):0;
-			int retSpace = nRet>6?(nRet-6):0;
+			int retSpace = nRet>2?(nRet-2):0;
 			if(argSpace > f.argSpace){
 				f.argSpace = argSpace;
 			}
@@ -162,8 +162,9 @@ public class IRCall extends IRExpr {
 		}
 		
 		//todo
+		int extra1for16align = (f.count+f.retSpace+f.argSpace)%2;
 		if(nRet>2){
-			sw.write("	movq	-"+8*(f.count+f.retSpace)+"(%rbp), %rdi\n");
+			sw.write("	movq	-"+8*(f.count+f.retSpace+extra1for16align)+"(%rbp), %rdi\n");
 		}
 		OpTarget t;
 		String argTarg;
@@ -191,7 +192,7 @@ public class IRCall extends IRExpr {
 				argTarg = "%r9";	
 				break;
 			default:
-				argTarg = "-"+8*(f.count+f.retSpace+f.argSpace-num2)+"(%rbp)\n";
+				argTarg = "-"+8*(f.count+f.retSpace+f.argSpace-num2+extra1for16align)+"(%rbp)\n";
 				break;
 			}
 			String s = t.getTarget(false);
