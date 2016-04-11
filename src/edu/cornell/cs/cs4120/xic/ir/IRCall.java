@@ -170,8 +170,8 @@ public class IRCall extends IRExpr {
 		int i;
 		for(i = 0; i < this.args.size(); i++){
 			t = args.get(i).genAssem(sw, f, funcs);
-			int num2 = gt2?i+1:i;
-			switch(gt2?1:0+i){
+			int num2 = gt2?(i+1):i;
+			switch(num2){
 			case 0:
 				argTarg = "%rdi";
 				break;

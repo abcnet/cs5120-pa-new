@@ -30,7 +30,7 @@ public class OpTarget {
 		case TEMP:
 			return "-"+8*num+"(%rbp)";
 		case ARGS:
-			int num2 = retGt2?1+num:num;
+			int num2 = retGt2?(1+num):num;
 			switch(num2){
 			case 0:
 				return "%rdi";
