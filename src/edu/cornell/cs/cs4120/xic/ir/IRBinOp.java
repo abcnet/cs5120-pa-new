@@ -367,8 +367,14 @@ public class IRBinOp extends IRExpr {
 			else {
 				OpTarget l = left.genAssem(sw, f, funcs);
 				OpTarget r = right.genAssem(sw, f, funcs);
-				sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
-						+" 	" + opStr + "	" + r.getTarget(false) + "\n");
+				sw.write("	movq	" + l.getTarget(false) + ", %rax\n");
+				if(right instanceof IRConst) {
+					sw.write("	movq	" + r.getTarget(false) + ", %r10\n"
+							+"	" + opStr + "	%r10\n");	
+				}
+				else {
+					sw.write(" 	" + opStr + "	" + r.getTarget(false) + "\n");
+				}
 				if(this.opType() == OpType.MUL)
 					sw.write("	movq	%rax, " + operand.getTarget(true) + "\n");
 				else
@@ -384,9 +390,15 @@ public class IRBinOp extends IRExpr {
 				OpTarget l = left.genAssem(sw, f, funcs);
 				OpTarget r = right.genAssem(sw, f, funcs);
 				sw.write("	xorq	%rdx, %rdx\n"
-						+"	movq	" + l.getTarget(false) + ", %rax\n"
-						+" 	" + opStr + "	" + r.getTarget(false) + "\n");
-				
+						+"	movq	" + l.getTarget(false) + ", %rax\n");
+				if(right instanceof IRConst) {
+					sw.write("	movq	" + r.getTarget(false) + ", %r10\n"
+							+"	" + opStr + "	%r10\n");
+				}
+				else {
+					sw.write(" 	" + opStr + "	" + r.getTarget(false) + "\n");
+					
+				}
 				if(this.opType() == OpType.DIV)
 					sw.write("	movq	%rax, " + operand.getTarget(true) + "\n");
 				else
