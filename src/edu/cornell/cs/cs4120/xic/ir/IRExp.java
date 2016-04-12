@@ -82,6 +82,7 @@ public class IRExp extends IRStmt {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		expr.genAssem(sw, f, funcs);
 		return operand;
 	}
 }
