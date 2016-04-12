@@ -298,14 +298,14 @@ public class IRBinOp extends IRExpr {
                     OpTarget r = _left.right().genAssem(sw, f, funcs);
                     sw.write("  movq    " + r.getTarget(false) + ", %r11\n");
                     sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
-                    sw.write("  movq    %r11, " + operand.getTarget(false) + "\n");
+                    sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
                 } else if (_left.right() instanceof IRConst) {
                     sw.write("  movq    " + _r.getTarget(false) + ", %r10\n");
                     IRConst _const = (IRConst) (_left.right());
                     OpTarget l = _left.left().genAssem(sw, f, funcs);
                     sw.write("  movq    " + l.getTarget(false) + ", %r11\n");
                     sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
-                    sw.write("  movq    %r11, " + operand.getTarget(false) + "\n");
+                    sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
                 } else {
                     OpTarget l = left.genAssem(sw, f, funcs);
                     OpTarget r = right.genAssem(sw, f, funcs);
@@ -313,7 +313,7 @@ public class IRBinOp extends IRExpr {
                         sw.write("# BINOP t" + l.num + " and t" + r.num + "\n");
                     sw.write("  movq    " + l.getTarget(false) + ", %rax\n"
                             +"  " + opStr + "   " + r.getTarget(false) + ", %rax\n"
-                            +"  movq    %rax, " + operand.getTarget(false) + "\n");
+                            +"  movq    %rax, " + operand.getTarget(true) + "\n");
                 }
             }
             else if (
@@ -329,7 +329,7 @@ public class IRBinOp extends IRExpr {
                     OpTarget r = _right.right().genAssem(sw, f, funcs);
                     sw.write("  movq    " + r.getTarget(false) + ", %r10\n");
                     sw.write("  lea     (%r11, %r10, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r11\n");
-                    sw.write("  movq    %r11, " + operand.getTarget(false) + "\n");
+                    sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
                 }
                 else if (_right.right() instanceof IRConst) {
                     sw.write("  movq    " + _l.getTarget(false) + ", %r11\n");
@@ -337,7 +337,7 @@ public class IRBinOp extends IRExpr {
                     OpTarget l = _right.left().genAssem(sw, f, funcs);
                     sw.write("  movq    " + l.getTarget(false) + ", %r10\n");
                     sw.write("  lea     (%r11, %r10, " + (this.opType() == OpType.ADD ? _const.value() : -_const.value()) + "), %r11\n");
-                    sw.write("  movq    %r11, " + operand.getTarget(false) + "\n");
+                    sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
                 } 
                 else {
                     OpTarget l = left.genAssem(sw, f, funcs);
@@ -346,7 +346,7 @@ public class IRBinOp extends IRExpr {
                         sw.write("# BINOP t" + l.num + " and t" + r.num + "\n");
                     sw.write("  movq    " + l.getTarget(false) + ", %rax\n"
                             +"  " + opStr + "   " + r.getTarget(false) + ", %rax\n"
-                            +"  movq    %rax, " + operand.getTarget(false) + "\n");
+                            +"  movq    %rax, " + operand.getTarget(true) + "\n");
                 }
             }
 			else {                
@@ -356,7 +356,7 @@ public class IRBinOp extends IRExpr {
 					sw.write("# BINOP t" + l.num + " and t" + r.num + "\n");
 				sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
 						+" 	" + opStr + "	" + r.getTarget(false) + ", %rax\n"
-						+"	movq	%rax, " + operand.getTarget(false) + "\n");
+						+"	movq	%rax, " + operand.getTarget(true) + "\n");
 			}
 			break;
 		case MUL:
@@ -370,9 +370,9 @@ public class IRBinOp extends IRExpr {
 				sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
 						+" 	" + opStr + "	" + r.getTarget(false) + "\n");
 				if(this.opType() == OpType.MUL)
-					sw.write("	movq	%rax, " + operand.getTarget(false) + "\n");
+					sw.write("	movq	%rax, " + operand.getTarget(true) + "\n");
 				else
-					sw.write("	movq	%rdx, " + operand.getTarget(false) + "\n");
+					sw.write("	movq	%rdx, " + operand.getTarget(true) + "\n");
 			}
 			break;
 		case DIV:
@@ -388,9 +388,9 @@ public class IRBinOp extends IRExpr {
 						+" 	" + opStr + "	" + r.getTarget(false) + "\n");
 				
 				if(this.opType() == OpType.DIV)
-					sw.write("	movq	%rax, " + operand.getTarget(false) + "\n");
+					sw.write("	movq	%rax, " + operand.getTarget(true) + "\n");
 				else
-					sw.write("	movq	%rdx, " + operand.getTarget(false) + "\n");
+					sw.write("	movq	%rdx, " + operand.getTarget(true) + "\n");
 			}
 			break;
 		case AND:
@@ -404,7 +404,7 @@ public class IRBinOp extends IRExpr {
 				OpTarget r = right.genAssem(sw, f, funcs);
 				sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
 						+" 	" + opStr + "	" + r.getTarget(false) + ", %rax\n"
-						+"	movq	%rax, " + operand.getTarget(false) + "\n");
+						+"	movq	%rax, " + operand.getTarget(true) + "\n");
 
 			}
 			break;
@@ -444,10 +444,10 @@ public class IRBinOp extends IRExpr {
 					break;
 				}
 				
-				sw.write("	movq	$0, " + operand.getTarget(false) + "\n"
+				sw.write("	movq	$0, " + operand.getTarget(true) + "\n"
 						+"	jmp	L_BINOP_CMP_END_" + cmpLabelCount + "\n"
 						+"L_BINOP_CMP_T_" + cmpLabelCount + ":\n"
-						+"	movq	$1, " + operand.getTarget(false) + "\n"
+						+"	movq	$1, " + operand.getTarget(true) + "\n"
 						+"L_BINOP_CMP_END_" + cmpLabelCount + ":\n");
 			}
 			break;
