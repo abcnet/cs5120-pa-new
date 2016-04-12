@@ -195,7 +195,7 @@ public class IRCall extends IRExpr {
 				argTarg = "%r9";	
 				break;
 			default:
-				argTarg = 8*(num2-6)+"(%rsp)\n";
+				argTarg = 8*(num2-6)+"(%rsp)";
 				break;
 			}
 			String s = t.getTarget(false);

@@ -1,7 +1,7 @@
 package zr54.assembly;
 
 public class OpTarget {
-	public enum TempType {TEMP, ARGS, RET, NIL};
+	public enum TempType {TEMP, ARGS, RET, CONST, NIL};
 	public TempType type;
 	public int num;
 	public boolean retGt2;
@@ -70,7 +70,8 @@ public class OpTarget {
 			default:
 				return 8*(num-2)+(isDest?"(%rdi)":"(%rcx)");
 			}
-			
+		case CONST:
+			return "$" + num;
 		default:
 			//todo
 			return "";

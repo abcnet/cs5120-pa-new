@@ -4,6 +4,7 @@ import java.io.StringWriter;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import zr54.assembly.OpTarget;
+import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -57,14 +58,16 @@ public class IRConst extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		f.count++;
-		operand = new OpTarget(f.count);
-		sw.write("# CONST " + value + " in t" + operand.num + "\n");
+		
 		if(value > Integer.MAX_VALUE || value < Integer.MIN_VALUE){
+			f.count++;
+			operand = new OpTarget(f.count);
+			sw.write("# CONST " + value + " in t" + operand.num + "\n");
 			sw.write("	movq	$" + value + ", %r11\n");
 			sw.write("	movq	%r11, "  + operand.getTarget(true) + "\n");
 		}else{
-			sw.write("	movq	$" + value + ", " + operand.getTarget(true) + "\n");
+//			sw.write("	movq	$" + value + ", " + operand.getTarget(true) + "\n");
+			operand = new OpTarget(TempType.CONST, (int)value);
 		}
 		
 		return operand;
