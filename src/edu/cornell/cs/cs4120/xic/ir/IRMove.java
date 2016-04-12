@@ -151,7 +151,16 @@ public class IRMove extends IRStmt {
 			if(expr instanceof IRConst) {
 				OpTarget dst = target.genAssem(sw, f, funcs);
 				String d = dst.getTarget(true);
-				sw.write("	movq	$" + ((IRConst)expr).value() + ", " + d + "\n");
+				long constValue = ((IRConst) expr).value();
+				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
+						&& d.contains("(")){
+					sw.write("	movq	$" + constValue + ", %r10\n"
+							+"	movq	%r10, " + d + "\n");
+					
+				}else{
+					sw.write("	movq	$" + ((IRConst)expr).value() + ", " + d + "\n");
+				}
+				
 			}
 			else {
 				OpTarget src = expr.genAssem(sw, f, funcs);

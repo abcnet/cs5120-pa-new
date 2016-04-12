@@ -66,7 +66,6 @@ public class IRConst extends IRExpr {
 			sw.write("	movq	$" + value + ", %r11\n");
 			sw.write("	movq	%r11, "  + operand.getTarget(true) + "\n");
 		}else{
-//			sw.write("	movq	$" + value + ", " + operand.getTarget(true) + "\n");
 			operand = new OpTarget(TempType.CONST, (int)value);
 		}
 		
