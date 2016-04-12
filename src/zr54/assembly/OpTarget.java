@@ -66,9 +66,9 @@ public class OpTarget {
 			case 0:
 				return isDest?"-24(%rbp)":"%rax";
 			case 1:
-				return isDest?"-32(%rbp)":"%rdx";
+				return isDest?"-40(%rbp)":"%rdx";
 			default:
-				return 8*(num-2)+(isDest?"(%rdi)":"(%rcx)");
+				return 8*(num-2)+(isDest?"(%rdi)":"(%rbx)");
 			}
 		case CONST:
 			return "$" + num;

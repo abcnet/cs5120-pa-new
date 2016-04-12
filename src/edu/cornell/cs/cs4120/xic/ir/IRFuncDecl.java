@@ -14,7 +14,10 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRFuncDecl extends IRNode {
     private String name;
     private IRStmt body;
-    private static final int RESERVED = 5; // for %rip, %rdi, %rsi, %rax and %rdx 
+    // Since %rax and %rdx are used for both multiplication and return values,
+    // return values are stored on stack first and then moved to %rax and %rdx 
+    // in function epilogue.
+    private static final int RESERVED = 10; // for %rip, %rdi, %rsi, %rax, %rbx, %rdx, %r12-%r15 
     public int count = getReserved();  
     public int retSpace = 0;
     public int argSpace = 0;
@@ -111,14 +114,25 @@ public class IRFuncDecl extends IRNode {
 		}
 		sw.write("	subq	$"+c*8+", %rsp\n"
 				+ "	movq	%rdi, -8(%rbp)\n"
-				+ "	movq	%rsi, -16(%rbp)\n");
+				+ "	movq	%rsi, -16(%rbp)\n"
+				+ "	movq	%rbx, -32(%rbp)\n"
+				+ "	movq	%r12, -48(%rbp)\n"
+				+ "	movq	%r13, -56(%rbp)\n"
+				+ "	movq	%r14, -64(%rbp)\n"
+				+ "	movq	%r15, -72(%rbp)\n");
+		
 		sw.write(bodyWriter.toString());
 		sw.write(name + "_EPILOGUE:\n");
 		sw.write("	addq	$"+c*8+", %rsp\n"
 				+ "	movq	-8(%rbp), %rdi\n"
 				+ "	movq	-16(%rbp), %rsi\n"
 				+ "	movq	-24(%rbp), %rax\n"
-				+ "	movq	-32(%rbp), %rdx\n"
+				+ "	movq	-32(%rbp), %rbx\n"
+				+ "	movq	-40(%rbp), %rdx\n"
+				+ "	movq	-48(%rbp), %r12\n"
+				+ "	movq	-56(%rbp), %r13\n"
+				+ "	movq	-64(%rbp), %r14\n"
+				+ "	movq	-72(%rbp), %r15\n"
 				+ "	popq	%rbp\n"
 				+ "	retq\n");
 		return operand;
