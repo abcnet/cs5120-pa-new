@@ -71,7 +71,7 @@ with open(sys.argv[1], 'r') as f:
 			else:
 				i=line.find(str(read))
 				i2=line.find(str(read+1))
-				if 2<=read<=3 and i==-1 and -1<i2<3:
+				if i==-1 and -1<i2<3:
 					i=i2
 					read+=1
 				if -1<i<3:
