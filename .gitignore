@@ -9,3 +9,5 @@ bin/
 *.parsed
 *.ir
 *.s
+assembly/
+output/
