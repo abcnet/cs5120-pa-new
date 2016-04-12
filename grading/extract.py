@@ -53,8 +53,15 @@ with open(sys.argv[1], 'r') as f:
 				# 	filename=line[i+1:indexxi+3]
 				# else:
 				# 	filename=line[:indexxi+3]
+				i=filename.rfind('-')
+				if i>-1:
+					filename = filename[i+1:]
 				print filename
-				w=open(sys.argv[1]+'-'+filename, 'w')
+				i=sys.argv[1].find('/')
+				if i>-1:
+					w=open(sys.argv[1][:i+1]+filename, 'w')
+				else:
+					w=open(filename, 'w')
 		elif state==READ:
 			if line.find("Compiler's standard")>-1 or line.find('Generated result')>-1:
 				state=IDLE
