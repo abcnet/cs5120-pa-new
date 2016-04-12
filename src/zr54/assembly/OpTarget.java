@@ -64,9 +64,9 @@ public class OpTarget {
 		case RET:
 			switch(num){
 			case 0:
-				return "%rax";
+				return isDest?"-24(%rbp)":"%rax";
 			case 1:
-				return "%rdx";
+				return isDest?"-32(%rbp)":"%rdx";
 			default:
 				return 8*(num-2)+(isDest?"(%rdi)":"(%rcx)");
 			}

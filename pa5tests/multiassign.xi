@@ -1,6 +1,7 @@
 use io
 use conv
 foo(a:int, b:int, c:int, d:int, e:int, f:int, g:int):int,int,int{
+	println("g = "+unparseInt(g))
 	return 1,2,3
 }
 main(args:int[][]){
