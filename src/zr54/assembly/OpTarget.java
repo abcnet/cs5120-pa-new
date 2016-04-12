@@ -1,11 +1,11 @@
 package zr54.assembly;
 
 public class OpTarget {
-	public enum TempType {TEMP, ARGS, RET, CONST, NIL};
+	public enum TempType {TEMP, ARGS, RET, CONST, ADDR, NIL};
 	public TempType type;
 	public int num;
 	public boolean retGt2;
-
+	public String addr;
 	
 	public OpTarget(){
 		type = TempType.NIL;
@@ -23,7 +23,10 @@ public class OpTarget {
 		this.type = type;
 		this.num = num;
 	}
-	
+	public OpTarget(String addr){
+		this.type = TempType.ADDR;
+		this.addr = addr;
+	}
 	public String toString(){
 		switch(type){
 		case TEMP:
@@ -32,7 +35,8 @@ public class OpTarget {
 			return "ARG " + num;
 		case RET:
 			return "RET " + num;
-			
+		case ADDR:
+			return addr;
 		default:
 			return "NIL";
 		}
@@ -72,6 +76,8 @@ public class OpTarget {
 			}
 		case CONST:
 			return "$" + num;
+		case ADDR:
+			return addr;
 		default:
 			//todo
 			return "";
