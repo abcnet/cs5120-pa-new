@@ -277,6 +277,15 @@ public class IRBinOp extends IRExpr {
 		case GEQ:
 			opStr = "cmpq";
 			break;
+		case LSHIFT:
+			opStr = "shlq";
+			break;
+		case RSHIFT:
+			opStr = "shrq";
+			break;
+		case ARSHIFT:
+			opStr = "sarq";
+			break;
 		default:
 		}
 		
@@ -462,6 +471,20 @@ public class IRBinOp extends IRExpr {
 						+"	movq	$1, " + operand.getTarget(true) + "\n"
 						+"L_BINOP_CMP_END_" + cmpLabelCount + ":\n");
 			}
+			break;
+		case LSHIFT:
+		case RSHIFT:
+		case ARSHIFT:
+
+			OpTarget l = left.genAssem(sw, f, funcs);
+			OpTarget r = right.genAssem(sw, f, funcs);
+			sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
+					+"	movq	" + r.getTarget(false) + ", %rcx\n"
+					+"	" + opStr + "	%cl, %rax\n"
+					+"	movq	%rax, " + operand.getTarget(true) + "\n");
+			
+			
+			
 			break;
 		default:
 				
