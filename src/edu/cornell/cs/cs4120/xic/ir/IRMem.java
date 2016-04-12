@@ -122,7 +122,7 @@ public class IRMem extends IRExpr {
 				sw.write("# MEM in t" + src.num + "\n");
 			sw.write("	movq	" + src.getTarget(false) + ", %rax\n"
 					+"	movq	(%rax), %r11\n"
-					+"	movq	%r11, " + operand.getTarget(false) + "\n");
+					+"	movq	%r11, " + operand.getTarget(true) + "\n");
 		}
 		
 		return operand;
