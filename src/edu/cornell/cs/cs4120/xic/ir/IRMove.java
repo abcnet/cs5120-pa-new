@@ -130,30 +130,45 @@ public class IRMove extends IRStmt {
 				OpTarget src = expr.genAssem(sw, f, funcs);
 				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
 
-				if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
-					sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+				
+				if(expr instanceof IRConst) {
+					sw.write("# MOVE CONST" + ((IRConst) expr).value() + " to MEM\n");
+					sw.write("	movq	" + addr.getTarget(false) + ", %r11\n"
+							+"	movq	$" + ((IRConst) expr).value() + ", (%r11)\n");
+
 				}
-				sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
-						+"	movq	" + addr.getTarget(false) + ", %r11\n"
-						+"	movq	%r10, (%r11)\n");
+				else {
+					if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
+						sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+					}
+					sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
+							+"	movq	" + addr.getTarget(false) + ", %r11\n"
+							+"	movq	%r10, (%r11)\n");
+				}
 			}
 		}
 		else {
-			OpTarget src = expr.genAssem(sw, f, funcs);
-			OpTarget dst = target.genAssem(sw, f, funcs);
-			String s = src.getTarget(false);
-			String d = dst.getTarget(true);
-			if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
-				sw.write("# MOVE from t" + src.num + " to t" + dst.num + "\n");
+			if(expr instanceof IRConst) {
+				OpTarget dst = target.genAssem(sw, f, funcs);
+				String d = dst.getTarget(true);
+				sw.write("	movq	$" + ((IRConst)expr).value() + ", " + d + "\n");
 			}
+			else {
+				OpTarget src = expr.genAssem(sw, f, funcs);
+				OpTarget dst = target.genAssem(sw, f, funcs);
+				String s = src.getTarget(false);
+				String d = dst.getTarget(true);
+				if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
+					sw.write("# MOVE from t" + src.num + " to t" + dst.num + "\n");
+				}
 
-			if(s.contains("(")&&d.contains("(")){
-				sw.write("	movq	" + s + ", %r10\n"
-						+"	movq	%r10, " + d + "\n");
-			}else{
-				sw.write("	movq	" + s + ", " + d + "\n");
+				if(s.contains("(")&&d.contains("(")){
+					sw.write("	movq	" + s + ", %r10\n"
+							+"	movq	%r10, " + d + "\n");
+				}else{
+					sw.write("	movq	" + s + ", " + d + "\n");
+				}
 			}
-			
 		}
 
 		return operand;
