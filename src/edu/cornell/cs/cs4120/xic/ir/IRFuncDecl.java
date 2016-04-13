@@ -123,8 +123,7 @@ public class IRFuncDecl extends IRNode {
 		
 		sw.write(bodyWriter.toString());
 		sw.write(name + "_EPILOGUE:\n");
-		sw.write("	addq	$"+c*8+", %rsp\n"
-				+ "	movq	-8(%rbp), %rdi\n"
+		sw.write("	movq	-8(%rbp), %rdi\n"
 				+ "	movq	-16(%rbp), %rsi\n"
 				+ "	movq	-24(%rbp), %rax\n"
 				+ "	movq	-32(%rbp), %rbx\n"
@@ -133,6 +132,7 @@ public class IRFuncDecl extends IRNode {
 				+ "	movq	-56(%rbp), %r13\n"
 				+ "	movq	-64(%rbp), %r14\n"
 				+ "	movq	-72(%rbp), %r15\n"
+				+ "	addq	$"+c*8+", %rsp\n"
 				+ "	popq	%rbp\n"
 				+ "	retq\n");
 		return operand;
