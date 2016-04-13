@@ -209,7 +209,8 @@ public class IRCall extends IRExpr {
 		}
 		
 		sw.write("	callq	"+callee+"\n");
-		sw.write("	movq	%rdi, %rbx\n"
+		sw.write("	movq	%rax, -80(%rbp)\n"
+				+"	movq	%rdi, %rbx\n"
 				+"	movq	-8(%rbp), %rdi\n");
 		return new OpTarget(TempType.RET, 0);
 	}

@@ -17,7 +17,9 @@ public class IRFuncDecl extends IRNode {
     // Since %rax and %rdx are used for both multiplication and return values,
     // return values are stored on stack first and then moved to %rax and %rdx 
     // in function epilogue.
-    private static final int RESERVED = 10; // for %rip, %rdi, %rsi, %rax, %rbx, %rdx, %r12-%r15 
+    // RESERVED is for %rip, %rdi, %rsi, %rax(self return value),  %rbx, %rdx,
+    // %r12-%r15, and %rax(return value of callee)
+    private static final int RESERVED = 11;  
     public int count = getReserved();  
     public int retSpace = 0;
     public int argSpace = 0;

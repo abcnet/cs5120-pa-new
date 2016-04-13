@@ -68,7 +68,7 @@ public class OpTarget {
 		case RET:
 			switch(num){
 			case 0:
-				return isDest?"-24(%rbp)":"%rax";
+				return isDest?"-24(%rbp)":"-80(%rbp)";
 			case 1:
 				return isDest?"-40(%rbp)":"%rdx";
 			default:
