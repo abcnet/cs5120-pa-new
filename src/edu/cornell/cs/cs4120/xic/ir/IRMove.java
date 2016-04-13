@@ -6,6 +6,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.assembly.Tiling;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -100,7 +101,7 @@ public class IRMove extends IRStmt {
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		
-		if(target instanceof IRMem) {
+		/*if(target instanceof IRMem) {
 			IRMem memTarget = (IRMem) target;
 			
 			//(MOVE (MEM (ADD (XX XX) (CONST XX))) (XX XX))			
@@ -130,7 +131,6 @@ public class IRMove extends IRStmt {
 				OpTarget src = expr.genAssem(sw, f, funcs);
 				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
 
-				
 				if(expr instanceof IRConst) {
 					sw.write("# MOVE CONST" + ((IRConst) expr).value() + " to MEM\n");
 					sw.write("	movq	" + addr.getTarget(false) + ", %r11\n"
@@ -143,6 +143,41 @@ public class IRMove extends IRStmt {
 					}
 					sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
 							+"	movq	" + addr.getTarget(false) + ", %r11\n"
+							+"	movq	%r10, (%r11)\n");
+				}
+			}
+		}*/
+		if(target instanceof IRMem) {
+			IRMem memTarget = (IRMem) target;
+			boolean generated = false;
+			OpTarget src = expr.genAssem(sw, f, funcs);	
+
+			if( memTarget.expr() instanceof IRBinOp) {
+				OpTarget addr = Tiling.leaTiling((IRBinOp)memTarget.expr(), sw, f, funcs);
+
+				if(addr != null) {
+					sw.write("# tiled MOVE to MEM\n");
+					sw.write("	movq	" + src.getTarget(false) + ", %rax\n" //don't use r10 and r11 here!
+							+"	movq	%rax, " + addr.getTarget(true) + "\n");
+					generated = true;
+				}
+			}
+			
+			if(!generated) {
+				//TODO: shall we evaluate src or addr first?
+				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
+
+				if(expr instanceof IRConst) {
+					sw.write("# MOVE CONST" + ((IRConst) expr).value() + " to MEM\n");
+					sw.write("	movq	" + addr.getTarget(false) + ", %r11\n"
+							+"	movq	$" + ((IRConst) expr).value() + ", (%r11)\n");
+				}
+				else {
+					if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
+						sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+					}
+					sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
+							+"	movq	" + addr.getTarget(true) + ", %r11\n"
 							+"	movq	%r10, (%r11)\n");
 				}
 			}
@@ -168,7 +203,7 @@ public class IRMove extends IRStmt {
 				String s = src.getTarget(false);
 				String d = dst.getTarget(true);
 				if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
-					sw.write("# MOVE from t" + src.num + " to t" + dst.num + "\n");
+					sw.write("# mark MOVE from t" + src.num + " to t" + dst.num + "\n");
 				}
 
 				if(s.contains("(")&&d.contains("(")){

@@ -306,9 +306,9 @@ public class IRBinOp extends IRExpr {
                 	  ||((IRConst) _left.left()).value() == 2
                 	  ||((IRConst) _left.left()).value() == 4
                 	  ||((IRConst) _left.left()).value() == 8)) {
-                    sw.write("  movq    " + _r.getTarget(false) + ", %r10\n");
                     IRConst _const = (IRConst) (_left.left());
                     OpTarget r = _left.right().genAssem(sw, f, funcs);
+                    sw.write("  movq    " + _r.getTarget(false) + ", %r10\n");
                     sw.write("  movq    " + r.getTarget(false) + ", %r11\n");
                     sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
                     sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
@@ -317,9 +317,9 @@ public class IRBinOp extends IRExpr {
                   	  ||((IRConst) _left.right()).value() == 2
                   	  ||((IRConst) _left.right()).value() == 4
                   	  ||((IRConst) _left.right()).value() == 8)) {
-                    sw.write("  movq    " + _r.getTarget(false) + ", %r10\n");
                     IRConst _const = (IRConst) (_left.right());
                     OpTarget l = _left.left().genAssem(sw, f, funcs);
+                    sw.write("  movq    " + _r.getTarget(false) + ", %r10\n");                
                     sw.write("  movq    " + l.getTarget(false) + ", %r11\n");
                     sw.write("  lea     (%r10, %r11, " + _const.value() + "), %r11\n");
                     sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
@@ -346,9 +346,9 @@ public class IRBinOp extends IRExpr {
                       ||((IRConst) _right.left()).value() == 2
                       ||((IRConst) _right.left()).value() == 4
                       ||((IRConst) _right.left()).value() == 8)	) {
-                    sw.write("  movq    " + _l.getTarget(false) + ", %r11\n");
                     IRConst _const = (IRConst) (_right.left());
                     OpTarget r = _right.right().genAssem(sw, f, funcs);
+                    sw.write("  movq    " + _l.getTarget(false) + ", %r11\n");                
                     sw.write("  movq    " + r.getTarget(false) + ", %r10\n");
                     sw.write("  lea     (%r11, %r10, " + _const.value() + "), %r11\n");
                     sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");
@@ -358,9 +358,9 @@ public class IRBinOp extends IRExpr {
                           ||((IRConst) _right.right()).value() == 2
                           ||((IRConst) _right.right()).value() == 4
                           ||((IRConst) _right.right()).value() == 8)) {
-                    sw.write("  movq    " + _l.getTarget(false) + ", %r11\n");
                     IRConst _const = (IRConst) (_right.right());
                     OpTarget l = _right.left().genAssem(sw, f, funcs);
+                    sw.write("  movq    " + _l.getTarget(false) + ", %r11\n");                   
                     sw.write("  movq    " + l.getTarget(false) + ", %r10\n");
                     sw.write("  lea     (%r11, %r10, " + _const.value() + "), %r11\n");
                     sw.write("  movq    %r11, " + operand.getTarget(true) + "\n");

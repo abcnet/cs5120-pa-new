@@ -1,13 +1,20 @@
 use io
 use conv
-foo(a:int, b:int, c:int, d:int, e:int, f:int, g:int):int,int,int{
-	println("g = "+unparseInt(g))
-	return 1,2,3
+
+foo():int, int[], bool {
+	   a:int = 1;
+	   arr:int[] = {2, 3, 4}
+	   return a, arr, true
 }
-main(args:int[][]){
-	a:int, b:int, c:int = foo(1,1,1,1,1,1,1)
-	println("a = "+unparseInt(a))
-	println("b = "+unparseInt(b))
-	println("c = "+unparseInt(c))
-	println(unparseInt(a+b+c))
+
+main(args:int[][]) {
+		   a:int, arr:int[], b:bool = foo()
+		   if(b)
+			println("the function returns true")
+		   println(unparseInt(a))
+		   c:int = 0
+		   while(c < length(arr)) {
+		   	   println(unparseInt(arr[c]))
+		   	   c = c + 1
+		   }
 }

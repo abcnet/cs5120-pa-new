@@ -23,7 +23,7 @@ do
       then
      # echo $filename
       "$SRCDIR/xic" -libpath "$SRCDIR/library" -d "$1" -sourcepath "$1" "$filename"
-	    "$SRCDIR/pa5_student/runtime/linkxi.sh" "$1/${filename%.*}.s" -o "$1/${filename%.*}"
+	    "pa5_student/runtime/linkxi.sh" "$1/${filename%.*}.s" -o "$1/${filename%.*}"
       echo "Running $1/${filename%.*}"
 	    "$1/${filename%.*}"
 	    
