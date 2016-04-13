@@ -157,8 +157,11 @@ public class IRMove extends IRStmt {
 
 				if(addr != null) {
 					sw.write("# tiled MOVE to MEM\n");
-					sw.write("	movq	" + src.getTarget(false) + ", %rax\n" //don't use r10 and r11 here!
-							+"	movq	%rax, " + addr.getTarget(true) + "\n");
+					if(!src.isConstTarget()) 
+						sw.write("	movq	" + src.getTarget(false) + ", %rax\n" //don't use r10 and r11 here!
+								+"	movq	%rax, " + addr.getTarget(true) + "\n");
+					else 
+						sw.write("	movq	" + src.getTarget(false) + ", " + addr.getTarget(true) + "\n");
 					generated = true;
 				}
 			}

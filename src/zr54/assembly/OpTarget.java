@@ -42,7 +42,17 @@ public class OpTarget {
 		}
 	}
 
-
+	public boolean isMemTarget(boolean isDest) {
+		if(this.getTarget(isDest).contains("("))
+			return true;
+		else 
+			return false;
+	}
+	
+	public boolean isConstTarget() {
+		return type == TempType.CONST;
+	}
+	
 	public String getTarget(boolean isDest){
 		switch(type){
 		case TEMP:

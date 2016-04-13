@@ -51,8 +51,7 @@ public class Tiling {
 				return null;
 			}
 		}
-		else if (
-				right instanceof IRBinOp &&
+		else if (right instanceof IRBinOp &&
 				(((IRBinOp) right).opType() == IRBinOp.OpType.MUL &&
 				node.opType() == IRBinOp.OpType.ADD) 
 				) {
@@ -85,6 +84,25 @@ public class Tiling {
 			else {
 				return null;
 			}
+		}
+		else if (node.opType() == OpType.ADD
+				&& (left instanceof IRConst)) {
+			OpTarget r = right.genAssem(sw, f, funcs);
+			sw.write("	movq    " + r.getTarget(false) + ", %r14\n");
+			return new OpTarget(((IRConst) left).value() + "(%r14)");
+		}
+		else if (node.opType() == OpType.ADD
+				&& (right instanceof IRConst)) {
+			OpTarget l = left.genAssem(sw, f, funcs);
+			sw.write("	movq	" + l.getTarget(false) + ", %r15\n");
+			return new OpTarget(((IRConst) right).value() + "(%r15)");
+		}
+		else if (node.opType() == OpType.ADD) {
+			OpTarget l = left.genAssem(sw, f, funcs);
+			OpTarget r = right.genAssem(sw, f, funcs);
+			sw.write("	movq    " + l.getTarget(false) + ", %r15\n");
+			sw.write("	movq    " + r.getTarget(false) + ", %r14\n");
+			return new OpTarget("(%r15, %r14)");
 		}
 		else {                
 			return null;
