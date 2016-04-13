@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.assembly.Tiling;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -293,7 +294,7 @@ public class IRBinOp extends IRExpr {
 		case ADD:
 		case SUB:
 
-            if (
+            /*if (
                 left instanceof IRBinOp && 
                 (((IRBinOp) left).opType() == IRBinOp.OpType.MUL) &&
                 this.opType() == OpType.ADD
@@ -374,8 +375,20 @@ public class IRBinOp extends IRExpr {
                             +"  " + opStr + "   " + r.getTarget(false) + ", %rax\n"
                             +"  movq    %rax, " + operand.getTarget(true) + "\n");
                 }
-            }
-			else {                
+            } */
+			
+			boolean matched = false;
+
+			OpTarget addr = Tiling.leaTiling(this, sw, f, funcs);
+
+			if(addr != null) {
+				sw.write("# tiled BinOp\n");
+				sw.write("	leaq	" + addr.getTarget(false) + ", %rax\n" //don't use r14 and r15 here!
+						+"	movq	%rax, " + operand.getTarget(true) + "\n");
+				matched = true;
+			}
+ 
+			if(!matched){                
 				OpTarget l = left.genAssem(sw, f, funcs);
 				OpTarget r = right.genAssem(sw, f, funcs);
 				if(l.type == OpTarget.TempType.TEMP && r.type == OpTarget.TempType.TEMP)

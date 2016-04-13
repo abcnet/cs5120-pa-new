@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.OpTarget;
+import zr54.assembly.Tiling;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -113,10 +114,20 @@ public class IRMem extends IRExpr {
 		f.count++;
 		operand = new OpTarget(f.count);
 
-		if(false) {
-			//matching tiles
+		boolean generated = false;
+
+		if(expr instanceof IRBinOp) {
+			OpTarget addr = Tiling.leaTiling((IRBinOp)expr, sw, f, funcs);
+			
+			if(addr != null) {
+				sw.write("# tiled Mem\n");
+				sw.write("	movq	" + addr.getTarget(false) + ", %rax\n" //don't use r14 and r15 here!
+						+"	movq	%rax, " + operand.getTarget(true) + "\n");
+				generated = true;
+			}
 		}
-		else {
+		
+		if(!generated) {
 			OpTarget src = expr.genAssem(sw, f, funcs);
 			if(src.type == OpTarget.TempType.TEMP)
 				sw.write("# MEM in t" + src.num + "\n");
