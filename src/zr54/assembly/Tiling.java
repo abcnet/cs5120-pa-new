@@ -68,9 +68,9 @@ public class Tiling {
 							||((IRConst) _leftright.left()).value() == 8)) {
 
 						IRConst _w = (IRConst) _leftright.left();
-						OpTarget r1 = _leftright.right().genAssem(sw, f, funcs);
 						OpTarget r2 = _left.left().genAssem(sw, f, funcs);
-
+						OpTarget r1 = _leftright.right().genAssem(sw, f, funcs);
+						
 						sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
 						sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
 						return new OpTarget(_k.value() + "(%r15, %r14, " + _w.value() + ")");
@@ -83,9 +83,9 @@ public class Tiling {
 							||((IRConst) _leftright.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _leftright.right();
-						OpTarget r1 = _leftright.left().genAssem(sw, f, funcs);
 						OpTarget r2 = _left.left().genAssem(sw, f, funcs);
-
+						OpTarget r1 = _leftright.left().genAssem(sw, f, funcs);
+						
 						sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
 						sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
 						return new OpTarget(_k.value() + "(%r15, %r14, " + _w.value() + ")");
@@ -158,9 +158,9 @@ public class Tiling {
 							||((IRConst) _rightright.left()).value() == 8)) {
 
 						IRConst _w = (IRConst) _rightright.left();
-						OpTarget r1 = _rightright.right().genAssem(sw, f, funcs);
 						OpTarget r2 = _right.left().genAssem(sw, f, funcs);
-
+						OpTarget r1 = _rightright.right().genAssem(sw, f, funcs);
+						
 						sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
 						sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
 						return new OpTarget(_k.value() + "(%r15, %r14, " + _w.value() + ")");
@@ -173,9 +173,9 @@ public class Tiling {
 							||((IRConst) _rightright.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _rightright.right();
-						OpTarget r1 = _rightright.left().genAssem(sw, f, funcs);
 						OpTarget r2 = _right.left().genAssem(sw, f, funcs);
-
+						OpTarget r1 = _rightright.left().genAssem(sw, f, funcs);
+						
 						sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
 						sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
 						return new OpTarget(_k.value() + "(%r15, %r14, " + _w.value() + ")");
@@ -191,39 +191,43 @@ public class Tiling {
 			return new OpTarget(_k.value() + "(%r15, %r14)");
 		}
 		
+		
 		if (left instanceof IRBinOp && 
 			(((IRBinOp) left).opType() == IRBinOp.OpType.MUL) &&
 			node.opType() == OpType.ADD) {
 			
 			IRBinOp _left = (IRBinOp) left;
-
+			
+			//(w * r1 + r2)
 			if (_left.left() instanceof IRConst
 					&&( ((IRConst) _left.left()).value() == 1 
 					||((IRConst) _left.left()).value() == 2
 					||((IRConst) _left.left()).value() == 4
 					||((IRConst) _left.left()).value() == 8)) {
-			
+				
 				IRConst _const = (IRConst) (_left.left());
-				OpTarget _r = right.genAssem(sw, f, funcs);
-				OpTarget r = _left.right().genAssem(sw, f, funcs);
+				OpTarget r1 = _left.right().genAssem(sw, f, funcs);
+				OpTarget r2 = right.genAssem(sw, f, funcs);
 				
-				sw.write("  movq    " + _r.getTarget(false) + ", %r14\n");
-				sw.write("  movq    " + r.getTarget(false) + ", %r15\n");
-				return new OpTarget("(%r14, %r15, " + _const.value() + ")");
+				sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
+				sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
+				return new OpTarget("(%r15, %r14, " + _const.value() + ")");
 				
-			} else if (_left.right() instanceof IRConst
+			} 
+			//(r1 * w + r2)
+			else if (_left.right() instanceof IRConst
 					&&( ((IRConst) _left.right()).value() == 1 
 					||((IRConst) _left.right()).value() == 2
 					||((IRConst) _left.right()).value() == 4
 					||((IRConst) _left.right()).value() == 8)) {
 				
 				IRConst _const = (IRConst) (_left.right());
-				OpTarget _r = right.genAssem(sw, f, funcs);
-				OpTarget l = _left.left().genAssem(sw, f, funcs);
+				OpTarget r1 = _left.left().genAssem(sw, f, funcs);			
+				OpTarget r2 = right.genAssem(sw, f, funcs);
 				
-				sw.write("	movq    " + _r.getTarget(false) + ", %r14\n");
-				sw.write("  movq    " + l.getTarget(false) + ", %r15\n");
-				return new OpTarget("(%r14, %r15, " + _const.value() + ")");
+				sw.write("	movq    " + r1.getTarget(false) + ", %r14\n");
+				sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
+				return new OpTarget("(%r15, %r14, " + _const.value() + ")");
 
 			} 
 		}
@@ -233,33 +237,37 @@ public class Tiling {
 				node.opType() == IRBinOp.OpType.ADD) 
 				) {
 			IRBinOp _right = (IRBinOp) right;
-
+			//(r2 + w * r1)
 			if (_right.left() instanceof IRConst
 					&&( ((IRConst) _right.left()).value() == 1 
 					||((IRConst) _right.left()).value() == 2
 					||((IRConst) _right.left()).value() == 4
 					||((IRConst) _right.left()).value() == 8)	) {
 				IRConst _const = (IRConst) (_right.left());
-				OpTarget _l = left.genAssem(sw, f, funcs);
-				OpTarget r = _right.right().genAssem(sw, f, funcs);
-				sw.write("  movq    " + _l.getTarget(false) + ", %r15\n");
-				sw.write("  movq    " + r.getTarget(false) + ", %r14\n");
+				OpTarget r2 = left.genAssem(sw, f, funcs);
+				OpTarget r1 = _right.right().genAssem(sw, f, funcs);
+				
+				sw.write("  movq    " + r1.getTarget(false) + ", %r14\n");
+				sw.write("  movq    " + r2.getTarget(false) + ", %r15\n");
 				return new OpTarget("(%r15, %r14, " + _const.value() + ")");
 			}
+			//(r2 + r1 * w)
 			else if (_right.right() instanceof IRConst
 					&&( ((IRConst) _right.right()).value() == 1 
 					||((IRConst) _right.right()).value() == 2
 					||((IRConst) _right.right()).value() == 4
 					||((IRConst) _right.right()).value() == 8)) {
 				IRConst _const = (IRConst) (_right.right());
-				OpTarget _l = left.genAssem(sw, f, funcs);
-				OpTarget l = _right.left().genAssem(sw, f, funcs);
-				sw.write("	movq    " + _l.getTarget(false) + ", %r15\n");
-				sw.write("	movq    " + l.getTarget(false) + ", %r14\n");
+				OpTarget r2 = left.genAssem(sw, f, funcs);
+				OpTarget r1 = _right.left().genAssem(sw, f, funcs);
+				
+				sw.write("	movq    " + r1.getTarget(false) + ", %r14\n");
+				sw.write("	movq    " + r2.getTarget(false) + ", %r15\n");
 				return new OpTarget("(%r15, %r14, " + _const.value() + ")");
 			} 
 		}
 		
+		//(k + r)
 		if (node.opType() == OpType.ADD
 				&& (left instanceof IRConst)) {
 			OpTarget r = right.genAssem(sw, f, funcs);
@@ -267,6 +275,7 @@ public class Tiling {
 			return new OpTarget(((IRConst) left).value() + "(%r14)");
 		}
 		
+		//(r + k)
 		if (node.opType() == OpType.ADD
 				&& (right instanceof IRConst)) {
 			OpTarget l = left.genAssem(sw, f, funcs);
@@ -274,6 +283,7 @@ public class Tiling {
 			return new OpTarget(((IRConst) right).value() + "(%r15)");
 		}
 		
+		//(r1 + r2)
 		if (node.opType() == OpType.ADD) {
 			OpTarget l = left.genAssem(sw, f, funcs);
 			OpTarget r = right.genAssem(sw, f, funcs);
