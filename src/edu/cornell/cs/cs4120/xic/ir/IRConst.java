@@ -79,7 +79,12 @@ public class IRConst extends IRExpr {
 		return operand;
 	}
 	
+	/**
+	 *
+	 * @return true if this const is in 32 bits, false otherwise
+	 */
 	public boolean isIn32BitRange(){
 		return value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE;
 	}
+
 }
