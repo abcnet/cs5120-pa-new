@@ -13,7 +13,7 @@ main(args:int[][] ) {
 	g:int[] = "hello "
 	h:int[] = "world"
 	y:int[] = g + h
-	println(g)
+	println(y)
 }
 
 retTrue() : bool { return true; }
