@@ -71,4 +71,8 @@ public class IRConst extends IRExpr {
 		
 		return operand;
 	}
+	
+	public boolean isIn32BitRange(){
+		return value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE;
+	}
 }
