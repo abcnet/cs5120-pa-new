@@ -24,7 +24,8 @@ public class Tiling {
 		if(node.opType() == OpType.ADD
 		&& left instanceof IRBinOp
 		&& ((IRBinOp) left).opType() == IRBinOp.OpType.ADD
-		&& right instanceof IRConst) {
+		&& right instanceof IRConst
+		&& ((IRConst) right).isIn32BitRange()) {
 			IRBinOp _left = (IRBinOp) left;
 			IRConst _k = (IRConst) right;  
 
@@ -112,7 +113,8 @@ public class Tiling {
 		if(node.opType() == OpType.ADD
 		&& right instanceof IRBinOp
 		&& ((IRBinOp) right).opType() == IRBinOp.OpType.ADD
-		&& left instanceof IRConst) {
+		&& left instanceof IRConst
+		&& ((IRConst) left).isIn32BitRange()) {
 			IRBinOp _right = (IRBinOp) right;
 			IRConst _k = (IRConst) left;  
 
@@ -277,7 +279,8 @@ public class Tiling {
 		
 		//(k + r)
 		if (node.opType() == OpType.ADD
-				&& (left instanceof IRConst)) {
+				&& (left instanceof IRConst)
+				&& ((IRConst) left).isIn32BitRange()) {
 			OpTarget r = right.genAssem(sw, f, funcs);
 			sw.write("	movq    " + r.getTarget(false) + ", %r14\n");
 			return new OpTarget(((IRConst) left).value() + "(%r14)");
@@ -285,7 +288,8 @@ public class Tiling {
 		
 		//(r + k)
 		if (node.opType() == OpType.ADD
-				&& (right instanceof IRConst)) {
+				&& (right instanceof IRConst)
+				&& ((IRConst) right).isIn32BitRange()) {
 			OpTarget l = left.genAssem(sw, f, funcs);
 			sw.write("	movq	" + l.getTarget(false) + ", %r15\n");
 			return new OpTarget(((IRConst) right).value() + "(%r15)");
