@@ -174,10 +174,11 @@ public class IRCall extends IRExpr {
 					+"	addq	$"+8*argSpace+", %rdi\n");
 		}
 		OpTarget t;
-		String argTarg;
+		String argTarg, s;
+		IRExpr arg;
 		int i;
 		for(i = 0; i < this.args.size(); i++){
-			t = args.get(i).genAssem(sw, f, funcs);
+			
 			int num2 = gt2?(i+1):i;
 			switch(num2){
 			case 0:
@@ -202,13 +203,26 @@ public class IRCall extends IRExpr {
 				argTarg = 8*(num2-6)+"(%rsp)";
 				break;
 			}
-			String s = t.getTarget(false);
-			if(s.contains("(")&&argTarg.contains("(")){
-				sw.write("	movq	" + s + ", %r10\n"
-						+"	movq	%r10, " + argTarg + "\n");
+			arg = args.get(i);
+			if(arg instanceof IRConst){
+				if(argTarg.contains("(")){
+					sw.write("	movq	$" + ((IRConst)arg).value() + ", %r10\n"
+							+"	movq	%r10, " + argTarg + "\n");
+				}else{
+					sw.write("	movq	$" + ((IRConst)arg).value() + ", " + argTarg + "\n");
+				}
+				
 			}else{
-				sw.write("	movq	" + s + ", " + argTarg + "\n");
+				t = arg.genAssem(sw, f, funcs);
+				s = t.getTarget(false);
+				if(s.contains("(")&&argTarg.contains("(")){
+					sw.write("	movq	" + s + ", %r10\n"
+							+"	movq	%r10, " + argTarg + "\n");
+				}else{
+					sw.write("	movq	" + s + ", " + argTarg + "\n");
+				}
 			}
+			
 			
 		}
 		
