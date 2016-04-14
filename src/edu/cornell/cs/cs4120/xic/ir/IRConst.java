@@ -55,9 +55,16 @@ public class IRConst extends IRExpr {
         p.endList();
     }
 
+    /**
+     * Generate assembly code for this IR node
+     * @param sw: buffer to write assembly code into
+     * @param f: This parameter indicates which function this node is in. We need this because each function 
+     * 			 needs a counter for the number of temps, to determine each temps position on the stack.   
+     * @param funcs: function symbol table, used to determine the number of arguments and returns when calling other functions
+     * @return
+     */
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
 		
 		if(value > Integer.MAX_VALUE || value < Integer.MIN_VALUE){
 			f.count++;
@@ -70,5 +77,9 @@ public class IRConst extends IRExpr {
 		}
 		
 		return operand;
+	}
+	
+	public boolean isIn32BitRange(){
+		return value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE;
 	}
 }

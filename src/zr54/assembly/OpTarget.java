@@ -1,5 +1,9 @@
 package zr54.assembly;
 
+/**
+ * Returned by genAssem function of each IR node
+ * This class represents the operand target corresponding to the edges in the IR tree
+ */
 public class OpTarget {
 	public enum TempType {TEMP, ARGS, RET, CONST, ADDR, NIL};
 	public TempType type;
@@ -7,26 +11,43 @@ public class OpTarget {
 	public boolean retGt2;
 	public String addr;
 	
+	/**
+	 * Constructors
+	 */
 	public OpTarget(){
 		type = TempType.NIL;
 	}
+	
+	/**
+	 * Construct a OpTarget that is stored on stack
+	 * @param tempNum
+	 */
 	public OpTarget(int tempNum){
 		type = TempType.TEMP;
 		num = tempNum;
 	}
+	
 	public OpTarget(int num, boolean gt2){
 		this.type = TempType.ARGS;
 		this.num = num;
 		this.retGt2 = gt2;
 	}
+	
 	public OpTarget(TempType type, int num){
 		this.type = type;
 		this.num = num;
 	}
+	
+	/**
+	 * Construct a target that is a memory acessing expression.
+	 * @param addr
+	 */
 	public OpTarget(String addr){
 		this.type = TempType.ADDR;
 		this.addr = addr;
 	}
+	
+	
 	public String toString(){
 		switch(type){
 		case TEMP:
@@ -42,6 +63,11 @@ public class OpTarget {
 		}
 	}
 
+	/**
+	 * Is this target a memery location?
+	 * @param isDest, is this target used for dst or src in the op code?
+	 * @return
+	 */
 	public boolean isMemTarget(boolean isDest) {
 		if(this.getTarget(isDest).contains("("))
 			return true;
@@ -49,10 +75,17 @@ public class OpTarget {
 			return false;
 	}
 	
+	/**
+	 * Is this target a constant?
+	 * @return
+	 */
 	public boolean isConstTarget() {
 		return type == TempType.CONST;
 	}
 	
+	/**
+	 * return the operand target string
+	 */
 	public String getTarget(boolean isDest){
 		switch(type){
 		case TEMP:

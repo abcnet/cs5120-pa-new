@@ -8,7 +8,15 @@ import zr54.typechecker.FuncSymbolTable;
 
 public class Tiling {
 	
-	//if cannot match any tile, don't write to sw and return null
+	/**
+	 * matching and replacing arithmetic with memory accessing like expression
+	 * if cannot match any tile, don't write to sw and return null
+	 * @param node: a binary operation node
+	 * @param sw: assembly code buffer
+	 * @param f: the function that we are in
+	 * @param funcs: function symbol table
+	 * @return null if not matched; a memory expression if matched
+	 */
 	static public OpTarget leaTiling(IRBinOp node, StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs){
 		IRExpr left = node.left();
 		IRExpr right = node.right();

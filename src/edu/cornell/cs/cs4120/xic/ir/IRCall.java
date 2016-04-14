@@ -131,10 +131,16 @@ public class IRCall extends IRExpr {
     	return null;
     }
 
+    /**
+     * Generate assembly code for this IR node
+     * @param sw: buffer to write assembly code into
+     * @param f: This parameter indicates which function this node is in. We need this because each function 
+     * 			 needs a counter for the number of temps, to determine each temps position on the stack.   
+     * @param funcs: function symbol table, used to determine the number of arguments and returns when calling other functions
+     * @return
+     */
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-//		sw.write("	movq	%rdi, -8(%rbp)\n");
 		String callee = ((IRName)this.target).name();
 		boolean gt2;
 		int nRet;
@@ -163,17 +169,16 @@ public class IRCall extends IRExpr {
 			}
 		}
 		
-		//todo
-//		int extra1for16align = (f.getReserved()+f.count+f.retSpace+f.argSpace+1)%2;
 		if(nRet>2){
 			sw.write("	movq	%rsp, %rdi\n"
 					+"	addq	$"+8*argSpace+", %rdi\n");
 		}
 		OpTarget t;
-		String argTarg;
+		String argTarg, s;
+		IRExpr arg;
 		int i;
 		for(i = 0; i < this.args.size(); i++){
-			t = args.get(i).genAssem(sw, f, funcs);
+			
 			int num2 = gt2?(i+1):i;
 			switch(num2){
 			case 0:
@@ -198,13 +203,26 @@ public class IRCall extends IRExpr {
 				argTarg = 8*(num2-6)+"(%rsp)";
 				break;
 			}
-			String s = t.getTarget(false);
-			if(s.contains("(")&&argTarg.contains("(")){
-				sw.write("	movq	" + s + ", %r10\n"
-						+"	movq	%r10, " + argTarg + "\n");
+			arg = args.get(i);
+			if(arg instanceof IRConst){
+				if(argTarg.contains("(")){
+					sw.write("	movq	$" + ((IRConst)arg).value() + ", %r10\n"
+							+"	movq	%r10, " + argTarg + "\n");
+				}else{
+					sw.write("	movq	$" + ((IRConst)arg).value() + ", " + argTarg + "\n");
+				}
+				
 			}else{
-				sw.write("	movq	" + s + ", " + argTarg + "\n");
+				t = arg.genAssem(sw, f, funcs);
+				s = t.getTarget(false);
+				if(s.contains("(")&&argTarg.contains("(")){
+					sw.write("	movq	" + s + ", %r10\n"
+							+"	movq	%r10, " + argTarg + "\n");
+				}else{
+					sw.write("	movq	" + s + ", " + argTarg + "\n");
+				}
 			}
+			
 			
 		}
 		
