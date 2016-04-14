@@ -91,6 +91,14 @@ public abstract class IRNode {
         return sw.toString();
     }
     
+    /**
+     * Generate assembly code for this IR node
+     * @param sw: buffer to write assembly code into
+     * @param f: This parameter indicates which function this node is in. We need this because each function 
+     * 			 needs a counter for the number of temps, to determine each temps position on the stack.   
+     * @param funcs: function symbol table, used to determine the number of arguments and returns when calling other functions
+     * @return
+     */
     public abstract OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs);
     
 }
