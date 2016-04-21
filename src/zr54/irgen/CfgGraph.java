@@ -2,6 +2,8 @@ package zr54.irgen;
 
 import java.util.*;
 
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
+
 public class CfgGraph {
 	HashMap<CfgNode, ArrayList<CfgNode>> graph;
 	
@@ -10,7 +12,19 @@ public class CfgGraph {
 	}
 	
 	public void addNode(CfgNode node) {
-		graph.put(node, new ArrayList<CfgNode>());
+		if (!graph.containsKey(node)) {
+			graph.put(node, new ArrayList<CfgNode>());
+		}
+	}
+	
+	public CfgNode getNode(IRNode node) {
+		Set<CfgNode> keys = graph.keySet();
+		for (CfgNode key : keys) {
+			if (key.getNode().equals(node)) {
+				return key;
+			}
+		}
+		return null;
 	}
 	
 	public void addChild(CfgNode parent, CfgNode child) {
