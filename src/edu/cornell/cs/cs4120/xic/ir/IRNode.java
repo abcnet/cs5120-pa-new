@@ -28,6 +28,7 @@ public abstract class IRNode {
      */
 	
 	public ArrayList<IRNode> children;
+	public boolean visitedCFG = false;
 	
 	public IRNode() {
 		this.children = new ArrayList<IRNode>();

@@ -3,19 +3,19 @@ package zr54.irgen;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 
 public class CfgEdge {
-	private IRNode src;
-	private IRNode dst;
+	private CfgNode src;
+	private CfgNode dst;
 	
-	public CfgEdge(IRNode src, IRNode dst) {
+	public CfgEdge(CfgNode src, CfgNode dst) {
 		this.src = src;
 		this.dst = dst;
 	}
 	
-	public IRNode getSrc() {
+	public CfgNode getSrc() {
 		return this.src;
 	}
 	
-	public IRNode getDst() {
+	public CfgNode getDst() {
 		return this.dst;
 	}																	
 }
