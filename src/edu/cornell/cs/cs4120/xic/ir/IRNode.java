@@ -12,6 +12,8 @@ import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CFG;
+import zr54.cfg.CFGNode;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -102,4 +104,7 @@ public abstract class IRNode {
      */
     public abstract OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs);
     
+    public CFGNode getCFGNode(CFG cfg){
+    	return cfg.outgoingGraph.getNode(this);
+    }
 }

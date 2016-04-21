@@ -1,15 +1,20 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CFG;
+import zr54.cfg.CFGEdge;
 import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
@@ -165,7 +170,7 @@ public class IRFuncDecl extends IRNode {
 			
 	}
 	
-	public void createCFG(){
+	public void createCFG(boolean draw, FileWriter fw) throws IOException{
 		IRNode curr; int i;
 		List<IRStmt> stmts = ((IRSeq)body).stmts();
 		for(i=0; i<stmts.size(); i++) {
@@ -174,6 +179,29 @@ public class IRFuncDecl extends IRNode {
 		}
 		
 		graph = new CFG(this);
+		if(draw){
+			ByteArrayOutputStream b;
+			CodeWriterSExpPrinter p; 
+			for(CFGEdge edge : graph.edges){
+				b = new ByteArrayOutputStream();
+				p = new CodeWriterSExpPrinter(b);
+				edge.getSrc().getNode().printSExp(p);
+				p.flush();
+				p.close();
+				b.flush();
+				fw.write("	" + b.toString());
+				b.close();
+				
+				b = new ByteArrayOutputStream();
+				p = new CodeWriterSExpPrinter(b);
+				edge.getDst().getNode().printSExp(p);
+				p.flush();
+				p.close();
+				b.flush();
+				fw.write(" -> " + b.toString() + " [ label = \"" + edge.toString() + "\" ];\n");
+				b.close();
+			}
+		}
 		
 	}
 

@@ -1,5 +1,7 @@
 package zr54.cfg;
 
+import java.util.ArrayList;
+
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import edu.cornell.cs.cs4120.xic.ir.IRJump;
@@ -12,6 +14,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 public class CFG {
 	public CFGGraph incomingGraph;
 	public CFGGraph outgoingGraph;
+	public ArrayList<CFGEdge> edges = new ArrayList<CFGEdge>();
 	
 	public CFG(IRFuncDecl root) {
 		IRSeq seq = (IRSeq) root.children.get(0);
@@ -73,5 +76,6 @@ public class CFG {
 			incomingGraph.addNode(child);
 			incomingGraph.addChild(child, parent);
 		}
+		edges.add(new CFGEdge(parent, child));
 	}
 }

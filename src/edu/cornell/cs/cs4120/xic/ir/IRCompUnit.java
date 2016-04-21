@@ -1,5 +1,7 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -126,9 +128,37 @@ public class IRCompUnit extends IRNode {
 		return operand;
 	}
 	
-	public void createCFG(){
-		for (IRFuncDecl func : functions.values()){
-			func.createCFG();
+	public void createCFG(boolean draw, String file){
+		if(draw){
+			try {
+				FileWriter fw = new FileWriter(file, false);
+				fw.write("digraph " + this.name + " {\n"
+						+" 	rankdir=LR;\n"
+						+"	size=\"8,5\"\n"
+						+"	node [style=invis] \"\";\n"
+						+"	node [shape = circle,style=\"\"];\n");
+				for (IRFuncDecl func : functions.values()){
+					func.createCFG(true, fw);
+				}
+				fw.write("}");
+				fw.flush();
+				fw.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			
+			for (IRFuncDecl func : functions.values()){
+				try {
+					func.createCFG(false, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
+		
+		
 	}
 }

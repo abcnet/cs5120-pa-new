@@ -162,13 +162,13 @@ public class IRGenerate {
 			            if (debug)System.out.println(cv.visit(program));
 			        }
 			        
-			        if(initialGraph){
-			        	program.createCFG();
-			        }
+			        String pathToFile = srcFile.substring(0, srcFile.lastIndexOf(".xi"));
 			        
-			        if(finalGraph){
-			        	program.createCFG();
-			        }
+			        program.createCFG(initialGraph, pathToFile + "_f_initial.dot");
+			        
+			        
+			        program.createCFG(finalGraph, pathToFile + "_f_final.dot");
+			        
 			        
 			        StringWriter assemStringWriter = new StringWriter();
 			        program.genAssem(assemStringWriter, null, funcs);
