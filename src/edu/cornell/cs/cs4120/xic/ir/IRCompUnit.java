@@ -125,4 +125,10 @@ public class IRCompUnit extends IRNode {
 		}
 		return operand;
 	}
+	
+	public void createCFG(){
+		for (IRFuncDecl func : functions.values()){
+			func.createCFG();
+		}
+	}
 }

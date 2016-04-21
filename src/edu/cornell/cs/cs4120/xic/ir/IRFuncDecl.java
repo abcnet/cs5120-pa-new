@@ -27,7 +27,7 @@ public class IRFuncDecl extends IRNode {
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
-    public CFG graph;
+    public CFG graph = null;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -163,6 +163,18 @@ public class IRFuncDecl extends IRNode {
 		}
 		return labelTable.get(label);
 			
+	}
+	
+	public void createCFG(){
+		IRNode curr; int i;
+		List<IRStmt> stmts = ((IRSeq)body).stmts();
+		for(i=0; i<stmts.size(); i++) {
+			curr = stmts.get(i);
+			curr.visitedCFG = false;
+		}
+		
+		graph = new CFG(this);
+		
 	}
 
 	public static int getReserved() {

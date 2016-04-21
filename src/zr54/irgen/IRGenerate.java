@@ -162,8 +162,12 @@ public class IRGenerate {
 			            if (debug)System.out.println(cv.visit(program));
 			        }
 			        
-			        {
-			        	
+			        if(initialGraph){
+			        	program.createCFG();
+			        }
+			        
+			        if(finalGraph){
+			        	program.createCFG();
 			        }
 			        
 			        StringWriter assemStringWriter = new StringWriter();

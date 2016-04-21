@@ -13,7 +13,7 @@ public class CFG {
 	public CFGGraph incomingGraph;
 	public CFGGraph outgoingGraph;
 	
-	public void createCfg(IRFuncDecl root) {
+	public CFG(IRFuncDecl root) {
 		IRSeq seq = (IRSeq) root.children.get(0);
 		for (int i = 0; i < seq.children.size(); ++i) {
 			IRNode currIRNode = seq.children.get(i);
