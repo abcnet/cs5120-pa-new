@@ -12,8 +12,8 @@ import edu.cornell.cs.cs4120.xic.ir.IRReturn;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 
 public class CFG {
-	public CFGGraph incomingGraph;
-	public CFGGraph outgoingGraph;
+	public CFGGraph incomingGraph = new CFGGraph();
+	public CFGGraph outgoingGraph = new CFGGraph();
 	public ArrayList<CFGEdge> edges = new ArrayList<CFGEdge>();
 	
 	public CFG(IRFuncDecl root) {
