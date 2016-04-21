@@ -20,11 +20,10 @@ public class cfg {
 			if (!currIRNode.visitedCFG) {
 				currIRNode.visitedCFG = true;
 				currNode = new CfgNode(currIRNode);
+				outgoingGraph.addNode(currNode);
 			} else {
 				currNode = outgoingGraph.getNode(currIRNode);
 			}
-			
-			outgoingGraph.addNode(currNode);
 			
 			CfgNode child = null;
 			if (currIRNode instanceof IRReturn) {
@@ -34,15 +33,17 @@ public class cfg {
 				if (n.visitedCFG == true) {
 					child = outgoingGraph.getNode(n);
 				} else {
-					child = new CfgNode(n);
 					n.visitedCFG = true;
+					child = new CfgNode(n);
+					outgoingGraph.addNode(child);
 				}
 			}  else {
 				if (seq.children.get(i+1).visitedCFG == true) {
 					child = outgoingGraph.getNode(seq.children.get(i+1));
 				} else {
-					child = new CfgNode(seq.children.get(i+1));
 					seq.children.get(i+1).visitedCFG = true;
+					child = new CfgNode(seq.children.get(i+1));
+					outgoingGraph.addNode(child);
 				}
 			}
 			addEdges(currNode, child);
@@ -52,8 +53,9 @@ public class cfg {
 				if (n.visitedCFG == true) {
 					child = outgoingGraph.getNode(n);
 				} else {
-					child = new CfgNode(n);
 					n.visitedCFG = true;
+					child = new CfgNode(n);
+					outgoingGraph.addNode(child);
 				}
 				addEdges(currNode, child);
 			}
