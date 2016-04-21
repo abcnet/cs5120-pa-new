@@ -75,7 +75,8 @@ public class CFG {
 		if (child != null) {
 			incomingGraph.addNode(child);
 			incomingGraph.addChild(child, parent);
+			edges.add(new CFGEdge(parent, child));
 		}
-		edges.add(new CFGEdge(parent, child));
+		
 	}
 }

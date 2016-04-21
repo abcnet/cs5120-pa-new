@@ -156,16 +156,22 @@ public class IRFuncDecl extends IRNode {
 	
 	public IRNode getNodeAfterLabel(String label){
 		if(labelTable==null){
-			 labelTable = new HashMap<String, IRNode>();
+			labelTable = new HashMap<String, IRNode>();
+			List<IRStmt> stmts = ((IRSeq)body).stmts();
+			IRNode curr; int i, j;
+			for(i=0; i<stmts.size(); i++) {
+				 curr = stmts.get(i);
+				 if(curr instanceof IRLabel && i<=stmts.size()-2){
+					 j = i+1;
+					 while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
+						 j++;
+					 }
+							 
+					 labelTable.put(((IRLabel)curr).name(), stmts.get(j));
+				 }
+			}
 		}
-		List<IRStmt> stmts = ((IRSeq)body).stmts();
-		IRNode curr; int i;
-		for(i=0; i<stmts.size(); i++) {
-			 curr = stmts.get(i);
-			 if(curr instanceof IRLabel && i<=stmts.size()-2){
-				 labelTable.put(((IRLabel)curr).name(), stmts.get(i+1));
-			 }
-		}
+		
 		return labelTable.get(label);
 			
 	}
@@ -177,6 +183,7 @@ public class IRFuncDecl extends IRNode {
 			curr = stmts.get(i);
 			curr.visitedCFG = false;
 		}
+		labelTable = null;
 		
 		graph = new CFG(this);
 		if(draw){
@@ -189,7 +196,7 @@ public class IRFuncDecl extends IRNode {
 				p.flush();
 				p.close();
 				b.flush();
-				fw.write("	" + b.toString());
+				fw.write("	\"" + b.toString().trim());
 				b.close();
 				
 				b = new ByteArrayOutputStream();
@@ -198,7 +205,7 @@ public class IRFuncDecl extends IRNode {
 				p.flush();
 				p.close();
 				b.flush();
-				fw.write(" -> " + b.toString() + " [ label = \"" + edge.toString() + "\" ];\n");
+				fw.write("\" -> \"" + b.toString().trim() + "\" [ label = \"" + edge.toString() + "\" ];\n");
 				b.close();
 			}
 		}
