@@ -45,11 +45,15 @@ public class CFG {
 					outgoingGraph.addNode(child);
 				}
 			}  else {
-				if (seq.children.get(i+1).visitedCFG == true) {
-					child = outgoingGraph.getNode(seq.children.get(i+1));
+				int j = i + 1;
+				while (seq.children.get(j) instanceof IRLabel) {
+					j++;
+				}
+				if (seq.children.get(j).visitedCFG == true) {
+					child = outgoingGraph.getNode(seq.children.get(j));
 				} else {
-					seq.children.get(i+1).visitedCFG = true;
-					child = new CFGNode(seq.children.get(i+1));
+					seq.children.get(j).visitedCFG = true;
+					child = new CFGNode(seq.children.get(j));
 					outgoingGraph.addNode(child);
 				}
 			}
@@ -76,6 +80,7 @@ public class CFG {
 			incomingGraph.addNode(child);
 			incomingGraph.addChild(child, parent);
 			edges.add(new CFGEdge(parent, child));
+			System.out.println(parent.getNode().label() + " -> " + child.getNode().label());
 		}
 		
 	}
