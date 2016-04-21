@@ -5,7 +5,7 @@ foo(a:int):int {
 	if (a == 1) {
 		return 10;
 	}
-	return 1 + f(a-1);
+	return 1 + foo(a-1);
 }
 
 main(args:int[][]) {
