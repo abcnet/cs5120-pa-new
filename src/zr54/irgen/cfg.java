@@ -15,8 +15,8 @@ public class cfg {
 		IRSeq seq = (IRSeq) root.children.get(0);
 		for (int i = 0; i < seq.children.size(); ++i) {
 			IRNode currIRNode = seq.children.get(i);
-			if (!currIRNode.visitedCfg) {
-				currIRNode.visitedCfg = true;
+			if (!currIRNode.visitedCFG) {
+				currIRNode.visitedCFG = true;
 			} else {
 				continue;
 			}
@@ -32,7 +32,7 @@ public class cfg {
 			} else {
 				CfgNode parent = currNode;
 				CfgNode child = null;
-				if (seq.children.get(i+1).visitedCfg == true) {
+				if (seq.children.get(i+1).visitedCFG == true) {
 					child = outgoingGraph.getNode(seq.children.get(i+1));
 				} else {
 					child = new CfgNode(seq.children.get(i+1));
