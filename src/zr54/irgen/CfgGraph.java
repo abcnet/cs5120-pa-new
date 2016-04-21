@@ -12,7 +12,7 @@ public class CfgGraph {
 	}
 	
 	public void addNode(CfgNode node) {
-		if (!graph.containsKey(node)) {
+		if (node != null && !graph.containsKey(node)) {
 			graph.put(node, new ArrayList<CfgNode>());
 		}
 	}
@@ -28,10 +28,12 @@ public class CfgGraph {
 	}
 	
 	public void addChild(CfgNode parent, CfgNode child) {
-		if (!graph.containsKey(parent)) {
-			addNode(parent);
+		if (parent != null) {
+			if (!graph.containsKey(parent)) {
+				addNode(parent);
+			}
+			graph.get(parent).add(child);
 		}
-		graph.get(parent).add(child);
 	}
 	
 	public ArrayList<CfgNode> getChildren(CfgNode node) {
