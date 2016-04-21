@@ -5,6 +5,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import edu.cornell.cs.cs4120.xic.ir.IRJump;
 import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRReturn;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 
 public class cfg {
@@ -26,7 +27,9 @@ public class cfg {
 			outgoingGraph.addNode(currNode);
 			
 			CfgNode child = null;
-			if (currIRNode instanceof IRJump) {
+			if (currIRNode instanceof IRReturn) {
+				child = null;
+			} else if (currIRNode instanceof IRJump) {
 				IRNode n = root.getNodeAfterLabel(((IRName)((IRJump)currIRNode).target()).name());
 				if (n.visitedCFG == true) {
 					child = outgoingGraph.getNode(n);
