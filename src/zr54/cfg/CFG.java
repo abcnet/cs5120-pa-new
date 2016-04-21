@@ -80,7 +80,7 @@ public class CFG {
 			incomingGraph.addNode(child);
 			incomingGraph.addChild(child, parent);
 			edges.add(new CFGEdge(parent, child));
-			System.out.println(parent.getNode().label() + " -> " + child.getNode().label());
+//			System.out.println(parent.getNode().label() + " -> " + child.getNode().label());
 		}
 		
 	}
