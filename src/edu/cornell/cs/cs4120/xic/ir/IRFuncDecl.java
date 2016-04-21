@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -24,7 +25,7 @@ public class IRFuncDecl extends IRNode {
     public int retSpace = 0;
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
-
+    private HashMap<String, IRNode> labelTable = null;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -144,6 +145,22 @@ public class IRFuncDecl extends IRNode {
 				+ "	popq	%rbp\n"
 				+ "	retq\n");
 		return operand;
+	}
+	
+	public IRNode getNodeAfterLabel(String label){
+		if(labelTable==null){
+			 labelTable = new HashMap<String, IRNode>();
+		}
+		List<IRStmt> stmts = ((IRSeq)body).stmts();
+		IRNode curr; int i;
+		for(i=0; i<stmts.size(); i++) {
+			 curr = stmts.get(i);
+			 if(curr instanceof IRLabel && i<=stmts.size()-2){
+				 labelTable.put(((IRLabel)curr).name(), stmts.get(i+1));
+			 }
+		}
+		return labelTable.get(label);
+			
 	}
 
 	public static int getReserved() {
