@@ -162,6 +162,10 @@ public class IRGenerate {
 			            if (debug)System.out.println(cv.visit(program));
 			        }
 			        
+			        {
+			        	
+			        }
+			        
 			        StringWriter assemStringWriter = new StringWriter();
 			        program.genAssem(assemStringWriter, null, funcs);
 			        assemStringWriter.flush();

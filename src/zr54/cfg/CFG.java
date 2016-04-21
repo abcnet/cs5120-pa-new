@@ -1,4 +1,4 @@
-package zr54.irgen;
+package zr54.cfg;
 
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
@@ -9,9 +9,9 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRReturn;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 
-public class cfg {
-	public CfgGraph incomingGraph;
-	public CfgGraph outgoingGraph;
+public class CFG {
+	public CFGGraph incomingGraph;
+	public CFGGraph outgoingGraph;
 	
 	public void createCfg(IRFuncDecl root) {
 		IRSeq seq = (IRSeq) root.children.get(0);
@@ -20,16 +20,16 @@ public class cfg {
 			if (currIRNode instanceof IRLabel) {
 				continue;
 			}
-			CfgNode currNode = null;
+			CFGNode currNode = null;
 			if (!currIRNode.visitedCFG) {
 				currIRNode.visitedCFG = true;
-				currNode = new CfgNode(currIRNode);
+				currNode = new CFGNode(currIRNode);
 				outgoingGraph.addNode(currNode);
 			} else {
 				currNode = outgoingGraph.getNode(currIRNode);
 			}
 			
-			CfgNode child = null;
+			CFGNode child = null;
 			if (currIRNode instanceof IRReturn) {
 				child = null;
 			} else if (currIRNode instanceof IRJump) {
@@ -38,7 +38,7 @@ public class cfg {
 					child = outgoingGraph.getNode(n);
 				} else {
 					n.visitedCFG = true;
-					child = new CfgNode(n);
+					child = new CFGNode(n);
 					outgoingGraph.addNode(child);
 				}
 			}  else {
@@ -46,7 +46,7 @@ public class cfg {
 					child = outgoingGraph.getNode(seq.children.get(i+1));
 				} else {
 					seq.children.get(i+1).visitedCFG = true;
-					child = new CfgNode(seq.children.get(i+1));
+					child = new CFGNode(seq.children.get(i+1));
 					outgoingGraph.addNode(child);
 				}
 			}
@@ -58,7 +58,7 @@ public class cfg {
 					child = outgoingGraph.getNode(n);
 				} else {
 					n.visitedCFG = true;
-					child = new CfgNode(n);
+					child = new CFGNode(n);
 					outgoingGraph.addNode(child);
 				}
 				addEdges(currNode, child);
@@ -67,7 +67,7 @@ public class cfg {
 		
 	}
 	
-	public void addEdges(CfgNode parent, CfgNode child) {
+	public void addEdges(CFGNode parent, CFGNode child) {
 		outgoingGraph.addChild(parent, child);
 		if (child != null) {
 			incomingGraph.addNode(child);

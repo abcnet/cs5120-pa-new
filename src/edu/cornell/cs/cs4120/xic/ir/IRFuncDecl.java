@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CFG;
 import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
@@ -26,6 +27,7 @@ public class IRFuncDecl extends IRNode {
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
+    public CFG graph;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();

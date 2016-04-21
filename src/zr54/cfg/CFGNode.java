@@ -1,11 +1,11 @@
-package zr54.irgen;
+package zr54.cfg;
 
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 
-public class CfgNode {
+public class CFGNode {
 	private IRNode node;
 	
-	public CfgNode(IRNode node) {
+	public CFGNode(IRNode node) {
 		this.node = node;
 	}
 	
