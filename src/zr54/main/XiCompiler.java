@@ -19,7 +19,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[12];
+        LongOpt[] longopts = new LongOpt[15];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -34,6 +34,11 @@ class XiCompiler {
         longopts[9] = new LongOpt("D", LongOpt.REQUIRED_ARGUMENT, null, 9);
         longopts[10] = new LongOpt("d", LongOpt.REQUIRED_ARGUMENT, null, 10);
         longopts[11] = new LongOpt("O", LongOpt.NO_ARGUMENT, null, 11);
+        longopts[12] = new LongOpt("report-opts", LongOpt.REQUIRED_ARGUMENT, null, 12);
+        longopts[13] = new LongOpt("optir", LongOpt.REQUIRED_ARGUMENT, null, 13);
+        longopts[14] = new LongOpt("optcfg", LongOpt.REQUIRED_ARGUMENT, null, 14);
+
+        
 
         Getopt g = new Getopt("XiCompiler", argv, ":", longopts, true);
         g.setOpterr(false);
@@ -59,6 +64,8 @@ class XiCompiler {
         String libPath = System.getProperty("user.dir");
         
         boolean optimization = true;
+        boolean initialGraph = false;
+        boolean finalGraph = false;
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -96,6 +103,30 @@ class XiCompiler {
 			              break;
                 case 11: optimization = false;
                           break;
+                case 12:
+                	System.out.println("% xic --report-opts\nreg\nuce\ncse\n%");
+                	break;
+                case 13:
+                	arg = g.getOptarg();
+                	if(arg.equals("initial")){
+                		
+                	}else if (arg.equals("final")){
+                		
+                	}else{
+                		
+                	}
+                	break;
+                case 14:
+                	arg = g.getOptarg();
+                	if(arg.equals("initial")){
+                		initialGraph = true;
+                	}else if (arg.equals("final")){
+                		finalGraph = true;
+                	}else{
+                		System.out.println("Graph for phase " + arg + " is not supported");
+                	}
+                	break;
+                	
                 case '?': System.out.println("error: invalid option entered");
                           System.out.println(usage);
                           System.exit(0);
@@ -131,23 +162,23 @@ class XiCompiler {
             if (op.equals("lex")) {
                 diagDst = diagDst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
             } else if (op.equals("parse")) {
                 diagDst = diagDst + ".parsed";
                 ParsePrint.parseAndPrint(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
             } else if (op.equals("typecheck")) {
             	diagDst = diagDst + ".typed";
                 TypeCheck.typeCheckAndPrint(src, diagDst, libPath+"/");
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
             } else if (op.equals("irgen")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst, true);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst, true, initialGraph, finalGraph);
             } else if (op.equals("irrun")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst, true);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst, true, initialGraph, finalGraph);
             } else if (op.equals("")){
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, true);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, true, initialGraph, finalGraph);
             }
         }
     }

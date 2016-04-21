@@ -34,6 +34,8 @@ public class IRGenerate {
 	 * Generete the IR
 	 * @param assemFile TODO
 	 * @param errOutput TODO
+	 * @param initialGraph TODO
+	 * @param finalGraph TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -42,7 +44,7 @@ public class IRGenerate {
 	 * @param optimization: true if doing constant folding
 	 * @throws Exception
 	 */
-	public static boolean IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization, boolean disableDiagFileWrite, String assemFile, boolean errOutput) throws Exception {
+	public static boolean IRGenAndPrint(String srcFile, String dstFile, String libPath, boolean run, boolean optimization, boolean disableDiagFileWrite, String assemFile, boolean errOutput, boolean initialGraph, boolean finalGraph) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
