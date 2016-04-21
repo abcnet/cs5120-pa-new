@@ -3,6 +3,7 @@ package zr54.irgen;
 import edu.cornell.cs.cs4120.xic.ir.IRCJump;
 import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import edu.cornell.cs.cs4120.xic.ir.IRJump;
+import edu.cornell.cs.cs4120.xic.ir.IRLabel;
 import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRReturn;
@@ -16,6 +17,9 @@ public class cfg {
 		IRSeq seq = (IRSeq) root.children.get(0);
 		for (int i = 0; i < seq.children.size(); ++i) {
 			IRNode currIRNode = seq.children.get(i);
+			if (currIRNode instanceof IRLabel) {
+				continue;
+			}
 			CfgNode currNode = null;
 			if (!currIRNode.visitedCFG) {
 				currIRNode.visitedCFG = true;
