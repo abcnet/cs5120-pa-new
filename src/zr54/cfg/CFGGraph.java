@@ -5,10 +5,10 @@ import java.util.*;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 
 public class CFGGraph {
-	HashMap<CFGNode, ArrayList<CFGNode>> graph;
+	HashMap<CFGNode, ArrayList<CFGEdge>> graph;
 	
 	public CFGGraph() {
-		graph = new HashMap<CFGNode, ArrayList<CFGNode>>();
+		graph = new HashMap<CFGNode, ArrayList<CFGEdge>>();
 	}
 	
 	public Set<CFGNode> getNodeSet() {
@@ -17,7 +17,7 @@ public class CFGGraph {
 	
 	public void addNode(CFGNode node) {
 		if (node != null && !graph.containsKey(node)) {
-			graph.put(node, new ArrayList<CFGNode>());
+			graph.put(node, new ArrayList<CFGEdge>());
 		}
 	}
 	
@@ -31,21 +31,20 @@ public class CFGGraph {
 		return null;
 	}
 	
-	public void addChild(CFGNode parent, CFGNode child) {
+	public void addChild(CFGNode parent, CFGEdge edge) {
 		if (parent != null) {
 			if (!graph.containsKey(parent)) {
 				addNode(parent);
 			}
-			graph.get(parent).add(child);
+			graph.get(parent).add(edge);
 		}
 	}
 	
-	public ArrayList<CFGNode> getChildren(CFGNode node) {
+	public ArrayList<CFGEdge> getChildren(CFGNode node) {
 		if (graph.containsKey(node)) {
 			return graph.get(node);
 		} else {
 			return null;
 		}
 	}
-
 }
