@@ -10,3 +10,4 @@ bin/
 *.ir
 *.s
 output/
+!*.*

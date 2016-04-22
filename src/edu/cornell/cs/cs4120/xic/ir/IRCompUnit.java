@@ -133,8 +133,8 @@ public class IRCompUnit extends IRNode {
 			try {
 				FileWriter fw = new FileWriter(file, false);
 				fw.write("digraph " + this.name + " {\n"
-						+" 	rankdir=LR;\n"
-						+"	size=\"8,5\"\n"
+//						+" 	rankdir=LR;\n"
+						+"	size=\"8,5\";\n"
 						+"	node [style=invis] \"\";\n"
 						+"	node [shape = circle,style=\"\"];\n");
 				for (IRFuncDecl func : functions.values()){
@@ -160,5 +160,11 @@ public class IRCompUnit extends IRNode {
 		}
 		
 		
+	}
+	
+	public void liveVarAnalyze(){
+		for (IRFuncDecl func : functions.values()){
+			func.liveVarAnalyze();
+		}
 	}
 }

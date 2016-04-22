@@ -166,6 +166,7 @@ public class IRGenerate {
 			        
 			        program.createCFG(initialGraph, pathToFile + "_f_initial.dot");
 			        
+			        program.liveVarAnalyze();
 			        
 			        program.createCFG(finalGraph, pathToFile + "_f_final.dot");
 			        

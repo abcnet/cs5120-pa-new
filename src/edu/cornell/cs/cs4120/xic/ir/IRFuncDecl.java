@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
@@ -15,6 +15,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CFG;
 import zr54.cfg.CFGEdge;
+import zr54.cfg.CFGNode;
 import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
@@ -207,6 +208,45 @@ public class IRFuncDecl extends IRNode {
 //				b.flush();
 				fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
 //				b.close();
+			}
+		}
+		
+	}
+	
+	public void liveVarAnalyze(){
+//		for(CFGEdge edge : graph.edges){
+//			edge.liveVars = new HashSet<IRTemp>();
+//		}
+		boolean changed = true;
+		while(changed){
+			changed = false;
+			int tmp;
+			HashSet<IRTemp> unionResult = null;
+			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+				
+				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
+					if(unionResult==null){
+						tmp = out.liveVars.size();
+						for (CFGEdge in: graph.incomingGraph.getChildren(node)){
+							if(out.liveVars.addAll(in.liveVars)){
+								changed = true;
+							}
+						}
+						unionResult = out.liveVars;
+					}else{
+						out.liveVars = unionResult;
+					}
+					
+					
+				}
+				unionResult = null;
+				for (CFGEdge in: graph.incomingGraph.getChildren(node)){
+					if(unionResult==null){
+						
+					}else{
+						in.liveVars = unionResult;
+					}
+				}
 			}
 		}
 		
