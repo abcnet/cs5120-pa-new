@@ -13,6 +13,8 @@ public class CFGNode {
 	public int count;
 	private HashSet<IRTemp> use = null;
 	private HashSet<IRTemp> def = null;
+	public HashSet<IRTemp> liveVarsIn = null;
+	public HashSet<IRTemp> liveVarsOut = null;
 	
 	public CFGNode(IRNode node) {
 		this.node = node;
@@ -45,6 +47,8 @@ public class CFGNode {
 	
 	public HashSet<IRTemp> getUse(){
 		if(use==null){
+			
+			use = new HashSet<IRTemp>();
 			//TODO
 		}
 		return use;

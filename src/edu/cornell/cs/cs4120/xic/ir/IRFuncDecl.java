@@ -221,43 +221,44 @@ public class IRFuncDecl extends IRNode {
 		while(changed){
 			changed = false;
 			int tmp;
-			HashSet<IRTemp> unionResult = null;
+			HashSet<IRTemp> outResult = null;
 			ArrayList<CFGEdge> inEdges;
-			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
-				if(node==null)continue;
-				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
-					if(out==null)continue;
-					if(unionResult==null){
-						
-						inEdges = graph.incomingGraph.getChildren(node);
-						if(inEdges == null)continue;
-						tmp = out.liveVars.size();
-						for (CFGEdge in: inEdges){
-							if(in==null)continue;
-							if(out.liveVars.addAll(in.liveVars)){
-								changed = true;
-							}
-						}
-						unionResult = out.liveVars;
-					}else{
-						out.liveVars = unionResult;
-					}
-					
-					
-				}
-				unionResult = new HashSet<IRTemp>();
-				inEdges = graph.incomingGraph.getChildren(node);
-				if(inEdges == null)continue;
-				for (CFGEdge in: inEdges){
-					if(unionResult==null){
-						
-						
-						unionResult = in.liveVars;
-					}else{
-						in.liveVars = unionResult;
-					}
-				}
-			}
+//			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+//				if(node==null)continue;
+//				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
+//					if(out==null)continue;
+//					if(outResult==null){
+//						
+//						inEdges = graph.incomingGraph.getChildren(node);
+//						if(inEdges == null)continue;
+//						tmp = out.liveVars.size();
+//						for (CFGEdge in: inEdges){
+//							if(in==null)continue;
+//							if(out.liveVars.addAll(in.liveVars)){
+//								changed = true;
+//							}
+//						}
+//						outResult = out.liveVars;
+//					}else{
+//						out.liveVars = outResult;
+//					}
+//					
+//					
+//				}
+//				HashSet<IRTemp> inResult = null;
+//				inEdges = graph.incomingGraph.getChildren(node);
+//				if(inEdges == null)continue;
+//				for (CFGEdge in: inEdges){
+//					if(inResult==null){
+//						in.liveVars = node.getUse();
+//						//TODO
+//						
+//						inResult = in.liveVars;
+//					}else{
+//						in.liveVars = inResult;
+//					}
+//				}
+//			}
 		}
 		
 	}
