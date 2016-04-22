@@ -187,26 +187,26 @@ public class IRFuncDecl extends IRNode {
 		
 		graph = new CFG(this);
 		if(draw){
-			ByteArrayOutputStream b;
-			CodeWriterSExpPrinter p; 
+//			ByteArrayOutputStream b;
+//			CodeWriterSExpPrinter p; 
 			for(CFGEdge edge : graph.edges){
-				b = new ByteArrayOutputStream();
-				p = new CodeWriterSExpPrinter(b);
-				edge.getSrc().getNode().printSExp(p);
-				p.flush();
-				p.close();
-				b.flush();
-				fw.write("	\"" + b.toString().trim());
-				b.close();
-				
-				b = new ByteArrayOutputStream();
-				p = new CodeWriterSExpPrinter(b);
-				edge.getDst().getNode().printSExp(p);
-				p.flush();
-				p.close();
-				b.flush();
-				fw.write("\" -> \"" + b.toString().trim() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-				b.close();
+//				b = new ByteArrayOutputStream();
+//				p = new CodeWriterSExpPrinter(b);
+//				edge.getSrc().getNode().printSExp(p);
+//				p.flush();
+//				p.close();
+//				b.flush();
+				fw.write("	\"" + edge.getSrc().toString());
+//				b.close();
+//				
+//				b = new ByteArrayOutputStream();
+//				p = new CodeWriterSExpPrinter(b);
+//				edge.getDst().getNode().printSExp(p);
+//				p.flush();
+//				p.close();
+//				b.flush();
+				fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
+//				b.close();
 			}
 		}
 		

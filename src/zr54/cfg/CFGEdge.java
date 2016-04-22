@@ -17,5 +17,8 @@ public class CFGEdge {
 	
 	public CFGNode getDst() {
 		return this.dst;
-	}																	
+	}		
+	public String toString(){
+		return "";
+	}
 }
