@@ -11,6 +11,10 @@ public class CFGGraph {
 		graph = new HashMap<CFGNode, ArrayList<CFGNode>>();
 	}
 	
+	public Set<CFGNode> getNodeSet() {
+		return graph.keySet();
+	}
+	
 	public void addNode(CFGNode node) {
 		if (node != null && !graph.containsKey(node)) {
 			graph.put(node, new ArrayList<CFGNode>());
