@@ -222,12 +222,18 @@ public class IRFuncDecl extends IRNode {
 			changed = false;
 			int tmp;
 			HashSet<IRTemp> unionResult = null;
+			ArrayList<CFGEdge> inEdges;
 			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
-				
+				if(node==null)continue;
 				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
+					if(out==null)continue;
 					if(unionResult==null){
+						
+						inEdges = graph.incomingGraph.getChildren(node);
+						if(inEdges == null)continue;
 						tmp = out.liveVars.size();
-						for (CFGEdge in: graph.incomingGraph.getChildren(node)){
+						for (CFGEdge in: inEdges){
+							if(in==null)continue;
 							if(out.liveVars.addAll(in.liveVars)){
 								changed = true;
 							}
@@ -239,10 +245,14 @@ public class IRFuncDecl extends IRNode {
 					
 					
 				}
-				unionResult = null;
-				for (CFGEdge in: graph.incomingGraph.getChildren(node)){
+				unionResult = new HashSet<IRTemp>();
+				inEdges = graph.incomingGraph.getChildren(node);
+				if(inEdges == null)continue;
+				for (CFGEdge in: inEdges){
 					if(unionResult==null){
 						
+						
+						unionResult = in.liveVars;
 					}else{
 						in.liveVars = unionResult;
 					}
