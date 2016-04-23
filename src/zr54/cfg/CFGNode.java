@@ -17,7 +17,7 @@ public class CFGNode {
 	public HashSet<String> liveVarsOut = new HashSet<String>();
 	
 	public static final boolean debugCFG = false;
-	public static final boolean debugLVA = true;
+	public static final boolean debugLVA = false;
 	
 	public CFGNode(IRNode node) {
 		this.node = node;
@@ -54,7 +54,7 @@ public class CFGNode {
 	
 	public void getUseSet(IRNode node, HashSet<String> use) {
 		if(debugLVA){
-			System.out.println(use.size() + " in use. getting use set for node " + node );
+			System.out.println(use.size() + " in use before getting use set for node " + this );
 		}
 		if (node instanceof IRTemp) {
 			use.add(((IRTemp)node).name());
@@ -63,7 +63,7 @@ public class CFGNode {
 				getUseSet(n, use);
 		}
 		if(debugLVA){
-			System.out.println(use.size() + " after getting use set for node " + node );
+			System.out.println(use.size() + " after getting use set for node " + this );
 		}
 	}
 	

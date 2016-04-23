@@ -34,7 +34,7 @@ public class IRFuncDecl extends IRNode {
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
     public CFG graph = null;
-    public static final boolean debugLVA = true;
+    public static final boolean debugLVA = false;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -179,50 +179,29 @@ public class IRFuncDecl extends IRNode {
 	}
 	
 	public void createCFG(boolean draw, FileWriter fw) throws IOException{
-		IRNode curr; int i;
-		List<IRStmt> stmts = ((IRSeq)body).stmts();
-		for(i=0; i<stmts.size(); i++) {
-			curr = stmts.get(i);
-			curr.visitedCFG = false;
-		}
-		labelTable = null;
-		
-		graph = new CFG(this);
+		if(graph==null){
+			IRNode curr; int i;
+			List<IRStmt> stmts = ((IRSeq)body).stmts();
+			for(i=0; i<stmts.size(); i++) {
+				curr = stmts.get(i);
+				curr.visitedCFG = false;
+			}
+			labelTable = null;
+			graph = new CFG(this);
+		}		
 		if(draw){
-//			ByteArrayOutputStream b;
-//			CodeWriterSExpPrinter p; 
 			for(CFGEdge edge : graph.edges){
-//				b = new ByteArrayOutputStream();
-//				p = new CodeWriterSExpPrinter(b);
-//				edge.getSrc().getNode().printSExp(p);
-//				p.flush();
-//				p.close();
-//				b.flush();
 				fw.write("	\"" + edge.getSrc().toString());
-//				b.close();
-//				
-//				b = new ByteArrayOutputStream();
-//				p = new CodeWriterSExpPrinter(b);
-//				edge.getDst().getNode().printSExp(p);
-//				p.flush();
-//				p.close();
-//				b.flush();
 				fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-//				b.close();
 			}
 		}
 		
 	}
 	
 	public void liveVarAnalyze(){
-//		for(CFGEdge edge : graph.edges){
-//			edge.liveVars = new HashSet<IRTemp>();
-//		}
 		boolean changed = true;
 		while(changed){
 			changed = false;
-//			int tmp;
-//			HashSet<IRTemp> outResult = null;
 			ArrayList<CFGEdge> inEdges;
 			CFGNode nprime;
 			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
