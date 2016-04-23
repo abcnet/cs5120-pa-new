@@ -47,11 +47,21 @@ public class CFGNode {
 	
 	public HashSet<IRTemp> getUse(){
 		if(use==null){
-			
 			use = new HashSet<IRTemp>();
-			//TODO
+			if (this.node instanceof IRMove) {
+				getUseSet(((IRMove)node).expr(), use);
+			}
 		}
 		return use;
+	}
+	
+	public void getUseSet(IRNode node, HashSet<IRTemp> use) {
+		if (node instanceof IRTemp) {
+			use.add((IRTemp)node);
+		} else {
+			for (int i = 0; i < node.children.size(); ++i)
+				getUseSet(node.children.get(i), use);
+		}
 	}
 	
 	public HashSet<IRTemp> getDef(){
@@ -60,8 +70,6 @@ public class CFGNode {
 			if(this.node instanceof IRMove){
 				IRMove n = (IRMove)this.node;
 				if(n.target() instanceof IRTemp){
-					
-				
 					def.add((IRTemp)n.target());
 				}
 			}
