@@ -10,4 +10,4 @@ bin/
 *.ir
 *.s
 output/
-!*.*
+*.dot
