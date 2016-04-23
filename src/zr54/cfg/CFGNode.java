@@ -63,8 +63,8 @@ public class CFGNode {
 		if (node instanceof IRTemp) {
 			use.add((IRTemp)node);
 		} else {
-			for (int i = 0; i < node.children.size(); ++i)
-				getUseSet(node.children.get(i), use);
+			for (IRNode n : node.children)
+				getUseSet(n, use);
 		}
 	}
 	
