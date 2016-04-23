@@ -13,8 +13,8 @@ public class CFGNode {
 	public int count;
 	private HashSet<String> use = null;
 	private HashSet<String> def = null;
-	public HashSet<String> liveVarsIn = null;
-	public HashSet<String> liveVarsOut = null;
+	public HashSet<String> liveVarsIn = new HashSet<String>();
+	public HashSet<String> liveVarsOut = new HashSet<String>();
 	
 	public CFGNode(IRNode node) {
 		this.node = node;
@@ -79,5 +79,33 @@ public class CFGNode {
 			}
 		}
 		return def;
+	}
+	
+	public String liveVarsInToString(){
+		String s = "In: ";
+		boolean first = true;
+		for(String each: this.liveVarsIn){
+			if(first){
+				s += each;
+				first = false;
+			}else{
+				s += ", " + each;
+			}
+		}
+		return s;
+	}
+	
+	public String liveVarsOutToString(){
+		String s = "Out: ";
+		boolean first = true;
+		for(String each: this.liveVarsOut){
+			if(first){
+				s += each;
+				first = false;
+			}else{
+				s += ", " + each;
+			}
+		}
+		return s;
 	}
 }

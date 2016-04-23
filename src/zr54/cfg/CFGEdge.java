@@ -24,6 +24,16 @@ public class CFGEdge {
 		return this.dst;
 	}		
 	public String toString(){
-		return "";
+		String s = "";
+		
+		if(src != null){
+			s += src.liveVarsOutToString();
+			s += "\r\n";
+		}
+		if(dst != null){
+			s += dst.liveVarsInToString();
+			
+		}
+		return s;
 	}
 }

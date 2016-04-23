@@ -220,31 +220,40 @@ public class IRFuncDecl extends IRNode {
 		boolean changed = true;
 		while(changed){
 			changed = false;
-			int tmp;
-			HashSet<IRTemp> outResult = null;
+//			int tmp;
+//			HashSet<IRTemp> outResult = null;
 			ArrayList<CFGEdge> inEdges;
-//			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
-//				if(node==null)continue;
-//				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
-//					if(out==null)continue;
+			CFGNode nprime;
+			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+				if(node==null)continue;
+//				if(node.liveVarsOut==null){
+//					node.liveVarsOut = new HashSet<String>();
+//				}
+				for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
+					if(outEdge==null)continue;
+					nprime = outEdge.getDst();
+					if(nprime==null)continue;
+					if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
+						changed = true;
+					}
+//					
+//					
 //					if(outResult==null){
 //						
 //						inEdges = graph.incomingGraph.getChildren(node);
 //						if(inEdges == null)continue;
-//						tmp = out.liveVars.size();
+//						tmp = outEdge.liveVars.size();
 //						for (CFGEdge in: inEdges){
 //							if(in==null)continue;
-//							if(out.liveVars.addAll(in.liveVars)){
-//								changed = true;
-//							}
+//							
 //						}
-//						outResult = out.liveVars;
+//						outResult = outEdge.liveVars;
 //					}else{
-//						out.liveVars = outResult;
+//						outEdge.liveVars = outResult;
 //					}
-//					
-//					
-//				}
+					
+					
+				}
 //				HashSet<IRTemp> inResult = null;
 //				inEdges = graph.incomingGraph.getChildren(node);
 //				if(inEdges == null)continue;
@@ -258,7 +267,15 @@ public class IRFuncDecl extends IRNode {
 //						in.liveVars = inResult;
 //					}
 //				}
-//			}
+				
+				HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
+				tmp.removeAll(node.getDef());
+				tmp.addAll(node.getUse());
+				if(node.liveVarsIn.addAll(tmp)){
+					changed = true;
+				}
+				
+			}
 		}
 		
 	}
