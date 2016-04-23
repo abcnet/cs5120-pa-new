@@ -48,8 +48,10 @@ public class CFGNode {
 	public HashSet<String> getUse(){
 		if(use==null){
 			use = new HashSet<String>();
-			if (this.node instanceof IRMove || this.node instanceof IRCJump) {
+			if (this.node instanceof IRMove ) {
 				getUseSet(((IRMove)node).expr(), use);
+			} else if (this.node instanceof IRCJump) {
+				getUseSet(((IRCJump)node).expr(), use);
 			} else if (this.node instanceof IRCall) {
 				for (IRExpr e : ((IRCall)node).args()) {
 					getUseSet(e, use);
