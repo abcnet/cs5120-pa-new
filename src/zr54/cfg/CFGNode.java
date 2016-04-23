@@ -11,10 +11,10 @@ public class CFGNode {
 	private IRNode node;
 	private static int counter = 0;
 	public int count;
-	private HashSet<IRTemp> use = null;
-	private HashSet<IRTemp> def = null;
-	public HashSet<IRTemp> liveVarsIn = null;
-	public HashSet<IRTemp> liveVarsOut = null;
+	private HashSet<String> use = null;
+	private HashSet<String> def = null;
+	public HashSet<String> liveVarsIn = null;
+	public HashSet<String> liveVarsOut = null;
 	
 	public CFGNode(IRNode node) {
 		this.node = node;
@@ -45,9 +45,9 @@ public class CFGNode {
 		return s;
 	}
 	
-	public HashSet<IRTemp> getUse(){
+	public HashSet<String> getUse(){
 		if(use==null){
-			use = new HashSet<IRTemp>();
+			use = new HashSet<String>();
 			if (this.node instanceof IRMove || this.node instanceof IRCJump) {
 				getUseSet(((IRMove)node).expr(), use);
 			} else if (this.node instanceof IRCall) {
@@ -59,22 +59,22 @@ public class CFGNode {
 		return use;
 	}
 	
-	public void getUseSet(IRNode node, HashSet<IRTemp> use) {
+	public void getUseSet(IRNode node, HashSet<String> use) {
 		if (node instanceof IRTemp) {
-			use.add((IRTemp)node);
+			use.add(((IRTemp)node).name());
 		} else {
 			for (int i = 0; i < node.children.size(); ++i)
 				getUseSet(node.children.get(i), use);
 		}
 	}
 	
-	public HashSet<IRTemp> getDef(){
+	public HashSet<String> getDef(){
 		if(def == null){
-			def = new HashSet<IRTemp>();
+			def = new HashSet<String>();
 			if(this.node instanceof IRMove){
 				IRMove n = (IRMove)this.node;
 				if(n.target() instanceof IRTemp){
-					def.add((IRTemp)n.target());
+					def.add(((IRTemp)(n.target())).name());
 				}
 			}
 		}
