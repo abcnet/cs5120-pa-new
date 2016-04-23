@@ -57,7 +57,11 @@ public class CFGNode {
 			System.out.println(use.size() + " in use before getting use set for node " + this );
 		}
 		if (node instanceof IRTemp) {
-			use.add(((IRTemp)node).name());
+			IRTemp tmp = (IRTemp)node;
+			if(!tmp.name().contains("ARG") && !tmp.name().contains("RET")){
+				use.add(((IRTemp)node).name());
+			}
+			
 		} else {
 			for (IRNode n : node.children)
 				getUseSet(n, use);
