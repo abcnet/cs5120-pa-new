@@ -16,6 +16,9 @@ public class CFGNode {
 	public HashSet<String> liveVarsIn = new HashSet<String>();
 	public HashSet<String> liveVarsOut = new HashSet<String>();
 	
+	public static final boolean debugCFG = false;
+	public static final boolean debugLVA = true;
+	
 	public CFGNode(IRNode node) {
 		this.node = node;
 		count = counter++;
@@ -26,22 +29,10 @@ public class CFGNode {
 	}
 	
 	public String toString(){
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		CodeWriterSExpPrinter p = new CodeWriterSExpPrinter(b); 
-		this.node.printSExp(p);
-		p.flush();
-		p.close();
 		String s = this.count + ": \r\n";
-		try {
-			b.flush();
-			s += b.toString().trim();
-			b.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		s += this.node.toString().trim();
 		s.replace("\n", "\r\n");
-		System.out.println(s);
+		if(debugCFG)System.out.println(s);
 		return s;
 	}
 	
@@ -62,11 +53,17 @@ public class CFGNode {
 	}
 	
 	public void getUseSet(IRNode node, HashSet<String> use) {
+		if(debugLVA){
+			System.out.println(use.size() + " in use. getting use set for node " + node );
+		}
 		if (node instanceof IRTemp) {
 			use.add(((IRTemp)node).name());
 		} else {
 			for (IRNode n : node.children)
 				getUseSet(n, use);
+		}
+		if(debugLVA){
+			System.out.println(use.size() + " after getting use set for node " + node );
 		}
 	}
 	
@@ -86,6 +83,7 @@ public class CFGNode {
 	public String liveVarsInToString(){
 		String s = "In: ";
 		boolean first = true;
+		if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
 		for(String each: this.liveVarsIn){
 			if(first){
 				s += each;
@@ -100,6 +98,7 @@ public class CFGNode {
 	public String liveVarsOutToString(){
 		String s = "Out: ";
 		boolean first = true;
+		if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
 		for(String each: this.liveVarsOut){
 			if(first){
 				s += each;

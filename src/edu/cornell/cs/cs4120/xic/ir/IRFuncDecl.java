@@ -34,6 +34,7 @@ public class IRFuncDecl extends IRNode {
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
     public CFG graph = null;
+    public static final boolean debugLVA = true;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -226,9 +227,7 @@ public class IRFuncDecl extends IRNode {
 			CFGNode nprime;
 			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
 				if(node==null)continue;
-//				if(node.liveVarsOut==null){
-//					node.liveVarsOut = new HashSet<String>();
-//				}
+
 				for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
 					if(outEdge==null)continue;
 					nprime = outEdge.getDst();
@@ -236,45 +235,20 @@ public class IRFuncDecl extends IRNode {
 					if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
 						changed = true;
 					}
-//					
-//					
-//					if(outResult==null){
-//						
-//						inEdges = graph.incomingGraph.getChildren(node);
-//						if(inEdges == null)continue;
-//						tmp = outEdge.liveVars.size();
-//						for (CFGEdge in: inEdges){
-//							if(in==null)continue;
-//							
-//						}
-//						outResult = outEdge.liveVars;
-//					}else{
-//						outEdge.liveVars = outResult;
-//					}
-					
+
 					
 				}
-//				HashSet<IRTemp> inResult = null;
-//				inEdges = graph.incomingGraph.getChildren(node);
-//				if(inEdges == null)continue;
-//				for (CFGEdge in: inEdges){
-//					if(inResult==null){
-//						in.liveVars = node.getUse();
-//						//TODO
-//						
-//						inResult = in.liveVars;
-//					}else{
-//						in.liveVars = inResult;
-//					}
-//				}
+				if(debugLVA)System.out.println(node.liveVarsOutToString());
+
 				
 				HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
 				tmp.removeAll(node.getDef());
 				tmp.addAll(node.getUse());
+				if(debugLVA)System.out.println("size of tmp is " + tmp.size());
 				if(node.liveVarsIn.addAll(tmp)){
 					changed = true;
 				}
-				
+				if(debugLVA)System.out.println(node.liveVarsInToString());
 			}
 		}
 		
