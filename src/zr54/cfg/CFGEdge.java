@@ -6,7 +6,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 
 public class CFGEdge {
-	public enum EdgeType {SINGLE, TRUE, FALSE};
+	public enum EdgeType {SINGLE, TRUE};
 	private CFGNode src;
 	private CFGNode dst;
 	public CpLattice cpl = new CpLattice();
@@ -31,9 +31,6 @@ public class CFGEdge {
 		switch(edgeType){
 		case TRUE:
 			s = "True\r\n";
-			break;
-		case FALSE:
-			s = "False\r\n";
 			break;
 		default:
 			s = "\r\n";
