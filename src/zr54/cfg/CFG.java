@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRReturn;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import zr54.cfg.CFGEdge.EdgeType;
 
 public class CFG {
 	public CFGGraph incomingGraph = new CFGGraph();
@@ -57,7 +58,7 @@ public class CFG {
 					outgoingGraph.addNode(child);
 				}
 			}
-			addEdges(currNode, child);
+			addEdges(currNode, child, EdgeType.SINGLE);
 			
 			if (currIRNode instanceof IRCJump) {
 				IRNode n = root.getNodeAfterLabel(((IRCJump)currIRNode).trueLabel());
@@ -68,16 +69,16 @@ public class CFG {
 					child = new CFGNode(n);
 					outgoingGraph.addNode(child);
 				}
-				addEdges(currNode, child);
+				addEdges(currNode, child, EdgeType.TRUE);
 			}
 		}
 		
 	}
 	
-	public void addEdges(CFGNode parent, CFGNode child) {
+	public void addEdges(CFGNode parent, CFGNode child, EdgeType edgeType) {
 		if (child != null) {
-			CFGEdge e1 = new CFGEdge(parent, child);
-			CFGEdge e2 = new CFGEdge(child, parent);
+			CFGEdge e1 = new CFGEdge(parent, child, edgeType);
+			CFGEdge e2 = new CFGEdge(child, parent, edgeType);
 			outgoingGraph.addChild(parent, e1);
 			incomingGraph.addNode(child);
 			incomingGraph.addChild(child, e2);
