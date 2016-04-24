@@ -165,7 +165,7 @@ public class IRGenerate {
 			        String pathToFile = srcFile.substring(0, srcFile.lastIndexOf(".xi"));
 			        
 			        program.createCFG(initialGraph, pathToFile + "_f_initial.dot");
-			        
+			        program.constantPropagate();
 			        program.liveVarAnalyze();
 			        
 			        program.createCFG(finalGraph, pathToFile + "_f_final.dot");

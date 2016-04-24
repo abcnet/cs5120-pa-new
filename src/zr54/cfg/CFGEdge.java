@@ -8,7 +8,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 public class CFGEdge {
 	private CFGNode src;
 	private CFGNode dst;
-	
+	public CpLattice cpl = new CpLattice();
 	
 	public CFGEdge(CFGNode src, CFGNode dst) {
 		this.src = src;

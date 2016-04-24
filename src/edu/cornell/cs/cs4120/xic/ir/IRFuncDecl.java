@@ -236,4 +236,16 @@ public class IRFuncDecl extends IRNode {
 	public static int getReserved() {
 		return RESERVED;
 	}
+	
+	public void constantPropagate() {
+		boolean changed = true;
+		while(changed) {
+			changed = false;
+			
+			for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
+				
+			}
+			
+		}
+	}
 }

@@ -167,4 +167,10 @@ public class IRCompUnit extends IRNode {
 			func.liveVarAnalyze();
 		}
 	}
+	
+	public void constantPropagate() {
+		for (IRFuncDecl func : functions.values()) {
+			func.constantPropagate();
+		}
+	}
 }
