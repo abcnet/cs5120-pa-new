@@ -6,13 +6,12 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 
 public class CFGEdge {
-	public enum EdgeType {SINGLE, TRUE};
 	private CFGNode src;
 	private CFGNode dst;
 	public CpLattice cpl = new CpLattice();
-	public EdgeType edgeType;
+	public boolean edgeType;
 	
-	public CFGEdge(CFGNode src, CFGNode dst, EdgeType edgeType) {
+	public CFGEdge(CFGNode src, CFGNode dst, boolean edgeType) {
 		this.src = src;
 		this.dst = dst;
 		this.edgeType = edgeType;
@@ -27,17 +26,8 @@ public class CFGEdge {
 		return this.dst;
 	}		
 	public String toString(){
-		String s;
-		switch(edgeType){
-		case TRUE:
-			s = "True\r\n";
-			break;
-		default:
-			s = "\r\n";
-			break;
-				
-		}
-		
+		String s = edgeType?"True\r\n":"\r\n";
+	
 		if(src != null){
 			s += src.liveVarsOutToString();
 			s += "\r\n";
