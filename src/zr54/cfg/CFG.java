@@ -70,10 +70,10 @@ public class CFG {
 	public void addEdges(CFGNode parent, CFGNode child, boolean edgeType) {
 		if (child != null) {
 			CFGEdge e1 = new CFGEdge(parent, child, edgeType);
-			CFGEdge e2 = new CFGEdge(child, parent, edgeType);
+//			CFGEdge e2 = new CFGEdge(child, parent, edgeType);
 			outgoingGraph.addChild(parent, e1);
 			incomingGraph.addNode(child);
-			incomingGraph.addChild(child, e2);
+			incomingGraph.addChild(child, e1);
 			edges.add(e1);
 //			System.out.println(parent.getNode().label() + " -> " + child.getNode().label());
 		}
