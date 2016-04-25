@@ -66,8 +66,8 @@ class XiCompiler {
         boolean optimization = true;
         boolean initialIRGraph = false;
         boolean finalIRGraph = false;
-        boolean initialGraph = false;
-        boolean finalGraph = false;
+        boolean initialAssemGraph = false;
+        boolean finalAssemGraph = false;
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -124,10 +124,14 @@ class XiCompiler {
                 		initialIRGraph = true;
                 	}else if (arg.equalsIgnoreCase("finalir")){
                 		finalIRGraph = true;
+                	}else if(arg.equalsIgnoreCase("initialassem")){
+                		initialAssemGraph = true;
+                	}else if (arg.equalsIgnoreCase("finalassem")){
+                		finalAssemGraph = true;
                 	}else if(arg.equals("initial")){
-                		initialGraph = true;
+                		initialIRGraph = true;
                 	}else if (arg.equals("final")){
-                		finalGraph = true;
+                		finalIRGraph = true;
                 	}else{
                 		System.out.println("Graph for phase " + arg + " is not supported");
                 	}
@@ -168,23 +172,23 @@ class XiCompiler {
             if (op.equals("lex")) {
                 diagDst = diagDst + ".lexed";
                 LexerOutput.writeLexAnalysis(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph);
             } else if (op.equals("parse")) {
                 diagDst = diagDst + ".parsed";
                 ParsePrint.parseAndPrint(src, diagDst);
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph);
             } else if (op.equals("typecheck")) {
             	diagDst = diagDst + ".typed";
                 TypeCheck.typeCheckAndPrint(src, diagDst, libPath+"/");
-                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialGraph, finalGraph);
+                IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph);
             } else if (op.equals("irgen")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst, true, initialGraph, finalGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, false, dDst, true, initialIRGraph, finalIRGraph);
             } else if (op.equals("irrun")) {
             	diagDst = diagDst + ".ir";
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst, true, initialGraph, finalGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", true, optimization, false, dDst, true, initialIRGraph, finalIRGraph);
             } else if (op.equals("")){
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, true, initialGraph, finalGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, true, initialIRGraph, finalIRGraph);
             }
         }
     }
