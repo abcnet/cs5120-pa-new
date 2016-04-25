@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +11,8 @@ import java.util.Set;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.AssemProgram;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
@@ -174,5 +177,13 @@ public class IRCompUnit extends IRNode {
 		for (IRFuncDecl func : functions.values()) {
 			func.constantPropagate();
 		}
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

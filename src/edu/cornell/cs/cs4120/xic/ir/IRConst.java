@@ -1,8 +1,11 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSymbolTable;
@@ -85,6 +88,14 @@ public class IRConst extends IRExpr {
 	 */
 	public boolean isIn32BitRange(){
 		return value <= Integer.MAX_VALUE && value >= Integer.MIN_VALUE;
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

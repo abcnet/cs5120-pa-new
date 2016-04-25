@@ -9,6 +9,8 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSignature;
@@ -231,5 +233,13 @@ public class IRCall extends IRExpr {
 				+"	movq	%rdi, %rbx\n"
 				+"	movq	-8(%rbp), %rdi\n");
 		return new OpTarget(TempType.RET, 0);
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

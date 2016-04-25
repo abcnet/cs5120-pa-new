@@ -10,6 +10,8 @@ import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator.Trap;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.assembly.Tiling;
 import zr54.typechecker.FuncSymbolTable;
@@ -428,6 +430,14 @@ public class IRBinOp extends IRExpr {
 
 		 return operand;
 	 }
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 
 }
