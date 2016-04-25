@@ -64,6 +64,8 @@ class XiCompiler {
         String libPath = System.getProperty("user.dir");
         
         boolean optimization = true;
+        boolean initialIRGraph = false;
+        boolean finalIRGraph = false;
         boolean initialGraph = false;
         boolean finalGraph = false;
 
@@ -118,7 +120,11 @@ class XiCompiler {
                 	break;
                 case 14:
                 	arg = g.getOptarg();
-                	if(arg.equals("initial")){
+                	if(arg.equalsIgnoreCase("initialir")){
+                		initialIRGraph = true;
+                	}else if (arg.equalsIgnoreCase("finalir")){
+                		finalIRGraph = true;
+                	}else if(arg.equals("initial")){
                 		initialGraph = true;
                 	}else if (arg.equals("final")){
                 		finalGraph = true;
