@@ -4,5 +4,6 @@ public class AssemProgram {
 	public IRCompUnit irCompUnit;
 	public AssemProgram(IRCompUnit irCompUnit){
 		this.irCompUnit = irCompUnit;
+		irCompUnit.program = this;
 	}
 }

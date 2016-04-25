@@ -7,6 +7,7 @@ public class AssemFunc {
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
+		irFuncDecl.func = this;
 	}
 	
 

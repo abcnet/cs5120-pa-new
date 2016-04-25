@@ -10,6 +10,7 @@ import java.util.Set;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.AssemProgram;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -19,6 +20,7 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRCompUnit extends IRNode {
     private String name;
     private Map<String, IRFuncDecl> functions;
+    public AssemProgram program = null;
 
     public IRCompUnit(String name) {
     	super();
