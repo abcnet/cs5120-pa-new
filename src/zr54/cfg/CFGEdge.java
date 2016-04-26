@@ -2,6 +2,7 @@ package zr54.cfg;
 
 import java.util.*;
 
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 
@@ -10,11 +11,13 @@ public class CFGEdge {
 	private CFGNode dst;
 	public CpLattice cpl = new CpLattice();
 	public boolean edgeType;
+	public ArrayList<IRExpr> exprList;
 	
 	public CFGEdge(CFGNode src, CFGNode dst, boolean edgeType) {
 		this.src = src;
 		this.dst = dst;
 		this.edgeType = edgeType;
+		this.exprList = new ArrayList<IRExpr>();
 //		this.liveVars = new HashSet<IRTemp>();
 	}
 	
@@ -37,5 +40,11 @@ public class CFGEdge {
 			
 		}
 		return s;
+	}
+	
+	public void copyExprList(ArrayList<IRExpr> exprList) {
+		for (IRExpr e : exprList) {
+			this.exprList.add(e);
+		}
 	}
 }
