@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
-import zr54.assembly.AssemInstruction;
-import zr54.assembly.AssemOperand;
-import zr54.assembly.OpTarget;
-import zr54.assembly.Tiling;
+import zr54.assembly.*;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -199,64 +196,63 @@ public class IRMove extends IRStmt {
 				AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)memTarget.expr(), instrs, f, funcs);
 
 				if(addr != null) {
-					sw.write("# tiled MOVE to MEM\n");
-					if(!src.isConstTarget()) 
-						sw.write("	movq	" + src.getTarget(false) + ", %rax\n" //don't use r10 and r11 here!
-								+"	movq	%rax, " + addr.getTarget(true) + "\n");
-					else 
-						sw.write("	movq	" + src.getTarget(false) + ", " + addr.getTarget(true) + "\n");
+
+					if(!(src instanceof AssemConst)) {
+						AssemVar t = new AssemVar("t" + ++f.count);
+						instrs.add(new AssemMove(src, t));
+						instrs.add(new AssemMove(t, addr));
+					}
+					else
+						instrs.add(new AssemMove(src, addr));
+
 					generated = true;
 				}
 			}
 			
 			if(!generated) {
 				//TODO: shall we evaluate src or addr first?
-				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
+				AssemOperand addr = memTarget.expr().genIntermediateAssem(instrs, f, funcs);
 
 				if(expr instanceof IRConst) {
-					sw.write("# MOVE CONST" + ((IRConst) expr).value() + " to MEM\n");
-					sw.write("	movq	" + addr.getTarget(false) + ", %r11\n"
-							+"	movq	$" + ((IRConst) expr).value() + ", (%r11)\n");
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(addr, t));
+					instrs.add(new AssemMove(new AssemConst(((IRConst) expr).value()), new AssemAddr(t)));
 				}
 				else {
-					if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
-						sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
-					}
-					sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
-							+"	movq	" + addr.getTarget(true) + ", %r11\n"
-							+"	movq	%r10, (%r11)\n");
+					AssemVar t1 = new AssemVar("t" + ++f.count);
+					AssemVar t2 = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(src, t1));
+					instrs.add(new AssemMove(addr, t2));
+					instrs.add(new AssemMove(t1, new AssemAddr(t2)));
 				}
 			}
 		}
 		else {
 			if(expr instanceof IRConst) {
-				OpTarget dst = target.genAssem(sw, f, funcs);
-				String d = dst.getTarget(true);
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+								
 				long constValue = ((IRConst) expr).value();
 				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
-						&& d.contains("(")){
-					sw.write("	movq	$" + constValue + ", %r10\n"
-							+"	movq	%r10, " + d + "\n");
+						&& dst instanceof AssemAddr){
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(new AssemConst(constValue), t));
+					instrs.add(new AssemMove(t, dst));
 					
 				}else{
-					sw.write("	movq	$" + ((IRConst)expr).value() + ", " + d + "\n");
+					instrs.add(new AssemMove(new AssemConst(((IRConst)expr).value()), dst));
 				}
 				
 			}
 			else {
-				OpTarget src = expr.genAssem(sw, f, funcs);
-				OpTarget dst = target.genAssem(sw, f, funcs);
-				String s = src.getTarget(false);
-				String d = dst.getTarget(true);
-				if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
-					sw.write("# mark MOVE from t" + src.num + " to t" + dst.num + "\n");
-				}
-
-				if(s.contains("(")&&d.contains("(")){
-					sw.write("	movq	" + s + ", %r10\n"
-							+"	movq	%r10, " + d + "\n");
+				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+				
+				if(src instanceof AssemAddr && dst instanceof AssemAddr) {
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(src, t));
+					instrs.add(new AssemMove(t, dst));
 				}else{
-					sw.write("	movq	" + s + ", " + d + "\n");
+					instrs.add(new AssemMove(src, dst));
 				}
 			}
 		}
