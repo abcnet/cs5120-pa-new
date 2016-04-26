@@ -13,8 +13,12 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.AssemFunc;
 import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemMove;
 import zr54.assembly.AssemOperand;
+import zr54.assembly.AssemPushq;
 import zr54.assembly.OpTarget;
+import zr54.assembly.AssemFixedRegister;
+import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.CFG;
 import zr54.cfg.CFGEdge;
 import zr54.cfg.CFGNode;
@@ -257,6 +261,46 @@ public class IRFuncDecl extends IRNode {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
+		instrs.add(new AssemFunc(this));
+		AssemFixedRegister rsp = new AssemFixedRegister(Reg.rbp);
+		AssemFixedRegister rbp = new AssemFixedRegister(Reg.rbp);
+		instrs.add(new AssemPushq(rbp));
+		instrs.add(new AssemMove(rsp, rbp));
+//		sw.write("	.globl	"+name+"\n"
+//				+ "	.align	4\n"
+//				+ name+":\n"
+//				+ "	pushq	%rbp\n"
+//				+ "	movq	%rsp, %rbp\n");
+		ArrayList<AssemInstruction> bodyinstrs = new ArrayList<AssemInstruction>();
+		this.body.genIntermediateAssem(bodyinstrs, this, funcs);
+//		bodyWriter.flush();
+		int c=getReserved()+count+retSpace+argSpace;
+		if(c%2==1){
+			c++;
+		}
+		sw.write("	subq	$"+c*8+", %rsp\n"
+				+ "	movq	%rdi, -8(%rbp)\n"
+				+ "	movq	%rsi, -16(%rbp)\n"
+				+ "	movq	%rbx, -32(%rbp)\n"
+				+ "	movq	%r12, -48(%rbp)\n"
+				+ "	movq	%r13, -56(%rbp)\n"
+				+ "	movq	%r14, -64(%rbp)\n"
+				+ "	movq	%r15, -72(%rbp)\n");
+		
+		sw.write(bodyWriter.toString());
+		sw.write(name + "_EPILOGUE:\n");
+		sw.write("	movq	-8(%rbp), %rdi\n"
+				+ "	movq	-16(%rbp), %rsi\n"
+				+ "	movq	-24(%rbp), %rax\n"
+				+ "	movq	-32(%rbp), %rbx\n"
+				+ "	movq	-40(%rbp), %rdx\n"
+				+ "	movq	-48(%rbp), %r12\n"
+				+ "	movq	-56(%rbp), %r13\n"
+				+ "	movq	-64(%rbp), %r14\n"
+				+ "	movq	-72(%rbp), %r15\n"
+				+ "	addq	$"+c*8+", %rsp\n"
+				+ "	popq	%rbp\n"
+				+ "	retq\n");
 		return null;
 	}
 }
