@@ -1,7 +1,7 @@
 package zr54.assembly;
 
 public class AssemAddr extends AssemOperand{
-	public enum AddrType {r, kr, r1r2, r1r2w, kr1r2w};
+	public enum AddrType {r, kr, r1r2, kr1r2, r1r2w, kr1r2w};
 	public int k,w;
 	public AssemOperand r1, r2;
 	public AddrType type;
@@ -20,6 +20,13 @@ public class AssemAddr extends AssemOperand{
 	public AssemAddr(AssemOperand r1, AssemOperand r2){
 		this.type = AddrType.r1r2;
 		
+		this.r1 = r1;
+		this.r2 = r2;
+		
+	}
+	public AssemAddr(int k, AssemOperand r1, AssemOperand r2){
+		this.type = AddrType.kr1r2;
+		this.k = k;
 		this.r1 = r1;
 		this.r2 = r2;
 		
