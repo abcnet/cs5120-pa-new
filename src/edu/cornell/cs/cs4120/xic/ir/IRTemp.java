@@ -1,12 +1,15 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
-
+import zr54.assembly.*;
 /**
  * An intermediate representation for a temporary register
  * TEMP(name)
@@ -84,5 +87,26 @@ public class IRTemp extends IRExpr {
 			}
 		}
 		return operand;
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+
+		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_'));
+		boolean gt2 = funcs.lookup(rawFuncName).getFunctionReturnTypes().getTuple().size() > 2;
+		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
+			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
+			return new AssemArgTemp(idx, gt2);
+		}
+		else if(name.startsWith(Configuration.ABSTRACT_RET_PREFIX)) {
+			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_RET_PREFIX.length()));
+			return new AssemRetTemp(idx);
+		}
+		else {
+			return new AssemVar(this.name);
+		}
+
 	}
 }

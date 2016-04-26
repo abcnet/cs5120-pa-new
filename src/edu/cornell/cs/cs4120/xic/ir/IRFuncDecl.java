@@ -6,13 +6,19 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
 
-
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
+import zr54.assembly.AssemFunc;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemMove;
+import zr54.assembly.AssemOperand;
+import zr54.assembly.AssemPushq;
 import zr54.assembly.OpTarget;
+import zr54.assembly.AssemFixedRegister;
+import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.CFG;
 import zr54.cfg.CFGEdge;
 import zr54.cfg.CFGNode;
@@ -34,6 +40,8 @@ public class IRFuncDecl extends IRNode {
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
     public CFG graph = null;
+    public AssemFunc func = null;
+    public static final boolean debugLVA = false;
     
     public IRFuncDecl(String name, IRStmt stmt) {
     	super();
@@ -178,92 +186,121 @@ public class IRFuncDecl extends IRNode {
 	}
 	
 	public void createCFG(boolean draw, FileWriter fw) throws IOException{
-		IRNode curr; int i;
-		List<IRStmt> stmts = ((IRSeq)body).stmts();
-		for(i=0; i<stmts.size(); i++) {
-			curr = stmts.get(i);
-			curr.visitedCFG = false;
-		}
-		labelTable = null;
-		
-		graph = new CFG(this);
+		if(graph==null){
+			IRNode curr; int i;
+			List<IRStmt> stmts = ((IRSeq)body).stmts();
+			for(i=0; i<stmts.size(); i++) {
+				curr = stmts.get(i);
+				curr.visitedCFG = false;
+			}
+			labelTable = null;
+			graph = new CFG(this);
+		}		
 		if(draw){
-//			ByteArrayOutputStream b;
-//			CodeWriterSExpPrinter p; 
 			for(CFGEdge edge : graph.edges){
-//				b = new ByteArrayOutputStream();
-//				p = new CodeWriterSExpPrinter(b);
-//				edge.getSrc().getNode().printSExp(p);
-//				p.flush();
-//				p.close();
-//				b.flush();
 				fw.write("	\"" + edge.getSrc().toString());
-//				b.close();
-//				
-//				b = new ByteArrayOutputStream();
-//				p = new CodeWriterSExpPrinter(b);
-//				edge.getDst().getNode().printSExp(p);
-//				p.flush();
-//				p.close();
-//				b.flush();
 				fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-//				b.close();
 			}
 		}
 		
 	}
 	
 	public void liveVarAnalyze(){
-//		for(CFGEdge edge : graph.edges){
-//			edge.liveVars = new HashSet<IRTemp>();
-//		}
 		boolean changed = true;
 		while(changed){
 			changed = false;
-			int tmp;
-			HashSet<IRTemp> outResult = null;
 			ArrayList<CFGEdge> inEdges;
-//			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
-//				if(node==null)continue;
-//				for (CFGEdge out: graph.outgoingGraph.getChildren(node)){
-//					if(out==null)continue;
-//					if(outResult==null){
-//						
-//						inEdges = graph.incomingGraph.getChildren(node);
-//						if(inEdges == null)continue;
-//						tmp = out.liveVars.size();
-//						for (CFGEdge in: inEdges){
-//							if(in==null)continue;
-//							if(out.liveVars.addAll(in.liveVars)){
-//								changed = true;
-//							}
-//						}
-//						outResult = out.liveVars;
-//					}else{
-//						out.liveVars = outResult;
-//					}
-//					
-//					
-//				}
-//				HashSet<IRTemp> inResult = null;
-//				inEdges = graph.incomingGraph.getChildren(node);
-//				if(inEdges == null)continue;
-//				for (CFGEdge in: inEdges){
-//					if(inResult==null){
-//						in.liveVars = node.getUse();
-//						//TODO
-//						
-//						inResult = in.liveVars;
-//					}else{
-//						in.liveVars = inResult;
-//					}
-//				}
-//			}
+			CFGNode nprime;
+			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+				if(node==null)continue;
+
+				for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
+					if(outEdge==null)continue;
+					nprime = outEdge.getDst();
+					if(nprime==null)continue;
+					if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
+						changed = true;
+					}
+
+					
+				}
+				if(debugLVA)System.out.println(node.liveVarsOutToString());
+
+				
+				HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
+				tmp.removeAll(node.getDef());
+				tmp.addAll(node.getUse());
+				if(debugLVA)System.out.println("size of tmp is " + tmp.size());
+				if(node.liveVarsIn.addAll(tmp)){
+					changed = true;
+				}
+				if(debugLVA)System.out.println(node.liveVarsInToString());
+			}
 		}
 		
 	}
 
 	public static int getReserved() {
 		return RESERVED;
+	}
+	
+	public void constantPropagate() {
+		boolean changed = true;
+		while(changed) {
+			changed = false;
+			
+			for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
+				
+			}
+			
+		}
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		instrs.add(new AssemFunc(this));
+		AssemFixedRegister rsp = new AssemFixedRegister(Reg.rbp);
+		AssemFixedRegister rbp = new AssemFixedRegister(Reg.rbp);
+		instrs.add(new AssemPushq(rbp));
+		instrs.add(new AssemMove(rsp, rbp));
+//		sw.write("	.globl	"+name+"\n"
+//				+ "	.align	4\n"
+//				+ name+":\n"
+//				+ "	pushq	%rbp\n"
+//				+ "	movq	%rsp, %rbp\n");
+		ArrayList<AssemInstruction> bodyinstrs = new ArrayList<AssemInstruction>();
+		this.body.genIntermediateAssem(bodyinstrs, this, funcs);
+//		bodyWriter.flush();
+		int c=getReserved()+count+retSpace+argSpace;
+		if(c%2==1){
+			c++;
+		}
+		sw.write("	subq	$"+c*8+", %rsp\n"
+				+ "	movq	%rdi, -8(%rbp)\n"
+				+ "	movq	%rsi, -16(%rbp)\n"
+				+ "	movq	%rbx, -32(%rbp)\n"
+				+ "	movq	%r12, -48(%rbp)\n"
+				+ "	movq	%r13, -56(%rbp)\n"
+				+ "	movq	%r14, -64(%rbp)\n"
+				+ "	movq	%r15, -72(%rbp)\n");
+		
+		sw.write(bodyWriter.toString());
+		sw.write(name + "_EPILOGUE:\n");
+		sw.write("	movq	-8(%rbp), %rdi\n"
+				+ "	movq	-16(%rbp), %rsi\n"
+				+ "	movq	-24(%rbp), %rax\n"
+				+ "	movq	-32(%rbp), %rbx\n"
+				+ "	movq	-40(%rbp), %rdx\n"
+				+ "	movq	-48(%rbp), %r12\n"
+				+ "	movq	-56(%rbp), %r13\n"
+				+ "	movq	-64(%rbp), %r14\n"
+				+ "	movq	-72(%rbp), %r15\n"
+				+ "	addq	$"+c*8+", %rsp\n"
+				+ "	popq	%rbp\n"
+				+ "	retq\n");
+		return null;
 	}
 }

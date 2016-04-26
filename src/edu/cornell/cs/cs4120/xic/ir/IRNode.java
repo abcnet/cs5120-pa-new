@@ -15,6 +15,7 @@ import zr54.assembly.OpTarget;
 import zr54.cfg.CFG;
 import zr54.cfg.CFGNode;
 import zr54.typechecker.FuncSymbolTable;
+import zr54.assembly.*;
 
 /**
  * A node in an intermediate-representation abstract syntax tree.
@@ -23,6 +24,7 @@ public abstract class IRNode {
 	public static int cmpLabelCount = 0;
 
 	OpTarget operand = null;
+	
     /**
      * Visit the children of this IR node.
      * @param v the visitor
@@ -103,6 +105,8 @@ public abstract class IRNode {
      * @return
      */
     public abstract OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs);
+    
+    public abstract AssemOperand genIntermediateAssem(ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs);
     
     public CFGNode getCFGNode(CFG cfg){
     	return cfg.outgoingGraph.getNode(this);

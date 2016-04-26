@@ -1,11 +1,20 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.assembly.AssemBinInst;
+import zr54.assembly.AssemBranch;
+import zr54.assembly.AssemComments;
+import zr54.assembly.AssemFixedRegister;
+import zr54.assembly.AssemFixedRegister.Reg;
+import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemMove;
+import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -186,5 +195,80 @@ public class IRCJump extends IRStmt {
 		}
 		
 		return operand;
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		if(expr instanceof IRBinOp &&
+				( (((IRBinOp) expr).opType() == IRBinOp.OpType.EQ) 
+				||(((IRBinOp) expr).opType() == IRBinOp.OpType.NEQ)
+				||(((IRBinOp) expr).opType() == IRBinOp.OpType.LT) 
+				||(((IRBinOp) expr).opType() == IRBinOp.OpType.GT) 
+				||(((IRBinOp) expr).opType() == IRBinOp.OpType.LEQ) 
+				||(((IRBinOp) expr).opType() == IRBinOp.OpType.GEQ) )) {
+				
+				IRBinOp binExpr = (IRBinOp) expr;
+				String jmpStr = "";
+				switch(binExpr.opType()) {
+				case EQ:
+					jmpStr = "je";
+					break;
+				case NEQ:
+					jmpStr = "jne";			
+					break;
+				case LT:
+					jmpStr = "jl";
+					break;
+				case GT:
+					jmpStr = "jg";
+					break;
+				case LEQ:
+					jmpStr = "jle";
+					break;
+				case GEQ:
+					jmpStr = "jge";
+					break;
+				}
+				instrs.add(new AssemComments("CJUMP BinOp " + jmpStr));
+//				sw.write("# CJUMP BinOp " + jmpStr + "\n");
+				AssemOperand l = binExpr.left().genIntermediateAssem(instrs, f, funcs);
+				AssemOperand r = binExpr.right().genIntermediateAssem(instrs, f, funcs);
+				AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);
+				instrs.add(new AssemMove(l, rax));
+				instrs.add(new AssemBinInst("cmpq", r, rax));
+//				sw.write("	movq	" + l.getTarget(false) + ", %rax\n"
+//						+"	cmpq	" + r.getTarget(false) + ", %rax\n");
+
+				if(trueLabel != null) {
+					instrs.add(new AssemBranch(jmpStr, trueLabel));
+//					sw.write("	" + jmpStr + "	" + trueLabel + "\n");
+				}
+				if(falseLabel != null){
+					instrs.add(new AssemBranch("jmp", falseLabel));
+//					sw.write("	jmp	" + falseLabel + "\n");
+				}
+										
+			}
+			else {
+				AssemOperand cond = expr.genIntermediateAssem(instrs, f, funcs);
+//				if(cond.type == OpTarget.TempType.TEMP)
+//					sw.write("# CJUMP t" + cond.num + "\n");
+				AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);
+				instrs.add(new AssemMove(cond, rax));
+				instrs.add(new AssemBinInst("testq", rax, rax));
+				instrs.add(new AssemBranch("jnz", trueLabel));
+//				sw.write("	movq	" + cond.getTarget(false) + ", %rax\n"
+//						+"	testq	%rax, %rax\n"
+//						+"	jnz	" + trueLabel + "\n");
+				if(falseLabel != null) {
+					instrs.add(new AssemBranch("jmp", falseLabel));
+//					sw.write("	jmp	" + falseLabel + "\n");
+				}
+			}
+			
+			return null;
 	}
 }

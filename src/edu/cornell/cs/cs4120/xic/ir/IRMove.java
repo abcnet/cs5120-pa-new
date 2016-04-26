@@ -1,12 +1,12 @@
 package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
-import zr54.assembly.OpTarget;
-import zr54.assembly.Tiling;
+import zr54.assembly.*;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -180,5 +180,83 @@ public class IRMove extends IRStmt {
 		}
 
 		return operand;
+	}
+
+	@Override
+	public AssemOperand genIntermediateAssem(
+			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+			FuncSymbolTable funcs) {
+		
+		if(target instanceof IRMem) {
+			IRMem memTarget = (IRMem) target;
+			boolean generated = false;
+			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);	
+
+			if( memTarget.expr() instanceof IRBinOp) {
+				AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)memTarget.expr(), instrs, f, funcs);
+
+				if(addr != null) {
+
+					if(!(src instanceof AssemConst)) {
+						AssemVar t = new AssemVar("t" + ++f.count);
+						instrs.add(new AssemMove(src, t));
+						instrs.add(new AssemMove(t, addr));
+					}
+					else
+						instrs.add(new AssemMove(src, addr));
+
+					generated = true;
+				}
+			}
+			
+			if(!generated) {
+				//TODO: shall we evaluate src or addr first?
+				AssemOperand addr = memTarget.expr().genIntermediateAssem(instrs, f, funcs);
+
+				if(expr instanceof IRConst) {
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(addr, t));
+					instrs.add(new AssemMove(new AssemConst(((IRConst) expr).value()), new AssemAddr(t)));
+				}
+				else {
+					AssemVar t1 = new AssemVar("t" + ++f.count);
+					AssemVar t2 = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(src, t1));
+					instrs.add(new AssemMove(addr, t2));
+					instrs.add(new AssemMove(t1, new AssemAddr(t2)));
+				}
+			}
+		}
+		else {
+			if(expr instanceof IRConst) {
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+								
+				long constValue = ((IRConst) expr).value();
+				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
+						&& dst instanceof AssemAddr){
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(new AssemConst(constValue), t));
+					instrs.add(new AssemMove(t, dst));
+					
+				}else{
+					instrs.add(new AssemMove(new AssemConst(((IRConst)expr).value()), dst));
+				}
+				
+			}
+			else {
+				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+				
+				if(src instanceof AssemAddr && dst instanceof AssemAddr) {
+					AssemVar t = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(src, t));
+					instrs.add(new AssemMove(t, dst));
+				}else{
+					instrs.add(new AssemMove(src, dst));
+				}
+			}
+		}
+
+		return null;
 	}
 }

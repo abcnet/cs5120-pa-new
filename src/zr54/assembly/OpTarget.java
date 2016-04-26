@@ -5,6 +5,7 @@ package zr54.assembly;
  * This class represents the operand target corresponding to the edges in the IR tree
  */
 public class OpTarget {
+	
 	public enum TempType {TEMP, ARGS, RET, CONST, ADDR, NIL};
 	public TempType type;
 	public int num;

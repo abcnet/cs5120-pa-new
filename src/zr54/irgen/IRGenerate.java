@@ -34,8 +34,10 @@ public class IRGenerate {
 	 * Generete the IR
 	 * @param assemFile TODO
 	 * @param errOutput TODO
-	 * @param initialGraph TODO
-	 * @param finalGraph TODO
+	 * @param initialIRGraph TODO
+	 * @param finalIRGraph TODO
+	 * @param initialAssemGraph TODO
+	 * @param finalAssemGraph TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -47,7 +49,8 @@ public class IRGenerate {
 	public static boolean IRGenAndPrint(String srcFile, String dstFile,
 			String libPath, boolean run, boolean optimization,
 			boolean disableDiagFileWrite, String assemFile, boolean errOutput, 
-			boolean initialGraph, boolean finalGraph) throws Exception {
+			boolean initialIRGraph, boolean finalIRGraph, 
+			boolean initialAssemGraph, boolean finalAssemGraph) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
@@ -164,11 +167,11 @@ public class IRGenerate {
 			        
 			        String pathToFile = srcFile.substring(0, srcFile.lastIndexOf(".xi"));
 			        
-			        program.createCFG(initialGraph, pathToFile + "_f_initial.dot");
-			        
+			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
+			        program.constantPropagate();
 			        program.liveVarAnalyze();
 			        
-			        program.createCFG(finalGraph, pathToFile + "_f_final.dot");
+			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        
 			        
 			        StringWriter assemStringWriter = new StringWriter();

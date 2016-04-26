@@ -2,14 +2,7 @@ package zr54.cfg;
 
 import java.util.ArrayList;
 
-import edu.cornell.cs.cs4120.xic.ir.IRCJump;
-import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
-import edu.cornell.cs.cs4120.xic.ir.IRJump;
-import edu.cornell.cs.cs4120.xic.ir.IRLabel;
-import edu.cornell.cs.cs4120.xic.ir.IRName;
-import edu.cornell.cs.cs4120.xic.ir.IRNode;
-import edu.cornell.cs.cs4120.xic.ir.IRReturn;
-import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.*;
 
 public class CFG {
 	public CFGGraph incomingGraph = new CFGGraph();
@@ -57,7 +50,7 @@ public class CFG {
 					outgoingGraph.addNode(child);
 				}
 			}
-			addEdges(currNode, child);
+			addEdges(currNode, child, false);
 			
 			if (currIRNode instanceof IRCJump) {
 				IRNode n = root.getNodeAfterLabel(((IRCJump)currIRNode).trueLabel());
@@ -68,19 +61,19 @@ public class CFG {
 					child = new CFGNode(n);
 					outgoingGraph.addNode(child);
 				}
-				addEdges(currNode, child);
+				addEdges(currNode, child, true);
 			}
 		}
 		
 	}
 	
-	public void addEdges(CFGNode parent, CFGNode child) {
+	public void addEdges(CFGNode parent, CFGNode child, boolean edgeType) {
 		if (child != null) {
-			CFGEdge e1 = new CFGEdge(parent, child);
-			CFGEdge e2 = new CFGEdge(child, parent);
+			CFGEdge e1 = new CFGEdge(parent, child, edgeType);
+//			CFGEdge e2 = new CFGEdge(child, parent, edgeType);
 			outgoingGraph.addChild(parent, e1);
 			incomingGraph.addNode(child);
-			incomingGraph.addChild(child, e2);
+			incomingGraph.addChild(child, e1);
 			edges.add(e1);
 //			System.out.println(parent.getNode().label() + " -> " + child.getNode().label());
 		}
