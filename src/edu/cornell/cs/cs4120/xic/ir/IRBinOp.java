@@ -10,10 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator.Trap;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
-import zr54.assembly.AssemInstruction;
-import zr54.assembly.AssemOperand;
-import zr54.assembly.OpTarget;
-import zr54.assembly.Tiling;
+import zr54.assembly.*;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -435,8 +432,185 @@ public class IRBinOp extends IRExpr {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		return null;
+		 // TODO Auto-generated method stub
+		 AssemVar assemOperand = new AssemVar("t" + ++f.count);
+		 
+		 String opStr = "";
+		 switch(this.opType()) {
+		 case ADD:
+			 opStr = "addq";
+			 break;
+		 case SUB:
+			 opStr = "subq";
+			 break;
+		 case MUL:
+		 case HMUL:
+			 opStr = "imulq";
+			 break;
+		 case DIV:
+		 case MOD:
+			 opStr = "idivq";
+			 break;
+		 case AND:
+			 opStr = "andq";
+			 break;
+		 case OR:
+			 opStr = "orq";
+			 break;
+		 case XOR:
+			 opStr = "xorq";
+			 break;
+		 case EQ:
+		 case NEQ:
+		 case LT:
+		 case GT:
+		 case LEQ:
+		 case GEQ:
+			 opStr = "cmpq";
+			 break;
+		 case LSHIFT:
+			 opStr = "shlq";
+			 break;
+		 case RSHIFT:
+			 opStr = "shrq";
+			 break;
+		 case ARSHIFT:
+			 opStr = "sarq";
+			 break;
+		 default:
+		 }
+
+		 AssemOperand l = null;
+		 AssemOperand r = null;
+		 AssemFixedRegister trax = new AssemFixedRegister(AssemFixedRegister.Reg.rax);
+		 AssemFixedRegister trdx = new AssemFixedRegister(AssemFixedRegister.Reg.rdx);
+		 switch(this.opType()) {
+		 case ADD:
+		 case SUB:
+
+			 boolean matched = false;
+			 AssemAddr addr = Tiling.intermediateLeaTiling(this, instrs, f, funcs);
+
+			 if(addr != null) {
+				 instrs.add(new AssemLea(addr, assemOperand));
+				 matched = true;
+			 }
+
+			 if(!matched){                
+				 l = left.genIntermediateAssem(instrs, f, funcs);
+				 r = right.genIntermediateAssem(instrs, f, funcs);
+				 instrs.add(new AssemMove(l, trax));
+				 instrs.add(new AssemBinInst(opStr, r, trax));
+				 instrs.add(new AssemMove(trax, assemOperand));
+			 }
+			 break;
+		 case MUL:
+		 case HMUL:
+
+			 l = left.genIntermediateAssem(instrs, f, funcs);
+			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 instrs.add(new AssemMove(l, trax));
+
+			 if(right instanceof IRConst) {
+				 AssemVar t2 = new AssemVar("t" + ++f.count);
+				 instrs.add(new AssemMove(r, t2));
+				 instrs.add(new AssemMulDiv(opStr, t2));
+			 }
+			 else {
+				 instrs.add(new AssemMulDiv(opStr, r));
+			 }
+			 if(this.opType() == OpType.MUL)
+				 instrs.add(new AssemMove(trax, assemOperand));
+			 else
+				 instrs.add(new AssemMove(trdx, assemOperand));
+
+			 break;
+		 case DIV:
+		 case MOD:
+
+			 l = left.genIntermediateAssem(instrs, f, funcs);
+			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 
+			 instrs.add(new AssemBinInst("xorq", trdx, trdx));
+			 instrs.add(new AssemMove(l, trax));
+			 
+			 if(right instanceof IRConst) {
+				 AssemVar t2 = new AssemVar("t" + ++f.count);
+				 instrs.add(new AssemMove(r, t2));
+				 instrs.add(new AssemMulDiv(opStr, t2));
+			 }
+			 else {
+				 instrs.add(new AssemMulDiv(opStr, r));
+			 }
+			 if(this.opType() == OpType.DIV)
+				 instrs.add(new AssemMove(trax, assemOperand));
+			 else
+				 instrs.add(new AssemMove(trdx, assemOperand));
+
+			 break;
+		 case AND:
+		 case OR:
+		 case XOR:
+			 
+			 l = left.genIntermediateAssem(instrs, f, funcs);
+			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 instrs.add(new AssemMove(l, trax));
+			 instrs.add(new AssemBinInst(opStr, r, trax));
+			 instrs.add(new AssemMove(trax, assemOperand));
+			 
+			 break;
+		 case EQ:
+		 case NEQ:
+		 case LT:
+		 case GT:
+		 case LEQ:
+		 case GEQ:
+			 
+			 l = left.genIntermediateAssem(instrs, f, funcs);
+			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 AssemVar tmp = new AssemVar("t" + ++f.count);
+			 instrs.add(new AssemMove(l, tmp));
+			 instrs.add(new AssemBinInst(opStr, r, tmp));
+			 
+			 switch(this.opType()) {
+			 case EQ:
+				 instrs.add(new AssemBranch("je", "L_BINOP_CMP_T_" + (++cmpLabelCount)));
+				 break;
+			 case NEQ:
+				 instrs.add(new AssemBranch("jne", "L_BINOP_CMP_T_" + (++cmpLabelCount)));
+				 break;
+			 case LT:
+				 instrs.add(new AssemBranch("jl", "L_BINOP_CMP_T_" + (++cmpLabelCount)));				 
+				 break;
+			 case GT:
+				 instrs.add(new AssemBranch("jg", "L_BINOP_CMP_T_" + (++cmpLabelCount)));
+				 break;
+			 case LEQ:
+				 instrs.add(new AssemBranch("jle", "L_BINOP_CMP_T_" + (++cmpLabelCount)));
+				 break;
+			 case GEQ:
+				 instrs.add(new AssemBranch("jge", "L_BINOP_CMP_T_" + (++cmpLabelCount)));
+				 break;
+			 }
+
+			 instrs.add(new AssemMove(new AssemConst(0), assemOperand));
+			 instrs.add(new AssemJump("L_BINOP_CMP_END_" + cmpLabelCount));
+			 instrs.add(new AssemLabel("L_BINOP_CMP_T_" + cmpLabelCount));
+			 instrs.add(new AssemMove(new AssemConst(1), assemOperand));
+			 instrs.add(new AssemLabel("L_BINOP_CMP_END_" + cmpLabelCount));
+			 
+			 break;
+		 case LSHIFT:
+		 case RSHIFT:
+		 case ARSHIFT:
+
+			 break;
+		 default:
+
+		 }
+
+		 return assemOperand;
+
 	}
 
 
