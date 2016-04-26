@@ -39,6 +39,7 @@ public class IRFuncDecl extends IRNode {
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
+    private HashMap<String, Integer> indexTable = null;
     public CFG graph = null;
     public AssemFunc func = null;
     public static final boolean debugLVA = false;
@@ -166,6 +167,7 @@ public class IRFuncDecl extends IRNode {
 	public IRNode getNodeAfterLabel(String label){
 		if(labelTable==null){
 			labelTable = new HashMap<String, IRNode>();
+			indexTable = new HashMap<String, Integer>();
 			List<IRStmt> stmts = ((IRSeq)body).stmts();
 			IRNode curr; int i, j;
 			for(i=0; i<stmts.size(); i++) {
@@ -177,11 +179,34 @@ public class IRFuncDecl extends IRNode {
 					 }
 							 
 					 labelTable.put(((IRLabel)curr).name(), stmts.get(j));
+					 indexTable.put(((IRLabel)curr).name(), j);
 				 }
 			}
 		}
 		
 		return labelTable.get(label);
+			
+	}
+	
+	public int getNodeIndexAfterLabel(String label){
+		if(labelTable==null){
+			indexTable = new HashMap<String, Integer>();
+			List<IRStmt> stmts = ((IRSeq)body).stmts();
+			IRNode curr; int i, j;
+			for(i=0; i<stmts.size(); i++) {
+				 curr = stmts.get(i);
+				 if(curr instanceof IRLabel && i<=stmts.size()-2){
+					 j = i+1;
+					 while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
+						 j++;
+					 }
+							 
+					 indexTable.put(((IRLabel)curr).name(), j);
+				 }
+			}
+		}
+		
+		return indexTable.get(label);
 			
 	}
 	

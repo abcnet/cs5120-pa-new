@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.xic.ir.*;
 
 public class CFGNode {
 	private IRNode node;
+	private int nodeIndex;
 	private static int counter = 0;
 	public int count;
 	private HashSet<String> use = null;
@@ -21,6 +22,12 @@ public class CFGNode {
 	
 	public CFGNode(IRNode node) {
 		this.node = node;
+		count = counter++;
+	}
+	
+	public CFGNode(IRNode node, int index) {
+		this.node = node;
+		this.nodeIndex = index;
 		count = counter++;
 	}
 	

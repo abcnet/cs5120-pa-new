@@ -19,7 +19,7 @@ public class CFG {
 			CFGNode currNode = null;
 			if (!currIRNode.visitedCFG) {
 				currIRNode.visitedCFG = true;
-				currNode = new CFGNode(currIRNode);
+				currNode = new CFGNode(currIRNode, i);
 				outgoingGraph.addNode(currNode);
 			} else {
 				currNode = outgoingGraph.getNode(currIRNode);
@@ -30,11 +30,12 @@ public class CFG {
 				child = null;
 			} else if (currIRNode instanceof IRJump) {
 				IRNode n = root.getNodeAfterLabel(((IRName)((IRJump)currIRNode).target()).name());
+				int index = root.getNodeIndexAfterLabel(((IRName)((IRJump)currIRNode).target()).name());
 				if (n.visitedCFG == true) {
 					child = outgoingGraph.getNode(n);
 				} else {
 					n.visitedCFG = true;
-					child = new CFGNode(n);
+					child = new CFGNode(n, index);
 					outgoingGraph.addNode(child);
 				}
 			}  else {
@@ -46,7 +47,7 @@ public class CFG {
 					child = outgoingGraph.getNode(seq.children.get(j));
 				} else {
 					seq.children.get(j).visitedCFG = true;
-					child = new CFGNode(seq.children.get(j));
+					child = new CFGNode(seq.children.get(j), j);
 					outgoingGraph.addNode(child);
 				}
 			}
@@ -54,11 +55,12 @@ public class CFG {
 			
 			if (currIRNode instanceof IRCJump) {
 				IRNode n = root.getNodeAfterLabel(((IRCJump)currIRNode).trueLabel());
+				int index = root.getNodeIndexAfterLabel(((IRCJump)currIRNode).trueLabel());
 				if (n.visitedCFG == true) {
 					child = outgoingGraph.getNode(n);
 				} else {
 					n.visitedCFG = true;
-					child = new CFGNode(n);
+					child = new CFGNode(n, index);
 					outgoingGraph.addNode(child);
 				}
 				addEdges(currNode, child, true);
