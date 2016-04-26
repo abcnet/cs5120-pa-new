@@ -7,5 +7,9 @@ public class AssemMove extends AssemInstruction{
 		this.src = src;
 		this.dst = dst;
 	}
+	
+	public String toString() {
+		return "movq	" + src + ", " + dst;
+	}
 
 }

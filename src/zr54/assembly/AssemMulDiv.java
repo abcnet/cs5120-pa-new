@@ -7,5 +7,9 @@ public class AssemMulDiv extends AssemInstruction{
 		this.op = op;
 		this.operand = operand; 
 	}
+	
+	public String toString() {
+		return op + "	" + operand;
+	}
 
 }

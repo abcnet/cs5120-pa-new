@@ -4,4 +4,8 @@ public class AssemJump extends AssemInstruction{
 	public AssemJump(String targetLabel){
 		this.targetLabel = targetLabel;
 	}
+	
+	public String toString() {
+		return "jmp " + targetLabel;
+	}
 }

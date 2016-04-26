@@ -5,5 +5,9 @@ public class AssemLabel extends AssemInstruction{
 	public AssemLabel(String label){
 		this.label = label;
 	}
+	
+	public String toString() {
+		return label + ":";
+	}
 
 }
