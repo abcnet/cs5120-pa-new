@@ -24,6 +24,7 @@ public abstract class IRNode {
 	public static int cmpLabelCount = 0;
 
 	OpTarget operand = null;
+	
     /**
      * Visit the children of this IR node.
      * @param v the visitor

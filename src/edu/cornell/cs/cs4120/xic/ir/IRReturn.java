@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemJump;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
@@ -52,7 +53,7 @@ public class IRReturn extends IRStmt {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
+		instrs.add(new AssemJump(f.name() + "_EPILOGUE"));
 		return null;
 	}
 }

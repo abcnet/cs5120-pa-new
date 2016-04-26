@@ -133,7 +133,9 @@ public class IRSeq extends IRStmt {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
+		
+		for(IRStmt s : stmts)
+			s.genIntermediateAssem(instrs, f, funcs);
 		return null;
 	}
 }
