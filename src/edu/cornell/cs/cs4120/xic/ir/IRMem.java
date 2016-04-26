@@ -7,11 +7,8 @@ import edu.cornell.cs.cs4120.util.InternalCompilerError;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
-import zr54.assembly.AssemInstruction;
-import zr54.assembly.AssemOperand;
-import zr54.assembly.OpTarget;
-import zr54.assembly.Tiling;
 import zr54.typechecker.FuncSymbolTable;
+import zr54.assembly.*;
 
 /**
  * An intermediate representation for a memory location
@@ -153,7 +150,32 @@ public class IRMem extends IRExpr {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		return null;
+		f.count++;
+		AssemVar assemOperand = new AssemVar("t" + f.count);
+				
+		boolean generated = false;
+
+		if(expr instanceof IRBinOp) {
+			AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)expr, instrs, f, funcs);
+			
+			if(addr != null) {
+				AssemVar t = new AssemVar("t" + ++f.count);
+				instrs.add(new AssemMove(addr, t));
+				instrs.add(new AssemMove(t, assemOperand));
+				generated = true;
+			}
+		}
+		
+		if(!generated) {
+			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
+			AssemVar t1 = new AssemVar("t" + ++f.count);
+			AssemVar t2 = new AssemVar("t" + ++f.count);
+			instrs.add(new AssemMove(src, t1));
+			instrs.add(new AssemMove(new AssemAddr(t1), t2));
+			instrs.add(new AssemMove(t2, assemOperand));
+		}
+		
+		return assemOperand;
+		
 	}
 }
