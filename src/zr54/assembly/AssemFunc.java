@@ -7,7 +7,7 @@ public class AssemFunc extends AssemInstruction{
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
-		irFuncDecl.func = this;
+		irFuncDecl.assemFunc = this;
 	}
 	public AssemOperand getNumSpilledVars(){
 		return new AssemConst(0*8);

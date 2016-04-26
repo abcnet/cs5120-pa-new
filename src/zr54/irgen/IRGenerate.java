@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
@@ -16,6 +17,7 @@ import edu.cornell.cs.cs4120.xic.ir.interpret.IRSimulator;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import java_cup.runtime.Symbol;
+import zr54.assembly.AssemInstruction;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
@@ -38,6 +40,7 @@ public class IRGenerate {
 	 * @param finalIRGraph TODO
 	 * @param initialAssemGraph TODO
 	 * @param finalAssemGraph TODO
+	 * @param genOldAssem TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -50,7 +53,7 @@ public class IRGenerate {
 			String libPath, boolean run, boolean optimization,
 			boolean disableDiagFileWrite, String assemFile, boolean errOutput, 
 			boolean initialIRGraph, boolean finalIRGraph, 
-			boolean initialAssemGraph, boolean finalAssemGraph) throws Exception {
+			boolean initialAssemGraph, boolean finalAssemGraph, boolean genOldAssem) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
@@ -175,7 +178,12 @@ public class IRGenerate {
 			        
 			        
 			        StringWriter assemStringWriter = new StringWriter();
+			        
 			        program.genAssem(assemStringWriter, null, funcs);
+			        
+//			        ArrayList<AssemInstruction> instrs = new ArrayList<AssemInstruction>();
+			        program.genIntermediateAssem(null, null, funcs);
+			        
 			        assemStringWriter.flush();
 			        if (debugAssem) System.out.println(assemStringWriter);
 			        try{

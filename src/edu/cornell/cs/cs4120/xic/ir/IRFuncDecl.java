@@ -36,18 +36,18 @@ public class IRFuncDecl extends IRNode {
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
     private HashMap<String, IRNode> labelTable = null;
     public CFG graph = null;
-    public AssemFunc func = null;
+    public AssemFunc assemFunc = null;
     public static final boolean debugLVA = false;
     
     public IRFuncDecl(String name, IRStmt stmt) {
-    	super();
+        super();
         this.name = name;
         body = stmt;
         this.children.add(stmt);
     }
     
     public void updateChildren() {
-    	this.body = (IRStmt) this.children.get(0);
+        this.body = (IRStmt) this.children.get(0);
     }
 
     public String name() {
@@ -103,161 +103,162 @@ public class IRFuncDecl extends IRNode {
     /**
      * Do constant folding. If any children can be folded, replace it with a IRConst node.
      * @return if this node can be folded into a constant, return the IRConst node
-     * 		   otherwise return null
+     *         otherwise return null
      */
     @Override 
     public IRConst doConstFolding() {
-    	body.doConstFolding();
-    	return null;
+        body.doConstFolding();
+        return null;
     }
 
     /**
      * Generate assembly code for this IR node
      * @param sw: buffer to write assembly code into
      * @param f: This parameter indicates which function this node is in. We need this because each function 
-     * 			 needs a counter for the number of temps, to determine each temps position on the stack.   
+     *           needs a counter for the number of temps, to determine each temps position on the stack.   
      * @param funcs: function symbol table, used to determine the number of arguments and returns when calling other functions
      * @return
      */
-	@Override
-	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
-		sw.write("	.globl	"+name+"\n"
-				+ "	.align	4\n"
-				+ name+":\n"
-				+ "	pushq	%rbp\n"
-				+ "	movq	%rsp, %rbp\n");
-		StringWriter bodyWriter = new StringWriter();
-		this.body.genAssem(bodyWriter, this, funcs);
-		bodyWriter.flush();
-		int c=getReserved()+count+retSpace+argSpace;
-		if(c%2==1){
-			c++;
-		}
-		sw.write("	subq	$"+c*8+", %rsp\n"
-				+ "	movq	%rdi, -8(%rbp)\n"
-				+ "	movq	%rsi, -16(%rbp)\n"
-				+ "	movq	%rbx, -32(%rbp)\n"
-				+ "	movq	%r12, -48(%rbp)\n"
-				+ "	movq	%r13, -56(%rbp)\n"
-				+ "	movq	%r14, -64(%rbp)\n"
-				+ "	movq	%r15, -72(%rbp)\n");
-		
-		sw.write(bodyWriter.toString());
-		sw.write(name + "_EPILOGUE:\n");
-		sw.write("	movq	-8(%rbp), %rdi\n"
-				+ "	movq	-16(%rbp), %rsi\n"
-				+ "	movq	-24(%rbp), %rax\n"
-				+ "	movq	-32(%rbp), %rbx\n"
-				+ "	movq	-40(%rbp), %rdx\n"
-				+ "	movq	-48(%rbp), %r12\n"
-				+ "	movq	-56(%rbp), %r13\n"
-				+ "	movq	-64(%rbp), %r14\n"
-				+ "	movq	-72(%rbp), %r15\n"
-				+ "	addq	$"+c*8+", %rsp\n"
-				+ "	popq	%rbp\n"
-				+ "	retq\n");
-		return operand;
-	}
-	
-	public IRNode getNodeAfterLabel(String label){
-		if(labelTable==null){
-			labelTable = new HashMap<String, IRNode>();
-			List<IRStmt> stmts = ((IRSeq)body).stmts();
-			IRNode curr; int i, j;
-			for(i=0; i<stmts.size(); i++) {
-				 curr = stmts.get(i);
-				 if(curr instanceof IRLabel && i<=stmts.size()-2){
-					 j = i+1;
-					 while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
-						 j++;
-					 }
-							 
-					 labelTable.put(((IRLabel)curr).name(), stmts.get(j));
-				 }
-			}
-		}
-		
-		return labelTable.get(label);
-			
-	}
-	
-	public void createCFG(boolean draw, FileWriter fw) throws IOException{
-		if(graph==null){
-			IRNode curr; int i;
-			List<IRStmt> stmts = ((IRSeq)body).stmts();
-			for(i=0; i<stmts.size(); i++) {
-				curr = stmts.get(i);
-				curr.visitedCFG = false;
-			}
-			labelTable = null;
-			graph = new CFG(this);
-		}		
-		if(draw){
-			for(CFGEdge edge : graph.edges){
-				fw.write("	\"" + edge.getSrc().toString());
-				fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-			}
-		}
-		
-	}
-	
-	public void liveVarAnalyze(){
-		boolean changed = true;
-		while(changed){
-			changed = false;
-			ArrayList<CFGEdge> inEdges;
-			CFGNode nprime;
-			for(CFGNode node: graph.outgoingGraph.getNodeSet()){
-				if(node==null)continue;
+    @Override
+    public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
+        sw.write("  .globl  "+name+"\n"
+                + " .align  4\n"
+                + name+":\n"
+                + " pushq   %rbp\n"
+                + " movq    %rsp, %rbp\n");
+        StringWriter bodyWriter = new StringWriter();
+        this.body.genAssem(bodyWriter, this, funcs);
+        bodyWriter.flush();
+        int c=getReserved()+count+retSpace+argSpace;
+        if(c%2==1){
+            c++;
+        }
+        sw.write("  subq    $"+c*8+", %rsp\n"
+                + " movq    %rdi, -8(%rbp)\n"
+                + " movq    %rsi, -16(%rbp)\n"
+                + " movq    %rbx, -32(%rbp)\n"
+                + " movq    %r12, -48(%rbp)\n"
+                + " movq    %r13, -56(%rbp)\n"
+                + " movq    %r14, -64(%rbp)\n"
+                + " movq    %r15, -72(%rbp)\n");
+        
+        sw.write(bodyWriter.toString());
+        sw.write(name + "_EPILOGUE:\n");
+        sw.write("  movq    -8(%rbp), %rdi\n"
+                + " movq    -16(%rbp), %rsi\n"
+                + " movq    -24(%rbp), %rax\n"
+                + " movq    -32(%rbp), %rbx\n"
+                + " movq    -40(%rbp), %rdx\n"
+                + " movq    -48(%rbp), %r12\n"
+                + " movq    -56(%rbp), %r13\n"
+                + " movq    -64(%rbp), %r14\n"
+                + " movq    -72(%rbp), %r15\n"
+                + " addq    $"+c*8+", %rsp\n"
+                + " popq    %rbp\n"
+                + " retq\n");
+        return operand;
+    }
+    
+    public IRNode getNodeAfterLabel(String label){
+        if(labelTable==null){
+            labelTable = new HashMap<String, IRNode>();
+            List<IRStmt> stmts = ((IRSeq)body).stmts();
+            IRNode curr; int i, j;
+            for(i=0; i<stmts.size(); i++) {
+                 curr = stmts.get(i);
+                 if(curr instanceof IRLabel && i<=stmts.size()-2){
+                     j = i+1;
+                     while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
+                         j++;
+                     }
+                             
+                     labelTable.put(((IRLabel)curr).name(), stmts.get(j));
+                 }
+            }
+        }
+        
+        return labelTable.get(label);
+            
+    }
+    
+    public void createCFG(boolean draw, FileWriter fw) throws IOException{
+        if(graph==null){
+            IRNode curr; int i;
+            List<IRStmt> stmts = ((IRSeq)body).stmts();
+            for(i=0; i<stmts.size(); i++) {
+                curr = stmts.get(i);
+                curr.visitedCFG = false;
+            }
+            labelTable = null;
+            graph = new CFG(this);
+        }       
+        if(draw){
+            for(CFGEdge edge : graph.edges){
+                fw.write("  \"" + edge.getSrc().toString());
+                fw.write("\" -> \"" + edge.getDst().toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
+            }
+        }
+        
+    }
+    
+    public void liveVarAnalyze(){
+        boolean changed = true;
+        while(changed){
+            changed = false;
+            ArrayList<CFGEdge> inEdges;
+            CFGNode nprime;
+            for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+                if(node==null)continue;
 
-				for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
-					if(outEdge==null)continue;
-					nprime = outEdge.getDst();
-					if(nprime==null)continue;
-					if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
-						changed = true;
-					}
+                for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
+                    if(outEdge==null)continue;
+                    nprime = outEdge.getDst();
+                    if(nprime==null)continue;
+                    if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
+                        changed = true;
+                    }
 
-					
-				}
-				if(debugLVA)System.out.println(node.liveVarsOutToString());
+                    
+                }
+                if(debugLVA)System.out.println(node.liveVarsOutToString());
 
-				
-				HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
-				tmp.removeAll(node.getDef());
-				tmp.addAll(node.getUse());
-				if(debugLVA)System.out.println("size of tmp is " + tmp.size());
-				if(node.liveVarsIn.addAll(tmp)){
-					changed = true;
-				}
-				if(debugLVA)System.out.println(node.liveVarsInToString());
-			}
-		}
-		
-	}
+                
+                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
+                tmp.removeAll(node.getDef());
+                tmp.addAll(node.getUse());
+                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
+                if(node.liveVarsIn.addAll(tmp)){
+                    changed = true;
+                }
+                if(debugLVA)System.out.println(node.liveVarsInToString());
+            }
+        }
+        
+    }
 
-	public static int getReserved() {
-		return RESERVED;
-	}
-	
-	public void constantPropagate() {
-		boolean changed = true;
-		while(changed) {
-			changed = false;
-			
-			for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
-				
-			}
-			
-		}
-	}
+    public static int getReserved() {
+        return RESERVED;
+    }
+    
+    public void constantPropagate() {
+        boolean changed = true;
+        while(changed) {
+            changed = false;
+            
+            for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
+                
+            }
+            
+        }
+    }
 
-	@Override
-	public AssemOperand genIntermediateAssem(
-			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		instrs.add(new AssemFunc(this));
+    @Override
+    public AssemOperand genIntermediateAssem(
+            ArrayList<AssemInstruction> instrs, IRFuncDecl f,
+            FuncSymbolTable funcs) {
+        // TODO Auto-generated method stub
+        this.assemFunc = new AssemFunc(this);
+        
         AssemFixedRegister rsp = new AssemFixedRegister(Reg.rsp);
         AssemFixedRegister rbp = new AssemFixedRegister(Reg.rbp);
         AssemFixedRegister rdi = new AssemFixedRegister(Reg.rdi);
@@ -271,66 +272,66 @@ public class IRFuncDecl extends IRNode {
         AssemFixedRegister r14 = new AssemFixedRegister(Reg.r14);
         AssemFixedRegister r15 = new AssemFixedRegister(Reg.r15);
 
-		
-		instrs.add(new AssemPushq(rbp));
-		instrs.add(new AssemMove(rsp, rbp));
-//		sw.write("	.globl	"+name+"\n"
-//				+ "	.align	4\n"
-//				+ name+":\n"
-//				+ "	pushq	%rbp\n"
-//				+ "	movq	%rsp, %rbp\n");
-		this.body.genIntermediateAssem(this.func.instList, this, funcs);
-//		bodyWriter.flush();
-		int c=getReserved()+count+retSpace+argSpace;
-		if(c%2==1){
-			c++;
-		}
-		instrs.add(new AssemBinInst("subq", this.func.getNumSpilledVars(), rsp));
-		instrs.add(new AssemMove(rdi, new AssemAddr(-8, rbp)));
-		instrs.add(new AssemMove(rsi, new AssemAddr(-16, rbp)));
-		instrs.add(new AssemMove(rbx, new AssemAddr(-32, rbp)));
-		instrs.add(new AssemMove(r12, new AssemAddr(-48, rbp)));
-		instrs.add(new AssemMove(r13, new AssemAddr(-56, rbp)));
-		instrs.add(new AssemMove(r14, new AssemAddr(-64, rbp)));
-		instrs.add(new AssemMove(r15, new AssemAddr(-72, rbp)));
-//		sw.write("	subq	$"+c*8+", %rsp\n"
-//				+ "	movq	%rdi, -8(%rbp)\n"
-//				+ "	movq	%rsi, -16(%rbp)\n"
-//				+ "	movq	%rbx, -32(%rbp)\n"
-//				+ "	movq	%r12, -48(%rbp)\n"
-//				+ "	movq	%r13, -56(%rbp)\n"
-//				+ "	movq	%r14, -64(%rbp)\n"
-//				+ "	movq	%r15, -72(%rbp)\n");
-		
-//		sw.write(bodyWriter.toString());
-		instrs.add(new AssemLabel(name + "_EPILOGUE:"));
-//		sw.write(name + "_EPILOGUE:\n");
-		instrs.add(new AssemMove(new AssemAddr(-8, rbp), rdi));
-		instrs.add(new AssemMove(new AssemAddr(-16, rbp), rsi));
-		instrs.add(new AssemMove(new AssemAddr(-24, rbp), rax));
-		instrs.add(new AssemMove(new AssemAddr(-32, rbp), rbx));
-		instrs.add(new AssemMove(new AssemAddr(-40, rbp), rdx));
-		instrs.add(new AssemMove(new AssemAddr(-48, rbp), r12));
-		instrs.add(new AssemMove(new AssemAddr(-56, rbp), r13));
-		instrs.add(new AssemMove(new AssemAddr(-64, rbp), r14));
-		instrs.add(new AssemMove(new AssemAddr(-72, rbp), r15));
+        
+        this.assemFunc.instList.add(new AssemPushq(rbp));
+        this.assemFunc.instList.add(new AssemMove(rsp, rbp));
+//      sw.write("  .globl  "+name+"\n"
+//              + " .align  4\n"
+//              + name+":\n"
+//              + " pushq   %rbp\n"
+//              + " movq    %rsp, %rbp\n");
+        this.body.genIntermediateAssem(this.assemFunc.instList, this, funcs);
+//      bodyWriter.flush();
+        int c=getReserved()+count+retSpace+argSpace;
+        if(c%2==1){
+            c++;
+        }
+        this.assemFunc.instList.add(new AssemBinInst("subq", this.assemFunc.getNumSpilledVars(), rsp));
+        this.assemFunc.instList.add(new AssemMove(rdi, new AssemAddr(-8, rbp)));
+        this.assemFunc.instList.add(new AssemMove(rsi, new AssemAddr(-16, rbp)));
+        this.assemFunc.instList.add(new AssemMove(rbx, new AssemAddr(-32, rbp)));
+        this.assemFunc.instList.add(new AssemMove(r12, new AssemAddr(-48, rbp)));
+        this.assemFunc.instList.add(new AssemMove(r13, new AssemAddr(-56, rbp)));
+        this.assemFunc.instList.add(new AssemMove(r14, new AssemAddr(-64, rbp)));
+        this.assemFunc.instList.add(new AssemMove(r15, new AssemAddr(-72, rbp)));
+//      sw.write("  subq    $"+c*8+", %rsp\n"
+//              + " movq    %rdi, -8(%rbp)\n"
+//              + " movq    %rsi, -16(%rbp)\n"
+//              + " movq    %rbx, -32(%rbp)\n"
+//              + " movq    %r12, -48(%rbp)\n"
+//              + " movq    %r13, -56(%rbp)\n"
+//              + " movq    %r14, -64(%rbp)\n"
+//              + " movq    %r15, -72(%rbp)\n");
+        
+//      sw.write(bodyWriter.toString());
+        this.assemFunc.instList.add(new AssemLabel(name + "_EPILOGUE:"));
+//      sw.write(name + "_EPILOGUE:\n");
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-8, rbp), rdi));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-16, rbp), rsi));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-24, rbp), rax));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-32, rbp), rbx));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-40, rbp), rdx));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-48, rbp), r12));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-56, rbp), r13));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-64, rbp), r14));
+        this.assemFunc.instList.add(new AssemMove(new AssemAddr(-72, rbp), r15));
 
-		instrs.add(new AssemBinInst("addq", this.func.getNumSpilledVars(), rsp));
-		instrs.add(new AssemPopq(rbp));
-		instrs.add(new AssemReturn());
+        this.assemFunc.instList.add(new AssemBinInst("addq", this.assemFunc.getNumSpilledVars(), rsp));
+        this.assemFunc.instList.add(new AssemPopq(rbp));
+        this.assemFunc.instList.add(new AssemReturn());
 
-//		sw.write("	movq	-8(%rbp), %rdi\n"
-//				+ "	movq	-16(%rbp), %rsi\n"
-//				+ "	movq	-24(%rbp), %rax\n"
-//				+ "	movq	-32(%rbp), %rbx\n"
-//				+ "	movq	-40(%rbp), %rdx\n"
-//				+ "	movq	-48(%rbp), %r12\n"
-//				+ "	movq	-56(%rbp), %r13\n"
-//				+ "	movq	-64(%rbp), %r14\n"
-//				+ "	movq	-72(%rbp), %r15\n"
-//				+ "	addq	$"+c*8+", %rsp\n"
-//				+ "	popq	%rbp\n"
-//				+ "	retq\n");
-		return null;
-	}
+//      sw.write("  movq    -8(%rbp), %rdi\n"
+//              + " movq    -16(%rbp), %rsi\n"
+//              + " movq    -24(%rbp), %rax\n"
+//              + " movq    -32(%rbp), %rbx\n"
+//              + " movq    -40(%rbp), %rdx\n"
+//              + " movq    -48(%rbp), %r12\n"
+//              + " movq    -56(%rbp), %r13\n"
+//              + " movq    -64(%rbp), %r14\n"
+//              + " movq    -72(%rbp), %r15\n"
+//              + " addq    $"+c*8+", %rsp\n"
+//              + " popq    %rbp\n"
+//              + " retq\n");
+        return null;
+    }
 }

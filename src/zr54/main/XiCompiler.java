@@ -187,11 +187,11 @@ class XiCompiler {
             }
             
             if(irrun){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
             }else if(irgen){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
             }else{
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
             }
             
             
