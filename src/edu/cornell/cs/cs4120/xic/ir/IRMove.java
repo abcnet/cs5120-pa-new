@@ -189,7 +189,78 @@ public class IRMove extends IRStmt {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
+		
+		if(target instanceof IRMem) {
+			IRMem memTarget = (IRMem) target;
+			boolean generated = false;
+			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);	
+
+			if( memTarget.expr() instanceof IRBinOp) {
+				AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)memTarget.expr(), instrs, f, funcs);
+
+				if(addr != null) {
+					sw.write("# tiled MOVE to MEM\n");
+					if(!src.isConstTarget()) 
+						sw.write("	movq	" + src.getTarget(false) + ", %rax\n" //don't use r10 and r11 here!
+								+"	movq	%rax, " + addr.getTarget(true) + "\n");
+					else 
+						sw.write("	movq	" + src.getTarget(false) + ", " + addr.getTarget(true) + "\n");
+					generated = true;
+				}
+			}
+			
+			if(!generated) {
+				//TODO: shall we evaluate src or addr first?
+				OpTarget addr = memTarget.expr().genAssem(sw, f, funcs);
+
+				if(expr instanceof IRConst) {
+					sw.write("# MOVE CONST" + ((IRConst) expr).value() + " to MEM\n");
+					sw.write("	movq	" + addr.getTarget(false) + ", %r11\n"
+							+"	movq	$" + ((IRConst) expr).value() + ", (%r11)\n");
+				}
+				else {
+					if(src.type == OpTarget.TempType.TEMP && addr.type == OpTarget.TempType.TEMP) {
+						sw.write("# MOVE from t" + src.num + " to (t" + addr.num + ")\n");
+					}
+					sw.write("	movq	" + src.getTarget(false) + ", %r10\n" 
+							+"	movq	" + addr.getTarget(true) + ", %r11\n"
+							+"	movq	%r10, (%r11)\n");
+				}
+			}
+		}
+		else {
+			if(expr instanceof IRConst) {
+				OpTarget dst = target.genAssem(sw, f, funcs);
+				String d = dst.getTarget(true);
+				long constValue = ((IRConst) expr).value();
+				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
+						&& d.contains("(")){
+					sw.write("	movq	$" + constValue + ", %r10\n"
+							+"	movq	%r10, " + d + "\n");
+					
+				}else{
+					sw.write("	movq	$" + ((IRConst)expr).value() + ", " + d + "\n");
+				}
+				
+			}
+			else {
+				OpTarget src = expr.genAssem(sw, f, funcs);
+				OpTarget dst = target.genAssem(sw, f, funcs);
+				String s = src.getTarget(false);
+				String d = dst.getTarget(true);
+				if(src.type == OpTarget.TempType.TEMP && dst.type == OpTarget.TempType.TEMP) {
+					sw.write("# mark MOVE from t" + src.num + " to t" + dst.num + "\n");
+				}
+
+				if(s.contains("(")&&d.contains("(")){
+					sw.write("	movq	" + s + ", %r10\n"
+							+"	movq	%r10, " + d + "\n");
+				}else{
+					sw.write("	movq	" + s + ", " + d + "\n");
+				}
+			}
+		}
+
 		return null;
 	}
 }
