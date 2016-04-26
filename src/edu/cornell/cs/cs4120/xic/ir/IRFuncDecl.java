@@ -13,11 +13,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.AssemFunc;
 import zr54.assembly.AssemInstruction;
-import zr54.assembly.AssemMove;
-import zr54.assembly.AssemOperand;
-import zr54.assembly.AssemPushq;
-import zr54.assembly.OpTarget;
-import zr54.assembly.AssemFixedRegister;
+import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.CFG;
 import zr54.cfg.CFGEdge;
@@ -262,8 +258,24 @@ public class IRFuncDecl extends IRNode {
 			FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
 		instrs.add(new AssemFunc(this));
-		AssemFixedRegister rsp = new AssemFixedRegister(Reg.rbp);
-		AssemFixedRegister rbp = new AssemFixedRegister(Reg.rbp);
+        AssemFixedRegister rsp = new AssemFixedRegister(Reg.rsp);
+        AssemFixedRegister rbp = new AssemFixedRegister(Reg.rbp);
+        AssemFixedRegister rdi = new AssemFixedRegister(Reg.rdi);
+        AssemFixedRegister rsi = new AssemFixedRegister(Reg.rsi);
+        AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);
+        AssemFixedRegister rbx = new AssemFixedRegister(Reg.rbx);
+        AssemFixedRegister rcx = new AssemFixedRegister(Reg.rcx);
+        AssemFixedRegister rdx = new AssemFixedRegister(Reg.rdx);
+        AssemFixedRegister r8 = new AssemFixedRegister(Reg.r8);
+        AssemFixedRegister r9 = new AssemFixedRegister(Reg.r9);
+        AssemFixedRegister r10 = new AssemFixedRegister(Reg.r10);
+        AssemFixedRegister r11 = new AssemFixedRegister(Reg.r11);
+        AssemFixedRegister r12 = new AssemFixedRegister(Reg.r12);
+        AssemFixedRegister r13 = new AssemFixedRegister(Reg.r13);
+        AssemFixedRegister r14 = new AssemFixedRegister(Reg.r14);
+        AssemFixedRegister r15 = new AssemFixedRegister(Reg.r15);
+
+		
 		instrs.add(new AssemPushq(rbp));
 		instrs.add(new AssemMove(rsp, rbp));
 //		sw.write("	.globl	"+name+"\n"
@@ -271,36 +283,58 @@ public class IRFuncDecl extends IRNode {
 //				+ name+":\n"
 //				+ "	pushq	%rbp\n"
 //				+ "	movq	%rsp, %rbp\n");
-		ArrayList<AssemInstruction> bodyinstrs = new ArrayList<AssemInstruction>();
-		this.body.genIntermediateAssem(bodyinstrs, this, funcs);
+		this.body.genIntermediateAssem(this.func.instList, this, funcs);
 //		bodyWriter.flush();
 		int c=getReserved()+count+retSpace+argSpace;
 		if(c%2==1){
 			c++;
 		}
-		sw.write("	subq	$"+c*8+", %rsp\n"
-				+ "	movq	%rdi, -8(%rbp)\n"
-				+ "	movq	%rsi, -16(%rbp)\n"
-				+ "	movq	%rbx, -32(%rbp)\n"
-				+ "	movq	%r12, -48(%rbp)\n"
-				+ "	movq	%r13, -56(%rbp)\n"
-				+ "	movq	%r14, -64(%rbp)\n"
-				+ "	movq	%r15, -72(%rbp)\n");
+		instrs.add(new AssemBinInst("subq", this.func.getNumSpilledVars(), rsp));
+		instrs.add(new AssemMove(rdi, new AssemAddr(-8, rbp)));
+		instrs.add(new AssemMove(rsi, new AssemAddr(-16, rbp)));
+		instrs.add(new AssemMove(rbx, new AssemAddr(-32, rbp)));
+		instrs.add(new AssemMove(r12, new AssemAddr(-48, rbp)));
+		instrs.add(new AssemMove(r13, new AssemAddr(-56, rbp)));
+		instrs.add(new AssemMove(r14, new AssemAddr(-64, rbp)));
+		instrs.add(new AssemMove(r15, new AssemAddr(-72, rbp)));
+//		sw.write("	subq	$"+c*8+", %rsp\n"
+//				+ "	movq	%rdi, -8(%rbp)\n"
+//				+ "	movq	%rsi, -16(%rbp)\n"
+//				+ "	movq	%rbx, -32(%rbp)\n"
+//				+ "	movq	%r12, -48(%rbp)\n"
+//				+ "	movq	%r13, -56(%rbp)\n"
+//				+ "	movq	%r14, -64(%rbp)\n"
+//				+ "	movq	%r15, -72(%rbp)\n");
 		
-		sw.write(bodyWriter.toString());
-		sw.write(name + "_EPILOGUE:\n");
-		sw.write("	movq	-8(%rbp), %rdi\n"
-				+ "	movq	-16(%rbp), %rsi\n"
-				+ "	movq	-24(%rbp), %rax\n"
-				+ "	movq	-32(%rbp), %rbx\n"
-				+ "	movq	-40(%rbp), %rdx\n"
-				+ "	movq	-48(%rbp), %r12\n"
-				+ "	movq	-56(%rbp), %r13\n"
-				+ "	movq	-64(%rbp), %r14\n"
-				+ "	movq	-72(%rbp), %r15\n"
-				+ "	addq	$"+c*8+", %rsp\n"
-				+ "	popq	%rbp\n"
-				+ "	retq\n");
+//		sw.write(bodyWriter.toString());
+		instrs.add(new AssemLabel(name + "_EPILOGUE:"));
+//		sw.write(name + "_EPILOGUE:\n");
+		instrs.add(new AssemMove(new AssemAddr(-8, rbp), rdi));
+		instrs.add(new AssemMove(new AssemAddr(-16, rbp), rsi));
+		instrs.add(new AssemMove(new AssemAddr(-24, rbp), rax));
+		instrs.add(new AssemMove(new AssemAddr(-32, rbp), rbx));
+		instrs.add(new AssemMove(new AssemAddr(-40, rbp), rdx));
+		instrs.add(new AssemMove(new AssemAddr(-48, rbp), r12));
+		instrs.add(new AssemMove(new AssemAddr(-56, rbp), r13));
+		instrs.add(new AssemMove(new AssemAddr(-64, rbp), r14));
+		instrs.add(new AssemMove(new AssemAddr(-72, rbp), r15));
+
+		instrs.add(new AssemBinInst("addq", this.func.getNumSpilledVars(), rsp));
+		instrs.add(new AssemPopq(rbp));
+		instrs.add(new AssemReturn());
+
+//		sw.write("	movq	-8(%rbp), %rdi\n"
+//				+ "	movq	-16(%rbp), %rsi\n"
+//				+ "	movq	-24(%rbp), %rax\n"
+//				+ "	movq	-32(%rbp), %rbx\n"
+//				+ "	movq	-40(%rbp), %rdx\n"
+//				+ "	movq	-48(%rbp), %r12\n"
+//				+ "	movq	-56(%rbp), %r13\n"
+//				+ "	movq	-64(%rbp), %r14\n"
+//				+ "	movq	-72(%rbp), %r15\n"
+//				+ "	addq	$"+c*8+", %rsp\n"
+//				+ "	popq	%rbp\n"
+//				+ "	retq\n");
 		return null;
 	}
 }

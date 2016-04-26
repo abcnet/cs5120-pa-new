@@ -9,6 +9,8 @@ public class AssemFunc extends AssemInstruction{
 		this.irFuncDecl = irFuncDecl;
 		irFuncDecl.func = this;
 	}
-	
+	public AssemOperand getNumSpilledVars(){
+		return new AssemConst(0*8);
+	}
 
 }
