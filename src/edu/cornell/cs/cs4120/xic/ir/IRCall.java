@@ -324,8 +324,7 @@ public class IRCall extends IRExpr {
 				t = arg.genIntermediateAssem(instrs, f, funcs);
 //				s = t.getTarget(false);
 				AssemVar r = new AssemVar("t" + ++f.count);
-				instrs.add(new AssemMove(t, r));
-				instrs.add(new AssemMove(r, argTarg));
+				instrs.add(new AssemMove(t, argTarg));
 //				if(s.contains("(")&&argTarg.contains("(")){
 //					sw.write("	movq	" + s + ", %r10\n"
 //							+"	movq	%r10, " + argTarg + "\n");
