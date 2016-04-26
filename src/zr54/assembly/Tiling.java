@@ -310,7 +310,7 @@ public class Tiling {
 	}
 	
 	
-	static public AssemOperand intermediateLeaTiling(IRBinOp node, ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs){
+	static public AssemAddr intermediateLeaTiling(IRBinOp node, ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs){
 		IRExpr left = node.left();
 		IRExpr right = node.right();
 		

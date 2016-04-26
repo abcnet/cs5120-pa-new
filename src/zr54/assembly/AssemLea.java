@@ -1,6 +1,6 @@
 package zr54.assembly;
 
-public class AssemLea {
+public class AssemLea extends AssemInstruction {
 	public AssemAddr addr;
 	public AssemVar var;
 	public AssemLea(AssemAddr addr, AssemVar var){
