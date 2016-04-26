@@ -4,8 +4,12 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
+import zr54.assembly.AssemComments;
+import zr54.assembly.AssemConst;
 import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemMove;
 import zr54.assembly.AssemOperand;
+import zr54.assembly.AssemVar;
 import zr54.assembly.OpTarget;
 import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSymbolTable;
@@ -95,7 +99,22 @@ public class IRConst extends IRExpr {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		return null;
+		if(value > Integer.MAX_VALUE || value < Integer.MIN_VALUE){
+//			f.count++;
+			AssemOperand operand = new AssemVar("t" + ++f.count);
+			instrs.add(new AssemComments("CONST " + value + " in t" + f.count + "\n"));
+			AssemVar r = new AssemVar("t" + ++f.count);
+			instrs.add(new AssemMove(new AssemConst(value), r));
+			instrs.add(new AssemMove(r, operand));
+//			sw.write("# CONST " + value + " in t" + operand.num + "\n");
+//			sw.write("	movq	$" + value + ", %r11\n");
+//			sw.write("	movq	%r11, "  + operand.getTarget(true) + "\n");
+			return operand;
+		}else{
+			return new AssemConst(value);
+//			operand = new OpTarget(TempType.CONST, (int)value);
+		}
+		
 	}
 
 }

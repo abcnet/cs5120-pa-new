@@ -183,7 +183,9 @@ public class IRCompUnit extends IRNode {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
+		for (IRFuncDecl func : functions.values()){
+			func.genIntermediateAssem(instrs, func, funcs);
+		}
 		return null;
 	}
 }
