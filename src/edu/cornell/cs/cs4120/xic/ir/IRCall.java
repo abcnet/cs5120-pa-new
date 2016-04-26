@@ -9,9 +9,10 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
-import zr54.assembly.AssemInstruction;
-import zr54.assembly.AssemOperand;
+import zr54.assembly.*;
+import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.assembly.OpTarget;
+
 import zr54.assembly.OpTarget.TempType;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
@@ -240,6 +241,109 @@ public class IRCall extends IRExpr {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		return null;
+		String callee = ((IRName)this.target).name();
+		boolean gt2;
+		int nRet;
+		int argSpace = 0;
+		int retSpace = 0;
+		if(callee.contentEquals("_I_alloc_i")){
+			gt2 = false;
+			nRet = 1;
+		}else if(callee.contentEquals("_I_outOfBounds_p")){
+			gt2 = false;
+			nRet = 0;
+		}else{
+			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
+			FuncSignature sign = funcs.lookup(rawFuncName);
+			nRet = sign.getFunctionReturnTypes().getTuple().size();
+			gt2 = nRet>2;
+			int nArgs = this.args().size()+(gt2?1:0);
+			argSpace = nArgs>6?(nArgs-6):0;
+			retSpace = nRet>2?(nRet-2):0;
+			if(argSpace > f.argSpace){
+				f.argSpace = argSpace;
+			}
+			
+			if(retSpace>f.retSpace){
+				f.retSpace=retSpace;
+			}
+		}
+		
+		if(nRet>2){
+			instrs.add(new AssemMove(new AssemFixedRegister(Reg.rsp), new AssemFixedRegister(Reg.rdi)));
+			instrs.add(new AssemBinInst("addq", new AssemConst(8*argSpace), new AssemFixedRegister(Reg.rdi)));
+//			sw.write("	movq	%rsp, %rdi\n"
+//					+"	addq	$"+8*argSpace+", %rdi\n");
+		}
+		AssemOperand t;
+		AssemOperand argTarg;
+		String s;
+		IRExpr arg;
+		int i;
+		for(i = 0; i < this.args.size(); i++){
+			
+			int num2 = gt2?(i+1):i;
+            switch(num2){
+            case 0:
+                argTarg = new AssemFixedRegister(Reg.rdi);
+                break;
+            case 1:
+                argTarg = new AssemFixedRegister(Reg.rsi);
+                break;
+            case 2:
+                argTarg = new AssemFixedRegister(Reg.rdx);
+                break;
+            case 3:
+                argTarg = new AssemFixedRegister(Reg.rcx);
+                break;
+            case 4:
+                argTarg = new AssemFixedRegister(Reg.r8);
+                break;
+            case 5:
+                argTarg = new AssemFixedRegister(Reg.r9);    
+				break;
+			default:
+				argTarg = new AssemAddr(8*(num2-6),new AssemFixedRegister(Reg.rsp));
+				break;
+			}
+			arg = args.get(i);
+			if(arg instanceof IRConst){
+				if(argTarg instanceof AssemAddr && !((IRConst)arg).isIn32BitRange()){
+					
+					AssemVar r = new AssemVar("t" + ++f.count);
+					instrs.add(new AssemMove(new AssemConst(((IRConst)arg).value()), r));
+					instrs.add(new AssemMove(r, argTarg));
+//					sw.write("	movq	$" + ((IRConst)arg).value() + ", %r10\n"
+//							+"	movq	%r10, " + argTarg + "\n");
+				}else{
+					instrs.add(new AssemMove(new AssemConst(((IRConst)arg).value()), argTarg));
+//					sw.write("	movq	$" + ((IRConst)arg).value() + ", " + argTarg + "\n");
+				}
+				
+			}else{
+				t = arg.genIntermediateAssem(instrs, f, funcs);
+//				s = t.getTarget(false);
+				AssemVar r = new AssemVar("t" + ++f.count);
+				instrs.add(new AssemMove(t, argTarg));
+//				if(s.contains("(")&&argTarg.contains("(")){
+//					sw.write("	movq	" + s + ", %r10\n"
+//							+"	movq	%r10, " + argTarg + "\n");
+//				}else{
+//					sw.write("	movq	" + s + ", " + argTarg + "\n");
+//				}
+			}
+			
+			
+		}
+		instrs.add(new AssemCall(callee));
+		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rax), new AssemAddr(-80, new AssemFixedRegister(Reg.rbp))));
+		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rdi), new AssemFixedRegister(Reg.rbx)));
+		instrs.add(new AssemMove(new AssemAddr(-8, new AssemFixedRegister(Reg.rbp)), new AssemFixedRegister(Reg.rdi)));
+//		sw.write("	callq	"+callee+"\n");
+//		sw.write("	movq	%rax, -80(%rbp)\n"
+//				+"	movq	%rdi, %rbx\n"
+//				+"	movq	-8(%rbp), %rdi\n");
+		return new AssemRetTemp(0);
+//		return new OpTarget(TempType.RET, 0);
 	}
 }
