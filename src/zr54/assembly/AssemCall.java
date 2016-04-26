@@ -6,4 +6,7 @@ public class AssemCall extends AssemInstruction{
 		this.callee = callee;
 	}
 
+	public String toString(){
+		return "callq	" + callee;
+	}
 }

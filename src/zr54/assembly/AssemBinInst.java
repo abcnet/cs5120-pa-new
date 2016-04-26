@@ -12,5 +12,9 @@ public class AssemBinInst extends AssemInstruction{
 			
 	}
 	
+	public String toString(){
+		return op + "	" + src + ", " + dst; 
+	}
+	
 
 }
