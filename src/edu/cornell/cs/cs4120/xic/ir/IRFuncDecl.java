@@ -264,12 +264,8 @@ public class IRFuncDecl extends IRNode {
         AssemFixedRegister rsi = new AssemFixedRegister(Reg.rsi);
         AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);
         AssemFixedRegister rbx = new AssemFixedRegister(Reg.rbx);
-        AssemFixedRegister rcx = new AssemFixedRegister(Reg.rcx);
         AssemFixedRegister rdx = new AssemFixedRegister(Reg.rdx);
-        AssemFixedRegister r8 = new AssemFixedRegister(Reg.r8);
-        AssemFixedRegister r9 = new AssemFixedRegister(Reg.r9);
-        AssemFixedRegister r10 = new AssemFixedRegister(Reg.r10);
-        AssemFixedRegister r11 = new AssemFixedRegister(Reg.r11);
+
         AssemFixedRegister r12 = new AssemFixedRegister(Reg.r12);
         AssemFixedRegister r13 = new AssemFixedRegister(Reg.r13);
         AssemFixedRegister r14 = new AssemFixedRegister(Reg.r14);
