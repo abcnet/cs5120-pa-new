@@ -101,6 +101,6 @@ public class IRExp extends IRStmt {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		// TODO Auto-generated method stub
-		return null;
+		return expr.genIntermediateAssem(instrs, f, funcs);
 	}
 }
