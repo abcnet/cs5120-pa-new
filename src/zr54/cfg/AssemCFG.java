@@ -13,13 +13,13 @@ public class AssemCFG {
 		
 		if(instructions.size() == 0) 
 			return;
-		
+			
 		for(AssemInstruction instr : instructions) {
 			AssemCFGNode n = new AssemCFGNode(instr);
 			nodes.add(n);
 			
 			if(instr instanceof AssemLabel) {
-				label2Node.put(instr.toString(), n);
+				label2Node.put(((AssemLabel)instr).label, n);
 			}
 		}
 		
