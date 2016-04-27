@@ -19,8 +19,14 @@ public class AssemBinInst extends AssemInstruction{
 		if(src instanceof AssemRetTemp){
 			srcString = ((AssemRetTemp)src).toString(false);
 		}else if (src instanceof AssemAddr){
-			retStr += ((AssemAddr)src).movr1r2() + "movq	" + src.toString() + ", %r10\n	";
-			srcString = "%r10";
+			if(dst instanceof AssemAddr){
+				retStr += ((AssemAddr)src).movr1r2() + "movq	" + src.toString() + ", %r10\n	";
+				srcString = "%r10";
+			}else{
+				retStr += ((AssemAddr)src).movr1r2();
+				srcString =  src.toString() ;
+			}
+			
 		}else{
 		
 			srcString = src.toString();
