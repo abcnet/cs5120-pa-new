@@ -31,14 +31,14 @@ public class CFGEdge {
 	public String toString(){
 		String s = edgeType?"True\r\n":"\r\n";
 	
-		if(src != null){
-			s += src.liveVarsOutToString();
-			s += "\r\n";
-		}
-		if(dst != null){
-			s += dst.liveVarsInToString();
-			
-		}
+//		if(src != null){
+//			s += src.liveVarsOutToString();
+//			s += "\r\n";
+//		}
+//		if(dst != null){
+//			s += dst.liveVarsInToString();
+//			
+//		}
 		return s;
 	}
 	

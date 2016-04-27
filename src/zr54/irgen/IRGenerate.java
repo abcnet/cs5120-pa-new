@@ -174,7 +174,7 @@ public class IRGenerate {
 			        
 			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
 			        program.constantPropagate();
-			        program.liveVarAnalyze();
+			        
 			        
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        
@@ -201,8 +201,13 @@ public class IRGenerate {
 					        }
 			        }else{
 			        	 program.genIntermediateAssem(null, null, funcs);
-					      
-					        
+			        	 
+			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_f_initial_assem.dot");
+			        	 
+			        	 program.liveVarAnalyze();
+					     
+			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_f_final_assem.dot");
+			        	 
 					        try{
 					        	FileWriter as = new FileWriter(assemFile, false);
 					        	

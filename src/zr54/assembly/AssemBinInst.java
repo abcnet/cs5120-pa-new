@@ -2,8 +2,9 @@ package zr54.assembly;
 
 public class AssemBinInst extends AssemInstruction{
 	
-	String op;
-	AssemOperand src, dst;
+	public String op;
+	public AssemOperand src;
+	public AssemOperand dst;
 	
 	public AssemBinInst(String op, AssemOperand src, AssemOperand dst){
 		this.op = op;

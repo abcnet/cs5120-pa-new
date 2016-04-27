@@ -36,6 +36,7 @@ public class IRFuncDecl extends IRNode {
     private HashMap<String, Integer> indexTable = null;
     public CFG graph = null;
     public IRCFG irgraph = null;
+    public AssemCFG assemGraph = null;
     public AssemFunc assemFunc = null;
     
     public static final boolean debugLVA = false;
@@ -206,18 +207,39 @@ public class IRFuncDecl extends IRNode {
         
     }
     
+    public void createAssemCFG(boolean draw, FileWriter fw) throws IOException{
+        if(assemGraph==null){
+//            IRNode curr; int i;
+//            List<IRStmt> stmts = ((IRSeq)body).stmts();
+//            for(i=0; i<stmts.size(); i++) {
+//                curr = stmts.get(i);
+//                curr.visitedCFG = false;
+//            }
+            labelTable = null;
+            assemGraph = new AssemCFG(this.assemFunc.instList);
+        }  
+        
+        
+        if(draw){
+            for(AssemCFGEdge edge : this.assemGraph.edges){
+                fw.write("  \"" + edge.from.toString());
+                fw.write("\" -> \"" + edge.to.toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
+            }
+        }
+        
+    }
+    
     public void liveVarAnalyze(){
         boolean changed = true;
         while(changed){
             changed = false;
-            ArrayList<CFGEdge> inEdges;
-            CFGNode nprime;
-            for(CFGNode node: graph.outgoingGraph.getNodeSet()){
+            AssemCFGNode nprime;
+            for(AssemCFGNode node: assemGraph.nodes){
                 if(node==null)continue;
 
-                for (CFGEdge outEdge: graph.outgoingGraph.getChildren(node)){
+                for (AssemCFGEdge outEdge: node.out){
                     if(outEdge==null)continue;
-                    nprime = outEdge.getDst();
+                    nprime = outEdge.to;
                     if(nprime==null)continue;
                     if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
                         changed = true;

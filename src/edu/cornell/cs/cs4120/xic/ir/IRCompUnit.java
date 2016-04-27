@@ -181,6 +181,43 @@ public class IRCompUnit extends IRNode {
 		
 	}
 	
+	public void createAssemCFG(boolean draw, String file){
+		if(draw){
+			try {
+				FileWriter fw = new FileWriter(file, false);
+				fw.write("digraph " + this.name + " {\n"
+//						+" 	rankdir=LR;\n"
+						+"	size=\"8,5\";\n"
+						+"	node [style=invis] \"\";\n"
+						+"	node [shape = circle,style=\"\"];\n");
+				for (IRFuncDecl func : functions.values()){
+					func.createAssemCFG(true, fw);
+				}
+				fw.write("}");
+				fw.flush();
+				fw.close();
+				
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			
+			for (IRFuncDecl func : functions.values()){
+				try {
+					func.createAssemCFG(false, null);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+	}
+	
 	public void liveVarAnalyze(){
 		for (IRFuncDecl func : functions.values()){
 			func.liveVarAnalyze();

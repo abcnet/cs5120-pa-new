@@ -4,9 +4,9 @@ import java.util.*;
 
 public class AssemCFG {
 	
-	ArrayList<AssemCFGNode> nodes = new ArrayList<AssemCFGNode>();
-	ArrayList<AssemCFGEdge> edges = new ArrayList<AssemCFGEdge>();
-	HashMap<String, AssemCFGNode> label2Node = new HashMap<String, AssemCFGNode>();
+	public ArrayList<AssemCFGNode> nodes = new ArrayList<AssemCFGNode>();
+	public ArrayList<AssemCFGEdge> edges = new ArrayList<AssemCFGEdge>();
+	public HashMap<String, AssemCFGNode> label2Node = new HashMap<String, AssemCFGNode>();
 	
 	public AssemCFG(ArrayList<AssemInstruction> instructions) {
 		

@@ -2,14 +2,32 @@ package zr54.cfg;
 import zr54.assembly.*;
 import java.util.*;
 
+import edu.cornell.cs.cs4120.xic.ir.IRCJump;
+import edu.cornell.cs.cs4120.xic.ir.IRCall;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
+import edu.cornell.cs.cs4120.xic.ir.IRNode;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+
 public class AssemCFGNode {
 	
 	public AssemInstruction instr = null;
 	public ArrayList<AssemCFGEdge> in = new ArrayList<AssemCFGEdge>();
 	public ArrayList<AssemCFGEdge> out = new ArrayList<AssemCFGEdge>();
 	
+	private static int counter = 0;
+	public int count;
+	private HashSet<String> use = null;
+	private HashSet<String> def = null;
+	public HashSet<String> liveVarsIn = new HashSet<String>();
+	public HashSet<String> liveVarsOut = new HashSet<String>();
+	
+	public static final boolean debugCFG = false;
+	public static final boolean debugLVA = false;
+	
 	public AssemCFGNode(AssemInstruction assInstr) {
 		instr = assInstr;
+		count = counter++;
 	}
 	
 	public void addInEdge(AssemCFGEdge e) {
@@ -18,5 +36,104 @@ public class AssemCFGNode {
 	
 	public void addOutEdge(AssemCFGEdge e) {
 		out.add(e);
+	}
+	
+	public HashSet<String> getUse(){
+		if(use==null){
+			use = new HashSet<String>();
+			if (this.instr instanceof AssemBinInst ) {
+				AssemBinInst n = (AssemBinInst) instr;
+				getUseSet(n.src, use);
+				if(n.dst instanceof AssemAddr){
+					getUseSet(n.dst, use);
+				}
+				
+			} else if(instr instanceof AssemMulDiv){
+				AssemMulDiv n = (AssemMulDiv)instr;
+				if(n.operand instanceof AssemVar){
+					use.add(((AssemVar)(n.operand)).varName);
+				}
+			}
+//			else if (this.instr instanceof IRCJump) {
+//				getUseSet(((IRCJump)node).expr(), use);
+//			} else if (this.instr instanceof IRCall) {
+//				for (IRExpr e : ((IRCall)node).args()) {
+//					getUseSet(e, use);
+//				}
+//			}
+		}
+		return use;
+	}
+	
+	public void getUseSet(AssemOperand operand, HashSet<String> use) {
+		if(debugLVA){
+			System.out.println(use.size() + " in use before getting use set for node " + this );
+		}
+		if (operand instanceof AssemVar) {
+			
+				use.add(((AssemVar)operand).varName);
+			
+			
+		} else if (operand instanceof AssemAddr) {
+			AssemAddr addr = (AssemAddr)operand; 
+			if(addr.r1 != null && addr.r1 instanceof AssemVar){
+				use.add(((AssemVar)addr.r1).varName);
+			}
+			if(addr.r2 != null && addr.r2 instanceof AssemVar){
+				use.add(((AssemVar)addr.r2).varName);
+			}
+		}
+		if(debugLVA){
+			System.out.println(use.size() + " after getting use set for node " + this );
+		}
+	}
+	
+	public HashSet<String> getDef(){
+		if(def == null){
+			def = new HashSet<String>();
+			if(instr instanceof AssemBinInst){
+				AssemBinInst n = (AssemBinInst)this.instr;
+				if(n.dst instanceof AssemVar){
+					def.add(((AssemVar)(n.dst)).varName);
+				}
+			}
+//			else if (instr instanceof AssemMulDiv){
+//				AssemMulDiv n = (AssemMulDiv)instr;
+//				if(n.operand instanceof AssemVar){
+//					def.add(((AssemVar)(n.operand)).varName);
+//				}
+//			}
+		}
+		return def;
+	}
+	
+	public String liveVarsInToString(){
+		String s = "In: ";
+		boolean first = true;
+		if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
+		for(String each: this.liveVarsIn){
+			if(first){
+				s += each;
+				first = false;
+			}else{
+				s += ", " + each;
+			}
+		}
+		return s;
+	}
+	
+	public String liveVarsOutToString(){
+		String s = "Out: ";
+		boolean first = true;
+		if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
+		for(String each: this.liveVarsOut){
+			if(first){
+				s += each;
+				first = false;
+			}else{
+				s += ", " + each;
+			}
+		}
+		return s;
 	}
 }
