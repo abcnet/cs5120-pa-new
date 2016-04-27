@@ -15,8 +15,17 @@ public class AssemFunc extends AssemInstruction{
 		this.irFuncDecl = irFuncDecl;
 		irFuncDecl.assemFunc = this;
 	}
-	public AssemOperand getNumSpilledVars(){
-		return new AssemConst(0*8);
+	public AssemOperand getStackOffset(){
+		int c = irFuncDecl.getReserved() + getNumSpilledVars() + 
+				irFuncDecl.retSpace + irFuncDecl.argSpace;
+		if(c%2==1){
+            c++;
+        }
+		return new AssemConst(c*8);
+	}
+	
+	public int getNumSpilledVars(){
+		return varSet.size();
 	}
 	
 	public String toString(){
