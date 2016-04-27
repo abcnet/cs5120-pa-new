@@ -15,9 +15,7 @@ import zr54.assembly.AssemFunc;
 import zr54.assembly.AssemInstruction;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
-import zr54.cfg.CFG;
-import zr54.cfg.CFGEdge;
-import zr54.cfg.CFGNode;
+import zr54.cfg.*;
 import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
@@ -37,6 +35,7 @@ public class IRFuncDecl extends IRNode {
     private HashMap<String, IRNode> labelTable = null;
     private HashMap<String, Integer> indexTable = null;
     public CFG graph = null;
+    public IRCFG irgraph = null;
     public AssemFunc assemFunc = null;
     
     public static final boolean debugLVA = false;
@@ -193,7 +192,11 @@ public class IRFuncDecl extends IRNode {
             }
             labelTable = null;
             graph = new CFG(this);
-        }       
+        }  
+        if(irgraph == null) {
+        	irgraph = new IRCFG(this);
+        }
+        
         if(draw){
             for(CFGEdge edge : graph.edges){
                 fw.write("  \"" + edge.getSrc().toString());

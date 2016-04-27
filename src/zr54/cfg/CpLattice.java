@@ -52,6 +52,18 @@ public class CpLattice {
 	}
 	
 	/**
+	 * return the value of a variable
+	 * if it's not constant, return 0
+	 * @param name
+	 * @return
+	 */
+	public long value(String name) {
+		if(!isConstant(name)) 
+			return 0;
+		return val.get(name);
+	}
+	
+	/**
 	 * 
 	 * @param l
 	 * @return

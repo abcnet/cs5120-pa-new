@@ -148,6 +148,20 @@ public class IRCompUnit extends IRNode {
 				fw.write("}");
 				fw.flush();
 				fw.close();
+				
+				String file2 = file.substring(0, file.lastIndexOf('.')) + "2.dot";
+				FileWriter fw2 = new FileWriter(file2, false);
+				fw2.write("digraph " + this.name + " {\n"
+						+"	size=\"8,5\";\n"
+						+"	node [style=invis] \"\";\n"
+						+"	node [shape = circle,style=\"\"];\n");
+				for(IRFuncDecl func : functions.values()) {
+					func.irgraph.writeEdges2File(fw2);
+				}
+				fw2.write("}");
+				fw2.flush();
+				fw2.close();
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
