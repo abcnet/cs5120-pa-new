@@ -10,6 +10,7 @@ import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
+import zr54.cfg.CpLattice;
 /**
  * An intermediate representation for a temporary register
  * TEMP(name)
@@ -109,4 +110,10 @@ public class IRTemp extends IRExpr {
 		}
 
 	}
+	
+	public Long propConstVal(CpLattice cpl) {
+		//TODO: do constant propagation
+		 return null;
+	}
+	
 }

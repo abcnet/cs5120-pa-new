@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -613,5 +614,8 @@ public class IRBinOp extends IRExpr {
 
 	}
 
-
+	public Long propConstVal(CpLattice cpl) {
+		//TODO: do constant propagation
+		return null;
+	}
 }
