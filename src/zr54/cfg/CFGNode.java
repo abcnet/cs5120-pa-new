@@ -12,9 +12,8 @@ public class CFGNode {
 	private int nodeIndex;
 	private static int counter = 0;
 	public int count;
-	
-	
-	
+	public ArrayList<IRNode> newStmtsFromCSE = new ArrayList<IRNode>();
+		
 	public CFGNode(IRNode node) {
 		this.node = node;
 		count = counter++;
