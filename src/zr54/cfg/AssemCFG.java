@@ -50,7 +50,7 @@ public class AssemCFG {
 				else 
 					System.out.println("label not found");
 			}
-			else {
+			else if(!(instr instanceof AssemReturn)){
 				AssemCFGNode to = nodes.get(i + 1);
 				addEdge(from, to);
 			}
