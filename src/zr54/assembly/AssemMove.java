@@ -9,6 +9,16 @@ public class AssemMove extends AssemInstruction{
 	}
 	
 	public String toString() {
+		String srcString = "";
+		String dstString;
+		if(dst instanceof AssemRetTemp){
+			dstString = ((AssemRetTemp)dst).toString(true);
+		}else{
+			dstString = dst.toString();
+		}
+		if(src instanceof AssemRetTemp){
+			dstString = ((AssemRetTemp)dst).toString(false);
+		}
 		return "movq	" + src + ", " + dst;
 	}
 
