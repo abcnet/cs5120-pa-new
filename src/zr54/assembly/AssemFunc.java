@@ -2,17 +2,30 @@ package zr54.assembly;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 public class AssemFunc extends AssemInstruction{
 	public IRFuncDecl irFuncDecl;
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
+	public HashSet<String> varSet = new HashSet<String>();
+	public HashMap<String, Integer> varMap;
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
 		irFuncDecl.assemFunc = this;
 	}
-	public AssemOperand getNumSpilledVars(){
-		return new AssemConst(0*8);
+	public AssemOperand getStackOffset(){
+		int c = irFuncDecl.getReserved() + getNumSpilledVars() + 
+				irFuncDecl.retSpace + irFuncDecl.argSpace;
+		if(c%2==1){
+            c++;
+        }
+		return new AssemConst(c*8);
+	}
+	
+	public int getNumSpilledVars(){
+		return varSet.size();
 	}
 	
 	public String toString(){
@@ -38,5 +51,18 @@ public class AssemFunc extends AssemInstruction{
       return s;
      
 	}
+	
+	public String getVarString(String name){
+		if(varMap==null){
+			varMap = new HashMap<String, Integer>();
+			int c = this.irFuncDecl.getReserved();
+			for(String s : this.varSet){
+				this.varMap.put(s, ++c);
+			}
+		}
+		int n = varMap.get(name);
+		return "-"+8*n+"(%rbp)";
+	}
+	
 
 }

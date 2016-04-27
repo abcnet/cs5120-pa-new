@@ -285,13 +285,15 @@ public class IRFuncDecl extends IRNode {
 //              + name+":\n"
 //              + " pushq   %rbp\n"
 //              + " movq    %rsp, %rbp\n");
-        this.body.genIntermediateAssem(this.assemFunc.instList, this, funcs);
+        ArrayList<AssemInstruction> bodyInsts = new ArrayList<AssemInstruction>();
+        this.body.genIntermediateAssem(bodyInsts, this, funcs);
 //      bodyWriter.flush();
         int c=getReserved()+count+retSpace+argSpace;
         if(c%2==1){
             c++;
         }
-        this.assemFunc.instList.add(new AssemBinInst("subq", this.assemFunc.getNumSpilledVars(), rsp));
+        
+        this.assemFunc.instList.add(new AssemBinInst("subq", this.assemFunc.getStackOffset(), rsp));
         this.assemFunc.instList.add(new AssemMove(rdi, new AssemAddr(-8, rbp)));
         this.assemFunc.instList.add(new AssemMove(rsi, new AssemAddr(-16, rbp)));
         this.assemFunc.instList.add(new AssemMove(rbx, new AssemAddr(-32, rbp)));
@@ -308,8 +310,9 @@ public class IRFuncDecl extends IRNode {
 //              + " movq    %r14, -64(%rbp)\n"
 //              + " movq    %r15, -72(%rbp)\n");
         
+        this.assemFunc.instList.addAll(bodyInsts);
 //      sw.write(bodyWriter.toString());
-        this.assemFunc.instList.add(new AssemLabel(name + "_EPILOGUE:"));
+        this.assemFunc.instList.add(new AssemLabel(name + "_EPILOGUE"));
 //      sw.write(name + "_EPILOGUE:\n");
         this.assemFunc.instList.add(new AssemMove(new AssemAddr(-8, rbp), rdi));
         this.assemFunc.instList.add(new AssemMove(new AssemAddr(-16, rbp), rsi));
@@ -321,7 +324,7 @@ public class IRFuncDecl extends IRNode {
         this.assemFunc.instList.add(new AssemMove(new AssemAddr(-64, rbp), r14));
         this.assemFunc.instList.add(new AssemMove(new AssemAddr(-72, rbp), r15));
 
-        this.assemFunc.instList.add(new AssemBinInst("addq", this.assemFunc.getNumSpilledVars(), rsp));
+        this.assemFunc.instList.add(new AssemBinInst("addq", this.assemFunc.getStackOffset(), rsp));
         this.assemFunc.instList.add(new AssemPopq(rbp));
         this.assemFunc.instList.add(new AssemReturn());
 
