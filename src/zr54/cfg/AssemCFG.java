@@ -31,7 +31,7 @@ public class AssemCFG {
 				
 				//add the jump to edge
 				if(to != null) {
-					addEdge(from, to);
+					addEdge(from, to, true);
 				}
 				else {
 					System.out.println("label not found");
@@ -39,28 +39,28 @@ public class AssemCFG {
 			
 				//add the fall through edge
 				to = nodes.get(i + 1);
-				addEdge(from, to);
+				addEdge(from, to, false);
 			}
 			else if(instr instanceof AssemJump) {
 				AssemCFGNode to = label2Node.get(((AssemJump) instr).targetLabel);
 				
 				if(to != null) {
-					addEdge(from, to);
+					addEdge(from, to, false);
 				}
 				else 
 					System.out.println("label not found");
 			}
 			else if(!(instr instanceof AssemReturn)){
 				AssemCFGNode to = nodes.get(i + 1);
-				addEdge(from, to);
+				addEdge(from, to, false);
 			}
 		}
 		
 		
 	}
 	
-	void addEdge(AssemCFGNode from, AssemCFGNode to) {
-		AssemCFGEdge edge = new AssemCFGEdge(from, to);
+	void addEdge(AssemCFGNode from, AssemCFGNode to, boolean edgeType) {
+		AssemCFGEdge edge = new AssemCFGEdge(from, to, edgeType);
 		from.addOutEdge(edge);
 		to.addInEdge(edge);
 		edges.add(edge);

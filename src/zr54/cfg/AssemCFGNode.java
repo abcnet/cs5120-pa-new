@@ -136,4 +136,12 @@ public class AssemCFGNode {
 		}
 		return s;
 	}
+	
+	public String toString(){
+		String s = this.count + ": \r\n";
+		s += instr.toString().trim();
+		s.replace("\n", "\r\n");
+		
+		return s;
+	}
 }
