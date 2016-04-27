@@ -11,13 +11,13 @@ public class CFGEdge {
 	private CFGNode dst;
 	public CpLattice cpl = new CpLattice();
 	public boolean edgeType;
-	public ArrayList<IRExpr> exprList;
+	public HashSet<IRExpr> availExprList;
 	
 	public CFGEdge(CFGNode src, CFGNode dst, boolean edgeType) {
 		this.src = src;
 		this.dst = dst;
 		this.edgeType = edgeType;
-		this.exprList = new ArrayList<IRExpr>();
+		this.availExprList = new HashSet<IRExpr>();
 //		this.liveVars = new HashSet<IRTemp>();
 	}
 	
@@ -44,7 +44,7 @@ public class CFGEdge {
 	
 	public void copyExprList(ArrayList<IRExpr> exprList) {
 		for (IRExpr e : exprList) {
-			this.exprList.add(e);
+			this.availExprList.add(e);
 		}
 	}
 }
