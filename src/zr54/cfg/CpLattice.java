@@ -47,13 +47,12 @@ public class CpLattice {
 	 * @param name
 	 * @return
 	 */
-	public long getValue(String name) {
+	public Long getValue(String name) {
 		if(isConstant(name)) {
 			return val.get(name);
 		}
 		else {
-			System.out.println("Not a constant value");
-			return 0;
+			return null;
 		}
 	}
 	

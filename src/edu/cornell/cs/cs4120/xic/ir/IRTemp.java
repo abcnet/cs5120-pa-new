@@ -110,10 +110,10 @@ public class IRTemp extends IRExpr {
 		}
 
 	}
-	
+
 	public Long propConstVal(CpLattice cpl) {
 		//TODO: do constant propagation
-		 return null;
+		return cpl.getValue(name);
 	}
-	
+
 }
