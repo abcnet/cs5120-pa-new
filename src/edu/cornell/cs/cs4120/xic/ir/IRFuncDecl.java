@@ -282,12 +282,14 @@ public class IRFuncDecl extends IRNode {
 //              + name+":\n"
 //              + " pushq   %rbp\n"
 //              + " movq    %rsp, %rbp\n");
-        this.body.genIntermediateAssem(this.assemFunc.instList, this, funcs);
+        ArrayList<AssemInstruction> bodyInsts = new ArrayList<AssemInstruction>();
+        this.body.genIntermediateAssem(bodyInsts, this, funcs);
 //      bodyWriter.flush();
         int c=getReserved()+count+retSpace+argSpace;
         if(c%2==1){
             c++;
         }
+        
         this.assemFunc.instList.add(new AssemBinInst("subq", this.assemFunc.getStackOffset(), rsp));
         this.assemFunc.instList.add(new AssemMove(rdi, new AssemAddr(-8, rbp)));
         this.assemFunc.instList.add(new AssemMove(rsi, new AssemAddr(-16, rbp)));
@@ -305,6 +307,7 @@ public class IRFuncDecl extends IRNode {
 //              + " movq    %r14, -64(%rbp)\n"
 //              + " movq    %r15, -72(%rbp)\n");
         
+        this.assemFunc.instList.addAll(bodyInsts);
 //      sw.write(bodyWriter.toString());
         this.assemFunc.instList.add(new AssemLabel(name + "_EPILOGUE"));
 //      sw.write(name + "_EPILOGUE:\n");
