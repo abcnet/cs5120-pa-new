@@ -8,4 +8,7 @@ public class AssemBranch extends AssemInstruction{
 		this.label = label;
 	}
 	
+	public String toString(){
+		return op + " " + label;
+	}
 }

@@ -7,5 +7,9 @@ public class AssemLea extends AssemInstruction {
 		this.addr = addr;
 		this.var = var;
 	}
+	
+	public String toString() {
+		return "leaq	" + addr + ", " + var;
+	}
 
 }

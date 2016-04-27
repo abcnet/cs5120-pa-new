@@ -1,4 +1,6 @@
 package zr54.assembly;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
@@ -7,8 +9,34 @@ public class AssemFunc extends AssemInstruction{
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
-		irFuncDecl.func = this;
+		irFuncDecl.assemFunc = this;
+	}
+	public AssemOperand getNumSpilledVars(){
+		return new AssemConst(0*8);
 	}
 	
+	public String toString(){
+		StringWriter sw = new StringWriter();
+      sw.write("  .globl  "+irFuncDecl.name()+"\n"
+      + " .align  4\n"
+      + irFuncDecl.name()+":\n");
+      for (AssemInstruction inst: instList){
+    	  if(inst instanceof AssemComments || inst instanceof AssemLabel){
+    		  sw.write(inst + "\n");
+    	  }else{
+    		  sw.write("	" + inst + "\n");
+    	  }
+      }
+      sw.flush();
+      String s = sw.toString();
+      try {
+		sw.close();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+      return s;
+     
+	}
 
 }

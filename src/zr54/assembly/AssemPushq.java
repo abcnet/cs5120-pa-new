@@ -5,5 +5,9 @@ public class AssemPushq extends AssemInstruction{
 	public AssemPushq(AssemFixedRegister reg){
 		this.reg = reg;
 	}
+	
+	public String toString() {
+		return "pushq	" + reg;
+	}
 
 }

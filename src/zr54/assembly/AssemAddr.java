@@ -46,7 +46,24 @@ public class AssemAddr extends AssemOperand{
 		this.w = w;
 	}
 	
-	
+	public String toString(){
+		switch(type){
+		case r:
+			return "(" + r1 + ")";
+		case kr:
+			return k + "(" + r1 + ")";
+		case r1r2:
+			return "(" + r1 + ", " + r2 + ")";
+		case kr1r2:
+			return k + "(" + r1 + ", " + r2 + ")";
+		case r1r2w:
+			return "(" + r1 + ", " + r2 +  ", " + w + ")";
+		case kr1r2w:
+			return k + "(" + r1 + ", " + r2 +  ", " + w + ")";
+		default:
+			return "";
+		}
+	}
 	
 
 }

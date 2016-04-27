@@ -5,5 +5,9 @@ public class AssemComments extends AssemInstruction{
 	public AssemComments(String comments){
 		this.comments = comments;
 	}
+	
+	public String toString(){
+		return "# " + comments;
+	}
 
 }

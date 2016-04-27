@@ -23,7 +23,7 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRCompUnit extends IRNode {
     private String name;
     private Map<String, IRFuncDecl> functions;
-    public AssemProgram program = null;
+    public AssemProgram assemProgram = null;
 
     public IRCompUnit(String name) {
     	super();
@@ -183,8 +183,10 @@ public class IRCompUnit extends IRNode {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
+		AssemProgram assemProgram = new AssemProgram(this);
 		for (IRFuncDecl func : functions.values()){
-			func.genIntermediateAssem(instrs, func, funcs);
+			func.genIntermediateAssem(null, func, funcs);
+			assemProgram.assemFuncs.add(func.assemFunc);
 		}
 		return null;
 	}
