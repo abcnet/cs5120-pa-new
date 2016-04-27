@@ -31,6 +31,8 @@ public class IRGenerate {
 	
 	public static boolean debug = false;
 	public static boolean debugAssem = false;
+	public static boolean debugPA6 = true;
+	
 	
 	/**
 	 * Generete the IR
@@ -183,6 +185,10 @@ public class IRGenerate {
 			        
 //			        ArrayList<AssemInstruction> instrs = new ArrayList<AssemInstruction>();
 			        program.genIntermediateAssem(null, null, funcs);
+			        if(debugPA6){
+			        	System.out.println(program.assemProgram);
+			        }
+			        
 			        
 			        assemStringWriter.flush();
 			        if (debugAssem) System.out.println(assemStringWriter);

@@ -2,11 +2,15 @@ package zr54.assembly;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 public class AssemFunc extends AssemInstruction{
 	public IRFuncDecl irFuncDecl;
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
+	public HashSet<String> varSet = new HashSet<String>();
+	public HashMap<String, Integer> varMap;
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
 		irFuncDecl.assemFunc = this;
@@ -38,5 +42,18 @@ public class AssemFunc extends AssemInstruction{
       return s;
      
 	}
+	
+	public String getVarString(String name){
+		if(varMap==null){
+			varMap = new HashMap<String, Integer>();
+			int c = this.irFuncDecl.getReserved();
+			for(String s : this.varSet){
+				this.varMap.put(s, ++c);
+			}
+		}
+		int n = varMap.get(name);
+		return "-"+8*n+"(%rbp)";
+	}
+	
 
 }
