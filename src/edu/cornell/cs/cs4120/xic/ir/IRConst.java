@@ -101,9 +101,9 @@ public class IRConst extends IRExpr {
 		// TODO Auto-generated method stub
 		if(value > Integer.MAX_VALUE || value < Integer.MIN_VALUE){
 //			f.count++;
-			AssemOperand operand = new AssemVar("t" + ++f.count);
+			AssemOperand operand = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemComments("CONST " + value + " in t" + f.count + "\n"));
-			AssemVar r = new AssemVar("t" + ++f.count);
+			AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(new AssemConst(value), r));
 			instrs.add(new AssemMove(r, operand));
 //			sw.write("# CONST " + value + " in t" + operand.num + "\n");

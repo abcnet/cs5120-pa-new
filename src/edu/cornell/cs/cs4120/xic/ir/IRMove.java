@@ -198,7 +198,7 @@ public class IRMove extends IRStmt {
 				if(addr != null) {
 
 					if(!(src instanceof AssemConst)) {
-						AssemVar t = new AssemVar("t" + ++f.count);
+						AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(src, t));
 						instrs.add(new AssemMove(t, addr));
 					}
@@ -214,13 +214,13 @@ public class IRMove extends IRStmt {
 				AssemOperand addr = memTarget.expr().genIntermediateAssem(instrs, f, funcs);
 
 				if(expr instanceof IRConst) {
-					AssemVar t = new AssemVar("t" + ++f.count);
+					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 					instrs.add(new AssemMove(addr, t));
 					instrs.add(new AssemMove(new AssemConst(((IRConst) expr).value()), new AssemAddr(t)));
 				}
 				else {
-					AssemVar t1 = new AssemVar("t" + ++f.count);
-					AssemVar t2 = new AssemVar("t" + ++f.count);
+					AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
+					AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 					instrs.add(new AssemMove(src, t1));
 					instrs.add(new AssemMove(addr, t2));
 					instrs.add(new AssemMove(t1, new AssemAddr(t2)));
@@ -234,7 +234,7 @@ public class IRMove extends IRStmt {
 				long constValue = ((IRConst) expr).value();
 				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
 						&& dst instanceof AssemAddr){
-					AssemVar t = new AssemVar("t" + ++f.count);
+					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 					instrs.add(new AssemMove(new AssemConst(constValue), t));
 					instrs.add(new AssemMove(t, dst));
 					
@@ -248,7 +248,7 @@ public class IRMove extends IRStmt {
 				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
 				
 				if(src instanceof AssemAddr && dst instanceof AssemAddr) {
-					AssemVar t = new AssemVar("t" + ++f.count);
+					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 					instrs.add(new AssemMove(src, t));
 					instrs.add(new AssemMove(t, dst));
 				}else{

@@ -210,6 +210,7 @@ public class IRGenerate {
 				}
 								
 			}catch(Exception e){
+				e.printStackTrace();
 				if(errOutput)System.out.println(e.getMessage());
 				s = l.next_token();
 				return false;

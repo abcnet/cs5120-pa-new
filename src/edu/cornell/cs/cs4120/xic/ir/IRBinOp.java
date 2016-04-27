@@ -433,7 +433,7 @@ public class IRBinOp extends IRExpr {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		 // TODO Auto-generated method stub
-		 AssemVar assemOperand = new AssemVar("t" + ++f.count);
+		 AssemVar assemOperand = new AssemVar("t" + ++f.count, f.assemFunc);
 		 
 		 String opStr = "";
 		 switch(this.opType()) {
@@ -512,7 +512,7 @@ public class IRBinOp extends IRExpr {
 			 instrs.add(new AssemMove(l, trax));
 
 			 if(right instanceof IRConst) {
-				 AssemVar t2 = new AssemVar("t" + ++f.count);
+				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
 				 instrs.add(new AssemMulDiv(opStr, t2));
 			 }
@@ -535,7 +535,7 @@ public class IRBinOp extends IRExpr {
 			 instrs.add(new AssemMove(l, trax));
 			 
 			 if(right instanceof IRConst) {
-				 AssemVar t2 = new AssemVar("t" + ++f.count);
+				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
 				 instrs.add(new AssemMulDiv(opStr, t2));
 			 }
@@ -568,7 +568,7 @@ public class IRBinOp extends IRExpr {
 			 
 			 l = left.genIntermediateAssem(instrs, f, funcs);
 			 r = right.genIntermediateAssem(instrs, f, funcs);
-			 AssemVar tmp = new AssemVar("t" + ++f.count);
+			 AssemVar tmp = new AssemVar("t" + ++f.count, f.assemFunc);
 			 instrs.add(new AssemMove(l, tmp));
 			 instrs.add(new AssemBinInst(opStr, r, tmp));
 			 

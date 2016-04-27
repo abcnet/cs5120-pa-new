@@ -151,7 +151,7 @@ public class IRMem extends IRExpr {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 		f.count++;
-		AssemVar assemOperand = new AssemVar("t" + f.count);
+		AssemVar assemOperand = new AssemVar("t" + f.count, f.assemFunc);
 				
 		boolean generated = false;
 
@@ -159,7 +159,7 @@ public class IRMem extends IRExpr {
 			AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)expr, instrs, f, funcs);
 			
 			if(addr != null) {
-				AssemVar t = new AssemVar("t" + ++f.count);
+				AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(addr, t));
 				instrs.add(new AssemMove(t, assemOperand));
 				generated = true;
@@ -168,8 +168,8 @@ public class IRMem extends IRExpr {
 		
 		if(!generated) {
 			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
-			AssemVar t1 = new AssemVar("t" + ++f.count);
-			AssemVar t2 = new AssemVar("t" + ++f.count);
+			AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
+			AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(src, t1));
 			instrs.add(new AssemMove(new AssemAddr(t1), t2));
 			instrs.add(new AssemMove(t2, assemOperand));

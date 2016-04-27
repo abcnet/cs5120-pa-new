@@ -1,9 +1,12 @@
 package zr54.assembly;
 
 public class AssemVar extends AssemOperand{
-	String varName;
-	public AssemVar(String varName){
+	public String varName;
+	public AssemFunc assemfunc;
+	public AssemVar(String varName, AssemFunc assemFunc){
 		this.varName = varName;
 	}
+	
+	
 
 }

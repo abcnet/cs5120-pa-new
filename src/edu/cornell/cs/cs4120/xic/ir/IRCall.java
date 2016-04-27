@@ -310,7 +310,7 @@ public class IRCall extends IRExpr {
 			if(arg instanceof IRConst){
 				if(argTarg instanceof AssemAddr && !((IRConst)arg).isIn32BitRange()){
 					
-					AssemVar r = new AssemVar("t" + ++f.count);
+					AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
 					instrs.add(new AssemMove(new AssemConst(((IRConst)arg).value()), r));
 					instrs.add(new AssemMove(r, argTarg));
 //					sw.write("	movq	$" + ((IRConst)arg).value() + ", %r10\n"
@@ -323,7 +323,7 @@ public class IRCall extends IRExpr {
 			}else{
 				t = arg.genIntermediateAssem(instrs, f, funcs);
 //				s = t.getTarget(false);
-				AssemVar r = new AssemVar("t" + ++f.count);
+				AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(t, argTarg));
 //				if(s.contains("(")&&argTarg.contains("(")){
 //					sw.write("	movq	" + s + ", %r10\n"

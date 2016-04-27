@@ -105,7 +105,7 @@ public class IRTemp extends IRExpr {
 			return new AssemRetTemp(idx);
 		}
 		else {
-			return new AssemVar(this.name);
+			return new AssemVar(this.name, f.assemFunc);
 		}
 
 	}

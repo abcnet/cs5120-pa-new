@@ -13,7 +13,25 @@ public class AssemBinInst extends AssemInstruction{
 	}
 	
 	public String toString(){
-		return op + "	" + src + ", " + dst; 
+		String srcString = "";
+		String dstString;
+		if(dst instanceof AssemRetTemp){
+			dstString = ((AssemRetTemp)dst).toString(true);
+		}else{
+			dstString = dst.toString();
+		}
+		if(src instanceof AssemRetTemp){
+			srcString = ((AssemRetTemp)src).toString(false);
+		}else{
+			srcString = src.toString();
+		}
+		if(dstString.contains("(") && 
+				(src instanceof AssemConst && !((AssemConst)src).isIn32BitRange()) || srcString.contains("(")){
+				return op + "	" + srcString + ", " + "%r10\n	" + op + "	%r10, " + dstString;
+			
+		}
+		return op + "	" + srcString + ", " + dstString;
+	
 	}
 	
 
