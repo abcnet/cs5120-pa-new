@@ -30,8 +30,8 @@ public class AssemFunc extends AssemInstruction{
 	
 	public String toString(){
 		StringWriter sw = new StringWriter();
-      sw.write("  .globl  "+irFuncDecl.name()+"\n"
-      + " .align  4\n"
+      sw.write("	.globl  "+irFuncDecl.name()+"\n"
+      + "	.align  4\n"
       + irFuncDecl.name()+":\n");
       for (AssemInstruction inst: instList){
     	  if(inst instanceof AssemComments || inst instanceof AssemLabel){

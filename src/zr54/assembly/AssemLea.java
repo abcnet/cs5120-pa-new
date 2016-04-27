@@ -9,7 +9,14 @@ public class AssemLea extends AssemInstruction {
 	}
 	
 	public String toString() {
-		return "leaq	" + addr + ", " + var;
+		String retStr = addr.movr1r2();
+		String varStr = var.toString();
+		if(varStr.contains("(")){
+			return retStr + "leaq	" + addr + ", %r10\n	movq	%r10, " + var;
+		}else{
+			return retStr + "leaq	" + addr + ", " + var;
+		}
+		
 	}
 
 }
