@@ -7,6 +7,7 @@ public class AssemCFG {
 	public ArrayList<AssemCFGNode> nodes = new ArrayList<AssemCFGNode>();
 	public ArrayList<AssemCFGEdge> edges = new ArrayList<AssemCFGEdge>();
 	public HashMap<String, AssemCFGNode> label2Node = new HashMap<String, AssemCFGNode>();
+	public static final boolean debug = true;
 	
 	public AssemCFG(ArrayList<AssemInstruction> instructions) {
 		
@@ -27,14 +28,15 @@ public class AssemCFG {
 			AssemCFGNode from = nodes.get(i);
 			
 			if(instr instanceof AssemBranch) {
-				AssemCFGNode to = label2Node.get(((AssemBranch) instr).label);
+				String label = ((AssemBranch) instr).label;
+				AssemCFGNode to = label2Node.get(label);
 				
 				//add the jump to edge
 				if(to != null) {
 					addEdge(from, to, true);
 				}
-				else {
-					System.out.println("label not found");
+				else if(debug){
+					System.out.println("label " + label + " not found");
 				}
 			
 				//add the fall through edge
@@ -42,13 +44,15 @@ public class AssemCFG {
 				addEdge(from, to, false);
 			}
 			else if(instr instanceof AssemJump) {
-				AssemCFGNode to = label2Node.get(((AssemJump) instr).targetLabel);
+				String label = ((AssemJump) instr).targetLabel;
+				AssemCFGNode to = label2Node.get(label);
 				
 				if(to != null) {
 					addEdge(from, to, false);
 				}
-				else 
-					System.out.println("label not found");
+				else if(debug){
+					System.out.println("label " + label + " not found");
+				}
 			}
 			else if(!(instr instanceof AssemReturn)){
 				AssemCFGNode to = nodes.get(i + 1);
