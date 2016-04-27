@@ -25,8 +25,9 @@ public class AssemBinInst extends AssemInstruction{
 		}else{
 			srcString = src.toString();
 		}
+		
 		if(dstString.contains("(") && 
-				(src instanceof AssemConst && !((AssemConst)src).isIn32BitRange()) || srcString.contains("(")){
+				((src instanceof AssemConst && !((AssemConst)src).isIn32BitRange()) || srcString.contains("("))){
 				return op + "	" + srcString + ", " + "%r10\n	" + op + "	%r10, " + dstString;
 			
 		}
