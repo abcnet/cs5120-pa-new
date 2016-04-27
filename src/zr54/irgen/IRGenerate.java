@@ -179,30 +179,52 @@ public class IRGenerate {
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        
 			        
-			        StringWriter assemStringWriter = new StringWriter();
+			       
 			        
-			        program.genAssem(assemStringWriter, null, funcs);
+			        if(genOldAssem){
+			        	 StringWriter assemStringWriter = new StringWriter();
+					        
+					        program.genAssem(assemStringWriter, null, funcs);
+					        assemStringWriter.flush();
+					        if (debugAssem) System.out.println(assemStringWriter);
+					        try{
+					        	FileWriter as = new FileWriter(assemFile, false);
+					        	
+					        	as.write(assemStringWriter.toString());
+					        	as.flush();
+						        as.close();
+					        }catch(IOException e){
+					        	System.out.println("Cannot write to " + assemFile);
+					        	return false;
+					        }finally{
+					        	assemStringWriter.close();
+					        }
+			        }else{
+			        	 program.genIntermediateAssem(null, null, funcs);
+					      
+					        
+					        try{
+					        	FileWriter as = new FileWriter(assemFile, false);
+					        	
+					        	as.write(program.assemProgram.toString());
+					        	as.flush();
+						        as.close();
+					        }catch(IOException e){
+					        	System.out.println("Cannot write to " + assemFile);
+					        	return false;
+					        }
+			        }
+			        
+			        
+			       
 			        
 //			        ArrayList<AssemInstruction> instrs = new ArrayList<AssemInstruction>();
-			        program.genIntermediateAssem(null, null, funcs);
-			        if(debugPA6){
-			        	System.out.println(program.assemProgram);
-			        }
+			       
 			        
 			        
-			        assemStringWriter.flush();
-			        if (debugAssem) System.out.println(assemStringWriter);
-			        try{
-			        	FileWriter as = new FileWriter(assemFile, false);
-			        	as.write(assemStringWriter.toString());
-			        	as.flush();
-				        as.close();
-			        }catch(IOException e){
-			        	System.out.println("Cannot write to " + assemFile);
-			        	return false;
-			        }finally{
-			        	assemStringWriter.close();
-			        }
+			        
+			      
+			       
 			        
 			        return true;
 					

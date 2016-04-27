@@ -2,7 +2,7 @@ package zr54.assembly;
 
 public class AssemConst extends AssemOperand{
 	public long literalConst;
-	public static final boolean debug = true;
+	public static final boolean debug = false;
 	public AssemConst(long literalConst){
 		this.literalConst = literalConst;
 	}
