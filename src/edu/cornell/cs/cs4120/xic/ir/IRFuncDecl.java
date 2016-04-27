@@ -338,25 +338,25 @@ public class IRFuncDecl extends IRNode {
     }
     
     public int getNodeIndexAfterLabel(String label){
-    	if(labelTable==null){
-    	indexTable = new HashMap<String, Integer>();
-    	List<IRStmt> stmts = ((IRSeq)body).stmts();
-    	IRNode curr; int i, j;
-    	for(i=0; i<stmts.size(); i++) {
-    	 curr = stmts.get(i);
-    	 if(curr instanceof IRLabel && i<=stmts.size()-2){
-    	 j = i+1;
-    	 while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
-    	 j++;
-    	 }
-    	 
-    	 indexTable.put(((IRLabel)curr).name(), j);
-    	 }
-    	}
-    	}
+    	if(indexTable==null){
+	    	indexTable = new HashMap<String, Integer>();
+	    	List<IRStmt> stmts = ((IRSeq)body).stmts();
+	    	IRNode curr; int i, j;
+	    	for(i=0; i<stmts.size(); i++) {
+		    	 curr = stmts.get(i);
+		    	 if(curr instanceof IRLabel && i<=stmts.size()-2){
+		    	 j = i+1;
+		    	 while(stmts.get(j) instanceof IRLabel && j<stmts.size()-1 ){
+		    		 j++;
+		    	 }
+	    	 
+		    	 indexTable.put(((IRLabel)curr).name(), j);
+		    	 }
+	    	}
+	    }
+	
+	    	return indexTable.get(label);
 
-    	return indexTable.get(label);
-
-    	}
+    }
     
 }
