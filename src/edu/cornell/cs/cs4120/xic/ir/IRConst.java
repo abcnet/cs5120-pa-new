@@ -12,6 +12,7 @@ import zr54.assembly.AssemOperand;
 import zr54.assembly.AssemVar;
 import zr54.assembly.OpTarget;
 import zr54.assembly.OpTarget.TempType;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -115,6 +116,10 @@ public class IRConst extends IRExpr {
 //			operand = new OpTarget(TempType.CONST, (int)value);
 		}
 		
+	}
+	
+	public Long propConstVal(CpLattice cpl) {
+		return value;
 	}
 
 }

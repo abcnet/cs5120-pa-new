@@ -11,9 +11,8 @@ import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
-import zr54.assembly.OpTarget;
-
 import zr54.assembly.OpTarget.TempType;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -345,5 +344,9 @@ public class IRCall extends IRExpr {
 //				+"	movq	-8(%rbp), %rdi\n");
 		return new AssemRetTemp(0);
 //		return new OpTarget(TempType.RET, 0);
+	}
+	
+	public Long propConstVal(CpLattice cpl) {
+		return null;
 	}
 }

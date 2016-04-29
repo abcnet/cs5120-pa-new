@@ -1,22 +1,24 @@
 package zr54.cfg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CpLattice {
 	
 	//whether this CFG node is unreachable
-	public boolean unreachable = true;
+	private boolean unreachable = true;
 	
 	//check whether a temp is bottom
 	//if the name is not in the map, then it's undefined (top)
 	//if the name maps to true, then it's overdefined (bottom); don't query val in this case
 	//if the name maps to false, then it's a constant
-	public HashMap<String, Boolean> bottom = new HashMap<String, Boolean>();
+	private HashMap<String, Boolean> bottom = new HashMap<String, Boolean>();
 	
 	//map temp name to value, if it's a constant
-	public HashMap<String, Long> val = new HashMap<String, Long>();
+	private HashMap<String, Long> val = new HashMap<String, Long>();
 	
-
+	private boolean changed = false;
+	
 	/**
 	 * true if the variable is top, false if not
 	 * @param name: name of the variable
@@ -41,6 +43,20 @@ public class CpLattice {
 	}
 
 	/**
+	 * return the value if it's a constant
+	 * @param name
+	 * @return
+	 */
+	public Long getValue(String name) {
+		if(isConstant(name)) {
+			return val.get(name);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
 	 * true if the variable	is bottom, false if not
 	 * @param name: name of the variable
 	 * @return
@@ -51,6 +67,7 @@ public class CpLattice {
 		return bottom.get(name);
 	}
 	
+		
 	/**
 	 * return the value of a variable
 	 * if it's not constant, return 0
@@ -64,7 +81,81 @@ public class CpLattice {
 	}
 	
 	/**
-	 * 
+	 * set the variable to top
+	 * @param name
+	 */
+	public void setTop(String name) {
+		bottom.remove(name);
+	}
+	
+	/**
+	 * set the variable to bottom
+	 * @param name
+	 */
+	public void setBottom(String name) {
+		bottom.put(name, true);			
+	}
+	
+	/**
+	 * set the variable to a contant value
+	 * @param name
+	 * @param num
+	 */
+	public void setConstant(String name, long num) {
+		bottom.put(name, false);
+		val.put(name, num);
+	}
+	
+	/**
+	 * set to unreachable
+	 */
+	public void setUnreachable() {
+		unreachable = true;
+	}
+	
+	/**
+	 * set to reachable
+	 */
+	public void setReachable() {
+		unreachable = false;
+	}
+	
+	public void setChanged() {
+		changed = true;
+	}
+
+	public void consumeChange() {
+		changed = false;
+	}
+	
+	public boolean changed() {
+		return changed;
+	}
+
+	public void setLattice(CpLattice cp) { 
+		this.unreachable = cp.unreachable;
+		this.changed = cp.changed;
+		//MARK: is this deep cloning?
+		this.bottom.clear();
+		for(String key : cp.bottom.keySet())
+			this.bottom.put(key, cp.bottom.get(key));
+		this.val.clear();
+		for(String key : cp.val.keySet())
+			this.val.put(key, cp.val.get(key));
+		
+	}
+	
+	static public CpLattice meet(ArrayList<IRCFGEdge> edges) {
+		CpLattice result = new CpLattice();
+		for(IRCFGEdge e : edges) {
+			result.setLattice(result.meet(e.cpl));
+		}
+		return result;
+	}
+	
+	
+	/**
+	 * return this meet l
 	 * @param l
 	 * @return
 	 */

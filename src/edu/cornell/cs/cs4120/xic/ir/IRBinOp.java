@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -613,5 +614,78 @@ public class IRBinOp extends IRExpr {
 
 	}
 
-
+	public Long propConstVal(CpLattice cpl) {
+		//TODO: do constant propagation
+		Long l = left.propConstVal(cpl);
+		Long r = right.propConstVal(cpl); 
+		if(l == null || r == null)
+			return null;
+		else {
+			 long result;
+			 switch(this.opType()) {
+			 case ADD:
+				 result = l + r;
+				 break;
+			 case SUB:
+				 result = l - r;
+				 break;
+			 case MUL:
+				 result = l * r;
+				 break;
+			 case HMUL:
+				 result = BigInteger.valueOf(l)
+				 .multiply(BigInteger.valueOf(r))
+				 .shiftRight(64)
+				 .longValue();
+				 break;
+			 case DIV:
+				 if (r == 0) throw new Trap("Division by zero!");
+				 result = l / r;
+				 break;
+			 case MOD:
+				 if (r == 0) throw new Trap("Division by zero!");
+				 result = l % r;
+				 break;
+			 case AND:
+				 result = l & r;
+				 break;
+			 case OR:
+				 result = l | r;
+				 break;
+			 case XOR:
+				 result = l ^ r;
+				 break;
+			 case LSHIFT:
+				 result = l << r;
+				 break;
+			 case RSHIFT:
+				 result = l >>> r;
+				 break;
+			 case ARSHIFT:
+				 result = l >> r;
+				 break;
+			 case EQ:
+				 result = l == r ? 1 : 0;
+				 break;
+			 case NEQ:
+				 result = l != r ? 1 : 0;
+				 break;
+			 case LT:
+				 result = l < r ? 1 : 0;
+				 break;
+			 case GT:
+				 result = l > r ? 1 : 0;
+				 break;
+			 case LEQ:
+				 result = l <= r ? 1 : 0;
+				 break;
+			 case GEQ:
+				 result = l >= r ? 1 : 0;
+				 break;
+			 default:
+				 throw new InternalCompilerError("Invalid binary operation");
+			}
+			return result;
+		}
+	}
 }

@@ -32,4 +32,38 @@ public class IRCFGNode {
 		return s;
 	}
 	
+	/**
+	 * update the constant propagation lattice
+	 * @return true if the lattice	s changed, false otherwise
+	 */
+	public boolean updateCpl() {
+		boolean inChanged = false;
+		for(IRCFGEdge e : in) {
+			if(e.cpl.changed()) {
+				inChanged = true;
+				e.cpl.consumeChange();
+			}
+		}
+		
+		if(inChanged) {
+			CpLattice inMeet = CpLattice.meet(in);
+			if(stmt instanceof IRMove){
+				
+			}
+			else if(stmt instanceof IRCJump) {
+				
+			}
+			else {
+				for(IRCFGEdge e : out) {
+					e.cpl.setLattice(inMeet);
+					e.cpl.setChanged();
+				}
+			}
+			
+			return true;
+		}
+
+		return false;
+	}
+	
 }
