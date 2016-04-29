@@ -19,17 +19,28 @@ import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 
 public class CSE {
-	private HashSet<IRExpr> allExpressions;
+	public class ExprMetaData {
+		public IRExpr expr;
+		public CFGNode srcNode;
+		public IRTemp assignedTemp;
+		
+		public ExprMetaData(IRExpr e, CFGNode n) {
+			this.expr = e;
+			this.srcNode = n;
+			this.assignedTemp = null;
+		}
+	}
+	//private HashSet<ExprMetaData> allExpressions;
 	private IRFuncDecl root;
 	private CFG cfg;
 	
 	public CSE(IRFuncDecl root) {
-		this.allExpressions = new HashSet<IRExpr>();
+		//this.allExpressions = new HashSet<ExprMetaData>();
 		this.root = root;
 		this.cfg = new CFG(root);
 	}
 	
-	public void getAllExpressions() {
+	/*public void getAllExpressions() {
 		IRSeq seq = (IRSeq) root.children.get(0);
 		for (IRNode currIRNode : seq.children) {
 			if (currIRNode instanceof IRMove) {
@@ -39,34 +50,34 @@ public class CSE {
 				getSubExpressions(((IRCJump)currIRNode).expr(), allExpressions);
 			}
 		}
-	}
+	}*/
 	
-	public void getSubExpressions(IRExpr IRExprNode, HashSet<IRExpr> allExpressions) {
+	public void getSubExpressions(IRExpr IRExprNode, CFGNode node, HashSet<ExprMetaData> exprList) {
 		if (IRExprNode instanceof IRConst
 			|| IRExprNode instanceof IRTemp
 			|| IRExprNode instanceof IRName) {
 			return;
 		} else {
-			allExpressions.add(IRExprNode);
+			exprList.add(new ExprMetaData(IRExprNode, node));
 		} 
 		if (IRExprNode instanceof IRCall) {
 			for (IRExpr arg : ((IRCall)IRExprNode).args()) {
-				getSubExpressions(arg, allExpressions);
+				getSubExpressions(arg, node, exprList);
 			}
 		} else if (IRExprNode instanceof IRMem) {
 			IRExpr child = ((IRMem)IRExprNode).expr();
-			getSubExpressions(child, allExpressions);
+			getSubExpressions(child, node, exprList);
 		} else if (IRExprNode instanceof IRBinOp) {
 			IRExpr leftChild = ((IRBinOp)IRExprNode).left();
 			IRExpr rightChild = ((IRBinOp)IRExprNode).right();
-			getSubExpressions(leftChild, allExpressions);
-			getSubExpressions(rightChild, allExpressions);
+			getSubExpressions(leftChild, node, exprList);
+			getSubExpressions(rightChild, node, exprList);
 			
 		}
 	}
 	
-	public HashSet<IRExpr> getKillSet(HashSet<IRExpr> exprList, IRExpr exprToMatch) {
-		HashSet<IRExpr> killSet = new HashSet<IRExpr>();
+	public HashSet<ExprMetaData> getKillSet(HashSet<ExprMetaData> exprList, IRExpr exprToMatch) {
+		HashSet<ExprMetaData> killSet = new HashSet<ExprMetaData>();
 		IRTemp baseAddr = null;
 		IRExpr offset = null;
 		if (exprToMatch instanceof IRMem) {
@@ -78,7 +89,8 @@ public class CSE {
 				offset = ((IRBinOp)expr).right();
 			}
 		}
-		for (IRExpr e : exprList) {
+		for (ExprMetaData eMetaData : exprList) {
+			IRExpr e = eMetaData.expr;
 			if (exprToMatch instanceof IRMem) {
 				if (e instanceof IRMem) {
 					IRTemp baseAddr1 = null;
@@ -95,26 +107,26 @@ public class CSE {
 					if (baseAddr.name().equals(baseAddr1.name())) {
 						if (offset instanceof IRConst && offset1 instanceof IRConst) {
 							if (((IRConst)offset).value() == ((IRConst)offset1).value()) {
-								killSet.add(e);
+								killSet.add(eMetaData);
 							}
 						} else {
-							killSet.add(e);
+							killSet.add(eMetaData);
 						}
 					}
 				}
 			} else if (contains(e, exprToMatch)) {
-				killSet.add(e);
+				killSet.add(eMetaData);
 			}
 		}
 		return killSet;
 	}
 	
-	public HashSet<IRExpr> in(CFGNode n) {
+	public HashSet<ExprMetaData> in(CFGNode n) {
 		if (cfg.incomingGraph.getChildren(n) == null) {
 			//return this.allExpressions;
-			return new HashSet<IRExpr>(); //empty set
+			return new HashSet<ExprMetaData>(); //empty set
 		} else {
-			HashSet<IRExpr> inSet = (HashSet<IRExpr>)this.allExpressions.clone();
+			HashSet<ExprMetaData> inSet = (HashSet<ExprMetaData>)(cfg.incomingGraph.getChildren(n).get(0).availExprList).clone();
 			for (CFGEdge inEdge : cfg.incomingGraph.getChildren(n)) {
 				inSet.retainAll(inEdge.availExprList);
 			}
@@ -124,26 +136,26 @@ public class CSE {
 	
 	public boolean out(CFGNode n) {
 		IRNode currIRNode = n.getNode();
-		HashSet<IRExpr> in = new HashSet<IRExpr>();
-		HashSet<IRExpr> exprs = new HashSet<IRExpr>();
-		HashSet<IRExpr> kill = new HashSet<IRExpr>();
-		in = (HashSet<IRExpr>)in(n).clone();
+		HashSet<ExprMetaData> in = new HashSet<ExprMetaData>();
+		HashSet<ExprMetaData> exprs = new HashSet<ExprMetaData>();
+		HashSet<ExprMetaData> kill = new HashSet<ExprMetaData>();
+		in = (HashSet<ExprMetaData>)in(n).clone();
 		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
 			IRExpr e = (currIRNode instanceof IRMove) ? ((IRMove)currIRNode).expr() : ((IRCJump)currIRNode).expr();
-			getSubExpressions(e, exprs);
+			getSubExpressions(e, n, exprs);
 			if (currIRNode instanceof IRMove) {
-				getSubExpressions(((IRMove)currIRNode).target(), exprs);
+				getSubExpressions(((IRMove)currIRNode).target(), n, exprs);
 			}
 			in.addAll(exprs);
 			if (currIRNode instanceof IRMove) {
-				kill = (HashSet<IRExpr>)getKillSet(in, ((IRMove)currIRNode).target()).clone();
+				kill = (HashSet<ExprMetaData>)getKillSet(in, ((IRMove)currIRNode).target()).clone();
 				in.removeAll(kill);
 			}
 			if (containsCallNode(e)) { //If RHS of MOVE contains a func call
 				kill.clear();
 				//Kill all expressions that contain mem node from in(n) -- being conservative
-				for (IRExpr temp : in) {
-					if (containsMemNode(temp)) {
+				for (ExprMetaData temp : in) {
+					if (containsMemNode(temp.expr)) {
 						kill.add(temp);
 					}
 				}
@@ -152,8 +164,8 @@ public class CSE {
 		}
 		boolean changed = false;
 		for (CFGEdge outEdge : cfg.outgoingGraph.getChildren(n)) {
-			HashSet<IRExpr> prev = (HashSet<IRExpr>)outEdge.availExprList.clone();
-			outEdge.availExprList = (HashSet<IRExpr>)in.clone();
+			HashSet<ExprMetaData> prev = (HashSet<ExprMetaData>)outEdge.availExprList.clone();
+			outEdge.availExprList = (HashSet<ExprMetaData>)in.clone();
 			if (!prev.equals(outEdge.availExprList)) {
 				changed = true;
 			}
@@ -163,7 +175,8 @@ public class CSE {
 	
 	public void CSEAnalysis() {
 		for (CFGEdge edge : cfg.edges) {
-			edge.availExprList = (HashSet<IRExpr>)this.allExpressions.clone();
+			//edge.availExprList = (HashSet<ExprMetaData>)this.allExpressions.clone();
+			edge.availExprList = new HashSet<ExprMetaData>(); //empty set
 		}
 		boolean changed;
 		do {

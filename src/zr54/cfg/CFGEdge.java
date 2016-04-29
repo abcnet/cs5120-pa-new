@@ -5,19 +5,20 @@ import java.util.*;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import zr54.cse.CSE.ExprMetaData;
 
 public class CFGEdge {
 	private CFGNode src;
 	private CFGNode dst;
 	public CpLattice cpl = new CpLattice();
 	public boolean edgeType;
-	public HashSet<IRExpr> availExprList;
+	public HashSet<ExprMetaData> availExprList;
 	
 	public CFGEdge(CFGNode src, CFGNode dst, boolean edgeType) {
 		this.src = src;
 		this.dst = dst;
 		this.edgeType = edgeType;
-		this.availExprList = new HashSet<IRExpr>();
+		this.availExprList = new HashSet<ExprMetaData>();
 //		this.liveVars = new HashSet<IRTemp>();
 	}
 	
@@ -40,11 +41,5 @@ public class CFGEdge {
 //			
 //		}
 		return s;
-	}
-	
-	public void copyExprList(ArrayList<IRExpr> exprList) {
-		for (IRExpr e : exprList) {
-			this.availExprList.add(e);
-		}
 	}
 }
