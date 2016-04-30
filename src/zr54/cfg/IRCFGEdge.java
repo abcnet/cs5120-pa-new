@@ -10,4 +10,8 @@ public class IRCFGEdge {
 		from = s;
 		to = d;
 	}
+	
+	public String toString() {
+		return cpl.toString();
+	}
 }
