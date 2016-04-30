@@ -460,6 +460,8 @@ public class IRFuncDecl extends IRNode {
     		if(!(stmt instanceof IRLabel))
     			seq.stmts().remove(stmt);
     	}
+    	
+    	//TODO: for move node, need to move constant instead of an expression
     }
     
 }
