@@ -37,6 +37,8 @@ public class IRFuncDecl extends IRNode {
     public IRCFG irgraph = null;
     public AssemCFG assemGraph = null;
     public AssemFunc assemFunc = null;
+    // Available registers for allocation: %rax, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    public static final int numAvailRegs = 10;
     
     public static final boolean debugLVA = false;
     public static final boolean debugInterference = true;
@@ -232,8 +234,8 @@ public class IRFuncDecl extends IRNode {
     
     private void liveVarAnalyze(){
     	 for(AssemCFGNode node: assemGraph.nodes){
-    		 node.liveVarsIn = new HashSet<String>();
-    		 node.liveVarsOut = new HashSet<String>();
+    		 node.liveVarsIn.clear();
+    		 node.liveVarsOut.clear();
     	 }
         boolean changed = true;
         while(changed){
@@ -294,17 +296,32 @@ public class IRFuncDecl extends IRNode {
         }
         
     }
-    
+
+    /**
+     * Appel's algorithm
+     */
     public void regAlloc(){
+    	Stack allocStack = new Stack();
+    	
     	boolean rewritten = true;
     	while(rewritten){
     		rewritten = false;
+    		// Step 0: live variable analysis + interference graph
     		for(AssemCFGNode n: this.assemGraph.nodes){
     			n.liveVarsIn = new HashSet<String>();
     			n.liveVarsOut = new HashSet<String>();
     		}
     		this.liveVarAnalyze();
     		
+    		boolean repeatFromStep1 = true;
+    		while(repeatFromStep1){
+    			repeatFromStep1 = false;
+    			// Step 1: Push all low-degree non-move-related nodes onto allocation stack
+    			HashSet<String> allocSet = new HashSet<String>();
+    			for(String var : this.assemFunc.varInterference.keySet()){
+//    				if(this.assemFunc.varInterference.get(var).size())
+    			}
+    		}
     	}
     }
 

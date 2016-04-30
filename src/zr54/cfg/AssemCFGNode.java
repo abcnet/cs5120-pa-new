@@ -19,8 +19,8 @@ public class AssemCFGNode {
 	public int count;
 	private HashSet<String> use = null;
 	private HashSet<String> def = null;
-	public HashSet<String> liveVarsIn = null;
-	public HashSet<String> liveVarsOut = null;
+	public HashSet<String> liveVarsIn = new HashSet<String>();
+	public HashSet<String> liveVarsOut = new HashSet<String>();
 	
 	public static final boolean debugCFG = false;
 	public static final boolean debugLVA = false;
@@ -48,8 +48,8 @@ public class AssemCFGNode {
 					getUseSet(n.dst, use);
 				}
 				
-			} else if(instr instanceof AssemMulDiv){
-				AssemMulDiv n = (AssemMulDiv)instr;
+			} else if(instr instanceof AssemMul){
+				AssemMul n = (AssemMul)instr;
 				if(n.operand instanceof AssemVar){
 					use.add(((AssemVar)(n.operand)).varName);
 				}
@@ -96,13 +96,15 @@ public class AssemCFGNode {
 				if(n.dst instanceof AssemVar){
 					def.add(((AssemVar)(n.dst)).varName);
 				}
+			} else if(instr instanceof AssemMul){
+				
+			} else if(instr instanceof AssemDiv){
+				
+			} else if(instr instanceof AssemCall){
+				
+			} else if(instr instanceof AssemMul){ // jcxz
+
 			}
-//			else if (instr instanceof AssemMulDiv){
-//				AssemMulDiv n = (AssemMulDiv)instr;
-//				if(n.operand instanceof AssemVar){
-//					def.add(((AssemVar)(n.operand)).varName);
-//				}
-//			}
 		}
 		return def;
 	}

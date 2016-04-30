@@ -515,10 +515,10 @@ public class IRBinOp extends IRExpr {
 			 if(right instanceof IRConst) {
 				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
-				 instrs.add(new AssemMulDiv(opStr, t2));
+				 instrs.add(new AssemMul(t2));
 			 }
 			 else {
-				 instrs.add(new AssemMulDiv(opStr, r));
+				 instrs.add(new AssemMul(r));
 			 }
 			 if(this.opType() == OpType.MUL)
 				 instrs.add(new AssemMove(trax, assemOperand));
@@ -538,10 +538,10 @@ public class IRBinOp extends IRExpr {
 			 if(right instanceof IRConst) {
 				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
-				 instrs.add(new AssemMulDiv(opStr, t2));
+				 instrs.add(new AssemDiv(t2));
 			 }
 			 else {
-				 instrs.add(new AssemMulDiv(opStr, r));
+				 instrs.add(new AssemDiv(r));
 			 }
 			 if(this.opType() == OpType.DIV)
 				 instrs.add(new AssemMove(trax, assemOperand));

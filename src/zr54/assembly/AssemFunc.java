@@ -11,7 +11,7 @@ public class AssemFunc extends AssemInstruction{
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 //	public HashSet<String> varSet = null;
 	public HashMap<String, ArrayList<AssemVar>> varOccurances = null;
-	public HashMap<String, HashSet<String>> varInterference = null;
+	public HashMap<String, HashSet<String>> varInterference = new HashMap<String, HashSet<String>>();
 	public HashMap<String, Integer> varMap;
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
@@ -117,7 +117,8 @@ public class AssemFunc extends AssemInstruction{
 	}
 	
 	public void reset(){
-		this.varInterference = null;
+		this.varInterference.clear();
+		
 	}
 
 }
