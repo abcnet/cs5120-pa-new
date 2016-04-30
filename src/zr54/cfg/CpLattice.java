@@ -20,6 +20,13 @@ public class CpLattice {
 	private boolean changed = false;
 	
 	/**
+	 * @return true if this is unreachable, false otherwise
+	 */
+	public boolean isUnreachable() {
+		return unreachable;
+	}
+	
+	/**
 	 * true if the variable is top, false if not
 	 * @param name: name of the variable
 	 * @return

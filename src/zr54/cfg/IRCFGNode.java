@@ -51,6 +51,17 @@ public class IRCFGNode {
 		
 		if(inChanged) {
 			CpLattice inMeet = CpLattice.meet(in);
+			if(inMeet.isUnreachable()) {
+				boolean changed = false;
+				for(IRCFGEdge e : out) {
+					if(!e.cpl.isAllTop()) {
+						e.cpl.setAllTop();
+						e.cpl.setChanged();
+						changed = true;
+					}
+				}
+				return changed;
+			}
 			
 			//implement the flow function here 
 			if(stmt instanceof IRMove){
