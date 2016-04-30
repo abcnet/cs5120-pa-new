@@ -37,11 +37,7 @@ public class AssemFunc extends AssemInstruction{
       + "	.align  4\n"
       + irFuncDecl.name()+":\n");
       for (AssemInstruction inst: instList){
-    	  if(inst instanceof AssemComments || inst instanceof AssemLabel){
-    		  sw.write(inst + "\n");
-    	  }else{
-    		  sw.write("	" + inst + "\n");
-    	  }
+    	  sw.write(inst + "\n");
       }
       sw.flush();
       String s = sw.toString();
@@ -58,7 +54,7 @@ public class AssemFunc extends AssemInstruction{
 	public String getVarString(String name){
 		if(varMap==null){
 			varMap = new HashMap<String, Integer>();
-			int c = this.irFuncDecl.getReserved();
+			int c = IRFuncDecl.getReserved();
 			for(String s : this.varOccurances.keySet()){
 				this.varMap.put(s, ++c);
 			}

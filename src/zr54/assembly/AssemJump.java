@@ -6,6 +6,6 @@ public class AssemJump extends AssemInstruction{
 	}
 	
 	public String toString() {
-		return "jmp " + targetLabel;
+		return "	jmp " + targetLabel;
 	}
 }

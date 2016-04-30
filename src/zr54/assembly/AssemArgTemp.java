@@ -1,8 +1,6 @@
 package zr54.assembly;
 
-import zr54.assembly.OpTarget.TempType;
-
-public class AssemArgTemp extends AssemOperand{
+public class AssemArgTemp extends AssemOperand implements AssemReg{
 	public int num;
 	public boolean retGt2;
 	public AssemArgTemp(int num, boolean gt2){
@@ -29,5 +27,17 @@ public class AssemArgTemp extends AssemOperand{
 		default:
 			return 8*(num2-4)+"(%rbp)";
 		}
+	}
+
+	@Override
+	public boolean isRegPossible(boolean isDst) {
+		// TODO Auto-generated method stub
+		return !toString().contains("(");
+	}
+
+	@Override
+	public String getName(boolean isDst) {
+		// TODO Auto-generated method stub
+		return toString();
 	}
 }

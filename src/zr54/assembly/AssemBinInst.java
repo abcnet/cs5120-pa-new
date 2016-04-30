@@ -17,11 +17,20 @@ public class AssemBinInst extends AssemInstruction{
 		String retStr = "";
 		String srcString = "";
 		int usedRegs = 0;
+		
+		if(src instanceof AssemVar){
+			retStr += ((AssemVar)src).comments();
+		}
+		
+		if(dst instanceof AssemVar){
+			retStr += ((AssemVar)dst).comments();
+		}
+		
 		if(src instanceof AssemRetTemp){
 			srcString = ((AssemRetTemp)src).toString(false);
 		}else if (src instanceof AssemAddr){
 			if(dst instanceof AssemAddr){
-				retStr += ((AssemAddr)src).movr1r2() + "movq	" + src.toString() + ", %r10\n	";
+				retStr += ((AssemAddr)src).movr1r2() + "	movq	" + src.toString() + ", %r10\n";
 				srcString = "%r10";
 			}else{
 				retStr += ((AssemAddr)src).movr1r2();
@@ -52,10 +61,10 @@ public class AssemBinInst extends AssemInstruction{
 		
 		if(dstString.contains("(") && 
 				((src instanceof AssemConst && !((AssemConst)src).isIn32BitRange()) || srcString.contains("("))){
-				retStr +=  "movq	" + srcString + ", " + "%r10\n	" + op + "	%r10, " + dstString;
+				retStr +=  "	movq	" + srcString + ", " + "%r10\n	" + op + "	%r10, " + dstString;
 			
 		}else{
-			retStr +=  op + "	" + srcString + ", " + dstString;
+			retStr +=  "	" + op + "	" + srcString + ", " + dstString;
 		}
 		
 		

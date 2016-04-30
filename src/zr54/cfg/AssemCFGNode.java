@@ -49,9 +49,27 @@ public class AssemCFGNode {
 				}
 				
 			} else if(instr instanceof AssemMul){
+				use.add("%rax");
 				AssemMul n = (AssemMul)instr;
-				if(n.operand instanceof AssemVar){
-					use.add(((AssemVar)(n.operand)).varName);
+				if(n.operand instanceof AssemReg){
+					AssemReg reg = (AssemReg)n.operand;
+					if(reg.isRegPossible(false)){
+						use.add(reg.getName(false));
+					}
+					
+//					use.add(((AssemVar)(n.operand)).varName);
+				}
+			}else if(instr instanceof AssemDiv){
+				use.add("%rax");
+				use.add("%rdx");
+				AssemDiv n = (AssemDiv)instr;
+				if(n.operand instanceof AssemReg){
+					AssemReg reg = (AssemReg)n.operand;
+					if(reg.isRegPossible(false)){
+						use.add(reg.getName(false));
+					}
+					
+//					use.add(((AssemVar)(n.operand)).varName);
 				}
 			}
 //			else if (this.instr instanceof IRCJump) {
@@ -69,18 +87,29 @@ public class AssemCFGNode {
 		if(debugLVA){
 			System.out.println(use.size() + " in use before getting use set for node " + this );
 		}
-		if (operand instanceof AssemVar) {
-			
-				use.add(((AssemVar)operand).varName);
+		if (operand instanceof AssemReg) {
+			AssemReg reg = (AssemReg)operand;
+			if(reg.isRegPossible(false)){
+				use.add(reg.getName(false));
+			}
+//				use.add(((AssemVar)operand).varName);
 			
 			
 		} else if (operand instanceof AssemAddr) {
 			AssemAddr addr = (AssemAddr)operand; 
-			if(addr.r1 != null && addr.r1 instanceof AssemVar){
-				use.add(((AssemVar)addr.r1).varName);
+			if(addr.r1 != null && addr.r1 instanceof AssemReg){
+				AssemReg r1 = (AssemReg)addr.r1;
+				if(r1.isRegPossible(false)){
+					use.add(r1.getName(false));
+				}
+//				use.add(((AssemVar)addr.r1).varName);
 			}
-			if(addr.r2 != null && addr.r2 instanceof AssemVar){
-				use.add(((AssemVar)addr.r2).varName);
+			if(addr.r2 != null && addr.r2 instanceof AssemReg){
+				AssemReg r2 = (AssemReg)addr.r2;
+				if(r2.isRegPossible(false)){
+					use.add(r2.getName(false));
+				}
+//				use.add(((AssemVar)addr.r2).varName);
 			}
 		}
 		if(debugLVA){
@@ -93,18 +122,28 @@ public class AssemCFGNode {
 			def = new HashSet<String>();
 			if(instr instanceof AssemBinInst){
 				AssemBinInst n = (AssemBinInst)this.instr;
-				if(n.dst instanceof AssemVar){
-					def.add(((AssemVar)(n.dst)).varName);
+				if(n.dst instanceof AssemReg){
+					AssemReg dst = (AssemReg)n.dst;
+					if(dst.isRegPossible(true)){
+						def.add(dst.getName(true));
+					}
+					
 				}
 			} else if(instr instanceof AssemMul){
+				def.add("%rax");
+				def.add("%rdx");
 				
 			} else if(instr instanceof AssemDiv){
-				
+				def.add("%rax");
+				def.add("%rdx");
 			} else if(instr instanceof AssemCall){
+				def.add("%rax");
+				def.add("%rcx");
+				def.add("%rdx");
+				def.add("%r8");
+				def.add("%r9");
 				
-			} else if(instr instanceof AssemMul){ // jcxz
-
-			}
+			} 
 		}
 		return def;
 	}

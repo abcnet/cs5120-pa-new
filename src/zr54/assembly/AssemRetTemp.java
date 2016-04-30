@@ -1,6 +1,6 @@
 package zr54.assembly;
 
-public class AssemRetTemp extends AssemOperand{
+public class AssemRetTemp extends AssemOperand implements AssemReg{
 	public int num;
 	
 	public AssemRetTemp(int num){
@@ -18,6 +18,18 @@ public class AssemRetTemp extends AssemOperand{
 		default:
 			return 8*(num-2)+(isDest?"(%rdi)":"(%rbx)");
 		}
+	}
+
+	@Override
+	public boolean isRegPossible(boolean isDst) {
+		// TODO Auto-generated method stub
+		return !toString(isDst).contains("(");
+	}
+
+	@Override
+	public String getName(boolean isDst) {
+		// TODO Auto-generated method stub
+		return toString(isDst);
 	}
 
 }
