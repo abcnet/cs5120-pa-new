@@ -3,6 +3,7 @@ package zr54.cfg;
 import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 
 public class IRCFGNode {
 	
@@ -137,6 +138,60 @@ public class IRCFGNode {
 			
 		}
 
+		return false;
+	}
+	
+	public boolean updateCopies() {
+		boolean inChanged = false;
+		for(IRCFGEdge e : in) {
+			if(e.copies.changed()) {
+				inChanged = true;
+				e.copies.consumeChange();
+			}
+		}
+		
+		if(inChanged) {
+			CopyLattice inMeet = CopyLattice.meet(in);
+			System.out.println(stmt.toString());
+			System.out.println(inMeet.toString());
+			
+			if(stmt instanceof IRMove) {
+				IRMove move = (IRMove) stmt;
+				if(move.target() instanceof IRTemp) {
+					IRTemp target = (IRTemp) move.target();
+					//if(!(target.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
+					//||target.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
+					if(target.name().equals("z_main")) {
+						int debug = 0;
+						debug = debug + 1;
+					}
+					//kill relevant entries
+					inMeet.removeEntriesContaining(target.name());				
+
+					if(move.expr() instanceof IRTemp) { 
+						//generate an entry
+						IRTemp src = (IRTemp) move.expr();
+						if(target.name().equals("z_main")) {
+							int debug = 0;
+							debug = debug + 1;
+						}
+						inMeet.addEntry(target.name(), src.name());
+					}
+					//}
+				}
+			}
+			
+			boolean changed = false;
+			for(IRCFGEdge e : out) {
+				if(!e.copies.sameLattice(inMeet)) {
+					e.copies.setLattice(inMeet);
+					e.copies.setChanged();
+					changed = true;
+				}
+			}
+			if(changed)
+				return true;
+		}
 		return false;
 	}
 	

@@ -13,8 +13,9 @@ public class IRCFG {
 	IRCFGNode startNode = null;
 	IRCFGEdge startEdge = null;
 	HashMap<String, IRCFGNode> label2Node = new HashMap<String, IRCFGNode>();
-
+	String name = null;
 	public IRCFG(IRFuncDecl func) {
+		name = func.name();
 		IRSeq seq = (IRSeq) func.children.get(0);
 		
 		for(int i = 0; i < seq.stmts().size(); i++) {
@@ -134,6 +135,60 @@ public class IRCFG {
 				stmts.add(n.stmt);
 		}
 		return stmts;
+	}
+	
+	public void doCopyPropagation() {
+		if(nodes.size() > 0) {
+			for(IRCFGEdge e : edges)
+				e.copies.setChanged();
+			
+			boolean changed = true;
+			int	i = 0;
+			while(changed) {
+				changed = false;
+				
+				i++;
+				String file2 = "pa6tests/" + name + "before" + i + ".dot";
+				FileWriter fw2;
+				try {
+					fw2 = new FileWriter(file2, false);
+					fw2.write("digraph " + "func" + " {\n"
+							+"	size=\"8,5\";\n"
+							+"	node [style=invis] \"\";\n"
+							+"	node [shape = circle,style=\"\"];\n");
+					this.writeEdges2File(fw2);
+					fw2.write("}");
+					fw2.flush();
+					fw2.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				for(IRCFGNode n : nodes) {
+					if(n.updateCopies())
+						changed = true;
+				}
+				
+				file2 = "pa6tests/" + name + "after" + i + ".dot";
+				try {
+					fw2 = new FileWriter(file2, false);
+					fw2.write("digraph " + "func" + " {\n"
+							+"	size=\"8,5\";\n"
+							+"	node [style=invis] \"\";\n"
+							+"	node [shape = circle,style=\"\"];\n");
+					this.writeEdges2File(fw2);
+					fw2.write("}");
+					fw2.flush();
+					fw2.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+			
+		}
 	}
 	
 }

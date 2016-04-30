@@ -157,6 +157,7 @@ public class IRCompUnit extends IRNode {
 						+"	node [style=invis] \"\";\n"
 						+"	node [shape = circle,style=\"\"];\n");
 				for(IRFuncDecl func : functions.values()) {
+					func.irgraph.doCopyPropagation();
 					func.irgraph.doCondConstProp();
 					func.irgraph.writeEdges2File(fw2);
 				}
