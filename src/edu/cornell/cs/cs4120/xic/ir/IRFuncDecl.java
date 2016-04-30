@@ -274,25 +274,25 @@ public class IRFuncDecl extends IRNode {
         	for(String varStr1: node.liveVarsIn){
            	 for(String varStr2: node.liveVarsIn){
                 	
-                	assemFunc.addVarInterference(varStr1, varStr2);
+                	assemFunc.interGraph.connect(varStr1, varStr2);
                 }
            }
         }
         
-        if(debugInterference && assemFunc.varInterference != null){
-        	for(Entry<String, HashSet<String>> entry: assemFunc.varInterference.entrySet()){
-        		if(entry.getKey().contains("%"))continue;
-        		System.out.print("Var " + entry.getKey() + " interferes with: ");
-        		boolean first = true;
-        		for(String s : entry.getValue()){
-        			if(first){
-        				System.out.print(s);
-        				first = false;
-        			}else{
-        				System.out.print(", " + s);
-        			}
-        			
-        		}
+        if(debugInterference && assemFunc.interGraph != null){
+        	for(InterferenceGraphNode node: assemFunc.interGraph.nodes){
+        		if(node.isFirstReg)continue;
+        		System.out.print(node.toString());
+//        		boolean first = true;
+//        		for(String s : node.getValue()){
+//        			if(first){
+//        				System.out.print(s);
+//        				first = false;
+//        			}else{
+//        				System.out.print(", " + s);
+//        			}
+//        			
+//        		}
         		System.out.println("");
         	}
         }
@@ -320,9 +320,9 @@ public class IRFuncDecl extends IRNode {
     			repeatFromStep1 = false;
     			// Step 1: Push all low-degree non-move-related nodes onto allocation stack
     			HashSet<String> allocSet = new HashSet<String>();
-    			for(String var : this.assemFunc.varInterference.keySet()){
-//    				if(this.assemFunc.varInterference.get(var).size())
-    			}
+//    			for(String var : this.assemFunc.interGraph.keySet()){
+////    				if(this.assemFunc.varInterference.get(var).size())
+//    			}
     		}
     	}
     }
