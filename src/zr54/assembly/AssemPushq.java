@@ -7,7 +7,7 @@ public class AssemPushq extends AssemInstruction{
 	}
 	
 	public String toString() {
-		return "pushq	" + reg;
+		return "	pushq	" + reg;
 	}
 
 }

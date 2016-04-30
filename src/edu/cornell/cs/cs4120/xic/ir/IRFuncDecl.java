@@ -43,7 +43,7 @@ public class IRFuncDecl extends IRNode {
     public static final int numAvailRegs = 10;
     
     public static final boolean debugLVA = false;
-    public static final boolean debugInterference = false;
+    public static final boolean debugInterference = true;
     
     
     public IRFuncDecl(String name, IRStmt stmt) {
@@ -282,6 +282,7 @@ public class IRFuncDecl extends IRNode {
         
         if(debugInterference && assemFunc.varInterference != null){
         	for(Entry<String, HashSet<String>> entry: assemFunc.varInterference.entrySet()){
+        		if(entry.getKey().contains("%"))continue;
         		System.out.print("Var " + entry.getKey() + " interferes with: ");
         		boolean first = true;
         		for(String s : entry.getValue()){

@@ -81,14 +81,14 @@ public class AssemAddr extends AssemOperand{
 		if(r1!=null){
 			String r1Str = r1.toString();
 			if(r1Str.contains("(")){
-				retStr += "movq	" + r1Str + ", %r14\n	";
+				retStr += "	movq	" + r1Str + ", %r14\n";
 			}
 			
 		}
 		if(r2!=null){
 			String r2Str = r2.toString();
 			if (r2Str.contains("(")){
-				retStr += "movq	" + r2Str + ", %r15\n	";
+				retStr += "	movq	" + r2Str + ", %r15\n";
 			}
 		}
 		return retStr;

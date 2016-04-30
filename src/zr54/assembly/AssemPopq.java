@@ -7,6 +7,6 @@ public class AssemPopq extends AssemInstruction{
 	}
 
 	public String toString() {
-		return "popq	" + reg;
+		return "	popq	" + reg;
 	}
 }

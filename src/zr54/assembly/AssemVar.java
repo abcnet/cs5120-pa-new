@@ -36,5 +36,8 @@ public class AssemVar extends AssemOperand implements AssemReg{
 		return varName;
 	}
 	
+	public String comments(){
+		return "#	Variable " + varName + " is in " + toString() + "\n";
+	}
 
 }
