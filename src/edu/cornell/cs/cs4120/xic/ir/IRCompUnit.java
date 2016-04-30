@@ -218,9 +218,15 @@ public class IRCompUnit extends IRNode {
 		
 	}
 	
-	public void liveVarAnalyze(){
+//	public void liveVarAnalyze(){
+//		for (IRFuncDecl func : functions.values()){
+//			func.liveVarAnalyze();
+//		}
+//	}
+	
+	public void regAlloc(){
 		for (IRFuncDecl func : functions.values()){
-			func.liveVarAnalyze();
+			func.regAlloc();
 		}
 	}
 	
