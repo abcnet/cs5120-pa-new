@@ -19,8 +19,8 @@ public class AssemCFGNode {
 	public int count;
 	private HashSet<String> use = null;
 	private HashSet<String> def = null;
-	public HashSet<String> liveVarsIn = new HashSet<String>();
-	public HashSet<String> liveVarsOut = new HashSet<String>();
+	public HashSet<String> liveVarsIn = null;
+	public HashSet<String> liveVarsOut = null;
 	
 	public static final boolean debugCFG = false;
 	public static final boolean debugLVA = false;
@@ -110,30 +110,38 @@ public class AssemCFGNode {
 	public String liveVarsInToString(){
 		String s = "In: ";
 		boolean first = true;
-		if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
-		for(String each: this.liveVarsIn){
-			if(first){
-				s += each;
-				first = false;
-			}else{
-				s += ", " + each;
+		
+		if(this.liveVarsIn != null){
+			if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
+			for(String each: this.liveVarsIn){
+				if(first){
+					s += each;
+					first = false;
+				}else{
+					s += ", " + each;
+				}
 			}
 		}
+		
 		return s;
 	}
 	
 	public String liveVarsOutToString(){
 		String s = "Out: ";
 		boolean first = true;
-		if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
-		for(String each: this.liveVarsOut){
-			if(first){
-				s += each;
-				first = false;
-			}else{
-				s += ", " + each;
+		
+		if(this.liveVarsOut!=null){
+			if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
+			for(String each: this.liveVarsOut){
+				if(first){
+					s += each;
+					first = false;
+				}else{
+					s += ", " + each;
+				}
 			}
 		}
+		
 		return s;
 	}
 	

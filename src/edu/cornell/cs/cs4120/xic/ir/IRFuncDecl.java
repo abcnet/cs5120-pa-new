@@ -5,14 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.Map.Entry;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
-import zr54.assembly.AssemFunc;
-import zr54.assembly.AssemInstruction;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.*;
@@ -40,6 +39,8 @@ public class IRFuncDecl extends IRNode {
     public AssemFunc assemFunc = null;
     
     public static final boolean debugLVA = false;
+    public static final boolean debugInterference = true;
+    
     
     public IRFuncDecl(String name, IRStmt stmt) {
         super();
@@ -229,7 +230,11 @@ public class IRFuncDecl extends IRNode {
         
     }
     
-    public void liveVarAnalyze(){
+    private void liveVarAnalyze(){
+    	 for(AssemCFGNode node: assemGraph.nodes){
+    		 node.liveVarsIn = new HashSet<String>();
+    		 node.liveVarsOut = new HashSet<String>();
+    	 }
         boolean changed = true;
         while(changed){
             changed = false;
@@ -256,11 +261,51 @@ public class IRFuncDecl extends IRNode {
                 if(debugLVA)System.out.println("size of tmp is " + tmp.size());
                 if(node.liveVarsIn.addAll(tmp)){
                     changed = true;
+                    
                 }
                 if(debugLVA)System.out.println(node.liveVarsInToString());
             }
         }
         
+        for(AssemCFGNode node: assemGraph.nodes){
+        	for(String varStr1: node.liveVarsIn){
+           	 for(String varStr2: node.liveVarsIn){
+                	
+                	assemFunc.addVarInterference(varStr1, varStr2);
+                }
+           }
+        }
+        
+        if(debugInterference && assemFunc.varInterference != null){
+        	for(Entry<String, HashSet<String>> entry: assemFunc.varInterference.entrySet()){
+        		System.out.print("Var " + entry.getKey() + " interferes with: ");
+        		boolean first = true;
+        		for(String s : entry.getValue()){
+        			if(first){
+        				System.out.print(s);
+        				first = false;
+        			}else{
+        				System.out.print(", " + s);
+        			}
+        			
+        		}
+        		System.out.println("");
+        	}
+        }
+        
+    }
+    
+    public void regAlloc(){
+    	boolean rewritten = true;
+    	while(rewritten){
+    		rewritten = false;
+    		for(AssemCFGNode n: this.assemGraph.nodes){
+    			n.liveVarsIn = new HashSet<String>();
+    			n.liveVarsOut = new HashSet<String>();
+    		}
+    		this.liveVarAnalyze();
+    		
+    	}
     }
 
     public static int getReserved() {

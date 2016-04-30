@@ -204,7 +204,7 @@ public class IRGenerate {
 			        	 
 			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_f_initial_assem.dot");
 			        	 
-			        	 program.liveVarAnalyze();
+			        	 program.regAlloc();
 					     
 			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_f_final_assem.dot");
 			        	 
