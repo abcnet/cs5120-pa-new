@@ -120,4 +120,20 @@ public class IRCFG {
 		}
 	}
 	
+	public ArrayList<IRStmt> unreachableStmts() {
+		doCondConstProp();
+		
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		for(IRCFGNode n : nodes) {
+			boolean unreachable = true;
+			for(IRCFGEdge e : n.in) {
+				if(!e.cpl.isUnreachable())
+					unreachable = false;
+			}
+			if(unreachable)
+				stmts.add(n.stmt);
+		}
+		return stmts;
+	}
+	
 }

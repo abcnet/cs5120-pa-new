@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -447,6 +449,17 @@ public class IRFuncDecl extends IRNode {
 	
 	    	return indexTable.get(label);
 
+    }
+    
+    public void elimUnreachableStmts() {
+    	IRCFG ircfg = new IRCFG(this);
+    	ArrayList<IRStmt> stmts = ircfg.unreachableStmts();
+    	IRSeq seq = (IRSeq) this.children.get(0);
+    	
+    	for(IRStmt stmt : stmts) {
+    		if(!(stmt instanceof IRLabel))
+    			seq.stmts().remove(stmt);
+    	}
     }
     
 }
