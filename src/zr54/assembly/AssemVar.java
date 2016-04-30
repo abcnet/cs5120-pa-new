@@ -2,7 +2,7 @@ package zr54.assembly;
 
 import java.util.ArrayList;
 
-public class AssemVar extends AssemOperand{
+public class AssemVar extends AssemOperand implements AssemReg{
 	public String varName;
 	public AssemFunc assemFunc;
 	
@@ -20,6 +20,20 @@ public class AssemVar extends AssemOperand{
 	
 	public String toString(){
 		return assemFunc.getVarString(varName);
+	}
+
+
+	@Override
+	public boolean isRegPossible(boolean isDst) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public String getName(boolean isDst) {
+		// TODO Auto-generated method stub
+		return varName;
 	}
 	
 

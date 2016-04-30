@@ -1,6 +1,6 @@
 package zr54.assembly;
 
-public class AssemFixedRegister extends AssemOperand{
+public class AssemFixedRegister extends AssemOperand implements AssemReg{
 	public enum Reg {rax, rbx, rcx, rdx, rsi, rdi, rsp, rbp, r8, r9, r10, r11, r12, r13, r14, r15};
 	public Reg reg;
 	public AssemFixedRegister(Reg reg){
@@ -44,6 +44,18 @@ public class AssemFixedRegister extends AssemOperand{
 		default:
 			return "invalid register";
 		}
+	}
+
+	@Override
+	public boolean isRegPossible(boolean isDst) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public String getName(boolean isDst) {
+		// TODO Auto-generated method stub
+		return toString();
 	}
 	
 }

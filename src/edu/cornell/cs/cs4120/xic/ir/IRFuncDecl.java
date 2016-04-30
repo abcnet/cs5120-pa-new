@@ -41,7 +41,7 @@ public class IRFuncDecl extends IRNode {
     public static final int numAvailRegs = 10;
     
     public static final boolean debugLVA = false;
-    public static final boolean debugInterference = true;
+    public static final boolean debugInterference = false;
     
     
     public IRFuncDecl(String name, IRStmt stmt) {
