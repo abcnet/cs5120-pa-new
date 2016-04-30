@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
@@ -43,7 +42,7 @@ public class IRFuncDecl extends IRNode {
     public static final int numAvailRegs = 10;
     
     public static final boolean debugLVA = false;
-    public static final boolean debugInterference = true;
+    public static final boolean debugInterference = false;
     
     
     public IRFuncDecl(String name, IRStmt stmt) {
