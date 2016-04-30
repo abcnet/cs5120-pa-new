@@ -10,6 +10,7 @@ import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
+import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
 /**
  * An intermediate representation for a temporary register
@@ -111,9 +112,13 @@ public class IRTemp extends IRExpr {
 
 	}
 
-	public Long propConstVal(CpLattice cpl) {
+	public CpEntry propConstVal(CpLattice cpl) {
 		//TODO: do constant propagation
-		return cpl.getValue(name);
+		if(cpl.isConstant(name))
+			return CpEntry.constCpEntry(cpl.getValue(name));
+		if(cpl.isTop(name))
+			return CpEntry.topCpEntry();
+		return CpEntry.bottomCpEntry();
 	}
 
 }

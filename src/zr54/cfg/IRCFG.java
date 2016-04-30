@@ -45,50 +45,55 @@ public class IRCFG {
 				if(cjump.trueLabel() != null) {
 					IRCFGNode to = label2Node.get(cjump.trueLabel());
 					if(to != null) 
-						addEdge(from, to);
+						from.trueEdge = addEdge(from, to);
 					else
 						System.out.println("label not found");
 				}
 				
 				if(cjump.falseLabel() != null) {
+					System.out.println("cjump false label not null!");
 					IRCFGNode to = label2Node.get(cjump.falseLabel());
 					if(to != null)
-						addEdge(from, to);
+						from.falseEdge = addEdge(from, to);
 					else
 						System.out.println("label not found");
 				}
 				
 				IRCFGNode to = nodes.get(i + 1);
-				addEdge(from, to);
+				from.fallEdge = addEdge(from, to);
 			}
 			else if(stmt instanceof IRJump) {
 				IRName target = (IRName) ((IRJump) stmt).target();
 				IRCFGNode to = label2Node.get(target.name());
 				if(to != null)
-					addEdge(from, to);
+					from.fallEdge = addEdge(from, to);
 				else 
 					System.out.println("label not found");
 			}
 			else if(!(stmt instanceof IRReturn)){
 				IRCFGNode to = nodes.get(i + 1);
-				addEdge(from, to);
+				from.fallEdge = addEdge(from, to);
 			}
 			
 		}
 
 	}
 	
-	void addEdge(IRCFGNode from, IRCFGNode to) {
+	IRCFGEdge addEdge(IRCFGNode from, IRCFGNode to) {
 		IRCFGEdge edge = new IRCFGEdge(from, to);
 		from.addOutEdge(edge);
 		to.addInEdge(edge);
 		edges.add(edge);
+		return edge;
 	}
 	
 	public void writeEdges2File(FileWriter fw) {
 		for(IRCFGEdge edge : edges){
             try {
-				fw.write("  \"" + edge.from.toString());
+            	if(edge.from == null)
+            		fw.write("	\"");
+            	else
+					fw.write("  \"" + edge.from.toString());
 	            fw.write("\" -> \"" + edge.to.toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
             } catch (IOException e) {
 				e.printStackTrace();
@@ -99,6 +104,8 @@ public class IRCFG {
 	public void doCondConstProp() {
 		if(nodes.size() > 0) {
 			startEdge.cpl.setReachable();
+			for(IRCFGEdge e : edges)
+				e.cpl.setChanged();
 			
 			boolean changed = true;
 			while(changed) {
@@ -109,7 +116,7 @@ public class IRCFG {
 						changed = true;
 				}
 			}
-
+			
 		}
 	}
 	
