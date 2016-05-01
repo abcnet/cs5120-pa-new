@@ -336,7 +336,10 @@ public class AssemFunc {
         			if(repeatFromStep1)continue;
         			
         			// Step 5: Coloring
-        			
+        			while(selectStack.size() > 0){
+        				InterferenceGraphNode node = selectStack.pop();
+        				node.assignColor();
+        			}
         		}
         	}
     	}else{
