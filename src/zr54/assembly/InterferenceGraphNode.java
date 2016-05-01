@@ -10,17 +10,30 @@ public class InterferenceGraphNode {
 	private HashSet<String> vars;
 	public static int count = 0;
 	public int n;
-	public boolean isFirstReg;
+	public boolean containsReg;
 	public boolean isMoveRelated = false;
 	public boolean isSpilled = false;
 	public boolean isPreColored = false;
-	public Reg color;
+	
+	public boolean isInWorkingStack = false;
+	
+	public Reg color = null;
 	
 	public InterferenceGraphNode(String varName){
 		if(varName.contains("%")){
-			isFirstReg = true;
-			isPreColored = true;
-			// color
+			containsReg = true;
+			if(varName.equals("%rax")) {isPreColored = true; color = Reg.rax;}
+			if(varName.equals("%rbx")) {isPreColored = true; color = Reg.rbx;}
+			if(varName.equals("%rcx")) {isPreColored = true; color = Reg.rcx;}
+			if(varName.equals("%rdx")) {isPreColored = true; color = Reg.rdx;}
+			if(varName.equals("%rdi")) {isPreColored = true; color = Reg.rdi;}
+			if(varName.equals("%rsi")) {isPreColored = true; color = Reg.rsi;}
+			if(varName.equals("%r8")) {isPreColored = true; color = Reg.r8;}
+			if(varName.equals("%r9")) {isPreColored = true; color = Reg.r9;}
+			if(varName.equals("%r11")) {isPreColored = true; color = Reg.r11;}
+			if(varName.equals("%r12")) {isPreColored = true; color = Reg.r12;}
+			if(varName.equals("%r13")) {isPreColored = true; color = Reg.r13;}
+			
 		}
 		
 		
@@ -29,6 +42,11 @@ public class InterferenceGraphNode {
 		vars.add(varName);
 		adjLists = new HashSet<InterferenceGraphNode>();
 	}
+
+
+	public boolean containsDangerousReg(){
+		return this.containsReg&&!this.isPreColored;
+	};
 	
 	public InterferenceGraphNode(InterferenceGraphNode node1, InterferenceGraphNode node2){
 		if(node1.adjLists.contains(node2)){
@@ -42,14 +60,14 @@ public class InterferenceGraphNode {
 		isPreColored = node1.isPreColored || node2.isPreColored;
 	}
 	
-	private int rawDegree(){
-		return adjLists.size();
-	}
+//	private int rawDegree(){
+//		return adjLists.size();
+//	}
 	
 	public int degree(){
 		int d = 0;
 		for(InterferenceGraphNode node: this.adjLists){
-			if(!node.isSpilled){
+			if(node.countAsDegree()){
 				d++;
 			}
 		}
@@ -93,6 +111,12 @@ public class InterferenceGraphNode {
 	
 	public void add(InterferenceGraphNode adjNode){
 		adjLists.add(adjNode);
+	}
+	
+	
+	public boolean countAsDegree(){
+		return !(this.isInWorkingStack || containsDangerousReg());
+		
 	}
 
 }

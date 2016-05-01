@@ -11,7 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.*;
 import zr54.cfg.AssemCFG;
 import zr54.cfg.AssemCFGEdge;
 import zr54.cfg.AssemCFGNode;
-public class AssemFunc extends AssemInstruction{
+public class AssemFunc {
 	public IRFuncDecl irFuncDecl;
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 //	public HashSet<String> varSet = null;
@@ -177,18 +177,9 @@ public class AssemFunc extends AssemInstruction{
        
        if(debugInterference && this.interGraph != null){
        	for(InterferenceGraphNode node: this.interGraph.nodes){
-       		if(node.isFirstReg)continue;
+//       		if(node.isFirstReg)continue;
        		System.out.print(node.toString());
-//       		boolean first = true;
-//       		for(String s : node.getValue()){
-//       			if(first){
-//       				System.out.print(s);
-//       				first = false;
-//       			}else{
-//       				System.out.print(", " + s);
-//       			}
-//       			
-//       		}
+
        		System.out.println("");
        	}
        }
@@ -237,15 +228,6 @@ public class AssemFunc extends AssemInstruction{
 		this.interGraph.reset();
 		
 	}
-	@Override
-	public void getUse(HashSet<String> use) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void getDef(HashSet<String> def) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 }
