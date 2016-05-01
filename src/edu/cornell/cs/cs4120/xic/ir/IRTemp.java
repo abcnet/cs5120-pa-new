@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
@@ -132,4 +133,13 @@ public class IRTemp extends IRExpr {
 	public void replacePropagatedConsts(CpLattice cpl) {
 	}
 	
+	@Override
+	public void analyzeUses(HashSet<String> uses) {
+		uses.add(name);
+	}
+	
+	@Override
+	public boolean hasSideEffect() {
+		return false;
+	}
 }

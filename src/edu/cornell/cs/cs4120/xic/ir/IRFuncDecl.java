@@ -326,52 +326,49 @@ public class IRFuncDecl extends IRNode {
 
     }
     
+    public void doDeadCodeElim() {
+    	boolean changed = true;
+    	while(changed) {
+    		IRCFG ircfg = new IRCFG(this);
+    		ArrayList<IRStmt> stmts = ircfg.deadStmts();
+    		
+    		if(stmts.size() > 0)
+    			changed = true;
+    		else
+    			changed = false;
+    		
+    		IRSeq seq = (IRSeq) this.children.get(0);
+        	for(IRStmt stmt : stmts) {
+       			seq.stmts().remove(stmt);
+        	}
+    	}
+    	
+    	IRSeq seq = (IRSeq) this.children.get(0);
+    	seq.children.clear();
+    	for(IRStmt stmt : seq.stmts()) 
+    		seq.children.add(stmt);
+    }
+    
     public void doUCE() {
     	IRCFG ircfg = new IRCFG(this);
     	ArrayList<IRStmt> stmts = ircfg.unreachableStmts();
     	IRSeq seq = (IRSeq) this.children.get(0);
     	
     	for(IRStmt stmt : stmts) {
-    		if(!(stmt instanceof IRLabel))
-    			seq.stmts().remove(stmt);
+//    		if(!(stmt instanceof IRLabel))
+    		seq.stmts().remove(stmt);
     	}
+    	
+    	seq.children.clear();
+    	for(IRStmt stmt : seq.stmts())
+    		seq.children.add(stmt);
 
     }
     
     public void doConstPropagation() {
-    	IRCFG ircfg = new IRCFG(this);
-		
-//		String file = name + "_cp_after.dot";
-//		ircfg = new IRCFG(this);
-//		FileWriter fw;
-//		try {
-//			fw = new FileWriter(file, false);
-//			fw.write("digraph " + this.name + " {\n"
-//					+"	size=\"8,5\";\n"
-//					+"	node [style=invis] \"\";\n"
-//					+"	node [shape = circle,style=\"\"];\n");
-//			ircfg.writeEdges2File(fw);
-//			fw.write("}");
-//			fw.flush();
-//			fw.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-    	
+    	IRCFG ircfg = new IRCFG(this);    	
 		ircfg.replacePropagatedConsts();
-    	
-//		String file2 = name + "_cp_after.ir";
-//		ircfg = new IRCFG(this);
-//		FileWriter fw2;
-//		try {
-//			fw2 = new FileWriter(file2, false);
-//			fw2.write(this.toString());
-//			fw2.flush();
-//			fw2.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
+
     }
     
     public void doCopyPropagation() {

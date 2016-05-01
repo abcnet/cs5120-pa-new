@@ -54,6 +54,8 @@ public class IRGenerate {
 	 * @param enableCOPY TODO
 	 * @param enableDCE TODO
 	 * @param enableCP TODO
+	 * @param initialIRCode TODO
+	 * @param finalIRCode TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -68,7 +70,7 @@ public class IRGenerate {
 			boolean finalIRGraph, boolean initialAssemGraph, 
 			boolean finalAssemGraph, boolean genOldAssem, boolean enableCF,
 			boolean enableREG, boolean enableMC, boolean enableUCE, boolean enableCSE,
-			boolean enableCOPY, boolean enableDCE, boolean enableCP) throws Exception {
+			boolean enableCOPY, boolean enableDCE, boolean enableCP, boolean initialIRCode, boolean finalIRCode) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
@@ -203,10 +205,58 @@ public class IRGenerate {
 			        
 			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
 			        
-			        if(enableCOPY) program.doCopyPropagation();
-			        if(enableUCE) program.doUCE();
+
+			        if(initialIRCode){
+			        	FileWriter fw = new FileWriter(pathToFile + "_initial.ir");
+//				        StringWriter sw1 = new StringWriter();
+			        	PrintWriter pw = new PrintWriter(fw);
+			        	SExpPrinter sp = new CodeWriterSExpPrinter(pw);
+				        try {
+				            program.printSExp(sp);
+				           
+				            
+				        }catch(Exception e){
+				        	e.printStackTrace();
+				        }finally{
+				        	sp.flush();
+				        	pw.flush();
+
+				        	fw.close();
+				        }
+				        
+			        }
+			        //System.out.print(program.toString());
+	
+
 			        if(enableCP) program.doConstPropagation();
+			        if(enableCF) program.doConstFolding(); 
+			        if(enableUCE) program.doUCE();
+			        if(enableCOPY) program.doCopyPropagation();
+			        if(enableDCE) program.doDeadCodeElim();
+
 			        
+
+			        //System.out.print(program.toString());
+			        if(finalIRCode){
+			        	FileWriter fw = new FileWriter(pathToFile + "_final.ir");
+//				        StringWriter sw1 = new StringWriter();
+			        	PrintWriter pw = new PrintWriter(fw);
+			        	SExpPrinter sp = new CodeWriterSExpPrinter(pw);
+				        try {
+				            program.printSExp(sp);
+				           
+				            
+				        }catch(Exception e){
+				        	e.printStackTrace();
+				        }finally{
+				        	sp.flush();
+				        	pw.flush();
+
+				        	fw.close();
+				        }
+				        
+			        }
+
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        
 			        if(genOldAssem){
@@ -230,11 +280,11 @@ public class IRGenerate {
 			        }else{
 			        	 program.genIntermediateAssem(null, null, funcs);
 			        	 
-			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_f_initial_assem.dot");
+			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_initial_assem.dot");
 			        	 
 			        	 program.regAlloc(enableREG, enableMC);
 					     
-			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_f_final_assem.dot");
+			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_final_assem.dot");
 			        	 
 					        try{
 					        	FileWriter as = new FileWriter(assemFile, false);

@@ -62,4 +62,5 @@ public class IRReturn extends IRStmt {
 	public void replacePropagatedConsts(CpLattice cpl) {
 		
 	}
+	
 }

@@ -260,7 +260,8 @@ public class AssemFunc {
         			while(existLowDegreeNonMoveRelatedNodes){
         				existLowDegreeNonMoveRelatedNodes = false;
         				for(InterferenceGraphNode node : this.interGraph.nodes){
-        					if(!node.isMoveRelated() && node.degree() < numAvailRegs && !node.isInWorkingStack){
+        					if(!node.containsDangerousReg() && !node.isMoveRelated()
+        							&& node.degree() < numAvailRegs && !node.isInWorkingStack){
         						if(debugStep1){
         							System.out.println("Pulling " + node.toString() + " out of graph and pushing onto stack");
         						}
@@ -289,9 +290,10 @@ public class AssemFunc {
         					if(debugStep2){
         						System.out.println("Coalescing " + dstNode + " with " + srcNode);
         					}
-        					this.interGraph.coalesce(dstNode, srcNode);
+        					InterferenceGraphNode mergedNode = this.interGraph.coalesce(dstNode, srcNode);
         					repeatFromStep1 = true;
         					this.workListMoves.remove(0);
+        					mergedNode.coalescRelatedMoves.remove(move);
         					i--;
         				}
         				i++;
@@ -321,7 +323,23 @@ public class AssemFunc {
         			if(repeatFromStep1)continue;
         			
         			// Step 4: Spill
+        			for(InterferenceGraphNode node: this.interGraph.nodes){
+        				if(!node.isSpilled && !node.containsDangerousReg() 
+        						&& !node.isInWorkingStack 
+        						&& node.degree() >= AssemFunc.numAvailRegs){
+        					node.isSpilled = true;
+        					repeatFromStep1 = true;
+        					
+        				}
+        			}
         			
+        			if(repeatFromStep1)continue;
+        			
+        			// Step 5: Coloring
+        			while(selectStack.size() > 0){
+        				InterferenceGraphNode node = selectStack.pop();
+        				node.assignColor();
+        			}
         		}
         	}
     	}else{

@@ -237,6 +237,12 @@ public class IRCompUnit extends IRNode {
 		}
 	}
 	
+	public void doDeadCodeElim()  {
+		for(IRFuncDecl func : functions.values()) {
+			func.doDeadCodeElim();
+		}
+	}
+	
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,

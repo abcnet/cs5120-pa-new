@@ -163,6 +163,30 @@ public class IRCFG {
 		return stmts;
 	}
 	
+	public void analyzeUseDef() {
+		for(IRCFGNode n : nodes) {
+			n.analyzeUseDef();
+		}
+	}
+
+	public void setAllNodesUnVisited() {
+		for(IRCFGNode n : nodes)
+			n.visited = false;
+	}
+	
+	public ArrayList<IRStmt> deadStmts() {
+		
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		analyzeUseDef();
+		
+		for(IRCFGNode n : nodes) {
+			setAllNodesUnVisited();
+			if(n.isDead())
+				stmts.add(n.stmt);
+		}
+		return stmts;
+	}
+	
 	public void doCopyPropagation() {
 		if(nodes.size() > 0) {
 			for(IRCFGEdge e : edges)

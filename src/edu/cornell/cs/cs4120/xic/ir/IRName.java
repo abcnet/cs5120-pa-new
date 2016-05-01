@@ -75,5 +75,10 @@ public class IRName extends IRExpr {
 	public void replacePropagatedConsts(CpLattice cpl) {
 		
 	}
+	
+	@Override
+	public boolean hasSideEffect() {
+		return false;
+	}
 
 }

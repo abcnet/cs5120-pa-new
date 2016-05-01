@@ -56,11 +56,32 @@ public class InterferenceGraphNode {
 			System.err.println("Cannot coalesce two interfered " + node1.vars() + " and " + node2.vars());
 			return;
 		}
+		if(node1.containsDangerousReg()){
+			System.err.println("cannot coalesce becasuse node " + node1.toString() + " contains dangerous regsiter");
+			return;
+		}
+		if(node2.containsDangerousReg()){
+			System.err.println("cannot coalesce becasuse node " + node2.toString() + " contains dangerous regsiter");
+			return;
+		}
+		
+		
+		this.coalescRelatedMoves = (HashSet<AssemMove>) node1.coalescRelatedMoves.clone();
+		this.coalescRelatedMoves.addAll(node2.coalescRelatedMoves);
 		adjLists = (HashSet<InterferenceGraphNode>) node1.adjLists.clone();
 		adjLists.addAll(node2.adjLists);
 		vars = (HashSet<String>) node1.vars.clone();
 		vars.addAll(node2.vars);
 		isPreColored = node1.isPreColored || node2.isPreColored;
+		if(node1.isPreColored){
+			color = node1.color;
+			if(node2.isPreColored && node1.color != node2.color){
+				System.err.println("Cannot coalesce two nodes with different colors");
+			}
+		}else if(node2.isPreColored){
+			color = node2.color;
+		}
+		
 	}
 	
 //	private int rawDegree(){
@@ -155,6 +176,43 @@ public class InterferenceGraphNode {
 			}
 		}
 		return numHighDegreeNeighbors < AssemFunc.numAvailRegs;
+	}
+	
+	public boolean assignColor(){
+		boolean[] availRegs = {true, true, true, true, true, true, true, true, true, true, true};
+		for(InterferenceGraphNode neighbor: this.adjLists){
+			if(neighbor.color == null) continue;
+			switch(neighbor.color){
+			case rax: availRegs[0] = false; break;
+			case rbx: availRegs[1] = false; break;
+			case rcx: availRegs[2] = false; break;
+			case rdx: availRegs[3] = false; break;
+			case rdi: availRegs[4] = false; break;
+			case rsi: availRegs[5] = false; break;
+			case r8: availRegs[6] = false; break;
+			case r9: availRegs[7] = false; break;
+			case r11: availRegs[8] = false; break;
+			case r12: availRegs[9] = false; break;
+			case r13: availRegs[10] = false; break;
+			default:
+				System.out.println("Should never reach this line");
+				break;
+				
+			}
+		}
+		if(availRegs[0]) {color = Reg.rax; return true;}
+		if(availRegs[1]) {color = Reg.rbx; return true;}
+		if(availRegs[2]) {color = Reg.rcx; return true;}
+		if(availRegs[3]) {color = Reg.rdx; return true;}
+		if(availRegs[4]) {color = Reg.rdi; return true;}
+		if(availRegs[5]) {color = Reg.rsi; return true;}
+		if(availRegs[6]) {color = Reg.r8; return true;}
+		if(availRegs[7]) {color = Reg.r9; return true;}
+		if(availRegs[8]) {color = Reg.r11; return true;}
+		if(availRegs[9]) {color = Reg.r12; return true;}
+		if(availRegs[10]) {color = Reg.r13; return true;}
+		this.isSpilled = true;
+		return false;
 	}
 
 }
