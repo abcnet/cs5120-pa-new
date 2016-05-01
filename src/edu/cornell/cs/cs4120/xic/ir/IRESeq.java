@@ -126,4 +126,8 @@ public class IRESeq extends IRExpr {
 	public CpEntry propConstVal(CpLattice cpl) {
 		return CpEntry.bottomCpEntry();
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+	}
 }

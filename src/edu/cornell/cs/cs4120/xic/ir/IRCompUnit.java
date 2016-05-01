@@ -15,6 +15,7 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.AssemProgram;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpLattice;
 import zr54.cfg.IRCFG;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -172,7 +173,7 @@ public class IRCompUnit extends IRNode {
 						+"	node [style=invis] \"\";\n"
 						+"	node [shape = circle,style=\"\"];\n");
 				for(IRFuncDecl func : functions.values()) {
-					func.elimUnreachableStmts();
+					func.doUCE();
 					IRCFG ircfg = new IRCFG(func);
 					ircfg.writeEdges2File(fw3);
 				}
@@ -247,13 +248,25 @@ public class IRCompUnit extends IRNode {
 			func.regAlloc();
 		}
 	}
-	
-	public void constantPropagate() {
-		for (IRFuncDecl func : functions.values()) {
-			func.constantPropagate();
+
+	public void doCopyPropagation() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doCopyPropagation();
 		}
 	}
-
+	
+	public void doUCE() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doUCE();
+		}
+	}
+	
+	public void doConstPropagation() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doConstPropagation();
+		}
+	}
+	
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
@@ -264,5 +277,9 @@ public class IRCompUnit extends IRNode {
 			assemProgram.assemFuncs.add(func.assemFunc);
 		}
 		return null;
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
 	}
 }

@@ -185,5 +185,17 @@ public class IRMem extends IRExpr {
 		return CpEntry.bottomCpEntry();
 	}
 	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		if(expr instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) expr;
+			if(cpl.isConstant(tmp.name())) {
+				expr = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			expr.replacePropagatedConsts(cpl);
+	}
+	
 }
 

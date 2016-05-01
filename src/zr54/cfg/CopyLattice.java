@@ -97,4 +97,8 @@ public class CopyLattice {
 			
 		return str;
 	}
+	
+	public String getCopy(String name) {
+		return x2y.get(name);
+	}
 }

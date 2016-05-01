@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.Map.Entry;
 
-
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -330,18 +329,6 @@ public class IRFuncDecl extends IRNode {
     public static int getReserved() {
         return RESERVED;
     }
-    
-    public void constantPropagate() {
-        boolean changed = true;
-        while(changed) {
-            changed = false;
-            
-            for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
-                
-            }
-            
-        }
-    }
 
     @Override
     public AssemOperand genIntermediateAssem(
@@ -451,7 +438,7 @@ public class IRFuncDecl extends IRNode {
 
     }
     
-    public void elimUnreachableStmts() {
+    public void doUCE() {
     	IRCFG ircfg = new IRCFG(this);
     	ArrayList<IRStmt> stmts = ircfg.unreachableStmts();
     	IRSeq seq = (IRSeq) this.children.get(0);
@@ -460,8 +447,21 @@ public class IRFuncDecl extends IRNode {
     		if(!(stmt instanceof IRLabel))
     			seq.stmts().remove(stmt);
     	}
-    	
-    	//TODO: for move node, need to move constant instead of an expression
+
     }
+    
+    public void doConstPropagation() {
+    	IRCFG ircfg = new IRCFG(this);
+    	ircfg.replacePropagatedConsts();
+    }
+    
+    public void doCopyPropagation() {
+    	IRCFG ircfg = new IRCFG(this);
+    	ircfg.replaceAvailableCopies();
+    }
+    
+    @Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+	}
     
 }

@@ -117,7 +117,6 @@ public class IRCFG {
 						changed = true;
 				}
 			}
-			
 		}
 	}
 	
@@ -133,6 +132,11 @@ public class IRCFG {
 			}
 			if(unreachable)
 				stmts.add(n.stmt);
+			else if(n.stmt instanceof IRCJump) {
+				//canonical CJump only has true edges
+				if(n.trueEdge.cpl.isUnreachable())
+					stmts.add(n.stmt);
+			}
 		}
 		return stmts;
 	}
@@ -143,51 +147,32 @@ public class IRCFG {
 				e.copies.setChanged();
 			
 			boolean changed = true;
-			int	i = 0;
 			while(changed) {
 				changed = false;
-				
-				i++;
-				String file2 = "pa6tests/" + name + "before" + i + ".dot";
-				FileWriter fw2;
-				try {
-					fw2 = new FileWriter(file2, false);
-					fw2.write("digraph " + "func" + " {\n"
-							+"	size=\"8,5\";\n"
-							+"	node [style=invis] \"\";\n"
-							+"	node [shape = circle,style=\"\"];\n");
-					this.writeEdges2File(fw2);
-					fw2.write("}");
-					fw2.flush();
-					fw2.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				
 				for(IRCFGNode n : nodes) {
 					if(n.updateCopies())
 						changed = true;
-				}
-				
-				file2 = "pa6tests/" + name + "after" + i + ".dot";
-				try {
-					fw2 = new FileWriter(file2, false);
-					fw2.write("digraph " + "func" + " {\n"
-							+"	size=\"8,5\";\n"
-							+"	node [style=invis] \"\";\n"
-							+"	node [shape = circle,style=\"\"];\n");
-					this.writeEdges2File(fw2);
-					fw2.write("}");
-					fw2.flush();
-					fw2.close();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
+				}				
 			}
-			
+		}
+	}
+	
+	public void replaceAvailableCopies() {
+		doCopyPropagation();
+		
+		for(IRCFGNode n : nodes) {
+			CopyLattice copies = CopyLattice.meet(n.in);
+			n.stmt.replaceAvailableCopies(copies);
+		}
+	}
+	
+	public void replacePropagatedConsts() {
+		doCondConstProp();
+		
+		for(IRCFGNode n : nodes) {
+			CpLattice cpl = CpLattice.meet(n.in);
+			n.stmt.replacePropagatedConsts(cpl);
 		}
 	}
 	

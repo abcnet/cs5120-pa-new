@@ -123,4 +123,8 @@ public class IRConst extends IRExpr {
 		return CpEntry.constCpEntry(value);
 	}
 
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+	}
+	
 }

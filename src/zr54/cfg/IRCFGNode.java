@@ -152,8 +152,8 @@ public class IRCFGNode {
 		
 		if(inChanged) {
 			CopyLattice inMeet = CopyLattice.meet(in);
-			System.out.println(stmt.toString());
-			System.out.println(inMeet.toString());
+//			System.out.println(stmt.toString());
+//			System.out.println(inMeet.toString());
 			
 			if(stmt instanceof IRMove) {
 				IRMove move = (IRMove) stmt;

@@ -185,8 +185,10 @@ public class IRGenerate {
 			        String pathToFile = srcFile.substring(0, srcFile.lastIndexOf(".xi"));
 			        
 			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
-			        program.constantPropagate();
 			        
+			        //if(enableCOPY) program.doCopyPropagation();
+			        //if(enableUCE) program.doUCE();
+			        //if(enableCP) program.doConstPropagation();
 			        
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        

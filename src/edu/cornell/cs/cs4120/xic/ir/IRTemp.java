@@ -10,6 +10,7 @@ import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
+import zr54.cfg.CopyLattice;
 import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
 /**
@@ -120,5 +121,15 @@ public class IRTemp extends IRExpr {
 			return CpEntry.topCpEntry();
 		return CpEntry.bottomCpEntry();
 	}
+	
+	public void replaceAvailableCopies(CopyLattice copies) {
+		if(copies.getCopy(name) != null) {
+			name = copies.getCopy(name);
+		}
+	}
 
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+	}
+	
 }

@@ -12,6 +12,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -137,5 +138,11 @@ public class IRSeq extends IRStmt {
 		for(IRStmt s : stmts)
 			s.genIntermediateAssem(instrs, f, funcs);
 		return null;
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		for(IRStmt stmt : stmts)
+			stmt.replacePropagatedConsts(cpl);
 	}
 }

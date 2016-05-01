@@ -350,4 +350,19 @@ public class IRCall extends IRExpr {
 	public CpEntry propConstVal(CpLattice cpl) {
 		return CpEntry.bottomCpEntry();
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		for(IRExpr expr : args) {
+			if(expr instanceof IRTemp) {
+				IRTemp tmp = (IRTemp) expr;
+				if(cpl.isConstant(tmp.name())) {
+					expr = new IRConst(cpl.getValue(tmp.name()));
+				}
+			}
+			else
+				expr.replacePropagatedConsts(cpl);
+		}
+	}
+	
 }

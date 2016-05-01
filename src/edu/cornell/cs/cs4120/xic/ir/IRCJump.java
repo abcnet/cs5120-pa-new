@@ -16,6 +16,7 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemMove;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -270,5 +271,17 @@ public class IRCJump extends IRStmt {
 			}
 			
 			return null;
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		if(expr instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) expr;
+			if(cpl.isConstant(tmp.name())) {
+				expr = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			expr.replacePropagatedConsts(cpl);
 	}
 }

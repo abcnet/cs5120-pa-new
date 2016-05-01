@@ -693,4 +693,27 @@ public class IRBinOp extends IRExpr {
 			return CpEntry.constCpEntry(result);
 		}
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		if(left instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) left;
+			if(cpl.isConstant(tmp.name())) {
+				left = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			left.replacePropagatedConsts(cpl);
+		
+		if(right instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) right;
+			if(cpl.isConstant(tmp.name())) {
+				right = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			right.replacePropagatedConsts(cpl);
+		
+	}
+	
 }
