@@ -109,6 +109,7 @@ public class IRCFG {
 				e.cpl.setChanged();
 			
 			boolean changed = true;
+//			int i = 0;
 			while(changed) {
 				changed = false;
 				
@@ -116,6 +117,27 @@ public class IRCFG {
 					if(n.updateCpl())
 						changed = true;
 				}
+//				System.out.println("in const prop loop");
+//				i++;
+//				if(i == 100) {
+//					int debug = 100;
+//					debug = debug + 1;
+//				}
+//				String file = name + i + "_cp_after.dot";
+//				FileWriter fw;
+//				try {
+//					fw = new FileWriter(file, false);
+//					fw.write("digraph " + this.name + " {\n"
+//							+"	size=\"8,5\";\n"
+//							+"	node [style=invis] \"\";\n"
+//							+"	node [shape = circle,style=\"\"];\n");
+//					this.writeEdges2File(fw);
+//					fw.write("}");
+//					fw.flush();
+//					fw.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 	}

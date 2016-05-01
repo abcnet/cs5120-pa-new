@@ -186,14 +186,11 @@ public class IRGenerate {
 			        
 			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
 			        
-			        //if(enableCOPY) program.doCopyPropagation();
-			        //if(enableUCE) program.doUCE();
-			        //if(enableCP) program.doConstPropagation();
+			        if(enableCOPY) program.doCopyPropagation();
+			        if(enableUCE) program.doUCE();
+			        if(enableCP) program.doConstPropagation();
 			        
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
-			        
-			        
-			       
 			        
 			        if(genOldAssem){
 			        	 StringWriter assemStringWriter = new StringWriter();

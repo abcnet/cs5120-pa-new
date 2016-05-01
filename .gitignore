@@ -10,4 +10,7 @@ bin/
 *.ir
 *.s
 output/
+pa5_student/
+pa5tests/
+pa4tests/
 *.dot

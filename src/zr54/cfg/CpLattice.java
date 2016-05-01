@@ -252,12 +252,15 @@ public class CpLattice {
 			return false;
 		
 		for(String key : this.bottom.keySet()) {
-			if(this.bottom.get(key) != l.bottom.get(key))
+			if(!this.bottom.get(key).equals(l.bottom.get(key)))
 				return false;
 			
 			if(!this.bottom.get(key)) {
-				if(this.val.get(key) != l.val.get(key))
+				if(!this.val.get(key).equals(l.val.get(key))) {
+					System.out.println(this.val.get(key));
+					System.out.println(l.val.get(key));
 					return false;
+				}
 			}
 		}
 		
@@ -299,6 +302,9 @@ public class CpLattice {
 			else
 				str += val.get(key) + ", "; 
 		}
+		
+		if(changed)
+			str += "changed";
 		
 		return str;
 	}
