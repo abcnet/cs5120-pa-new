@@ -1,6 +1,8 @@
 package zr54.cse;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import zr54.cfg.CFG;
 import zr54.cfg.CFGEdge;
@@ -23,21 +25,44 @@ public class CSE {
 	public class ExprMetaData {
 		public IRExpr expr;
 		public CFGNode srcNode;
-		public IRTemp assignedTemp;
 		
 		public ExprMetaData(IRExpr e, CFGNode n) {
 			this.expr = e;
 			this.srcNode = n;
-			this.assignedTemp = null;
+		}
+		
+		@Override
+		public boolean equals(Object o) {
+			ExprMetaData e = (ExprMetaData)o;
+			if (this.srcNode.toString().equals(e.srcNode.toString())
+				&& this.expr.toString().equals(e.expr.toString())) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
+	private IRFuncDecl root;
+	private IRSeq seq;
 	private CFG cfg;
 	private int counter = 0;
 	
-	public IRTemp newTemp() {
-		String s=  "__TEMP__" + Integer.toString(++this.counter);
-		return new IRTemp(s);
+	public CSE(IRFuncDecl root) {
+		this.root = root;
+		this.seq = (IRSeq)root.children.get(0);
+		this.cfg = new CFG(root);
+	}
+	
+	public String newTemp() {
+		String s =  "__TEMP__" + Integer.toString(++this.counter);
+		return s;
+	}
+	
+	public HashSet<ExprMetaData> copy(HashSet<ExprMetaData> source) {
+		HashSet<ExprMetaData> target = new HashSet<ExprMetaData>();
+		target.addAll(source);
+		return target;
 	}
 	
 	public void getSubExpressions(IRExpr IRExprNode, CFGNode node, HashSet<ExprMetaData> exprList) {
@@ -46,7 +71,8 @@ public class CSE {
 			|| IRExprNode instanceof IRName) {
 			return;
 		} else {
-			exprList.add(new ExprMetaData(IRExprNode, node));
+			if (!(IRExprNode instanceof IRCall))
+				exprList.add(new ExprMetaData(IRExprNode, node));
 		} 
 		if (IRExprNode instanceof IRCall) {
 			for (IRExpr arg : ((IRCall)IRExprNode).args()) {
@@ -113,35 +139,60 @@ public class CSE {
 		if (cfg.incomingGraph.getChildren(n) == null) {
 			return new HashSet<ExprMetaData>(); //empty set
 		} else {
-			HashSet<ExprMetaData> inSet = (HashSet<ExprMetaData>)(cfg.incomingGraph.getChildren(n).get(0).availExprList).clone();
+			HashSet<ExprMetaData> inSet = copy((cfg.incomingGraph.getChildren(n).get(0).availExprList));
 			for (CFGEdge inEdge : cfg.incomingGraph.getChildren(n)) {
 				inSet.retainAll(inEdge.availExprList);
+				//intersection(inSet, inEdge.availExprList);
 			}
 			return inSet;
 		}
 	}
+	
+//	public void intersection(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
+//		HashSet<ExprMetaData> temp = new HashSet<ExprMetaData>();
+//		for (ExprMetaData e1 : set1) {
+//			boolean found = false;
+//			for (ExprMetaData e2 : set2) {
+//				if (e1.equals(e2)) {
+//					found = true;
+//					break;
+//				}
+//			}
+//			if (!found) {
+//				temp.add(e1);
+//			}
+//		}
+//		set1.removeAll(temp);
+//	}
 	
 	public boolean out(CFGNode n) {
 		IRNode currIRNode = n.getNode();
 		HashSet<ExprMetaData> in = new HashSet<ExprMetaData>();
 		HashSet<ExprMetaData> exprs = new HashSet<ExprMetaData>();
 		HashSet<ExprMetaData> kill = new HashSet<ExprMetaData>();
-		in = (HashSet<ExprMetaData>)in(n).clone();
+		in = in(n);
+		
+//		System.out.println("IN("+currIRNode.toString()+")");
+//		for (ExprMetaData exprMetaData : in) {
+//				System.out.print("<"+exprMetaData.srcNode.toString()+", "+exprMetaData.expr.toString()+", "+">  ");
+//		}
+//		System.out.print("\n\n");
 		
 		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
-			IRExpr e1 = (currIRNode instanceof IRMove) ? ((IRMove)currIRNode).expr() : ((IRCJump)currIRNode).expr();
 			//at this point use in(n) and exprs(n) to take care of all the common expressions
-			e1 = handleCommonExpressions(in, e1);
+			int index = n.getNodeIndex();
+			currIRNode = modifyNode(in, currIRNode);
+			seq.children.set(index, currIRNode);
+			n.setNode(currIRNode);
+			
+			IRExpr e1 = (currIRNode instanceof IRMove) ? ((IRMove)currIRNode).expr() : ((IRCJump)currIRNode).expr();
 			getSubExpressions(e1, n, exprs);
 			if (currIRNode instanceof IRMove) {
 				IRExpr  e2 = ((IRMove)currIRNode).target();
-				//at this point use in(n) and exprs(n) to take care of all the common expressions
-				e2 = handleCommonExpressions(in, e2);
-				getSubExpressions(e2, n, exprs);
 			}
 			in.addAll(exprs);
 			if (currIRNode instanceof IRMove) {
-				kill = (HashSet<ExprMetaData>)getKillSet(in, ((IRMove)currIRNode).target()).clone();
+				kill = copy(getKillSet(in, ((IRMove)currIRNode).target()));
 				in.removeAll(kill);
 			}
 			if (containsCallNode(e1)) { //If RHS of MOVE contains a func call
@@ -156,70 +207,164 @@ public class CSE {
 			}
 		}
 		boolean changed = false;
-		for (CFGEdge outEdge : cfg.outgoingGraph.getChildren(n)) {
-			HashSet<ExprMetaData> prev = (HashSet<ExprMetaData>)outEdge.availExprList.clone();
-			outEdge.availExprList = (HashSet<ExprMetaData>)in.clone();
-			if (!prev.equals(outEdge.availExprList)) {
+		if (cfg.outgoingGraph.getChildren(n) != null && cfg.outgoingGraph.getChildren(n).size() > 0) {
+			HashSet<ExprMetaData> prev = copy(cfg.outgoingGraph.getChildren(n).get(0).availExprList);
+			HashSet<ExprMetaData> curr = in;
+			if (!hashSetEqual(curr, prev)) {
 				changed = true;
+			}
+			for (CFGEdge outEdge : cfg.outgoingGraph.getChildren(n)) {
+				outEdge.availExprList = curr;
 			}
 		}
 		return changed;
 	}
 	
-	public IRExpr handleCommonExpressions(HashSet<ExprMetaData> in, IRExpr expr) {
+	public boolean hashSetEqual(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
+		if (set1.size() != set2.size()) {
+			return false;
+		} else {
+			for (ExprMetaData d1 : set1) {
+				boolean found = false;
+				for (ExprMetaData d2 : set2) {
+					if (d1.equals(d2)) {
+						found = true;
+						break;
+					}
+				}
+				if (!found) {
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+	
+	public IRNode modifyNode(HashSet<ExprMetaData> in, IRNode currIRNode) {
+		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
+			IRExpr e1 = (currIRNode instanceof IRMove) ? ((IRMove)currIRNode).expr() : ((IRCJump)currIRNode).expr();
+			e1 = handleCommonExpressions(in, e1);
+			if (currIRNode instanceof IRMove) {
+				IRExpr e2 = ((IRMove)currIRNode).target();
+				e2 = handleCommonExpressions(in, e2);
+				return new IRMove(e2, e1);
+			} else {
+				return new IRCJump(e1, ((IRCJump)currIRNode).trueLabel());
+			}
+		}
+		return null;
+	}
+	
+	public IRExpr handleCommonExpressions(HashSet<ExprMetaData> in, IRExpr expr) { //handle common subexpressions in expr
 		IRExpr e = replaceSubExpression(in, expr);
 		if (e == null) {
 			for (int i = 0; i < expr.children.size(); ++i) {
-				return handleCommonExpressions(in, (IRExpr)expr.children.get(i));
+				expr.children.set(i, handleCommonExpressions(in, (IRExpr)expr.children.get(i)));
+				expr.updateChildren();
+			}
+		} else {
+			expr = e;
+		}
+		return expr;
+	}
+	
+	public IRTemp getTemp(CFGNode node, IRExpr e) {
+		for (IRMove stmt : node.newStmtsFromCSE) {
+			IRExpr expr = stmt.expr();
+			if (isEqual(expr, e)) {
+				return (IRTemp)stmt.target();
 			}
 		}
-		return e;
+		return null;
 	}
 	
 	public IRExpr replaceSubExpression(HashSet<ExprMetaData> in, IRExpr expr) {
+		if (in == null || in.size() == 0) {
+			return expr;
+		}
 		for(ExprMetaData exprMetaData : in) {
 			IRExpr e = exprMetaData.expr;
 			if (isEqual(expr, e)) {
-				if (exprMetaData.assignedTemp == null) {
-					exprMetaData.assignedTemp = newTemp();
-					exprMetaData.srcNode.newStmtsFromCSE.add(new IRMove(exprMetaData.assignedTemp, e));
+				IRTemp t = getTemp(exprMetaData.srcNode, expr);
+				if (t == null) {
+					t = new IRTemp(newTemp());
+					exprMetaData.srcNode.newStmtsFromCSE.add(new IRMove(new IRTemp(t.name()), e));
 					HashSet<ExprMetaData> temp = new HashSet<ExprMetaData>();
 					temp.add(exprMetaData);
-					handleCommonExpressions(temp, e);
+					//replace subexpression in the src node
+					int index = exprMetaData.srcNode.getNodeIndex();
+					IRNode modifiedNode = modifyNode(temp, exprMetaData.srcNode.getNode());
+					seq.children.set(index, modifiedNode);
+					exprMetaData.srcNode.setNode(modifiedNode);
 				}
-				expr = exprMetaData.assignedTemp;
+				expr = new IRTemp(t.name());
 				return expr;
 			}
 		}
 		return null;
 	}
 	
-	public IRFuncDecl CSEAnalysis(IRFuncDecl root) {
+	public IRFuncDecl CSEAnalysis() throws Exception{
 		for (CFGEdge edge : cfg.edges) {
 			edge.availExprList = new HashSet<ExprMetaData>(); //empty set
 		}
-		boolean changed;
-		do {
-			changed = false;
-			for (CFGNode node : cfg.outgoingGraph.getNodeSet()) {
-				if (out(node)) {
-					changed = true;
-				}
-			}
-		} while (changed);
 		
-		//TODO modify IR tree
-		for (CFGNode n : cfg.outgoingGraph.getNodeSet()) {
-			IRSeq seq = (IRSeq)root.children.get(0);
-			int index = n.getNodeIndex();
-			for (IRStmt stmt : n.newStmtsFromCSE) {
-				seq.children.add(index, stmt);
+		CFGNode startNode = null;
+		for (CFGNode node : cfg.outgoingGraph.getNodeSet()) {
+			if (cfg.incomingGraph.getChildren(node) == null) {
+				startNode = node;
+				break;
 			}
 		}
-		return root;
+		assert(startNode != null);
+		
+		boolean changed;
+		int i = 0;
+		LinkedBlockingQueue<CFGNode> queue = new LinkedBlockingQueue();
+		HashMap<CFGNode, Boolean> visited = new HashMap<CFGNode, Boolean>();
+		do {
+//			System.out.println("ITERATION -- " + i + "\n");
+			queue.put(startNode);
+			visited.clear();
+			changed = false;
+			while (queue.size() != 0) {
+				CFGNode currNode = queue.poll();
+				visited.put(currNode, true);
+				if (out(currNode)) {
+					changed = true;
+				}
+				for (CFGEdge edge : cfg.outgoingGraph.getChildren(currNode)) {
+					if(!visited.containsKey(edge.getDst()))
+						queue.put(edge.getDst());
+				}
+			}
+			++i;
+		} while (changed);
+		
+//		System.out.println("\n");
+//		for (CFGNode n : cfg.outgoingGraph.getNodeSet()) {
+//			System.out.println("=========\n"+n.getNode().toString());
+//			for (IRMove stmt : n.newStmtsFromCSE) {
+//				System.out.println(stmt.toString());
+//			}
+//			System.out.println("=========\n");
+//		}
+		
+		//modify IR tree
+		for (CFGNode n : cfg.outgoingGraph.getNodeSet()) {
+			int index = n.getNodeIndex();
+			for (int j = n.newStmtsFromCSE.size()-1; j >= 0; --j) {
+				seq.children.add(index, n.newStmtsFromCSE.get(j));
+			}
+		}
+		seq.addNewChildren();
+		return this.root;
 	}
 	
 	public boolean isEqual(IRExpr e1, IRExpr e2) { //whether e1 equals e2
+		if (e1 == null || e2 == null) {
+			return false;
+		}
 		if (!e1.label().equals(e2.label())) {
 			return false;
 		} else if (e1.children.size() != e2.children.size()) {
@@ -236,6 +381,9 @@ public class CSE {
 	}
 	
 	public boolean contains(IRExpr e1, IRExpr e2) { //whether e1 contains e2
+		if (e1 == null || e2 == null) {
+			return false;
+		}
 		if (isEqual(e1, e2)) {
 			return true;
 		} else {
@@ -250,6 +398,9 @@ public class CSE {
 	}
 	
 	public boolean containsMemNode(IRExpr e) { //whether e contains a MEM node
+		if (e == null) {
+			return false;
+		}
 		if (e instanceof IRMem) {
 			return true;
 		} else {
@@ -264,6 +415,9 @@ public class CSE {
 	}
 	
 	public boolean containsCallNode(IRExpr e) { //whether e contains a MEM node
+		if (e == null) {
+			return false;
+		}
 		if (e instanceof IRCall) {
 			return true;
 		} else {

@@ -18,6 +18,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.CheckCanonicalIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import java_cup.runtime.Symbol;
 import zr54.assembly.AssemInstruction;
+import zr54.cse.CSE;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
@@ -145,13 +146,28 @@ public class IRGenerate {
 					
 					if(!disableDiagFileWrite){
 						program.printSExp(printer);
-						if (debug) System.out.println("After code:");
+						if (debug) System.out.println("After CANONICAL:");
 				        StringWriter sw1 = new StringWriter();
 				        try (PrintWriter pw = new PrintWriter(sw1);
 				             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
 				            program.printSExp(sp);
 				        }
 				        if (debug) System.out.println(sw1);
+				        
+				      //CSE
+						for (int i = 0; i < program.children.size(); ++i) {
+							IRFuncDecl funcDecl = (IRFuncDecl)program.children.get(i);
+							CSE cse = new CSE(funcDecl);
+							funcDecl = cse.CSEAnalysis();
+						}
+						program.printSExp(printer);
+						if (debug) System.out.println("AFTER CSE:");
+				        StringWriter sw = new StringWriter();
+				        try (PrintWriter pw = new PrintWriter(sw);
+				             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+				            program.printSExp(sp);
+				        }
+				        if (debug) System.out.println(sw);
 						
 
 				        // IR canonical checker demo
@@ -173,6 +189,7 @@ public class IRGenerate {
 				            long result = sim.call("_Imain_paai");
 				        }
 					}
+					
 					
 					
 			        if(enableCF)program.doConstFolding();

@@ -48,6 +48,12 @@ public class IRSeq extends IRStmt {
     	for (int i = 0; i < this.children.size(); i++)
     		this.stmts.set(i, (IRStmt) this.children.get(i));
     }
+    
+    public void addNewChildren() {
+    	this.stmts.clear();
+    	for (int i = 0; i < this.children.size(); i++)
+    		this.stmts.add((IRStmt) this.children.get(i));
+    }
 
     public List<IRStmt> stmts() {
         return stmts;
