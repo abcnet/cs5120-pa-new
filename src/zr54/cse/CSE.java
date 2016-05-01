@@ -1,7 +1,11 @@
 package zr54.cse;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import zr54.cfg.CFG;
@@ -43,6 +47,13 @@ public class CSE {
 		}
 	}
 
+	public class CFGNodeIndexComparator implements Comparator<CFGNode> {
+		@Override
+		public int compare(CFGNode n1, CFGNode n2) {
+			return n1.getNodeIndex() - n2.getNodeIndex();
+		}
+	}
+	
 	private IRFuncDecl root;
 	private IRSeq seq;
 	private CFG cfg;
@@ -351,10 +362,16 @@ public class CSE {
 //		}
 		
 		//modify IR tree
-		for (CFGNode n : cfg.outgoingGraph.getNodeSet()) {
-			int index = n.getNodeIndex();
-			for (int j = n.newStmtsFromCSE.size()-1; j >= 0; --j) {
-				seq.children.add(index, n.newStmtsFromCSE.get(j));
+		Set<CFGNode> temp = cfg.outgoingGraph.getNodeSet();
+		ArrayList<CFGNode> nodeSet = new ArrayList<CFGNode>();
+		for (CFGNode n : temp) {
+			nodeSet.add(n);
+		}
+		Collections.sort(nodeSet, new CFGNodeIndexComparator());
+		for (int k = nodeSet.size()-1; k >= 0; --k) {
+			int index = nodeSet.get(k).getNodeIndex();
+			for (int j = nodeSet.get(k).newStmtsFromCSE.size()-1; j >= 0; --j) {
+				seq.children.add(index, nodeSet.get(k).newStmtsFromCSE.get(j));
 			}
 		}
 		seq.addNewChildren();
