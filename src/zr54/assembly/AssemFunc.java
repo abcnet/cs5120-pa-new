@@ -22,6 +22,7 @@ public class AssemFunc extends AssemInstruction{
 	public boolean enableREG = false;
 	
 	public static final boolean debugLVA = false;
+	public static final boolean debugLVALoop = false;
     public static final boolean debugInterference = false;
 	
 	public AssemFunc(IRFuncDecl irFuncDecl){
@@ -126,12 +127,18 @@ public class AssemFunc extends AssemInstruction{
    		 node.liveVarsOut.clear();
    	 }
        boolean changed = true;
+       int loop = 0;
        while(changed){
+    	   if(debugLVALoop)System.out.println("LVA loop " + loop);
+    	   loop++;
+    	   
            changed = false;
            AssemCFGNode nprime;
            for(AssemCFGNode node: assemGraph.nodes){
                if(node==null)continue;
 
+               
+               
                for (AssemCFGEdge outEdge: node.out){
                    if(outEdge==null)continue;
                    nprime = outEdge.to;
@@ -142,15 +149,17 @@ public class AssemFunc extends AssemInstruction{
 
                    
                }
-               if(debugLVA)System.out.println(node.liveVarsOutToString());
+//               if(debugLVA)System.out.println(node.liveVarsOutToString());
 
                
                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
                tmp.removeAll(node.getDef());
                tmp.addAll(node.getUse());
+               if(debugLVA)System.out.println("size of liveVarsIn was " + node.liveVarsIn.size());
                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
                if(node.liveVarsIn.addAll(tmp)){
                    changed = true;
+                   if(debugLVA)System.out.println("size of liveVarsIn is now " + node.liveVarsIn.size()); 
                    
                }
                if(debugLVA)System.out.println(node.liveVarsInToString());
@@ -226,6 +235,16 @@ public class AssemFunc extends AssemInstruction{
 	
 	public void reset(){
 		this.interGraph.reset();
+		
+	}
+	@Override
+	public void getUse(HashSet<String> use) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void getDef(HashSet<String> def) {
+		// TODO Auto-generated method stub
 		
 	}
 

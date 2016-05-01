@@ -2,16 +2,28 @@ package zr54.assembly;
 
 import java.util.*;
 
+import zr54.assembly.AssemFixedRegister.Reg;
+
+
 public class InterferenceGraphNode {
 	public HashSet<InterferenceGraphNode> adjLists;
-	public HashSet<String> vars;
+	private HashSet<String> vars;
 	public static int count = 0;
 	public int n;
 	public boolean isFirstReg;
 	public boolean isMoveRelated = false;
+	public boolean isSpilled = false;
+	public boolean isPreColored = false;
+	public Reg color;
 	
 	public InterferenceGraphNode(String varName){
-		isFirstReg = varName.contains("%");
+		if(varName.contains("%")){
+			isFirstReg = true;
+			isPreColored = true;
+			// color
+		}
+		
+		
 		n = ++count;
 		vars = new  HashSet<String> ();
 		vars.add(varName);
@@ -27,12 +39,24 @@ public class InterferenceGraphNode {
 		adjLists.addAll(node2.adjLists);
 		vars = (HashSet<String>) node1.vars.clone();
 		vars.addAll(node2.vars);
-		
+		isPreColored = node1.isPreColored || node2.isPreColored;
 	}
 	
-	public int rawDegree(){
+	private int rawDegree(){
 		return adjLists.size();
 	}
+	
+	public int degree(){
+		int d = 0;
+		for(InterferenceGraphNode node: this.adjLists){
+			if(!node.isSpilled){
+				d++;
+			}
+		}
+		
+		return d;
+	}
+	
 	
 	public String vars(){
 		String s = "#" + n + " (";
