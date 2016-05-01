@@ -31,17 +31,16 @@ public class IRFuncDecl extends IRNode {
     public int retSpace = 0;
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
-    private HashMap<String, IRNode> labelTable = null;
+    public HashMap<String, IRNode> labelTable = null;
     private HashMap<String, Integer> indexTable = null;
     public CFG graph = null;
     public IRCFG irgraph = null;
-    public AssemCFG assemGraph = null;
+    
     public AssemFunc assemFunc = null;
     // Available registers for allocation: %rax, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
     public static final int numAvailRegs = 10;
     
-    public static final boolean debugLVA = false;
-    public static final boolean debugInterference = false;
+   
     
     
     public IRFuncDecl(String name, IRStmt stmt) {
@@ -210,121 +209,11 @@ public class IRFuncDecl extends IRNode {
         
     }
     
-    public void createAssemCFG(boolean draw, FileWriter fw) throws IOException{
-        if(assemGraph==null){
-//            IRNode curr; int i;
-//            List<IRStmt> stmts = ((IRSeq)body).stmts();
-//            for(i=0; i<stmts.size(); i++) {
-//                curr = stmts.get(i);
-//                curr.visitedCFG = false;
-//            }
-            labelTable = null;
-            assemGraph = new AssemCFG(this.assemFunc.instList);
-        }  
-        
-        
-        if(draw){
-            for(AssemCFGEdge edge : this.assemGraph.edges){
-                fw.write("  \"" + edge.from.toString());
-                fw.write("\" -> \"" + edge.to.toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-            }
-        }
-        
-    }
     
-    private void liveVarAnalyze(){
-    	 for(AssemCFGNode node: assemGraph.nodes){
-    		 node.liveVarsIn.clear();
-    		 node.liveVarsOut.clear();
-    	 }
-        boolean changed = true;
-        while(changed){
-            changed = false;
-            AssemCFGNode nprime;
-            for(AssemCFGNode node: assemGraph.nodes){
-                if(node==null)continue;
+    
+    
 
-                for (AssemCFGEdge outEdge: node.out){
-                    if(outEdge==null)continue;
-                    nprime = outEdge.to;
-                    if(nprime==null)continue;
-                    if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
-                        changed = true;
-                    }
-
-                    
-                }
-                if(debugLVA)System.out.println(node.liveVarsOutToString());
-
-                
-                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
-                tmp.removeAll(node.getDef());
-                tmp.addAll(node.getUse());
-                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
-                if(node.liveVarsIn.addAll(tmp)){
-                    changed = true;
-                    
-                }
-                if(debugLVA)System.out.println(node.liveVarsInToString());
-            }
-        }
-        
-        for(AssemCFGNode node: assemGraph.nodes){
-        	for(String varStr1: node.liveVarsIn){
-           	 for(String varStr2: node.liveVarsIn){
-                	
-                	assemFunc.interGraph.connect(varStr1, varStr2);
-                }
-           }
-        }
-        
-        if(debugInterference && assemFunc.interGraph != null){
-        	for(InterferenceGraphNode node: assemFunc.interGraph.nodes){
-        		if(node.isFirstReg)continue;
-        		System.out.print(node.toString());
-//        		boolean first = true;
-//        		for(String s : node.getValue()){
-//        			if(first){
-//        				System.out.print(s);
-//        				first = false;
-//        			}else{
-//        				System.out.print(", " + s);
-//        			}
-//        			
-//        		}
-        		System.out.println("");
-        	}
-        }
-        
-    }
-
-    /**
-     * Appel's algorithm
-     */
-    public void regAlloc(){
-    	Stack allocStack = new Stack();
-    	
-    	boolean rewritten = true;
-    	while(rewritten){
-    		rewritten = false;
-    		// Step 0: live variable analysis + interference graph
-    		for(AssemCFGNode n: this.assemGraph.nodes){
-    			n.liveVarsIn = new HashSet<String>();
-    			n.liveVarsOut = new HashSet<String>();
-    		}
-    		this.liveVarAnalyze();
-    		
-    		boolean repeatFromStep1 = true;
-    		while(repeatFromStep1){
-    			repeatFromStep1 = false;
-    			// Step 1: Push all low-degree non-move-related nodes onto allocation stack
-    			HashSet<String> allocSet = new HashSet<String>();
-//    			for(String var : this.assemFunc.interGraph.keySet()){
-////    				if(this.assemFunc.varInterference.get(var).size())
-//    			}
-    		}
-    	}
-    }
+    
 
     public static int getReserved() {
         return RESERVED;
