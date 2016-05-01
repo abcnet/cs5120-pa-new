@@ -12,7 +12,7 @@ public class CFGNode {
 	private int nodeIndex;
 	private static int counter = 0;
 	public int count;
-	public ArrayList<IRNode> newStmtsFromCSE = new ArrayList<IRNode>();
+	public ArrayList<IRStmt> newStmtsFromCSE = new ArrayList<IRStmt>();
 		
 	public CFGNode(IRNode node) {
 		this.node = node;
@@ -27,6 +27,10 @@ public class CFGNode {
 	
 	public IRNode getNode() {
 		return this.node;
+	}
+	
+	public int getNodeIndex() {
+		return this.nodeIndex;
 	}
 	
 	public String toString(){
