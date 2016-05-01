@@ -194,7 +194,7 @@ public class AssemFunc extends AssemInstruction{
     public void regAlloc(boolean enableREG, boolean enableMC){
     	
     	if(enableREG){
-    		this.enableREG = true;
+//    		this.enableREG = true;
     		Stack allocStack = new Stack();
         	
         	boolean rewritten = true;
