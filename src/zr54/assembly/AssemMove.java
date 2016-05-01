@@ -8,6 +8,14 @@ public class AssemMove extends AssemBinInst{
 		
 	}
 	
-	
+	public boolean moveCoalescable(){
+//		if((src instanceof AssemReg) && ((AssemReg)src).isPreColoredAllocableReg(false)
+//				&& (dst instanceof AssemReg) && ((AssemReg)dst).isPreColoredAllocableReg(true)){
+//			System.err.println("wrong");
+//		}
+		return (src instanceof AssemReg) && ((AssemReg)src).isPreColoredAllocableReg(false)
+				&& (dst instanceof AssemReg) && ((AssemReg)dst).isPreColoredAllocableReg(true);
+		
+	}
 
 }

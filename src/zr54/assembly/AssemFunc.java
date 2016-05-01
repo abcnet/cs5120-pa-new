@@ -19,11 +19,21 @@ public class AssemFunc {
 	public InterferenceGraph interGraph= new InterferenceGraph();
 	public HashMap<String, Integer> varMap;
 	public AssemCFG assemGraph = null;
+	
+	/**
+	 * Data structures for register allocation
+	 */
+	public HashSet<AssemMove> workListMoves = new HashSet<AssemMove>();
+	
+	
 	public boolean enableREG = false;
 	
+//	public static final boolean spillAll = true;
 	public static final boolean debugLVA = false;
 	public static final boolean debugLVALoop = false;
     public static final boolean debugInterference = false;
+//    public static final boolean debugMCWorklist = true;
+    
 	
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
@@ -134,10 +144,17 @@ public class AssemFunc {
     	   
            changed = false;
            AssemCFGNode nprime;
-           for(AssemCFGNode node: assemGraph.nodes){
+           for(int i=assemGraph.nodes.size()-1; i>=0; i--){
+        	   AssemCFGNode node = assemGraph.nodes.get(i);
+           
                if(node==null)continue;
 
-               
+               if(node.instr instanceof AssemMove){
+            	   AssemMove move = ((AssemMove)node.instr);
+            	   if(move.moveCoalescable()){
+            		   this.workListMoves.add(move);
+            	   }
+               }
                
                for (AssemCFGEdge outEdge: node.out){
                    if(outEdge==null)continue;
@@ -167,12 +184,12 @@ public class AssemFunc {
        }
        
        for(AssemCFGNode node: assemGraph.nodes){
-       	for(String varStr1: node.liveVarsIn){
-          	 for(String varStr2: node.liveVarsIn){
+    	   for(String varStr1: node.liveVarsIn){
+    		   for(String varStr2: node.liveVarsIn){
                	
-               	this.interGraph.connect(varStr1, varStr2);
-               }
-          }
+    			   this.interGraph.connect(varStr1, varStr2);
+    		   }
+    	   }
        }
        
        if(debugInterference && this.interGraph != null){
@@ -206,6 +223,19 @@ public class AssemFunc {
         			n.liveVarsOut = new HashSet<String>();
         		}
         		this.liveVarAnalyze();
+        		
+        		for(AssemMove move: this.workListMoves){
+        			
+        			InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        			if(dstNode != null){
+        				dstNode.coalescRelatedMoves.add(move);
+        			}
+        			InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        			if(srcNode != null){
+        				srcNode.coalescRelatedMoves.add(move);
+        			}
+        			
+        		}
         		
         		boolean repeatFromStep1 = true;
         		while(repeatFromStep1){

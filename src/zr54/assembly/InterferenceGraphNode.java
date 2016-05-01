@@ -10,8 +10,9 @@ public class InterferenceGraphNode {
 	private HashSet<String> vars;
 	public static int count = 0;
 	public int n;
+	public HashSet<AssemMove> coalescRelatedMoves = new HashSet<AssemMove>();
 	public boolean containsReg;
-	public boolean isMoveRelated = false;
+//	public boolean isMoveRelated = false;
 	public boolean isSpilled = false;
 	public boolean isPreColored = false;
 	
@@ -110,12 +111,15 @@ public class InterferenceGraphNode {
 	}
 	
 	public void add(InterferenceGraphNode adjNode){
-		adjLists.add(adjNode);
+		if(adjNode != this){
+			adjLists.add(adjNode);
+		}
+		
 	}
 	
 	
 	public boolean countAsDegree(){
-		return !(this.isInWorkingStack || containsDangerousReg());
+		return !(this.isInWorkingStack || isSpilled || containsDangerousReg());
 		
 	}
 

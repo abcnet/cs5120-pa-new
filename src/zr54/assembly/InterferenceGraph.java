@@ -39,10 +39,10 @@ public class InterferenceGraph {
 	}
 	
 	public void connect(String var1, String var2){
-		if(var1.equals(var2)){
-//			System.err.println("Cannot connect two identical vars " + var1);
-			return;
-		}
+//		if(var1.equals(var2)){
+////			System.err.println("Cannot connect two identical vars " + var1);
+//			return;
+//		}
 		InterferenceGraphNode node1, node2;
 		if(!map.containsKey(var1)){
 			node1 = new InterferenceGraphNode(var1);
