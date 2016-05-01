@@ -357,7 +357,9 @@ public class IRCall extends IRExpr {
 			if(expr instanceof IRTemp) {
 				IRTemp tmp = (IRTemp) expr;
 				if(cpl.isConstant(tmp.name())) {
+					int idx = children.indexOf(expr);
 					expr = new IRConst(cpl.getValue(tmp.name()));
+					children.set(idx, expr);
 				}
 			}
 			else

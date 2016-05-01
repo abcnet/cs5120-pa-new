@@ -191,6 +191,7 @@ public class IRMem extends IRExpr {
 			IRTemp tmp = (IRTemp) expr;
 			if(cpl.isConstant(tmp.name())) {
 				expr = new IRConst(cpl.getValue(tmp.name()));
+				children.set(0, expr);
 			}
 		}
 		else

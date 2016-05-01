@@ -700,6 +700,7 @@ public class IRBinOp extends IRExpr {
 			IRTemp tmp = (IRTemp) left;
 			if(cpl.isConstant(tmp.name())) {
 				left = new IRConst(cpl.getValue(tmp.name()));
+				children.set(0, left);
 			}
 		}
 		else
@@ -709,6 +710,7 @@ public class IRBinOp extends IRExpr {
 			IRTemp tmp = (IRTemp) right;
 			if(cpl.isConstant(tmp.name())) {
 				right = new IRConst(cpl.getValue(tmp.name()));
+				children.set(1, right);
 			}
 		}
 		else

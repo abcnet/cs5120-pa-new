@@ -358,39 +358,9 @@ public class IRFuncDecl extends IRNode {
     }
     
     public void doConstPropagation() {
-    	IRCFG ircfg = new IRCFG(this);
-		
-//		String file = name + "_cp_after.dot";
-//		ircfg = new IRCFG(this);
-//		FileWriter fw;
-//		try {
-//			fw = new FileWriter(file, false);
-//			fw.write("digraph " + this.name + " {\n"
-//					+"	size=\"8,5\";\n"
-//					+"	node [style=invis] \"\";\n"
-//					+"	node [shape = circle,style=\"\"];\n");
-//			ircfg.writeEdges2File(fw);
-//			fw.write("}");
-//			fw.flush();
-//			fw.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-    	
+    	IRCFG ircfg = new IRCFG(this);    	
 		ircfg.replacePropagatedConsts();
-    	
-//		String file2 = name + "_cp_after.ir";
-//		ircfg = new IRCFG(this);
-//		FileWriter fw2;
-//		try {
-//			fw2 = new FileWriter(file2, false);
-//			fw2.write(this.toString());
-//			fw2.flush();
-//			fw2.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
+
     }
     
     public void doCopyPropagation() {

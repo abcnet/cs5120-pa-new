@@ -204,8 +204,9 @@ public class IRCFGNode {
 			IRCFGNode succ = e.to;
 			if(!succ.visited) {
 				succ.visited = true;
-				if(succ.uses.contains(name))
+				if(succ.uses.contains(name)) 
 					return true;
+				
 				if(succ.succUseVar(name))
 					return true;
 			}

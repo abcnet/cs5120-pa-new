@@ -274,6 +274,7 @@ public class IRMove extends IRStmt {
 			IRTemp tmp = (IRTemp) expr;
 			if(cpl.isConstant(tmp.name())) {
 				expr = new IRConst(cpl.getValue(tmp.name()));
+				children.set(1, expr);
 			}
 		}
 		else
