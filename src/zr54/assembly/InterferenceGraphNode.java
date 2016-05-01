@@ -65,6 +65,9 @@ public class InterferenceGraphNode {
 			return;
 		}
 		
+		
+		this.coalescRelatedMoves = (HashSet<AssemMove>) node1.coalescRelatedMoves.clone();
+		this.coalescRelatedMoves.addAll(node2.coalescRelatedMoves);
 		adjLists = (HashSet<InterferenceGraphNode>) node1.adjLists.clone();
 		adjLists.addAll(node2.adjLists);
 		vars = (HashSet<String>) node1.vars.clone();
