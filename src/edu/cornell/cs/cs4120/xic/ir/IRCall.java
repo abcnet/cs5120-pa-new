@@ -353,13 +353,14 @@ public class IRCall extends IRExpr {
 	
 	@Override
 	public void replacePropagatedConsts(CpLattice cpl) {
-		for(IRExpr expr : args) {
+		for(int i = 0; i < args.size(); i++) {
+			IRExpr expr = args.get(i);
 			if(expr instanceof IRTemp) {
 				IRTemp tmp = (IRTemp) expr;
 				if(cpl.isConstant(tmp.name())) {
-					int idx = children.indexOf(expr);
 					expr = new IRConst(cpl.getValue(tmp.name()));
-					children.set(idx, expr);
+					args.set(i, expr);
+					children.set(i + 1, expr);
 				}
 			}
 			else

@@ -266,6 +266,8 @@ public class IRMove extends IRStmt {
 	@Override
 	public void replaceAvailableCopies(CopyLattice copies) {
 		expr.replaceAvailableCopies(copies);
+		if(!(target instanceof IRTemp))
+			target.replaceAvailableCopies(copies);
 	}
 	
 	@Override

@@ -342,6 +342,11 @@ public class IRFuncDecl extends IRNode {
        			seq.stmts().remove(stmt);
         	}
     	}
+    	
+    	IRSeq seq = (IRSeq) this.children.get(0);
+    	seq.children.clear();
+    	for(IRStmt stmt : seq.stmts()) 
+    		seq.children.add(stmt);
     }
     
     public void doUCE() {
@@ -350,10 +355,13 @@ public class IRFuncDecl extends IRNode {
     	IRSeq seq = (IRSeq) this.children.get(0);
     	
     	for(IRStmt stmt : stmts) {
-    		//TODO: do we need to eliminate labels?
-    		if(!(stmt instanceof IRLabel))
-    			seq.stmts().remove(stmt);
+//    		if(!(stmt instanceof IRLabel))
+    		seq.stmts().remove(stmt);
     	}
+    	
+    	seq.children.clear();
+    	for(IRStmt stmt : seq.stmts())
+    		seq.children.add(stmt);
 
     }
     
