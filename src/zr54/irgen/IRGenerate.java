@@ -156,13 +156,14 @@ public class IRGenerate {
 				        }
 				        if (debug) System.out.println(sw1);
 				        
-				      
+
 				        if(false && enableCSE){
 				        	//CSE
 				        	for (int i = 0; i < program.children.size(); ++i) {
 								IRFuncDecl funcDecl = (IRFuncDecl)program.children.get(i);
 								CSE cse = new CSE(funcDecl);
 								funcDecl = cse.CSEAnalysis();
+								program.updateChildren();
 							}
 							program.printSExp(printer);
 							if (debug) System.out.println("AFTER CSE:");
