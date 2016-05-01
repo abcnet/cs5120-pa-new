@@ -245,6 +245,7 @@ public class AssemFunc {
         				srcNode.coalescRelatedMoves.add(move);
         			}else{
         				this.workListMoves.remove(move);
+        				dstNode.coalescRelatedMoves.remove(move);
         				i--;
         			}
         			i++;
@@ -302,7 +303,25 @@ public class AssemFunc {
 	
 	        	       		System.out.println("");
         		       	}
-        	       }
+        			}
+        			
+        			if(repeatFromStep1)continue;
+        			
+        			// Step 3: Freeze
+        			if(this.workListMoves.size() > 0){
+        				AssemMove move = this.workListMoves.get(0);
+        				InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        				InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        				dstNode.coalescRelatedMoves.remove(move);
+        				srcNode.coalescRelatedMoves.remove(move);
+        				this.workListMoves.remove(move);
+        				repeatFromStep1 = true;
+        			}
+        			
+        			if(repeatFromStep1)continue;
+        			
+        			// Step 4: Spill
+        			
         		}
         	}
     	}else{
