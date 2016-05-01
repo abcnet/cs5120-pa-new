@@ -56,11 +56,29 @@ public class InterferenceGraphNode {
 			System.err.println("Cannot coalesce two interfered " + node1.vars() + " and " + node2.vars());
 			return;
 		}
+		if(node1.containsDangerousReg()){
+			System.err.println("cannot coalesce becasuse node " + node1.toString() + " contains dangerous regsiter");
+			return;
+		}
+		if(node2.containsDangerousReg()){
+			System.err.println("cannot coalesce becasuse node " + node2.toString() + " contains dangerous regsiter");
+			return;
+		}
+		
 		adjLists = (HashSet<InterferenceGraphNode>) node1.adjLists.clone();
 		adjLists.addAll(node2.adjLists);
 		vars = (HashSet<String>) node1.vars.clone();
 		vars.addAll(node2.vars);
 		isPreColored = node1.isPreColored || node2.isPreColored;
+		if(node1.isPreColored){
+			color = node1.color;
+			if(node2.isPreColored && node1.color != node2.color){
+				System.err.println("Cannot coalesce two nodes with different colors");
+			}
+		}else if(node2.isPreColored){
+			color = node2.color;
+		}
+		
 	}
 	
 //	private int rawDegree(){

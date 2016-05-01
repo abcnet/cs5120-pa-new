@@ -30,25 +30,23 @@ class XiCompiler {
 	static boolean enableCP = true;
     
     static void disableAll(){
-    	if(specifiedCF){enableCF = false;}
-    	if(specifiedREG){enableREG = false;}
-    	if(specifiedMC){enableMC = false;}
-    	if(specifiedUCE){enableUCE = false;}
-    	if(specifiedCSE){enableCSE = false;}
-    	if(specifiedCOPY){enableCOPY = false;}
-    	if(specifiedDCE){enableDCE = false;}
-    	if(specifiedCP){enableCP = false;}
+    	if(!specifiedREG){enableREG = false;}
+    	if(!specifiedMC){enableMC = false;}
+    	if(!specifiedUCE){enableUCE = false;}
+    	if(!specifiedCSE){enableCSE = false;}
+    	if(!specifiedCOPY){enableCOPY = false;}
+    	if(!specifiedDCE){enableDCE = false;}
+    	if(!specifiedCP){enableCP = false;}
     }
     
     static void enableAll(){
-    	if(specifiedCF){enableCF = true;}
-    	if(specifiedREG){enableREG = true;}
-    	if(specifiedMC){enableMC = true;}
-    	if(specifiedUCE){enableUCE = true;}
-    	if(specifiedCSE){enableCSE = true;}
-    	if(specifiedCOPY){enableCOPY = true;}
-    	if(specifiedDCE){enableDCE = true;}
-    	if(specifiedCP){enableCP = true;}
+    	if(!specifiedREG){enableREG = true;}
+    	if(!specifiedMC){enableMC = true;}
+    	if(!specifiedUCE){enableUCE = true;}
+    	if(!specifiedCSE){enableCSE = true;}
+    	if(!specifiedCOPY){enableCOPY = true;}
+    	if(!specifiedDCE){enableDCE = true;}
+    	if(!specifiedCP){enableCP = true;}
     }
 	
 	/**
@@ -75,7 +73,7 @@ class XiCompiler {
         longopts[9] = new LongOpt("D", LongOpt.REQUIRED_ARGUMENT, null, 9);
         longopts[10] = new LongOpt("d", LongOpt.REQUIRED_ARGUMENT, null, 10);
         longopts[11] = new LongOpt("O", LongOpt.NO_ARGUMENT, null, 11);
-        longopts[12] = new LongOpt("report-opts", LongOpt.REQUIRED_ARGUMENT, null, 12);
+        longopts[12] = new LongOpt("report-opts", LongOpt.NO_ARGUMENT, null, 12);
         longopts[13] = new LongOpt("optir", LongOpt.REQUIRED_ARGUMENT, null, 13);
         longopts[14] = new LongOpt("optcfg", LongOpt.REQUIRED_ARGUMENT, null, 14);
         longopts[15] = new LongOpt("old", LongOpt.NO_ARGUMENT, null, 15);
@@ -131,6 +129,8 @@ class XiCompiler {
         boolean old = false;
         
 
+        boolean initialIRCode = false;
+        boolean finalIRCode = false;
         boolean initialIRGraph = false;
         boolean finalIRGraph = false;
         boolean initialAssemGraph = false;
@@ -180,11 +180,11 @@ class XiCompiler {
                 case 13:
                 	arg = g.getOptarg();
                 	if(arg.equals("initial")){
-                		
+                		initialIRCode = true;
                 	}else if (arg.equals("final")){
-                		
+                		finalIRCode = true;
                 	}else{
-                		
+                		System.out.println("IR code for phase " + arg + " is not supported");
                 	}
                 	break;
                 case 14:
@@ -267,11 +267,11 @@ class XiCompiler {
             }
             
             if(irrun){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
             }else if(irgen){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
             }else{
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
             }
             
             
