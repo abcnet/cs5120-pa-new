@@ -7,18 +7,20 @@ import zr54.assembly.AssemFixedRegister.Reg;
 
 public class InterferenceGraphNode {
 	public HashSet<InterferenceGraphNode> adjLists;
-	private HashSet<String> vars;
+	public HashSet<String> vars;
 	public static int count = 0;
 	public int n;
 	public HashSet<AssemMove> coalescRelatedMoves = new HashSet<AssemMove>();
 	public boolean containsReg;
-//	public boolean isMoveRelated = false;
+
 	public boolean isSpilled = false;
 	public boolean isPreColored = false;
 	
 	public boolean isInWorkingStack = false;
 	
 	public Reg color = null;
+	
+	public static boolean debugCoalesce = false; 
 	
 	public InterferenceGraphNode(String varName){
 		if(varName.contains("%")){
@@ -121,6 +123,38 @@ public class InterferenceGraphNode {
 	public boolean countAsDegree(){
 		return !(this.isInWorkingStack || isSpilled || containsDangerousReg());
 		
+	}
+	
+	public boolean isMoveRelated(){
+		return this.coalescRelatedMoves.size() > 0;
+	}
+	
+	public boolean canConservativeCoalesce(InterferenceGraphNode another){
+		if(this.containsDangerousReg() || another.containsDangerousReg()){
+			return false;
+		}
+		if(this.isPreColored && another.isPreColored && this.color != another.color){
+			return false;
+		}
+		if(this.adjLists.contains(another)){
+			return false;
+		}
+		if(this.degree() >= AssemFunc.numAvailRegs 
+				|| another.degree() >= AssemFunc.numAvailRegs){
+			return false;
+		}
+		if(debugCoalesce && this.degree() + another.degree() < AssemFunc.numAvailRegs){
+			System.out.println("Should coalesce");
+		}
+		HashSet<InterferenceGraphNode> tmp = (HashSet<InterferenceGraphNode>) this.adjLists.clone();
+		tmp.addAll(another.adjLists);
+		int numHighDegreeNeighbors = 0;
+		for(InterferenceGraphNode neighbor: tmp){
+			if(neighbor.degree() >= AssemFunc.numAvailRegs){
+				numHighDegreeNeighbors++;
+			}
+		}
+		return numHighDegreeNeighbors < AssemFunc.numAvailRegs;
 	}
 
 }

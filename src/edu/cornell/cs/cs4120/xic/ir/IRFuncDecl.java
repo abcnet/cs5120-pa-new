@@ -37,8 +37,7 @@ public class IRFuncDecl extends IRNode {
     public IRCFG irgraph = null;
     
     public AssemFunc assemFunc = null;
-    // Available registers for allocation: %rax, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
-    public static final int numAvailRegs = 10;
+
     
    
     

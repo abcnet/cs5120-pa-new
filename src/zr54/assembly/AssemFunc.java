@@ -2,10 +2,8 @@ package zr54.assembly;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
+
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import zr54.cfg.AssemCFG;
@@ -20,10 +18,13 @@ public class AssemFunc {
 	public HashMap<String, Integer> varMap;
 	public AssemCFG assemGraph = null;
 	
+    // Available registers for allocation: %rax, %rbx, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    public static final int numAvailRegs = 11;
+	
 	/**
 	 * Data structures for register allocation
 	 */
-	public HashSet<AssemMove> workListMoves = new HashSet<AssemMove>();
+	public LinkedList<AssemMove> workListMoves = new LinkedList<AssemMove>();
 	
 	
 	public boolean enableREG = false;
@@ -31,7 +32,10 @@ public class AssemFunc {
 //	public static final boolean spillAll = true;
 	public static final boolean debugLVA = false;
 	public static final boolean debugLVALoop = false;
-    public static final boolean debugInterference = false;
+	public static final boolean debugInterference = false;
+	public static final boolean debugStep1 = false;
+	public static final boolean debugStep2 = false;
+    
 //    public static final boolean debugMCWorklist = true;
     
 	
@@ -212,7 +216,7 @@ public class AssemFunc {
     	
     	if(enableREG){
 //    		this.enableREG = true;
-    		Stack allocStack = new Stack();
+    		Stack<InterferenceGraphNode> selectStack = new Stack<InterferenceGraphNode>();
         	
         	boolean rewritten = true;
         	while(rewritten){
@@ -223,28 +227,82 @@ public class AssemFunc {
         			n.liveVarsOut = new HashSet<String>();
         		}
         		this.liveVarAnalyze();
+        		int i = 0;
+        		while(i < this.workListMoves.size()){
+        			AssemMove move = this.workListMoves.get(i);
         		
-        		for(AssemMove move: this.workListMoves){
         			
         			InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
         			if(dstNode != null){
         				dstNode.coalescRelatedMoves.add(move);
+        			}else{
+        				this.workListMoves.remove(move);
+        				
+        				continue;
         			}
         			InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
         			if(srcNode != null){
         				srcNode.coalescRelatedMoves.add(move);
+        			}else{
+        				this.workListMoves.remove(move);
+        				i--;
         			}
-        			
+        			i++;
         		}
         		
         		boolean repeatFromStep1 = true;
         		while(repeatFromStep1){
         			repeatFromStep1 = false;
         			// Step 1: Push all low-degree non-move-related nodes onto allocation stack
-        			HashSet<String> allocSet = new HashSet<String>();
-//        			for(String var : this.assemFunc.interGraph.keySet()){
-////        				if(this.assemFunc.varInterference.get(var).size())
-//        			}
+        			
+        			boolean existLowDegreeNonMoveRelatedNodes = true;
+        			while(existLowDegreeNonMoveRelatedNodes){
+        				existLowDegreeNonMoveRelatedNodes = false;
+        				for(InterferenceGraphNode node : this.interGraph.nodes){
+        					if(!node.isMoveRelated() && node.degree() < numAvailRegs && !node.isInWorkingStack){
+        						if(debugStep1){
+        							System.out.println("Pulling " + node.toString() + " out of graph and pushing onto stack");
+        						}
+        						existLowDegreeNonMoveRelatedNodes = true;
+        						node.isInWorkingStack = true;
+        						selectStack.push(node);
+        					}
+        				}
+        			}
+        			
+        			// Step 2: Conservative coalesce
+        			i = 0;
+        			while(i<this.workListMoves.size()){
+        				if(debugStep2){
+        					System.out.println(i);
+//        					if(i==9){
+//        						System.out.println(i);
+//        					}
+
+        					System.out.println("Size of working list moves is " + this.workListMoves.size());
+        				}
+        				AssemMove move = this.workListMoves.get(0);
+        				InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        				InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        				if(dstNode.canConservativeCoalesce(srcNode)){
+        					if(debugStep2){
+        						System.out.println("Coalescing " + dstNode + " with " + srcNode);
+        					}
+        					this.interGraph.coalesce(dstNode, srcNode);
+        					repeatFromStep1 = true;
+        					this.workListMoves.remove(0);
+        					i--;
+        				}
+        				i++;
+        			}
+        			if(debugStep2 && this.interGraph != null){
+        		       	for(InterferenceGraphNode node: this.interGraph.nodes){
+	//        	       		if(node.isFirstReg)continue;
+	        	       		System.out.print(node.toString());
+	
+	        	       		System.out.println("");
+        		       	}
+        	       }
         		}
         	}
     	}else{
