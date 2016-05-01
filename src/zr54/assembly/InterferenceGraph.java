@@ -110,4 +110,18 @@ public class InterferenceGraph {
 		map.clear();
 	}
 	
+	public InterferenceGraphNode add(String name){
+		if(map.containsKey(name)){
+			return null;
+		}else{
+			InterferenceGraphNode node = new InterferenceGraphNode(name);
+			node.isSpilled = true;
+			this.map.put(name, node);
+			this.nodes.add(node);
+			return node;
+		}
+		
+		
+	}
+	
 }
