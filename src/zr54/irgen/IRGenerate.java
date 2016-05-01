@@ -161,6 +161,7 @@ public class IRGenerate {
 							IRFuncDecl funcDecl = (IRFuncDecl)program.children.get(i);
 							CSE cse = new CSE(funcDecl);
 							funcDecl = cse.CSEAnalysis();
+							program.updateChildren();
 						}
 						program.printSExp(printer);
 						if (debug) System.out.println("AFTER CSE:");
