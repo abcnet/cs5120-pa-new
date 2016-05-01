@@ -3,6 +3,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
@@ -120,5 +121,14 @@ public abstract class IRNode {
     }
     
     public abstract void replacePropagatedConsts(CpLattice cpl);
-    	    
+    	
+    public void analyzeDefs(HashSet<String> defs) {
+    	
+    }
+    
+    public void analyzeUses(HashSet<String> uses) {
+    	for(IRNode child : children)
+    		child.analyzeUses(uses);
+    }
+    
 }

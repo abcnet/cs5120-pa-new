@@ -365,4 +365,9 @@ public class IRCall extends IRExpr {
 		}
 	}
 	
+	@Override
+	public boolean hasSideEffect() {
+		return true;
+	}
+	
 }

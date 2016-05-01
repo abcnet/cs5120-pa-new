@@ -130,4 +130,9 @@ public class IRESeq extends IRExpr {
 	@Override
 	public void replacePropagatedConsts(CpLattice cpl) {
 	}
+	
+	@Override
+	public boolean hasSideEffect() {
+		return true;
+	}
 }

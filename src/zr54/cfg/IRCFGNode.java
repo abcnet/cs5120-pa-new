@@ -1,7 +1,7 @@
 package zr54.cfg;
 
 import java.util.ArrayList;
-
+import java.util.HashSet;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 
@@ -14,7 +14,9 @@ public class IRCFGNode {
 	public IRCFGEdge trueEdge = null;
 	public IRCFGEdge falseEdge = null;
 	public IRCFGEdge fallEdge = null;
-	
+	public HashSet<String> uses = new HashSet<String>();
+	public HashSet<String> defs = new HashSet<String>();
+	public boolean visited = false;
 	
 	public IRCFGNode(IRStmt irStmt, int n) {
 		stmt = irStmt;
@@ -152,35 +154,31 @@ public class IRCFGNode {
 		
 		if(inChanged) {
 			CopyLattice inMeet = CopyLattice.meet(in);
-//			System.out.println(stmt.toString());
-//			System.out.println(inMeet.toString());
-			
+			//			System.out.println(stmt.toString());
+			//			System.out.println(inMeet.toString());
+
 			if(stmt instanceof IRMove) {
 				IRMove move = (IRMove) stmt;
 				if(move.target() instanceof IRTemp) {
 					IRTemp target = (IRTemp) move.target();
-					//if(!(target.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
-					//||target.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
-					if(target.name().equals("z_main")) {
-						int debug = 0;
-						debug = debug + 1;
-					}
-					//kill relevant entries
-					inMeet.removeEntriesContaining(target.name());				
+					if(!(target.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
+							||target.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
+						//kill relevant entries
+						inMeet.removeEntriesContaining(target.name());				
 
-					if(move.expr() instanceof IRTemp) { 
-						//generate an entry
-						IRTemp src = (IRTemp) move.expr();
-						if(target.name().equals("z_main")) {
-							int debug = 0;
-							debug = debug + 1;
+						if(move.expr() instanceof IRTemp) { 
+							//generate an entry
+							
+							IRTemp src = (IRTemp) move.expr();
+							if(!(src.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
+									||src.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
+								inMeet.addEntry(target.name(), src.name());
+							}
 						}
-						inMeet.addEntry(target.name(), src.name());
 					}
-					//}
 				}
 			}
-			
+
 			boolean changed = false;
 			for(IRCFGEdge e : out) {
 				if(!e.copies.sameLattice(inMeet)) {
@@ -192,6 +190,45 @@ public class IRCFGNode {
 			if(changed)
 				return true;
 		}
+		return false;
+	}
+	
+	public void analyzeUseDef() {
+		stmt.analyzeDefs(defs);
+		stmt.analyzeUses(uses);
+	}
+	
+	public boolean succUseVar(String name) {
+		
+		for(IRCFGEdge e : out) {
+			IRCFGNode succ = e.to;
+			if(!succ.visited) {
+				succ.visited = true;
+				if(succ.uses.contains(name))
+					return true;
+				if(succ.succUseVar(name))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isDead() {
+		if(stmt instanceof IRMove){
+			IRMove move = (IRMove) stmt;
+			if(move.target() instanceof IRTemp) {
+				IRTemp target = (IRTemp) move.target();
+				if(!(target.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
+						||target.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
+
+					if(!move.expr().hasSideEffect()) {
+						if(!succUseVar(target.name()))
+							return true;
+					}
+				}
+			}
+		}
+
 		return false;
 	}
 	

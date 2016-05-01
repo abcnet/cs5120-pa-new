@@ -327,12 +327,31 @@ public class IRFuncDecl extends IRNode {
 
     }
     
+    public void doDeadCodeElim() {
+    	boolean changed = true;
+    	while(changed) {
+    		IRCFG ircfg = new IRCFG(this);
+    		ArrayList<IRStmt> stmts = ircfg.deadStmts();
+    		
+    		if(stmts.size() > 0)
+    			changed = true;
+    		else
+    			changed = false;
+    		
+    		IRSeq seq = (IRSeq) this.children.get(0);
+        	for(IRStmt stmt : stmts) {
+       			seq.stmts().remove(stmt);
+        	}
+    	}
+    }
+    
     public void doUCE() {
     	IRCFG ircfg = new IRCFG(this);
     	ArrayList<IRStmt> stmts = ircfg.unreachableStmts();
     	IRSeq seq = (IRSeq) this.children.get(0);
     	
     	for(IRStmt stmt : stmts) {
+    		//TODO: do we need to eliminate labels?
     		if(!(stmt instanceof IRLabel))
     			seq.stmts().remove(stmt);
     	}

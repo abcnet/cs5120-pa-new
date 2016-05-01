@@ -26,4 +26,7 @@ public abstract class IRExpr extends IRNode {
      */
     abstract public CpEntry propConstVal(CpLattice cpl);
 
+    abstract public boolean hasSideEffect();
+
+    
 }

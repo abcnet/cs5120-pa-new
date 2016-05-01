@@ -716,4 +716,12 @@ public class IRBinOp extends IRExpr {
 		
 	}
 	
+	@Override
+	public boolean hasSideEffect() {
+		if(left.hasSideEffect() || right.hasSideEffect())
+			return true;
+		else
+			return false;
+	}
+	
 }

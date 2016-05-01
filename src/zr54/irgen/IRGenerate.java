@@ -186,9 +186,12 @@ public class IRGenerate {
 			        
 			        program.createCFG(initialIRGraph, pathToFile + "_f_initial.dot");
 			        
+			        //System.out.print(program.toString());
 			        if(enableCOPY) program.doCopyPropagation();
 			        if(enableUCE) program.doUCE();
 			        if(enableCP) program.doConstPropagation();
+			        if(enableDCE) program.doDeadCodeElim();
+			        //System.out.print(program.toString());
 			        
 			        program.createCFG(finalIRGraph, pathToFile + "_f_final.dot");
 			        

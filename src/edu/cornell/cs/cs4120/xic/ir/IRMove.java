@@ -2,6 +2,7 @@ package edu.cornell.cs.cs4120.xic.ir;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
@@ -280,6 +281,21 @@ public class IRMove extends IRStmt {
 		
 		if(!(target instanceof IRTemp)) 
 			target.replacePropagatedConsts(cpl);
+		
+	}
+	
+	@Override
+	public void analyzeDefs(HashSet<String> defs) {
+		if(target instanceof IRTemp)
+			defs.add(((IRTemp) target).name());
+	}
+	
+	@Override
+	public void analyzeUses(HashSet<String> uses) {
+		expr.analyzeUses(uses);		
+		
+		if(!(target instanceof IRTemp))
+			target.analyzeUses(uses);
 		
 	}
 }

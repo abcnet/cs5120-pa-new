@@ -197,5 +197,10 @@ public class IRMem extends IRExpr {
 			expr.replacePropagatedConsts(cpl);
 	}
 	
+	@Override
+	public boolean hasSideEffect() {
+		return expr.hasSideEffect();
+	}
+	
 }
 

@@ -127,4 +127,9 @@ public class IRConst extends IRExpr {
 	public void replacePropagatedConsts(CpLattice cpl) {
 	}
 	
+	@Override
+	public boolean hasSideEffect() {
+		return false;
+	}
+	
 }
