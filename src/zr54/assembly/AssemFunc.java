@@ -67,16 +67,7 @@ public class AssemFunc extends AssemInstruction{
 		if(varOccurances == null){
 			varOccurances = new HashMap<String, ArrayList<AssemVar>>();
 		}
-//		if(varSet == null){
-//			varSet = new HashSet<String>();
-//		}
-		
-//		if(varSet.contains(v.varName)){
-//			
-//		}else{
-//			varSet.add(v.varName);
-//			
-//		}
+
 		
 		if(varOccurances.containsKey(v.varName)){
 			varOccurances.get(v.varName).add(v);

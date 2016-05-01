@@ -30,6 +30,8 @@ import zr54.typechecker.VarSymbolTable;
 public class IRGenerate {
 	
 	public static boolean debug = false;
+	public static boolean debugCF = false;
+	
 	public static boolean debugAssem = false;
 	public static boolean debugPA6 = true;
 	
@@ -43,6 +45,14 @@ public class IRGenerate {
 	 * @param initialAssemGraph TODO
 	 * @param finalAssemGraph TODO
 	 * @param genOldAssem TODO
+	 * @param enableCF TODO
+	 * @param enableREG TODO
+	 * @param enableMC TODO
+	 * @param enableUCE TODO
+	 * @param enableCSE TODO
+	 * @param enableCOPY TODO
+	 * @param enableDCE TODO
+	 * @param enableCP TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -52,10 +62,12 @@ public class IRGenerate {
 	 * @throws Exception
 	 */
 	public static boolean IRGenAndPrint(String srcFile, String dstFile,
-			String libPath, boolean run, boolean optimization,
-			boolean disableDiagFileWrite, String assemFile, boolean errOutput, 
-			boolean initialIRGraph, boolean finalIRGraph, 
-			boolean initialAssemGraph, boolean finalAssemGraph, boolean genOldAssem) throws Exception {
+			String libPath, boolean run, boolean disableDiagFileWrite,
+			String assemFile, boolean errOutput, boolean initialIRGraph, 
+			boolean finalIRGraph, boolean initialAssemGraph, 
+			boolean finalAssemGraph, boolean genOldAssem, boolean enableCF,
+			boolean enableREG, boolean enableMC, boolean enableUCE, boolean enableCSE,
+			boolean enableCOPY, boolean enableDCE, boolean enableCP) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
@@ -120,11 +132,11 @@ public class IRGenerate {
 //			        }
 //			        if (debug) System.out.println(sw);
 					
-			        if(optimization)program.doConstFolding();
-			        {
+			        if(enableCF)program.doConstFolding();
+			        if (debugCF){
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            if (debug)System.out.print("Constant-folded?: ");
-			            if (debug)System.out.println(cv.visit(program));
+			            if (debugCF)System.out.print("Constant-folded?: ");
+			            if (debugCF)System.out.println(cv.visit(program));
 			        }
 			        
 					//Generate canonical IR
@@ -163,11 +175,11 @@ public class IRGenerate {
 					}
 					
 					
-			        if(optimization)program.doConstFolding();
-			        {
+			        if(enableCF)program.doConstFolding();
+			        if (debugCF){
 			            CheckConstFoldedIRVisitor cv = new CheckConstFoldedIRVisitor();
-			            if (debug)System.out.print("Constant-folded?: ");
-			            if (debug)System.out.println(cv.visit(program));
+			            if (debugCF)System.out.print("Constant-folded?: ");
+			            if (debugCF)System.out.println(cv.visit(program));
 			        }
 			        
 			        String pathToFile = srcFile.substring(0, srcFile.lastIndexOf(".xi"));

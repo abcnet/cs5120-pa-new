@@ -8,6 +8,7 @@ public class InterferenceGraphNode {
 	public static int count = 0;
 	public int n;
 	public boolean isFirstReg;
+	public boolean isMoveRelated = false;
 	
 	public InterferenceGraphNode(String varName){
 		isFirstReg = varName.contains("%");

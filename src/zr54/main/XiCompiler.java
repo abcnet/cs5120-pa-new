@@ -10,6 +10,47 @@ import zr54.typechecker.*;
 import zr54.irgen.*;
 
 class XiCompiler {
+	
+	static boolean specifiedCF = false;
+	static boolean specifiedREG = false;
+	static boolean specifiedMC = false;
+	static boolean specifiedUCE = false;
+	static boolean specifiedCSE = false;
+	static boolean specifiedCOPY = false;
+	static boolean specifiedDCE = false;
+	static boolean specifiedCP = false;
+    
+	static boolean enableCF = true;
+	static boolean enableREG = true;
+	static boolean enableMC = true;
+	static boolean enableUCE = true;
+	static boolean enableCSE = true;
+	static boolean enableCOPY = true;
+	static boolean enableDCE = true;
+	static boolean enableCP = true;
+    
+    static void disableAll(){
+    	if(specifiedCF){enableCF = false;}
+    	if(specifiedREG){enableREG = false;}
+    	if(specifiedMC){enableMC = false;}
+    	if(specifiedUCE){enableUCE = false;}
+    	if(specifiedCSE){enableCSE = false;}
+    	if(specifiedCOPY){enableCOPY = false;}
+    	if(specifiedDCE){enableDCE = false;}
+    	if(specifiedCP){enableCP = false;}
+    }
+    
+    static void enableAll(){
+    	if(specifiedCF){enableCF = true;}
+    	if(specifiedREG){enableREG = true;}
+    	if(specifiedMC){enableMC = true;}
+    	if(specifiedUCE){enableUCE = true;}
+    	if(specifiedCSE){enableCSE = true;}
+    	if(specifiedCOPY){enableCOPY = true;}
+    	if(specifiedDCE){enableDCE = true;}
+    	if(specifiedCP){enableCP = true;}
+    }
+	
 	/**
 	 * Main function of the compiler
      * Parses the command-line arguments and sends them to the Lexer/Parser
@@ -19,7 +60,7 @@ class XiCompiler {
     public static void main(String[] argv) throws Exception {
         int c;
         String arg;
-        LongOpt[] longopts = new LongOpt[16];
+        LongOpt[] longopts = new LongOpt[32];
 
         StringBuffer sb = new StringBuffer();
         longopts[0] = new LongOpt("help", LongOpt.NO_ARGUMENT, null, 0);
@@ -37,8 +78,25 @@ class XiCompiler {
         longopts[12] = new LongOpt("report-opts", LongOpt.REQUIRED_ARGUMENT, null, 12);
         longopts[13] = new LongOpt("optir", LongOpt.REQUIRED_ARGUMENT, null, 13);
         longopts[14] = new LongOpt("optcfg", LongOpt.REQUIRED_ARGUMENT, null, 14);
-        longopts[15] = new LongOpt("old", LongOpt.REQUIRED_ARGUMENT, null, 15);
-
+        longopts[15] = new LongOpt("old", LongOpt.NO_ARGUMENT, null, 15);
+        
+        longopts[16] = new LongOpt("Ocf", LongOpt.NO_ARGUMENT, null, 16);
+        longopts[17] = new LongOpt("Oreg", LongOpt.NO_ARGUMENT, null, 17);
+        longopts[18] = new LongOpt("Omc", LongOpt.NO_ARGUMENT, null, 18);
+        longopts[19] = new LongOpt("Ouce", LongOpt.NO_ARGUMENT, null, 19);
+        longopts[20] = new LongOpt("Ocse", LongOpt.NO_ARGUMENT, null, 20);
+        longopts[21] = new LongOpt("Ocopy", LongOpt.NO_ARGUMENT, null, 21);
+        longopts[22] = new LongOpt("Odce", LongOpt.NO_ARGUMENT, null, 22);
+        longopts[23] = new LongOpt("Ocp", LongOpt.NO_ARGUMENT, null, 23);
+        
+        longopts[24] = new LongOpt("O-no-cf", LongOpt.NO_ARGUMENT, null, 24);
+        longopts[25] = new LongOpt("O-no-reg", LongOpt.NO_ARGUMENT, null, 25);
+        longopts[26] = new LongOpt("O-no-mc", LongOpt.NO_ARGUMENT, null, 26);
+        longopts[27] = new LongOpt("O-no-uce", LongOpt.NO_ARGUMENT, null, 27);
+        longopts[28] = new LongOpt("O-no-cse", LongOpt.NO_ARGUMENT, null, 28);
+        longopts[29] = new LongOpt("O-no-copy", LongOpt.NO_ARGUMENT, null, 29);
+        longopts[30] = new LongOpt("O-no-dce", LongOpt.NO_ARGUMENT, null, 30);
+        longopts[31] = new LongOpt("O-no-cp", LongOpt.NO_ARGUMENT, null, 31);
         
 
         Getopt g = new Getopt("XiCompiler", argv, ":", longopts, true);
@@ -72,11 +130,13 @@ class XiCompiler {
         boolean irrun = false;
         boolean old = false;
         
-        boolean optimization = true;
+
         boolean initialIRGraph = false;
         boolean finalIRGraph = false;
         boolean initialAssemGraph = false;
         boolean finalAssemGraph = false;
+        
+        
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -112,10 +172,10 @@ class XiCompiler {
 			              dPath = arg;
 			              dPathSet = true;
 			              break;
-                case 11: optimization = false;
+                case 11: disableAll();
                           break;
                 case 12:
-                	System.out.println("% xic --report-opts\nreg\nuce\ncse\n%");
+                	System.out.println("cf\nreg\nmc\nuce\ncse\ncopy\ndce\ncp\n");
                 	break;
                 case 13:
                 	arg = g.getOptarg();
@@ -148,6 +208,26 @@ class XiCompiler {
                 case 15:
                 	old = true;
                 	break;
+                
+                case 16: specifiedCF = true; enableCF = true; disableAll(); break;
+                case 17: specifiedREG = true; enableREG = true; disableAll(); break;
+                case 18: specifiedMC = true; enableMC = true; disableAll(); break;
+                case 19: specifiedUCE = true; enableUCE = true; disableAll(); break;
+                case 20: specifiedCSE = true; enableCSE = true; disableAll(); break;
+                case 21: specifiedCOPY = true; enableCOPY = true; disableAll(); break;
+                case 22: specifiedDCE = true; enableDCE = true; disableAll(); break;
+                case 23: specifiedCP = true; enableCP = true; disableAll(); break;
+                	
+                case 24: specifiedCF = true; enableCF = false; enableAll(); break;
+                case 25: specifiedREG = true; enableREG = false; enableAll(); break;
+                case 26: specifiedMC = true; enableMC = false; enableAll(); break;
+                case 27: specifiedUCE = true; enableUCE = false; enableAll(); break;
+                case 28: specifiedCSE = true; enableCSE = false; enableAll(); break;
+                case 29: specifiedCOPY = true; enableCOPY = false; enableAll(); break;
+                case 30: specifiedDCE = true; enableDCE = false; enableAll(); break;
+                case 31: specifiedCP = true; enableCP = false; enableAll(); break;
+                	
+                	
                 case '?': System.out.println("error: invalid option entered");
                           System.out.println(usage);
                           System.exit(0);
@@ -187,11 +267,11 @@ class XiCompiler {
             }
             
             if(irrun){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
             }else if(irgen){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, optimization, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
             }else{
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, optimization, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP);
             }
             
             
