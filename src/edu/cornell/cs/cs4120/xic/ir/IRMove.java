@@ -7,6 +7,8 @@ import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
+import zr54.cfg.CopyLattice;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -258,5 +260,26 @@ public class IRMove extends IRStmt {
 		}
 
 		return null;
+	}
+	
+	@Override
+	public void replaceAvailableCopies(CopyLattice copies) {
+		expr.replaceAvailableCopies(copies);
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		if(expr instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) expr;
+			if(cpl.isConstant(tmp.name())) {
+				expr = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			expr.replacePropagatedConsts(cpl);
+		
+		if(!(target instanceof IRTemp)) 
+			target.replacePropagatedConsts(cpl);
+		
 	}
 }

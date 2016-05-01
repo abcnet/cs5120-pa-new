@@ -13,8 +13,9 @@ public class IRCFG {
 	IRCFGNode startNode = null;
 	IRCFGEdge startEdge = null;
 	HashMap<String, IRCFGNode> label2Node = new HashMap<String, IRCFGNode>();
-
+	String name = null;
 	public IRCFG(IRFuncDecl func) {
+		name = func.name();
 		IRSeq seq = (IRSeq) func.children.get(0);
 		
 		for(int i = 0; i < seq.stmts().size(); i++) {
@@ -45,50 +46,55 @@ public class IRCFG {
 				if(cjump.trueLabel() != null) {
 					IRCFGNode to = label2Node.get(cjump.trueLabel());
 					if(to != null) 
-						addEdge(from, to);
+						from.trueEdge = addEdge(from, to);
 					else
 						System.out.println("label not found");
 				}
 				
 				if(cjump.falseLabel() != null) {
+					System.out.println("cjump false label not null!");
 					IRCFGNode to = label2Node.get(cjump.falseLabel());
 					if(to != null)
-						addEdge(from, to);
+						from.falseEdge = addEdge(from, to);
 					else
 						System.out.println("label not found");
 				}
 				
 				IRCFGNode to = nodes.get(i + 1);
-				addEdge(from, to);
+				from.fallEdge = addEdge(from, to);
 			}
 			else if(stmt instanceof IRJump) {
 				IRName target = (IRName) ((IRJump) stmt).target();
 				IRCFGNode to = label2Node.get(target.name());
 				if(to != null)
-					addEdge(from, to);
+					from.fallEdge = addEdge(from, to);
 				else 
 					System.out.println("label not found");
 			}
 			else if(!(stmt instanceof IRReturn)){
 				IRCFGNode to = nodes.get(i + 1);
-				addEdge(from, to);
+				from.fallEdge = addEdge(from, to);
 			}
 			
 		}
 
 	}
 	
-	void addEdge(IRCFGNode from, IRCFGNode to) {
+	IRCFGEdge addEdge(IRCFGNode from, IRCFGNode to) {
 		IRCFGEdge edge = new IRCFGEdge(from, to);
 		from.addOutEdge(edge);
 		to.addInEdge(edge);
 		edges.add(edge);
+		return edge;
 	}
 	
 	public void writeEdges2File(FileWriter fw) {
 		for(IRCFGEdge edge : edges){
             try {
-				fw.write("  \"" + edge.from.toString());
+            	if(edge.from == null)
+            		fw.write("	\"");
+            	else
+					fw.write("  \"" + edge.from.toString());
 	            fw.write("\" -> \"" + edge.to.toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
             } catch (IOException e) {
 				e.printStackTrace();
@@ -99,8 +105,11 @@ public class IRCFG {
 	public void doCondConstProp() {
 		if(nodes.size() > 0) {
 			startEdge.cpl.setReachable();
+			for(IRCFGEdge e : edges)
+				e.cpl.setChanged();
 			
 			boolean changed = true;
+//			int i = 0;
 			while(changed) {
 				changed = false;
 				
@@ -108,8 +117,84 @@ public class IRCFG {
 					if(n.updateCpl())
 						changed = true;
 				}
+//				System.out.println("in const prop loop");
+//				i++;
+//				if(i == 100) {
+//					int debug = 100;
+//					debug = debug + 1;
+//				}
+//				String file = name + i + "_cp_after.dot";
+//				FileWriter fw;
+//				try {
+//					fw = new FileWriter(file, false);
+//					fw.write("digraph " + this.name + " {\n"
+//							+"	size=\"8,5\";\n"
+//							+"	node [style=invis] \"\";\n"
+//							+"	node [shape = circle,style=\"\"];\n");
+//					this.writeEdges2File(fw);
+//					fw.write("}");
+//					fw.flush();
+//					fw.close();
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 			}
-
+		}
+	}
+	
+	public ArrayList<IRStmt> unreachableStmts() {
+		doCondConstProp();
+		
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		for(IRCFGNode n : nodes) {
+			boolean unreachable = true;
+			for(IRCFGEdge e : n.in) {
+				if(!e.cpl.isUnreachable())
+					unreachable = false;
+			}
+			if(unreachable)
+				stmts.add(n.stmt);
+			else if(n.stmt instanceof IRCJump) {
+				//canonical CJump only has true edges
+				if(n.trueEdge.cpl.isUnreachable())
+					stmts.add(n.stmt);
+			}
+		}
+		return stmts;
+	}
+	
+	public void doCopyPropagation() {
+		if(nodes.size() > 0) {
+			for(IRCFGEdge e : edges)
+				e.copies.setChanged();
+			
+			boolean changed = true;
+			while(changed) {
+				changed = false;
+				
+				for(IRCFGNode n : nodes) {
+					if(n.updateCopies())
+						changed = true;
+				}				
+			}
+		}
+	}
+	
+	public void replaceAvailableCopies() {
+		doCopyPropagation();
+		
+		for(IRCFGNode n : nodes) {
+			CopyLattice copies = CopyLattice.meet(n.in);
+			n.stmt.replaceAvailableCopies(copies);
+		}
+	}
+	
+	public void replacePropagatedConsts() {
+		doCondConstProp();
+		
+		for(IRCFGNode n : nodes) {
+			CpLattice cpl = CpLattice.meet(n.in);
+			n.stmt.replacePropagatedConsts(cpl);
 		}
 	}
 	

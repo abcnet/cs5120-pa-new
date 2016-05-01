@@ -20,6 +20,13 @@ public class CpLattice {
 	private boolean changed = false;
 	
 	/**
+	 * @return true if this is unreachable, false otherwise
+	 */
+	public boolean isUnreachable() {
+		return unreachable;
+	}
+	
+	/**
 	 * true if the variable is top, false if not
 	 * @param name: name of the variable
 	 * @return
@@ -206,4 +213,100 @@ public class CpLattice {
 		
 		return result;
 	}
+	
+	/**
+	 * update the variable when assigned a new constant
+	 * @param name: name of the variable
+	 * @param val: new constant value to be assigned
+	 * @return true if actually needs to be updated, false otherwise
+	 */
+	public boolean updateVariable(String name, long val) {
+		if(this.isTop(name)) {	// set to new constant
+			this.setConstant(name, val);
+			return true;
+		}
+		else if(this.isConstant(name)) {	//need to compare whether the two constants are the same
+			long val2 = this.getValue(name);
+			if(val != val2) {
+				this.setBottom(name);
+				return true;
+			}
+			else 
+				return false;
+		}
+		else { //still bottom, need to do nothing
+			return false;
+		}
+	}
+	
+	/**
+	 * check whether this lattice is the same as the other
+	 * @param l: input lattice
+	 * @return true if the two lattices are the same, false otherwise
+	 */
+	public boolean sameLattice(CpLattice l) {
+		if(this.unreachable != l.unreachable)
+			return false;
+		
+		if(this.bottom.size() != l.bottom.size())
+			return false;
+		
+		for(String key : this.bottom.keySet()) {
+			if(!this.bottom.get(key).equals(l.bottom.get(key)))
+				return false;
+			
+			if(!this.bottom.get(key)) {
+				if(!this.val.get(key).equals(l.val.get(key))) {
+					System.out.println(this.val.get(key));
+					System.out.println(l.val.get(key));
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	/*
+	 * Set all entries to top 
+	 */
+	public void setAllTop() {
+		unreachable = true;
+		bottom.clear();
+		val.clear();
+	}
+	
+	/**
+	 * 
+	 * @return true if all entries are top
+	 */
+	public boolean isAllTop() {
+		if(unreachable && bottom.isEmpty())
+			return true;
+		else 
+			return false;
+	}
+	
+
+	public String toString() {
+		String str = "";
+		if(unreachable)
+			str += "t, ";
+		else
+			str += "b, ";
+		
+		for(String key : bottom.keySet()) {
+			str += key + ":";
+			if(bottom.get(key))
+				str += "b, ";
+			else
+				str += val.get(key) + ", "; 
+		}
+		
+		if(changed)
+			str += "changed";
+		
+		return str;
+	}
+	
 }

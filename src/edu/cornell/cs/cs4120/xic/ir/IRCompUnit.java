@@ -15,6 +15,8 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.AssemProgram;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpLattice;
+import zr54.cfg.IRCFG;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -148,20 +150,7 @@ public class IRCompUnit extends IRNode {
 				fw.write("}");
 				fw.flush();
 				fw.close();
-				
-				String file2 = file.substring(0, file.lastIndexOf('.')) + "2.dot";
-				FileWriter fw2 = new FileWriter(file2, false);
-				fw2.write("digraph " + this.name + " {\n"
-						+"	size=\"8,5\";\n"
-						+"	node [style=invis] \"\";\n"
-						+"	node [shape = circle,style=\"\"];\n");
-				for(IRFuncDecl func : functions.values()) {
-					func.irgraph.writeEdges2File(fw2);
-				}
-				fw2.write("}");
-				fw2.flush();
-				fw2.close();
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -191,7 +180,7 @@ public class IRCompUnit extends IRNode {
 						+"	node [style=invis] \"\";\n"
 						+"	node [shape = circle,style=\"\"];\n");
 				for (IRFuncDecl func : functions.values()){
-					func.createAssemCFG(true, fw);
+					func.assemFunc.createAssemCFG(true, fw);
 				}
 				fw.write("}");
 				fw.flush();
@@ -207,7 +196,7 @@ public class IRCompUnit extends IRNode {
 			
 			for (IRFuncDecl func : functions.values()){
 				try {
-					func.createAssemCFG(false, null);
+					func.assemFunc.createAssemCFG(false, null);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -218,18 +207,36 @@ public class IRCompUnit extends IRNode {
 		
 	}
 	
-	public void liveVarAnalyze(){
-		for (IRFuncDecl func : functions.values()){
-			func.liveVarAnalyze();
-		}
-	}
+//	public void liveVarAnalyze(){
+//		for (IRFuncDecl func : functions.values()){
+//			func.liveVarAnalyze();
+//		}
+//	}
 	
-	public void constantPropagate() {
-		for (IRFuncDecl func : functions.values()) {
-			func.constantPropagate();
+	public void regAlloc(boolean enableREG, boolean enableMC){
+		for (IRFuncDecl func : functions.values()){
+			func.assemFunc.regAlloc(enableREG, enableMC);
 		}
 	}
 
+	public void doCopyPropagation() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doCopyPropagation();
+		}
+	}
+	
+	public void doUCE() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doUCE();
+		}
+	}
+	
+	public void doConstPropagation() {
+		for(IRFuncDecl func : functions.values()) {
+			func.doConstPropagation();
+		}
+	}
+	
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
@@ -240,5 +247,9 @@ public class IRCompUnit extends IRNode {
 			assemProgram.assemFuncs.add(func.assemFunc);
 		}
 		return null;
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
 	}
 }

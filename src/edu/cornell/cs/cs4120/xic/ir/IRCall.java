@@ -12,6 +12,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.assembly.OpTarget.TempType;
+import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
@@ -346,7 +347,22 @@ public class IRCall extends IRExpr {
 //		return new OpTarget(TempType.RET, 0);
 	}
 	
-	public Long propConstVal(CpLattice cpl) {
-		return null;
+	public CpEntry propConstVal(CpLattice cpl) {
+		return CpEntry.bottomCpEntry();
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		for(IRExpr expr : args) {
+			if(expr instanceof IRTemp) {
+				IRTemp tmp = (IRTemp) expr;
+				if(cpl.isConstant(tmp.name())) {
+					expr = new IRConst(cpl.getValue(tmp.name()));
+				}
+			}
+			else
+				expr.replacePropagatedConsts(cpl);
+		}
+	}
+	
 }

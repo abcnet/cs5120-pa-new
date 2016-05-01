@@ -5,14 +5,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import java.util.Map.Entry;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
-import zr54.assembly.AssemFunc;
-import zr54.assembly.AssemInstruction;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.*;
@@ -32,14 +31,16 @@ public class IRFuncDecl extends IRNode {
     public int retSpace = 0;
     public int argSpace = 0;
     public HashMap<String, Integer> tempNodeTable = new HashMap<String, Integer>();
-    private HashMap<String, IRNode> labelTable = null;
+    public HashMap<String, IRNode> labelTable = null;
     private HashMap<String, Integer> indexTable = null;
     public CFG graph = null;
     public IRCFG irgraph = null;
-    public AssemCFG assemGraph = null;
-    public AssemFunc assemFunc = null;
     
-    public static final boolean debugLVA = false;
+    public AssemFunc assemFunc = null;
+
+    
+   
+    
     
     public IRFuncDecl(String name, IRStmt stmt) {
         super();
@@ -207,76 +208,14 @@ public class IRFuncDecl extends IRNode {
         
     }
     
-    public void createAssemCFG(boolean draw, FileWriter fw) throws IOException{
-        if(assemGraph==null){
-//            IRNode curr; int i;
-//            List<IRStmt> stmts = ((IRSeq)body).stmts();
-//            for(i=0; i<stmts.size(); i++) {
-//                curr = stmts.get(i);
-//                curr.visitedCFG = false;
-//            }
-            labelTable = null;
-            assemGraph = new AssemCFG(this.assemFunc.instList);
-        }  
-        
-        
-        if(draw){
-            for(AssemCFGEdge edge : this.assemGraph.edges){
-                fw.write("  \"" + edge.from.toString());
-                fw.write("\" -> \"" + edge.to.toString() + "\" [ label = \"" + edge.toString() + "\" ];\n");
-            }
-        }
-        
-    }
     
-    public void liveVarAnalyze(){
-        boolean changed = true;
-        while(changed){
-            changed = false;
-            AssemCFGNode nprime;
-            for(AssemCFGNode node: assemGraph.nodes){
-                if(node==null)continue;
+    
+    
 
-                for (AssemCFGEdge outEdge: node.out){
-                    if(outEdge==null)continue;
-                    nprime = outEdge.to;
-                    if(nprime==null)continue;
-                    if(node.liveVarsOut.addAll(nprime.liveVarsIn)){
-                        changed = true;
-                    }
-
-                    
-                }
-                if(debugLVA)System.out.println(node.liveVarsOutToString());
-
-                
-                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
-                tmp.removeAll(node.getDef());
-                tmp.addAll(node.getUse());
-                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
-                if(node.liveVarsIn.addAll(tmp)){
-                    changed = true;
-                }
-                if(debugLVA)System.out.println(node.liveVarsInToString());
-            }
-        }
-        
-    }
+    
 
     public static int getReserved() {
         return RESERVED;
-    }
-    
-    public void constantPropagate() {
-        boolean changed = true;
-        while(changed) {
-            changed = false;
-            
-            for(CFGNode node : graph.outgoingGraph.getNodeSet()) {
-                
-            }
-            
-        }
     }
 
     @Override
@@ -386,5 +325,62 @@ public class IRFuncDecl extends IRNode {
 	    	return indexTable.get(label);
 
     }
+    
+    public void doUCE() {
+    	IRCFG ircfg = new IRCFG(this);
+    	ArrayList<IRStmt> stmts = ircfg.unreachableStmts();
+    	IRSeq seq = (IRSeq) this.children.get(0);
+    	
+    	for(IRStmt stmt : stmts) {
+    		if(!(stmt instanceof IRLabel))
+    			seq.stmts().remove(stmt);
+    	}
+
+    }
+    
+    public void doConstPropagation() {
+    	IRCFG ircfg = new IRCFG(this);
+		
+//		String file = name + "_cp_after.dot";
+//		ircfg = new IRCFG(this);
+//		FileWriter fw;
+//		try {
+//			fw = new FileWriter(file, false);
+//			fw.write("digraph " + this.name + " {\n"
+//					+"	size=\"8,5\";\n"
+//					+"	node [style=invis] \"\";\n"
+//					+"	node [shape = circle,style=\"\"];\n");
+//			ircfg.writeEdges2File(fw);
+//			fw.write("}");
+//			fw.flush();
+//			fw.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+    	
+		ircfg.replacePropagatedConsts();
+    	
+//		String file2 = name + "_cp_after.ir";
+//		ircfg = new IRCFG(this);
+//		FileWriter fw2;
+//		try {
+//			fw2 = new FileWriter(file2, false);
+//			fw2.write(this.toString());
+//			fw2.flush();
+//			fw2.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+    }
+    
+    public void doCopyPropagation() {
+    	IRCFG ircfg = new IRCFG(this);
+    	ircfg.replaceAvailableCopies();
+    }
+    
+    @Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+	}
     
 }

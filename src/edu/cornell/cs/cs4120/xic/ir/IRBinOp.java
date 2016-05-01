@@ -11,6 +11,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.CheckConstFoldedIRVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
+import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -515,10 +516,10 @@ public class IRBinOp extends IRExpr {
 			 if(right instanceof IRConst) {
 				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
-				 instrs.add(new AssemMulDiv(opStr, t2));
+				 instrs.add(new AssemMul(t2));
 			 }
 			 else {
-				 instrs.add(new AssemMulDiv(opStr, r));
+				 instrs.add(new AssemMul(r));
 			 }
 			 if(this.opType() == OpType.MUL)
 				 instrs.add(new AssemMove(trax, assemOperand));
@@ -538,10 +539,10 @@ public class IRBinOp extends IRExpr {
 			 if(right instanceof IRConst) {
 				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				 instrs.add(new AssemMove(r, t2));
-				 instrs.add(new AssemMulDiv(opStr, t2));
+				 instrs.add(new AssemDiv(t2));
 			 }
 			 else {
-				 instrs.add(new AssemMulDiv(opStr, r));
+				 instrs.add(new AssemDiv(r));
 			 }
 			 if(this.opType() == OpType.DIV)
 				 instrs.add(new AssemMove(trax, assemOperand));
@@ -614,13 +615,17 @@ public class IRBinOp extends IRExpr {
 
 	}
 
-	public Long propConstVal(CpLattice cpl) {
+	public CpEntry propConstVal(CpLattice cpl) {
 		//TODO: do constant propagation
-		Long l = left.propConstVal(cpl);
-		Long r = right.propConstVal(cpl); 
-		if(l == null || r == null)
-			return null;
+		CpEntry le = left.propConstVal(cpl);
+		CpEntry re = right.propConstVal(cpl); 
+		if(le.isBottom() || re.isBottom())
+			return CpEntry.bottomCpEntry();
+		else if(le.isTop() || re.isTop())
+			return CpEntry.topCpEntry();
 		else {
+			 long l = le.val;
+			 long r = re.val;
 			 long result;
 			 switch(this.opType()) {
 			 case ADD:
@@ -685,7 +690,30 @@ public class IRBinOp extends IRExpr {
 			 default:
 				 throw new InternalCompilerError("Invalid binary operation");
 			}
-			return result;
+			return CpEntry.constCpEntry(result);
 		}
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+		if(left instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) left;
+			if(cpl.isConstant(tmp.name())) {
+				left = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			left.replacePropagatedConsts(cpl);
+		
+		if(right instanceof IRTemp) {
+			IRTemp tmp = (IRTemp) right;
+			if(cpl.isConstant(tmp.name())) {
+				right = new IRConst(cpl.getValue(tmp.name()));
+			}
+		}
+		else
+			right.replacePropagatedConsts(cpl);
+		
+	}
+	
 }

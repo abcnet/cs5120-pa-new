@@ -41,68 +41,76 @@ public class AssemCFGNode {
 	public HashSet<String> getUse(){
 		if(use==null){
 			use = new HashSet<String>();
-			if (this.instr instanceof AssemBinInst ) {
-				AssemBinInst n = (AssemBinInst) instr;
-				getUseSet(n.src, use);
-				if(n.dst instanceof AssemAddr){
-					getUseSet(n.dst, use);
-				}
-				
-			} else if(instr instanceof AssemMulDiv){
-				AssemMulDiv n = (AssemMulDiv)instr;
-				if(n.operand instanceof AssemVar){
-					use.add(((AssemVar)(n.operand)).varName);
-				}
-			}
-//			else if (this.instr instanceof IRCJump) {
-//				getUseSet(((IRCJump)node).expr(), use);
-//			} else if (this.instr instanceof IRCall) {
-//				for (IRExpr e : ((IRCall)node).args()) {
-//					getUseSet(e, use);
+			this.instr.getUse(use);
+//			if (this.instr instanceof AssemBinInst ) {
+//				AssemBinInst n = (AssemBinInst) instr;
+//				n.src.getUse(false, use);
+//				
+//				if(n.dst instanceof AssemAddr){
+//					getUseSet(n.dst, use);
+//				}
+//				
+//			} else if(instr instanceof AssemMul){
+//				use.add("%rax");
+//				AssemMul n = (AssemMul)instr;
+//				if(n.operand instanceof AssemReg){
+//					AssemReg reg = (AssemReg)n.operand;
+//					if(reg.isPreColoredAllocableReg(false)){
+//						use.add(reg.getName(false));
+//					}
+//					
+////					use.add(((AssemVar)(n.operand)).varName);
+//				}
+//			}else if(instr instanceof AssemDiv){
+//				use.add("%rax");
+//				use.add("%rdx");
+//				AssemDiv n = (AssemDiv)instr;
+//				if(n.operand instanceof AssemReg){
+//					AssemReg reg = (AssemReg)n.operand;
+//					if(reg.isPreColoredAllocableReg(false)){
+//						use.add(reg.getName(false));
+//					}
+//					
+////					use.add(((AssemVar)(n.operand)).varName);
 //				}
 //			}
+
 		}
 		return use;
 	}
 	
-	public void getUseSet(AssemOperand operand, HashSet<String> use) {
-		if(debugLVA){
-			System.out.println(use.size() + " in use before getting use set for node " + this );
-		}
-		if (operand instanceof AssemVar) {
-			
-				use.add(((AssemVar)operand).varName);
-			
-			
-		} else if (operand instanceof AssemAddr) {
-			AssemAddr addr = (AssemAddr)operand; 
-			if(addr.r1 != null && addr.r1 instanceof AssemVar){
-				use.add(((AssemVar)addr.r1).varName);
-			}
-			if(addr.r2 != null && addr.r2 instanceof AssemVar){
-				use.add(((AssemVar)addr.r2).varName);
-			}
-		}
-		if(debugLVA){
-			System.out.println(use.size() + " after getting use set for node " + this );
-		}
-	}
+
 	
 	public HashSet<String> getDef(){
 		if(def == null){
 			def = new HashSet<String>();
-			if(instr instanceof AssemBinInst){
-				AssemBinInst n = (AssemBinInst)this.instr;
-				if(n.dst instanceof AssemVar){
-					def.add(((AssemVar)(n.dst)).varName);
-				}
-			}
-//			else if (instr instanceof AssemMulDiv){
-//				AssemMulDiv n = (AssemMulDiv)instr;
-//				if(n.operand instanceof AssemVar){
-//					def.add(((AssemVar)(n.operand)).varName);
+			instr.getDef(def);
+			
+			
+//			if(instr instanceof AssemBinInst){
+//				AssemBinInst n = (AssemBinInst)this.instr;
+//				if(n.dst instanceof AssemReg){
+//					AssemReg dst = (AssemReg)n.dst;
+//					if(dst.isPreColoredAllocableReg(true)){
+//						def.add(dst.getName(true));
+//					}
+//					
 //				}
-//			}
+//			} else if(instr instanceof AssemMul){
+//				def.add("%rax");
+//				def.add("%rdx");
+//				
+//			} else if(instr instanceof AssemDiv){
+//				def.add("%rax");
+//				def.add("%rdx");
+//			} else if(instr instanceof AssemCall){
+//				def.add("%rax");
+//				def.add("%rcx");
+//				def.add("%rdx");
+//				def.add("%r8");
+//				def.add("%r9");
+//				
+//			} 
 		}
 		return def;
 	}
@@ -110,30 +118,38 @@ public class AssemCFGNode {
 	public String liveVarsInToString(){
 		String s = "In: ";
 		boolean first = true;
-		if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
-		for(String each: this.liveVarsIn){
-			if(first){
-				s += each;
-				first = false;
-			}else{
-				s += ", " + each;
+		
+		if(this.liveVarsIn != null){
+			if(debugLVA)System.out.println(this.liveVarsIn.size() + " live vars coming into node " + this.toString());
+			for(String each: this.liveVarsIn){
+				if(first){
+					s += each;
+					first = false;
+				}else{
+					s += ", " + each;
+				}
 			}
 		}
+		
 		return s;
 	}
 	
 	public String liveVarsOutToString(){
 		String s = "Out: ";
 		boolean first = true;
-		if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
-		for(String each: this.liveVarsOut){
-			if(first){
-				s += each;
-				first = false;
-			}else{
-				s += ", " + each;
+		
+		if(this.liveVarsOut!=null){
+			if(debugLVA)System.out.println(this.liveVarsOut.size() + " live vars coming out of node " + this.toString());
+			for(String each: this.liveVarsOut){
+				if(first){
+					s += each;
+					first = false;
+				}else{
+					s += ", " + each;
+				}
 			}
 		}
+		
 		return s;
 	}
 	

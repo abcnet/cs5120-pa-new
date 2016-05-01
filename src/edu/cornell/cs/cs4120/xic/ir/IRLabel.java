@@ -9,6 +9,7 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemLabel;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -82,5 +83,9 @@ public class IRLabel extends IRStmt {
 		
 		return null;
 	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
+ 	}
 
 }

@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
+import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -122,7 +123,11 @@ public class IRESeq extends IRExpr {
 		return null;
 	}
 	
-	public Long propConstVal(CpLattice cpl) {
-		return null;
+	public CpEntry propConstVal(CpLattice cpl) {
+		return CpEntry.bottomCpEntry();
+	}
+	
+	@Override
+	public void replacePropagatedConsts(CpLattice cpl) {
 	}
 }
