@@ -209,7 +209,7 @@ public class IRCompUnit extends IRNode {
 						+"	node [style=invis] \"\";\n"
 						+"	node [shape = circle,style=\"\"];\n");
 				for (IRFuncDecl func : functions.values()){
-					func.createAssemCFG(true, fw);
+					func.assemFunc.createAssemCFG(true, fw);
 				}
 				fw.write("}");
 				fw.flush();
@@ -225,7 +225,7 @@ public class IRCompUnit extends IRNode {
 			
 			for (IRFuncDecl func : functions.values()){
 				try {
-					func.createAssemCFG(false, null);
+					func.assemFunc.createAssemCFG(false, null);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -242,9 +242,9 @@ public class IRCompUnit extends IRNode {
 //		}
 //	}
 	
-	public void regAlloc(){
+	public void regAlloc(boolean enableREG, boolean enableMC){
 		for (IRFuncDecl func : functions.values()){
-			func.regAlloc();
+			func.assemFunc.regAlloc(enableREG, enableMC);
 		}
 	}
 	
