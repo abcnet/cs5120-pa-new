@@ -1,5 +1,7 @@
 package zr54.assembly;
 
+import java.util.HashSet;
+
 public class AssemAddr extends AssemOperand{
 	public enum AddrType {r, kr, r1r2, kr1r2, r1r2w, kr1r2w};
 	public int k,w;
@@ -92,6 +94,22 @@ public class AssemAddr extends AssemOperand{
 			}
 		}
 		return retStr;
+	}
+	@Override
+	public void getUse(boolean isDst, HashSet<String> use) {
+		// TODO Auto-generated method stub
+		
+		if(this.r1 != null){
+			r1.getUse(isDst, use);
+		}
+		if(this.r2 != null){
+			r2.getUse(isDst, use);
+		}
+	}
+	@Override
+	public void getDef(boolean isDst, HashSet<String> def) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

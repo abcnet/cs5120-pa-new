@@ -1,6 +1,7 @@
 package zr54.assembly;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AssemVar extends AssemOperand implements AssemReg{
 	public String varName;
@@ -24,7 +25,7 @@ public class AssemVar extends AssemOperand implements AssemReg{
 
 
 	@Override
-	public boolean isRegPossible(boolean isDst) {
+	public boolean isPreColoredAllocableReg(boolean isDst) {
 		// TODO Auto-generated method stub
 		return true;
 	}
@@ -38,6 +39,24 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	
 	public String comments(){
 		return "#	Variable " + varName + " is in " + toString() + "\n";
+	}
+
+
+	@Override
+	public void getUse(boolean isDst, HashSet<String> use) {
+		// TODO Auto-generated method stub
+		if(isDst == false){
+			use.add(varName);
+		}
+	}
+
+
+	@Override
+	public void getDef(boolean isDst, HashSet<String> def) {
+		// TODO Auto-generated method stub
+		if(isDst){
+			def.add(varName);
+		}
 	}
 
 }

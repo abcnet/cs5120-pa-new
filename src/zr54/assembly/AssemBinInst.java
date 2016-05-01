@@ -1,5 +1,7 @@
 package zr54.assembly;
 
+import java.util.HashSet;
+
 public class AssemBinInst extends AssemInstruction{
 	
 	public String op;
@@ -70,6 +72,22 @@ public class AssemBinInst extends AssemInstruction{
 		
 		return retStr;
 	
+	}
+
+	@Override
+	public void getUse(HashSet<String> use) {
+//		if(op.equals("movq") && dst.toString().equals("%r13")){
+//			System.out.println("problem");
+//		}
+		// TODO Auto-generated method stub
+		src.getUse(false, use);
+		dst.getUse(true, use);
+	}
+
+	@Override
+	public void getDef(HashSet<String> def) {
+		// TODO Auto-generated method stub
+		dst.getDef(true, def);
 	}
 	
 

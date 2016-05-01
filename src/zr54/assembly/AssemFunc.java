@@ -2,16 +2,14 @@ package zr54.assembly;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Stack;
+import java.util.*;
+
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import zr54.cfg.AssemCFG;
 import zr54.cfg.AssemCFGEdge;
 import zr54.cfg.AssemCFGNode;
-public class AssemFunc extends AssemInstruction{
+public class AssemFunc {
 	public IRFuncDecl irFuncDecl;
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
 //	public HashSet<String> varSet = null;
@@ -19,10 +17,27 @@ public class AssemFunc extends AssemInstruction{
 	public InterferenceGraph interGraph= new InterferenceGraph();
 	public HashMap<String, Integer> varMap;
 	public AssemCFG assemGraph = null;
+	
+    // Available registers for allocation: %rax, %rbx, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    public static final int numAvailRegs = 11;
+	
+	/**
+	 * Data structures for register allocation
+	 */
+	public LinkedList<AssemMove> workListMoves = new LinkedList<AssemMove>();
+	
+	
 	public boolean enableREG = false;
 	
+//	public static final boolean spillAll = true;
 	public static final boolean debugLVA = false;
-    public static final boolean debugInterference = false;
+	public static final boolean debugLVALoop = false;
+	public static final boolean debugInterference = false;
+	public static final boolean debugStep1 = false;
+	public static final boolean debugStep2 = false;
+    
+//    public static final boolean debugMCWorklist = true;
+    
 	
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
@@ -126,12 +141,25 @@ public class AssemFunc extends AssemInstruction{
    		 node.liveVarsOut.clear();
    	 }
        boolean changed = true;
+       int loop = 0;
        while(changed){
+    	   if(debugLVALoop)System.out.println("LVA loop " + loop);
+    	   loop++;
+    	   
            changed = false;
            AssemCFGNode nprime;
-           for(AssemCFGNode node: assemGraph.nodes){
+           for(int i=assemGraph.nodes.size()-1; i>=0; i--){
+        	   AssemCFGNode node = assemGraph.nodes.get(i);
+           
                if(node==null)continue;
 
+               if(node.instr instanceof AssemMove){
+            	   AssemMove move = ((AssemMove)node.instr);
+            	   if(move.moveCoalescable()){
+            		   this.workListMoves.add(move);
+            	   }
+               }
+               
                for (AssemCFGEdge outEdge: node.out){
                    if(outEdge==null)continue;
                    nprime = outEdge.to;
@@ -142,15 +170,17 @@ public class AssemFunc extends AssemInstruction{
 
                    
                }
-               if(debugLVA)System.out.println(node.liveVarsOutToString());
+//               if(debugLVA)System.out.println(node.liveVarsOutToString());
 
                
                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
                tmp.removeAll(node.getDef());
                tmp.addAll(node.getUse());
+               if(debugLVA)System.out.println("size of liveVarsIn was " + node.liveVarsIn.size());
                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
                if(node.liveVarsIn.addAll(tmp)){
                    changed = true;
+                   if(debugLVA)System.out.println("size of liveVarsIn is now " + node.liveVarsIn.size()); 
                    
                }
                if(debugLVA)System.out.println(node.liveVarsInToString());
@@ -158,28 +188,19 @@ public class AssemFunc extends AssemInstruction{
        }
        
        for(AssemCFGNode node: assemGraph.nodes){
-       	for(String varStr1: node.liveVarsIn){
-          	 for(String varStr2: node.liveVarsIn){
+    	   for(String varStr1: node.liveVarsIn){
+    		   for(String varStr2: node.liveVarsIn){
                	
-               	this.interGraph.connect(varStr1, varStr2);
-               }
-          }
+    			   this.interGraph.connect(varStr1, varStr2);
+    		   }
+    	   }
        }
        
        if(debugInterference && this.interGraph != null){
        	for(InterferenceGraphNode node: this.interGraph.nodes){
-       		if(node.isFirstReg)continue;
+//       		if(node.isFirstReg)continue;
        		System.out.print(node.toString());
-//       		boolean first = true;
-//       		for(String s : node.getValue()){
-//       			if(first){
-//       				System.out.print(s);
-//       				first = false;
-//       			}else{
-//       				System.out.print(", " + s);
-//       			}
-//       			
-//       		}
+
        		System.out.println("");
        	}
        }
@@ -195,7 +216,7 @@ public class AssemFunc extends AssemInstruction{
     	
     	if(enableREG){
 //    		this.enableREG = true;
-    		Stack allocStack = new Stack();
+    		Stack<InterferenceGraphNode> selectStack = new Stack<InterferenceGraphNode>();
         	
         	boolean rewritten = true;
         	while(rewritten){
@@ -206,15 +227,101 @@ public class AssemFunc extends AssemInstruction{
         			n.liveVarsOut = new HashSet<String>();
         		}
         		this.liveVarAnalyze();
+        		int i = 0;
+        		while(i < this.workListMoves.size()){
+        			AssemMove move = this.workListMoves.get(i);
+        		
+        			
+        			InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        			if(dstNode != null){
+        				dstNode.coalescRelatedMoves.add(move);
+        			}else{
+        				this.workListMoves.remove(move);
+        				
+        				continue;
+        			}
+        			InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        			if(srcNode != null){
+        				srcNode.coalescRelatedMoves.add(move);
+        			}else{
+        				this.workListMoves.remove(move);
+        				dstNode.coalescRelatedMoves.remove(move);
+        				i--;
+        			}
+        			i++;
+        		}
         		
         		boolean repeatFromStep1 = true;
         		while(repeatFromStep1){
         			repeatFromStep1 = false;
         			// Step 1: Push all low-degree non-move-related nodes onto allocation stack
-        			HashSet<String> allocSet = new HashSet<String>();
-//        			for(String var : this.assemFunc.interGraph.keySet()){
-////        				if(this.assemFunc.varInterference.get(var).size())
-//        			}
+        			
+        			boolean existLowDegreeNonMoveRelatedNodes = true;
+        			while(existLowDegreeNonMoveRelatedNodes){
+        				existLowDegreeNonMoveRelatedNodes = false;
+        				for(InterferenceGraphNode node : this.interGraph.nodes){
+        					if(!node.isMoveRelated() && node.degree() < numAvailRegs && !node.isInWorkingStack){
+        						if(debugStep1){
+        							System.out.println("Pulling " + node.toString() + " out of graph and pushing onto stack");
+        						}
+        						existLowDegreeNonMoveRelatedNodes = true;
+        						node.isInWorkingStack = true;
+        						selectStack.push(node);
+        					}
+        				}
+        			}
+        			
+        			// Step 2: Conservative coalesce
+        			i = 0;
+        			while(i<this.workListMoves.size()){
+        				if(debugStep2){
+        					System.out.println(i);
+//        					if(i==9){
+//        						System.out.println(i);
+//        					}
+
+        					System.out.println("Size of working list moves is " + this.workListMoves.size());
+        				}
+        				AssemMove move = this.workListMoves.get(0);
+        				InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        				InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        				if(dstNode.canConservativeCoalesce(srcNode)){
+        					if(debugStep2){
+        						System.out.println("Coalescing " + dstNode + " with " + srcNode);
+        					}
+        					this.interGraph.coalesce(dstNode, srcNode);
+        					repeatFromStep1 = true;
+        					this.workListMoves.remove(0);
+        					i--;
+        				}
+        				i++;
+        			}
+        			if(debugStep2 && this.interGraph != null){
+        		       	for(InterferenceGraphNode node: this.interGraph.nodes){
+	//        	       		if(node.isFirstReg)continue;
+	        	       		System.out.print(node.toString());
+	
+	        	       		System.out.println("");
+        		       	}
+        			}
+        			
+        			if(repeatFromStep1)continue;
+        			
+        			// Step 3: Freeze
+        			if(this.workListMoves.size() > 0){
+        				AssemMove move = this.workListMoves.get(0);
+        				InterferenceGraphNode dstNode = this.interGraph.map.get(((AssemReg)move.dst).getName(true));
+        				InterferenceGraphNode srcNode = this.interGraph.map.get(((AssemReg)move.src).getName(false));
+        				dstNode.coalescRelatedMoves.remove(move);
+        				srcNode.coalescRelatedMoves.remove(move);
+        				this.workListMoves.remove(move);
+        				repeatFromStep1 = true;
+        			}
+        			
+        			if(repeatFromStep1)continue;
+        			
+        			// Step 4: Spill
+        			
         		}
         	}
     	}else{
@@ -228,5 +335,6 @@ public class AssemFunc extends AssemInstruction{
 		this.interGraph.reset();
 		
 	}
+
 
 }
