@@ -7,7 +7,7 @@ public class InterferenceGraph {
 	public HashMap<String, InterferenceGraphNode> map = new HashMap<String, InterferenceGraphNode>();
 
 	
-	public void coalesce(InterferenceGraphNode node1, InterferenceGraphNode node2){
+	public InterferenceGraphNode coalesce(InterferenceGraphNode node1, InterferenceGraphNode node2){
 		InterferenceGraphNode mergedNode = new InterferenceGraphNode(node1, node2);
 		for(InterferenceGraphNode var1Neighbor: node1.adjLists){
 			var1Neighbor.adjLists.remove(node1);
@@ -26,7 +26,7 @@ public class InterferenceGraph {
 		for(String var2: node2.vars){
 			map.replace(var2, mergedNode);
 		}
-		
+		return mergedNode;
 	}
 	
 	
