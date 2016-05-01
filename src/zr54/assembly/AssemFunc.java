@@ -16,6 +16,7 @@ public class AssemFunc {
 	public HashMap<String, ArrayList<AssemVar>> varOccurances = null;
 	public InterferenceGraph interGraph= new InterferenceGraph();
 	public HashMap<String, Integer> varMap;
+	public HashMap<InterferenceGraphNode, Integer> spilledNodeMap = new HashMap<InterferenceGraphNode, Integer>();
 	public AssemCFG assemGraph = null;
 	
     // Available registers for allocation: %rax, %rbx, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
@@ -26,15 +27,17 @@ public class AssemFunc {
 	 */
 	public LinkedList<AssemMove> workListMoves = new LinkedList<AssemMove>();
 	
-	
+	public int spillRegsRBPOffsetCount = IRFuncDecl.getReserved();
 	public boolean enableREG = false;
 	
 //	public static final boolean spillAll = true;
 	public static final boolean debugLVA = false;
 	public static final boolean debugLVALoop = false;
-	public static final boolean debugInterference = false;
+	public static final boolean debugInterference = true;
 	public static final boolean debugStep1 = false;
 	public static final boolean debugStep2 = false;
+	public static final boolean debugREG = true;
+	
     
 //    public static final boolean debugMCWorklist = true;
     
@@ -42,20 +45,23 @@ public class AssemFunc {
 	public AssemFunc(IRFuncDecl irFuncDecl){
 		this.irFuncDecl = irFuncDecl;
 		irFuncDecl.assemFunc = this;
+//		this.enableREG = enableREG;
 	}
-	public AssemOperand getStackOffset(){
-		int c = irFuncDecl.getReserved() + getNumSpilledVars() + 
+	public int getStackOffset(){
+		int c = IRFuncDecl.RESERVED + getNumSpilledVars() + 
 				irFuncDecl.retSpace + irFuncDecl.argSpace;
 		if(c%2==1){
             c++;
         }
-		return new AssemConst(c*8);
+		return c;
 	}
 	
 	public int getNumSpilledVars(){
 		if(enableREG){
-			//todo
-			return varOccurances.size();
+			if(debugREG){
+				System.out.println("There are " + this.spilledNodeMap.size() + "spilled temps");
+			}
+			return this.spilledNodeMap.size();
 		}else{
 			return varOccurances.size();
 		}
@@ -83,18 +89,47 @@ public class AssemFunc {
 	}
 	
 	public String getVarString(String name){
-		if(varMap==null){
-			varMap = new HashMap<String, Integer>();
-			int c = IRFuncDecl.getReserved();
-			for(String s : this.varOccurances.keySet()){
-				this.varMap.put(s, ++c);
-			}
-		}
-		int n = varMap.get(name);
+		
 		if(enableREG){
+			InterferenceGraphNode node = this.interGraph.map.get(name);
+			if(node == null) {
+				if(debugInterference)System.err.println("InterferenceGraphNode is null for " + name);
+				node = this.interGraph.add(name);
+				
+			}
+			if(node.isSpilled){
+				
+				if(this.spilledNodeMap.containsKey(node)){
+					return "-"+8*this.spilledNodeMap.get(node)+"(%rbp)"; 
+				}else{
+					this.spilledNodeMap.put(node, ++spillRegsRBPOffsetCount);
+					if(debugREG){
+						System.out.println(spillRegsRBPOffsetCount + " : " + node.vars());
+					}
+					return "-"+8*spillRegsRBPOffsetCount+"(%rbp)"; 
+				}
+				
+				
+			}else{
+				return new AssemFixedRegister(node.color).toString();
+			}
 			
+			
+			
+		}else{
+			if(varMap==null){
+				varMap = new HashMap<String, Integer>();
+				int c = IRFuncDecl.getReserved();
+				for(String s : this.varOccurances.keySet()){
+					this.varMap.put(s, ++c);
+				}
+			}
+			int n = varMap.get(name);
+			
+			return "-"+8*n+"(%rbp)";
 		}
-		return "-"+8*n+"(%rbp)";
+		
+		
 	}
 	
 	public void addVar(AssemVar v){
@@ -115,12 +150,7 @@ public class AssemFunc {
 	
 	public void createAssemCFG(boolean draw, FileWriter fw) throws IOException{
         if(assemGraph==null){
-//            IRNode curr; int i;
-//            List<IRStmt> stmts = ((IRSeq)body).stmts();
-//            for(i=0; i<stmts.size(); i++) {
-//                curr = stmts.get(i);
-//                curr.visitedCFG = false;
-//            }
+
             irFuncDecl.labelTable = null;
             assemGraph = new AssemCFG(this.instList);
         }  
@@ -135,7 +165,7 @@ public class AssemFunc {
         
     }
 	
-	private void liveVarAnalyze(){
+	private void liveVarAnalyze(boolean enableMC){
    	 for(AssemCFGNode node: assemGraph.nodes){
    		 node.liveVarsIn.clear();
    		 node.liveVarsOut.clear();
@@ -153,7 +183,7 @@ public class AssemFunc {
            
                if(node==null)continue;
 
-               if(node.instr instanceof AssemMove){
+               if(enableMC && node.instr instanceof AssemMove){
             	   AssemMove move = ((AssemMove)node.instr);
             	   if(move.moveCoalescable()){
             		   this.workListMoves.add(move);
@@ -215,7 +245,7 @@ public class AssemFunc {
     public void regAlloc(boolean enableREG, boolean enableMC){
     	
     	if(enableREG){
-//    		this.enableREG = true;
+    		this.enableREG = true;
     		Stack<InterferenceGraphNode> selectStack = new Stack<InterferenceGraphNode>();
         	
         	boolean rewritten = true;
@@ -226,7 +256,7 @@ public class AssemFunc {
         			n.liveVarsIn = new HashSet<String>();
         			n.liveVarsOut = new HashSet<String>();
         		}
-        		this.liveVarAnalyze();
+        		this.liveVarAnalyze(enableMC);
         		int i = 0;
         		while(i < this.workListMoves.size()){
         			AssemMove move = this.workListMoves.get(i);
@@ -294,6 +324,7 @@ public class AssemFunc {
         					repeatFromStep1 = true;
         					this.workListMoves.remove(0);
         					mergedNode.coalescRelatedMoves.remove(move);
+        					move.coalesced = true;
         					i--;
         				}
         				i++;
@@ -342,6 +373,9 @@ public class AssemFunc {
         			}
         		}
         	}
+        	
+        	
+        	
     	}else{
     		this.enableREG = false;
     	}

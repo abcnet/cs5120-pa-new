@@ -156,20 +156,24 @@ public class IRGenerate {
 				        }
 				        if (debug) System.out.println(sw1);
 				        
-				      //CSE
-						for (int i = 0; i < program.children.size(); ++i) {
-							IRFuncDecl funcDecl = (IRFuncDecl)program.children.get(i);
-							CSE cse = new CSE(funcDecl);
-							funcDecl = cse.CSEAnalysis();
-						}
-						program.printSExp(printer);
-						if (debug) System.out.println("AFTER CSE:");
-				        StringWriter sw = new StringWriter();
-				        try (PrintWriter pw = new PrintWriter(sw);
-				             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
-				            program.printSExp(sp);
+				      
+				        if(false && enableCSE){
+				        	//CSE
+				        	for (int i = 0; i < program.children.size(); ++i) {
+								IRFuncDecl funcDecl = (IRFuncDecl)program.children.get(i);
+								CSE cse = new CSE(funcDecl);
+								funcDecl = cse.CSEAnalysis();
+							}
+							program.printSExp(printer);
+							if (debug) System.out.println("AFTER CSE:");
+					        StringWriter sw = new StringWriter();
+					        try (PrintWriter pw = new PrintWriter(sw);
+					             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+					            program.printSExp(sp);
+					        }
+					        if (debug) System.out.println(sw);
 				        }
-				        if (debug) System.out.println(sw);
+						
 						
 
 				        // IR canonical checker demo
@@ -282,7 +286,7 @@ public class IRGenerate {
 			        	 
 			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_initial_assem.dot");
 			        	 
-			        	 program.regAlloc(enableREG, enableMC);
+			        	 program.regAlloc(false && enableREG, enableMC);
 					     
 			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_final_assem.dot");
 			        	 
