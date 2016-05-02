@@ -119,6 +119,9 @@ public class AssemFunc {
 //							+ new AssemFixedRegister(node.color).toString()
 //							+ ", " + node.toString());
 //				}
+				if(node.color == null){
+//					asdf
+				}
 				return node.colorString();
 			}
 			
@@ -378,13 +381,19 @@ public class AssemFunc {
         			while(selectStack.size() > 0){
         				InterferenceGraphNode node = selectStack.pop();
         				node.isInWorkingStack = false;
-        				node.assignColor();
+//        				if(!node.assignColor()){
+//        					repeatFromStep1 = true;
+//        				}
+        				
         			}
         			
         			// Extra step: if no color assigned, spill
         			for(InterferenceGraphNode node: this.interGraph.nodes){
-        				if(!node.isSpilled && node.color == null){
+        				if(!node.containsDangerousReg() && 
+        						!node.isSpilled && node.color == null){
+//        					System.out.println(node.degree());
         					node.isSpilled = true;
+        					repeatFromStep1 = true;
         				}
         			}
         			
