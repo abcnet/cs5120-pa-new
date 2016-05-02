@@ -6,7 +6,7 @@ import java.util.HashSet;
 public class AssemVar extends AssemOperand implements AssemReg{
 	public String varName;
 	public AssemFunc assemFunc;
-	
+	public static boolean debug = true;
 	
 	public AssemVar(String varName, AssemFunc assemFunc){
 		this.varName = varName + "_" + assemFunc.irFuncDecl.name();
@@ -38,7 +38,12 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	}
 	
 	public String comments(){
-		return "#	Variable " + varName + " is in " + toString() + "\n";
+		if(debug){
+			return "#	Variable " + varName + " is in " + toString() + "\n";
+		}else{
+			return "";
+		}
+		
 	}
 
 
