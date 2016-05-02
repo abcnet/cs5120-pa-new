@@ -202,11 +202,11 @@ public class CSE {
 		HashSet<ExprMetaData> kill = new HashSet<ExprMetaData>();
 		in = in(n);
 		
-		System.out.println("IN("+currIRNode.toString()+")");
-		for (ExprMetaData exprMetaData : in) {
-				System.out.print("<"+exprMetaData.srcNode.toString()+", "+exprMetaData.expr.toString()+", "+">  ");
-		}
-		System.out.print("\n\n");
+//		System.out.println("IN("+currIRNode.toString()+")");
+//		for (ExprMetaData exprMetaData : in) {
+//				System.out.print("<"+exprMetaData.srcNode.toString()+", "+exprMetaData.expr.toString()+", "+">  ");
+//		}
+//		System.out.print("\n\n");
 		
 		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
 			//at this point use in(n) and exprs(n) to take care of all the common expressions
