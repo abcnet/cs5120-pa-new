@@ -3,8 +3,8 @@ use conv
 
 
 main(args:int[][]) {
-    n: int = 11
-    r: int = Ack(2, n)
+    //n: int = 2
+    r: int = Ack(1, 1)
     
    
 }

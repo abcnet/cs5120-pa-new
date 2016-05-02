@@ -171,6 +171,8 @@ public class IRCompUnit extends IRNode {
 	}
 	
 	public void createAssemCFG(boolean draw, String file){
+		file = draw?file:"/dev/null";
+		draw = true;
 		if(draw){
 			try {
 				FileWriter fw = new FileWriter(file, false);

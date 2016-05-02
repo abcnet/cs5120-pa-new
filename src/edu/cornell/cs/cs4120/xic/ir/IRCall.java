@@ -246,18 +246,21 @@ public class IRCall extends IRExpr {
 		int nRet;
 		int argSpace = 0;
 		int retSpace = 0;
+		int nArgs;
 		if(callee.contentEquals("_I_alloc_i")){
 			gt2 = false;
 			nRet = 1;
+			nArgs = 1;
 		}else if(callee.contentEquals("_I_outOfBounds_p")){
 			gt2 = false;
 			nRet = 0;
+			nArgs = 0;
 		}else{
 			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
 			FuncSignature sign = funcs.lookup(rawFuncName);
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;
-			int nArgs = this.args().size()+(gt2?1:0);
+			nArgs = this.args().size()+(gt2?1:0);
 			argSpace = nArgs>6?(nArgs-6):0;
 			retSpace = nRet>2?(nRet-2):0;
 			if(argSpace > f.argSpace){
@@ -335,7 +338,7 @@ public class IRCall extends IRExpr {
 			
 			
 		}
-		instrs.add(new AssemCall(callee));
+		instrs.add(new AssemCall(callee, nArgs));
 		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rax), new AssemAddr(-80, new AssemFixedRegister(Reg.rbp))));
 		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rdi), new AssemFixedRegister(Reg.rbx)));
 		instrs.add(new AssemMove(new AssemAddr(-8, new AssemFixedRegister(Reg.rbp)), new AssemFixedRegister(Reg.rdi)));

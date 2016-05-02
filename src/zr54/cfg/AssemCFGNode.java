@@ -21,6 +21,7 @@ public class AssemCFGNode {
 	private HashSet<String> def = null;
 	public HashSet<String> liveVarsIn = new HashSet<String>();
 	public HashSet<String> liveVarsOut = new HashSet<String>();
+	public HashSet<String> liveRegs = new HashSet<String>();
 	
 	public static final boolean debugCFG = false;
 	public static final boolean debugLVA = false;
@@ -153,11 +154,36 @@ public class AssemCFGNode {
 		return s;
 	}
 	
+	public String liveRegsToString(){
+		String s = "Def'ed regs: ";
+		boolean first = true;
+		
+		if(this.liveRegs != null){
+			if(debugLVA)System.out.println(this.liveRegs.size() + " live regs coming into node " + this.toString());
+			for(String each: this.liveRegs){
+				if(first){
+					s += each;
+					first = false;
+				}else{
+					s += ", " + each;
+				}
+			}
+		}
+		
+		return s;
+	}
+	
 	public String toString(){
 		String s = this.count + ": \r\n";
 		s += instr.toString().trim();
 		s.replace("\n", "\r\n");
 		
 		return s;
+	}
+	
+	public HashSet<String> getLive(){
+		HashSet<String> set = (HashSet<String>) this.liveVarsIn.clone();
+		set.addAll(liveRegs);
+		return set;
 	}
 }

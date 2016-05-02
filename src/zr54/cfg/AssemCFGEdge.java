@@ -16,6 +16,8 @@ public class AssemCFGEdge {
 		String s = edgeType?"True\r\n":"\r\n";
 	
 		if(from != null){
+			s += from.liveRegsToString();
+			s += "\r\n";
 			s += from.liveVarsOutToString();
 			s += "\r\n";
 		}
