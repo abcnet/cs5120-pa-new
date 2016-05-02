@@ -9,7 +9,7 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	
 	
 	public AssemVar(String varName, AssemFunc assemFunc){
-		this.varName = varName;
+		this.varName = varName + "_" + assemFunc.irFuncDecl.name();
 		this.assemFunc = assemFunc;
 		assemFunc.addVar(this);
 //		if(assemFunc.varSet.contains(varName)==false){

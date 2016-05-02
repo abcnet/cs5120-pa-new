@@ -23,7 +23,7 @@ public class AssemMove extends AssemBinInst{
 	public String toString(){
 		if(coalesced){
 			String s = "#	coalesced move\n";
-			return s + super.toString().replaceAll("\n", "\n#") + "\n#	End of coalesced move";
+			return s + super.toString().replaceAll("\n", "\n") + "\n#	End of coalesced move";
 		}else{
 			return super.toString();
 		}
