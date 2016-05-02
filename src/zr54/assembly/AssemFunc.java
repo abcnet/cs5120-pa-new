@@ -391,7 +391,6 @@ public class AssemFunc {
         				if(!node.assignColor()){
         					if(debugColor)System.out.println(node);
         					node.isSpilled = true;
-//        					repeatFromStep1 = true;
         				}
         				
         			}
