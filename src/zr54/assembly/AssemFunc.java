@@ -19,8 +19,8 @@ public class AssemFunc {
 	public HashMap<InterferenceGraphNode, Integer> spilledNodeMap = new HashMap<InterferenceGraphNode, Integer>();
 	public AssemCFG assemGraph = null;
 	
-    // Available registers for allocation: %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
-    public static final int numAvailRegs = 9;
+    // Available registers for allocation: %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    public static final int numAvailRegs = 7;
 	
 	/**
 	 * Data structures for register allocation

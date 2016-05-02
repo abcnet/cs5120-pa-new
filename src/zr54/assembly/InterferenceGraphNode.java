@@ -28,8 +28,7 @@ public class InterferenceGraphNode {
 	public InterferenceGraphNode(String varName){
 		if(varName.contains("%")){
 			containsReg = true;
-			if(varName.equals("%rcx")) {isPreColored = true; color = Reg.rcx;}
-			if(varName.equals("%rdx")) {isPreColored = true; color = Reg.rdx;}
+			
 			if(varName.equals("%rdi")) {isPreColored = true; color = Reg.rdi;}
 			if(varName.equals("%rsi")) {isPreColored = true; color = Reg.rsi;}
 			if(varName.equals("%r8")) {isPreColored = true; color = Reg.r8;}
@@ -182,35 +181,31 @@ public class InterferenceGraphNode {
 	}
 	
 	public boolean assignColor(){
-		boolean[] availRegs = {true, true, true, true, true, true, true, true, true, true};
+		boolean[] availRegs = {true, true, true, true, true, true, true};
 		for(InterferenceGraphNode neighbor: this.adjLists){
 			if(neighbor.color == null) continue;
 			switch(neighbor.color){
 
-			case rcx: availRegs[0] = false; break;
-			case rdx: availRegs[1] = false; break;
-			case rdi: availRegs[2] = false; break;
-			case rsi: availRegs[3] = false; break;
-			case r8: availRegs[4] = false; break;
-			case r9: availRegs[5] = false; break;
-			case r11: availRegs[6] = false; break;
-			case r12: availRegs[7] = false; break;
-			case r13: availRegs[8] = false; break;
+			case rdi: availRegs[0] = false; break;
+			case rsi: availRegs[1] = false; break;
+			case r8: availRegs[2] = false; break;
+			case r9: availRegs[3] = false; break;
+			case r11: availRegs[4] = false; break;
+			case r12: availRegs[5] = false; break;
+			case r13: availRegs[6] = false; break;
 			default:
 				System.out.println("Should never reach this line");
 				break;
 				
 			}
 		}
-		if(availRegs[0]) {color = Reg.rcx; return true;}
-		if(availRegs[1]) {color = Reg.rdx; return true;}
-		if(availRegs[2]) {color = Reg.rdi; return true;}
-		if(availRegs[3]) {color = Reg.rsi; return true;}
-		if(availRegs[4]) {color = Reg.r8; return true;}
-		if(availRegs[5]) {color = Reg.r9; return true;}
-		if(availRegs[6]) {color = Reg.r11; return true;}
-		if(availRegs[7]) {color = Reg.r12; return true;}
-		if(availRegs[8]) {color = Reg.r13; return true;}
+		if(availRegs[0]) {color = Reg.rdi; return true;}
+		if(availRegs[1]) {color = Reg.rsi; return true;}
+		if(availRegs[2]) {color = Reg.r8; return true;}
+		if(availRegs[3]) {color = Reg.r9; return true;}
+		if(availRegs[4]) {color = Reg.r11; return true;}
+		if(availRegs[5]) {color = Reg.r12; return true;}
+		if(availRegs[6]) {color = Reg.r13; return true;}
 		this.isSpilled = true;
 		return false;
 	}
