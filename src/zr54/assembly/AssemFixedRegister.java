@@ -53,6 +53,7 @@ public class AssemFixedRegister extends AssemOperand implements AssemReg{
 		switch(reg) {
 		case rax:
 		case rbx:
+			return false;
 		case rcx:
 		case rdx:
 		case rsi:

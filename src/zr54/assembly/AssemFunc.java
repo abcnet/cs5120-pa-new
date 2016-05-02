@@ -19,8 +19,8 @@ public class AssemFunc {
 	public HashMap<InterferenceGraphNode, Integer> spilledNodeMap = new HashMap<InterferenceGraphNode, Integer>();
 	public AssemCFG assemGraph = null;
 	
-    // Available registers for allocation: %rax, %rbx, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
-    public static final int numAvailRegs = 11;
+    // Available registers for allocation: %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    public static final int numAvailRegs = 9;
 	
 	/**
 	 * Data structures for register allocation
@@ -33,10 +33,11 @@ public class AssemFunc {
 //	public static final boolean spillAll = true;
 	public static final boolean debugLVA = false;
 	public static final boolean debugLVALoop = false;
-	public static final boolean debugInterference = true;
+	public static final boolean debugInterference = false;
 	public static final boolean debugStep1 = false;
 	public static final boolean debugStep2 = false;
-	public static final boolean debugREG = true;
+	public static final boolean debugREG = false;
+	public static final boolean debugColor = false;
 	
     
 //    public static final boolean debugMCWorklist = true;
@@ -63,6 +64,7 @@ public class AssemFunc {
 			}
 			return this.spilledNodeMap.size();
 		}else{
+			if(varOccurances == null) return 0;
 			return varOccurances.size();
 		}
 		
@@ -93,13 +95,14 @@ public class AssemFunc {
 		if(enableREG){
 			InterferenceGraphNode node = this.interGraph.map.get(name);
 			if(node == null) {
-				if(debugInterference)System.err.println("InterferenceGraphNode is null for " + name);
+//				if(debugInterference)System.err.println("InterferenceGraphNode is null for " + name);
 				node = this.interGraph.add(name);
 				
 			}
 			if(node.isSpilled){
 				
 				if(this.spilledNodeMap.containsKey(node)){
+					
 					return "-"+8*this.spilledNodeMap.get(node)+"(%rbp)"; 
 				}else{
 					this.spilledNodeMap.put(node, ++spillRegsRBPOffsetCount);
@@ -111,7 +114,12 @@ public class AssemFunc {
 				
 				
 			}else{
-				return new AssemFixedRegister(node.color).toString();
+//				if(debugREG){
+//					System.out.println(node.vars() + "is assigned "
+//							+ new AssemFixedRegister(node.color).toString()
+//							+ ", " + node.toString());
+//				}
+				return node.colorString();
 			}
 			
 			
@@ -369,11 +377,29 @@ public class AssemFunc {
         			// Step 5: Coloring
         			while(selectStack.size() > 0){
         				InterferenceGraphNode node = selectStack.pop();
+        				node.isInWorkingStack = false;
         				node.assignColor();
         			}
+        			
+        			// Extra step: if no color assigned, spill
+        			for(InterferenceGraphNode node: this.interGraph.nodes){
+        				if(!node.isSpilled && node.color == null){
+        					node.isSpilled = true;
+        				}
+        			}
+        			
         		}
         	}
         	
+        	if(debugColor){
+        		System.out.println("--------------" + this.irFuncDecl.name() + "--------------");
+        		for(InterferenceGraphNode node: this.interGraph.nodes){
+        			if(node.coalesced){
+        				System.err.println("Coalesced node " + node.vars() + "still exists in graph");
+        			}
+            		System.out.println(node.neighborColors());
+            	}
+        	}
         	
         	
     	}else{

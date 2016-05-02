@@ -19,14 +19,15 @@ public class InterferenceGraphNode {
 	public boolean isInWorkingStack = false;
 	
 	public Reg color = null;
+	public boolean coalesced = false;
 	
 	public static boolean debugCoalesce = false; 
+//	public static HashMap<String, Reg> regStr2Enum = new HashMap<String, Reg>();
+
 	
 	public InterferenceGraphNode(String varName){
 		if(varName.contains("%")){
 			containsReg = true;
-			if(varName.equals("%rax")) {isPreColored = true; color = Reg.rax;}
-			if(varName.equals("%rbx")) {isPreColored = true; color = Reg.rbx;}
 			if(varName.equals("%rcx")) {isPreColored = true; color = Reg.rcx;}
 			if(varName.equals("%rdx")) {isPreColored = true; color = Reg.rdx;}
 			if(varName.equals("%rdi")) {isPreColored = true; color = Reg.rdi;}
@@ -65,6 +66,8 @@ public class InterferenceGraphNode {
 			return;
 		}
 		
+		node1.coalesced = true;
+		node2.coalesced = true;
 		
 		this.coalescRelatedMoves = (HashSet<AssemMove>) node1.coalescRelatedMoves.clone();
 		this.coalescRelatedMoves.addAll(node2.coalescRelatedMoves);
@@ -179,40 +182,61 @@ public class InterferenceGraphNode {
 	}
 	
 	public boolean assignColor(){
-		boolean[] availRegs = {true, true, true, true, true, true, true, true, true, true, true};
+		boolean[] availRegs = {true, true, true, true, true, true, true, true, true, true};
 		for(InterferenceGraphNode neighbor: this.adjLists){
 			if(neighbor.color == null) continue;
 			switch(neighbor.color){
-			case rax: availRegs[0] = false; break;
-			case rbx: availRegs[1] = false; break;
-			case rcx: availRegs[2] = false; break;
-			case rdx: availRegs[3] = false; break;
-			case rdi: availRegs[4] = false; break;
-			case rsi: availRegs[5] = false; break;
-			case r8: availRegs[6] = false; break;
-			case r9: availRegs[7] = false; break;
-			case r11: availRegs[8] = false; break;
-			case r12: availRegs[9] = false; break;
-			case r13: availRegs[10] = false; break;
+
+			case rcx: availRegs[0] = false; break;
+			case rdx: availRegs[1] = false; break;
+			case rdi: availRegs[2] = false; break;
+			case rsi: availRegs[3] = false; break;
+			case r8: availRegs[4] = false; break;
+			case r9: availRegs[5] = false; break;
+			case r11: availRegs[6] = false; break;
+			case r12: availRegs[7] = false; break;
+			case r13: availRegs[8] = false; break;
 			default:
 				System.out.println("Should never reach this line");
 				break;
 				
 			}
 		}
-		if(availRegs[0]) {color = Reg.rax; return true;}
-		if(availRegs[1]) {color = Reg.rbx; return true;}
-		if(availRegs[2]) {color = Reg.rcx; return true;}
-		if(availRegs[3]) {color = Reg.rdx; return true;}
-		if(availRegs[4]) {color = Reg.rdi; return true;}
-		if(availRegs[5]) {color = Reg.rsi; return true;}
-		if(availRegs[6]) {color = Reg.r8; return true;}
-		if(availRegs[7]) {color = Reg.r9; return true;}
-		if(availRegs[8]) {color = Reg.r11; return true;}
-		if(availRegs[9]) {color = Reg.r12; return true;}
-		if(availRegs[10]) {color = Reg.r13; return true;}
+		if(availRegs[0]) {color = Reg.rcx; return true;}
+		if(availRegs[1]) {color = Reg.rdx; return true;}
+		if(availRegs[2]) {color = Reg.rdi; return true;}
+		if(availRegs[3]) {color = Reg.rsi; return true;}
+		if(availRegs[4]) {color = Reg.r8; return true;}
+		if(availRegs[5]) {color = Reg.r9; return true;}
+		if(availRegs[6]) {color = Reg.r11; return true;}
+		if(availRegs[7]) {color = Reg.r12; return true;}
+		if(availRegs[8]) {color = Reg.r13; return true;}
 		this.isSpilled = true;
 		return false;
+	}
+	
+	public String colorString(){
+		if(isSpilled) return "-";
+		if(color==null) return "No color";
+		return new AssemFixedRegister(color).toString();
+	}
+	
+	public String neighborColors(){
+		if(isSpilled) return "Node -";
+		String s = "Node " + colorString();
+		
+		s += " interferences with ";
+		boolean first = true;
+		for(InterferenceGraphNode node: adjLists){
+			if(first){
+				first = false;
+				s += node.colorString();
+			}else{
+				s += ", " + node.colorString();
+			}
+			
+		}
+		return s;
 	}
 
 }
