@@ -19,7 +19,7 @@ public class AssemFunc {
 	public HashMap<InterferenceGraphNode, Integer> spilledNodeMap = new HashMap<InterferenceGraphNode, Integer>();
 	public AssemCFG assemGraph = null;
 	
-    // Available registers for allocation: %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
+    // Available registers for allocation: %rax, %rbx, %rcx, %rdx, %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
     public static final int numAvailRegs = 11;
 	
 	/**
@@ -391,17 +391,20 @@ public class AssemFunc {
         				if(!node.assignColor()){
         					if(debugColor)System.out.println(node);
         					node.isSpilled = true;
+//        					repeatFromStep1 = true;
         				}
         				
         			}
         			
+        			
         			// Extra step: if no color assigned, spill
         			for(InterferenceGraphNode node: this.interGraph.nodes){
         				if(!node.containsDangerousReg() && 
-        						!node.isSpilled && node.color == null){
+        						!node.isSpilled && node.color == null 
+        						&& node.degree() >= AssemFunc.numAvailRegs){
 //        					System.out.println(node.degree());
         					node.isSpilled = true;
-//        					repeatFromStep1 = true;
+        					repeatFromStep1 = true;
         				}
         			}
         			
