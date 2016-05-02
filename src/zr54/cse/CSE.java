@@ -45,6 +45,15 @@ public class CSE {
 				return false;
 			}
 		}
+		
+		public boolean exprEquals(Object o) {
+			ExprMetaData e = (ExprMetaData)o;
+			if (this.expr.toString().equals(e.expr.toString())) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 	public class CFGNodeIndexComparator implements Comparator<CFGNode> {
@@ -152,29 +161,29 @@ public class CSE {
 		} else {
 			HashSet<ExprMetaData> inSet = copy((cfg.incomingGraph.getChildren(n).get(0).availExprList));
 			for (CFGEdge inEdge : cfg.incomingGraph.getChildren(n)) {
-				inSet.retainAll(inEdge.availExprList);
-				//intersection(inSet, inEdge.availExprList);
+				//inSet.retainAll(inEdge.availExprList);
+				intersection(inSet, inEdge.availExprList);
 			}
 			return inSet;
 		}
 	}
 	
-//	public void intersection(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
-//		HashSet<ExprMetaData> temp = new HashSet<ExprMetaData>();
-//		for (ExprMetaData e1 : set1) {
-//			boolean found = false;
-//			for (ExprMetaData e2 : set2) {
-//				if (e1.equals(e2)) {
-//					found = true;
-//					break;
-//				}
-//			}
-//			if (!found) {
-//				temp.add(e1);
-//			}
-//		}
-//		set1.removeAll(temp);
-//	}
+	public void intersection(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
+		HashSet<ExprMetaData> temp = new HashSet<ExprMetaData>();
+		for (ExprMetaData e1 : set1) {
+			boolean found = false;
+			for (ExprMetaData e2 : set2) {
+				if (e1.exprEquals(e2)) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				temp.add(e1);
+			}
+		}
+		set1.removeAll(temp);
+	}
 	
 	public boolean out(CFGNode n) {
 		IRNode currIRNode = n.getNode();
@@ -192,7 +201,7 @@ public class CSE {
 		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
 			//at this point use in(n) and exprs(n) to take care of all the common expressions
 			int index = n.getNodeIndex();
-			currIRNode = modifyNode(in, currIRNode);
+			currIRNode = modifyNode(in, currIRNode, index);
 			seq.children.set(index, currIRNode);
 			n.setNode(currIRNode);
 			
@@ -251,13 +260,13 @@ public class CSE {
 		}
 	}
 	
-	public IRNode modifyNode(HashSet<ExprMetaData> in, IRNode currIRNode) {
+	public IRNode modifyNode(HashSet<ExprMetaData> in, IRNode currIRNode, int cfgNodeIndex) {
 		if (currIRNode instanceof IRMove || currIRNode instanceof IRCJump) {
 			IRExpr e1 = (currIRNode instanceof IRMove) ? ((IRMove)currIRNode).expr() : ((IRCJump)currIRNode).expr();
-			e1 = handleCommonExpressions(in, e1);
+			e1 = handleCommonExpressions(in, e1, cfgNodeIndex);
 			if (currIRNode instanceof IRMove) {
 				IRExpr e2 = ((IRMove)currIRNode).target();
-				e2 = handleCommonExpressions(in, e2);
+				e2 = handleCommonExpressions(in, e2, cfgNodeIndex);
 				return new IRMove(e2, e1);
 			} else {
 				return new IRCJump(e1, ((IRCJump)currIRNode).trueLabel());
@@ -266,11 +275,11 @@ public class CSE {
 		return null;
 	}
 	
-	public IRExpr handleCommonExpressions(HashSet<ExprMetaData> in, IRExpr expr) { //handle common subexpressions in expr
-		IRExpr e = replaceSubExpression(in, expr);
+	public IRExpr handleCommonExpressions(HashSet<ExprMetaData> in, IRExpr expr, int cfgNodeIndex) { //handle common subexpressions in expr
+		IRExpr e = replaceSubExpression(in, expr, cfgNodeIndex);
 		if (e == null) {
 			for (int i = 0; i < expr.children.size(); ++i) {
-				expr.children.set(i, handleCommonExpressions(in, (IRExpr)expr.children.get(i)));
+				expr.children.set(i, handleCommonExpressions(in, (IRExpr)expr.children.get(i), cfgNodeIndex));
 				expr.updateChildren();
 			}
 		} else {
@@ -289,13 +298,13 @@ public class CSE {
 		return null;
 	}
 	
-	public IRExpr replaceSubExpression(HashSet<ExprMetaData> in, IRExpr expr) {
+	public IRExpr replaceSubExpression(HashSet<ExprMetaData> in, IRExpr expr, int cfgNodeIndex) {
 		if (in == null || in.size() == 0) {
 			return expr;
 		}
 		for(ExprMetaData exprMetaData : in) {
 			IRExpr e = exprMetaData.expr;
-			if (isEqual(expr, e)) {
+			if (isEqual(expr, e) && exprMetaData.srcNode.getNodeIndex() != cfgNodeIndex) {
 				IRTemp t = getTemp(exprMetaData.srcNode, expr);
 				if (t == null) {
 					t = new IRTemp(newTemp());
@@ -304,7 +313,7 @@ public class CSE {
 					temp.add(exprMetaData);
 					//replace subexpression in the src node
 					int index = exprMetaData.srcNode.getNodeIndex();
-					IRNode modifiedNode = modifyNode(temp, exprMetaData.srcNode.getNode());
+					IRNode modifiedNode = modifyNode(temp, exprMetaData.srcNode.getNode(), -1);
 					seq.children.set(index, modifiedNode);
 					exprMetaData.srcNode.setNode(modifiedNode);
 				}
