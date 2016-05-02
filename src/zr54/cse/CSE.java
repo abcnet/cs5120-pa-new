@@ -85,10 +85,20 @@ public class CSE {
 		return target;
 	}
 	
+	public boolean isPresent(HashSet<ExprMetaData> exprList, IRExpr IRExprNode) {
+		for (ExprMetaData expMetaData : exprList) {
+			if (isEqual(expMetaData.expr, IRExprNode)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void getSubExpressions(IRExpr IRExprNode, CFGNode node, HashSet<ExprMetaData> exprList) {
 		if (IRExprNode instanceof IRConst
 			|| IRExprNode instanceof IRTemp
-			|| IRExprNode instanceof IRName) {
+			|| IRExprNode instanceof IRName
+			|| isPresent(exprList, IRExprNode)) {
 			return;
 		} else {
 			if (!(IRExprNode instanceof IRCall))
@@ -162,27 +172,27 @@ public class CSE {
 			HashSet<ExprMetaData> inSet = copy((cfg.incomingGraph.getChildren(n).get(0).availExprList));
 			for (CFGEdge inEdge : cfg.incomingGraph.getChildren(n)) {
 				//inSet.retainAll(inEdge.availExprList);
-				intersection(inSet, inEdge.availExprList);
+				inSet = intersection(inSet, inEdge.availExprList);
 			}
 			return inSet;
 		}
 	}
 	
-	public void intersection(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
+	public HashSet<ExprMetaData> intersection(HashSet<ExprMetaData> set1, HashSet<ExprMetaData> set2) {
 		HashSet<ExprMetaData> temp = new HashSet<ExprMetaData>();
 		for (ExprMetaData e1 : set1) {
-			boolean found = false;
 			for (ExprMetaData e2 : set2) {
 				if (e1.exprEquals(e2)) {
-					found = true;
+					if (e1.srcNode.getNodeIndex() < e2.srcNode.getNodeIndex()) {
+						temp.add(e1);
+					} else {
+						temp.add(e2);
+					}
 					break;
 				}
 			}
-			if (!found) {
-				temp.add(e1);
-			}
 		}
-		set1.removeAll(temp);
+		return temp;
 	}
 	
 	public boolean out(CFGNode n) {
