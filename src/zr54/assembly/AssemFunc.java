@@ -20,7 +20,7 @@ public class AssemFunc {
 	public AssemCFG assemGraph = null;
 	
     // Available registers for allocation: %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
-    public static final int numAvailRegs = 7;
+    public static final int numAvailRegs = 11;
 	
 	/**
 	 * Data structures for register allocation
