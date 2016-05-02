@@ -20,7 +20,7 @@ public class AssemFunc {
 	public AssemCFG assemGraph = null;
 	
     // Available registers for allocation: %r12, %r13, %r11, %r9, %r8, %rsi, %rdi
-    public static final int numAvailRegs = 7;
+    public static final int numAvailRegs = 11;
 	
 	/**
 	 * Data structures for register allocation
@@ -215,7 +215,13 @@ public class AssemFunc {
 
                
                HashSet<String> tmp = new HashSet<String>(node.liveVarsOut);
-               tmp.removeAll(node.getDef());
+               HashSet<String> tmpDef = node.getDef();
+               for(String def : tmpDef){
+            	   if(def.contains("%")){
+            		   node.liveRegs.add(def);
+            	   }
+               }
+               tmp.removeAll(tmpDef);
                tmp.addAll(node.getUse());
                if(debugLVA)System.out.println("size of liveVarsIn was " + node.liveVarsIn.size());
                if(debugLVA)System.out.println("size of tmp is " + tmp.size());
@@ -229,8 +235,8 @@ public class AssemFunc {
        }
        
        for(AssemCFGNode node: assemGraph.nodes){
-    	   for(String varStr1: node.liveVarsIn){
-    		   for(String varStr2: node.liveVarsIn){
+    	   for(String varStr1: node.getLive()){
+    		   for(String varStr2: node.getLive()){
                	
     			   this.interGraph.connect(varStr1, varStr2);
     		   }
@@ -302,7 +308,8 @@ public class AssemFunc {
         				existLowDegreeNonMoveRelatedNodes = false;
         				for(InterferenceGraphNode node : this.interGraph.nodes){
         					if(!node.containsDangerousReg() && !node.isMoveRelated()
-        							&& node.degree() < numAvailRegs && !node.isInWorkingStack){
+        							&& node.degree() < numAvailRegs && !node.isInWorkingStack 
+        							&& !node.isPreColored && !node.containsReg && node.color == null){
         						if(debugStep1){
         							System.out.println("Pulling " + node.toString() + " out of graph and pushing onto stack");
         						}
@@ -381,9 +388,10 @@ public class AssemFunc {
         			while(selectStack.size() > 0){
         				InterferenceGraphNode node = selectStack.pop();
         				node.isInWorkingStack = false;
-//        				if(!node.assignColor()){
-//        					repeatFromStep1 = true;
-//        				}
+        				if(!node.assignColor()){
+        					if(debugColor)System.out.println(node);
+        					node.isSpilled = true;
+        				}
         				
         			}
         			
@@ -393,7 +401,7 @@ public class AssemFunc {
         						!node.isSpilled && node.color == null){
 //        					System.out.println(node.degree());
         					node.isSpilled = true;
-        					repeatFromStep1 = true;
+//        					repeatFromStep1 = true;
         				}
         			}
         			

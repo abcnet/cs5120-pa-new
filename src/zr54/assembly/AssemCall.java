@@ -4,8 +4,11 @@ import java.util.HashSet;
 
 public class AssemCall extends AssemInstruction{
 	String callee;
-	public AssemCall(String callee){
+	int nArgs;
+	public static final boolean debug = false;
+	public AssemCall(String callee, int numArgs){
 		this.callee = callee;
+		this.nArgs = numArgs;
 	}
 
 	public String toString(){
@@ -15,12 +18,31 @@ public class AssemCall extends AssemInstruction{
 	@Override
 	public void getUse(HashSet<String> use) {
 		// TODO Auto-generated method stub
-		use.add("%rdi");
-		use.add("%rsi");
-		use.add("%rdx");
-		use.add("%rcx");
-		use.add("%r8");
-		use.add("%r9");
+		if(debug){
+			System.out.println(callee);
+		}
+		switch(nArgs){
+		default:
+			use.add("%r9");
+		case 5:
+			use.add("%r8");
+		case 4:
+			use.add("%rcx");
+		case 3:
+			use.add("%rdx");
+		case 2:
+			use.add("%rsi");
+		case 1:
+			use.add("%rdi");
+		case 0:
+			break;
+		}
+		
+		
+		
+		
+		
+		
 	}
 
 	@Override
@@ -29,7 +51,11 @@ public class AssemCall extends AssemInstruction{
 		def.add("%rax");
 		def.add("%rcx");
 		def.add("%rdx");
+		def.add("%rdi");
+		def.add("%rsi");
 		def.add("%r8");
 		def.add("%r9");
+		
+		def.add("%r11");
 	}
 }
