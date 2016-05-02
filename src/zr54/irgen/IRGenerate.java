@@ -30,11 +30,11 @@ import zr54.typechecker.VarSymbolTable;
 
 public class IRGenerate {
 	
-	public static boolean debug = true;
+	public static boolean debug = false;
 	public static boolean debugCF = false;
 	
 	public static boolean debugAssem = false;
-	public static boolean debugPA6 = true;
+	public static boolean debugPA6 = false;
 	
 	
 	/**
@@ -165,14 +165,14 @@ public class IRGenerate {
 								funcDecl = cse.CSEAnalysis();
 								program.updateChildren();
 							}
-							program.printSExp(printer);
-							if (debug) System.out.println("AFTER CSE:");
-					        StringWriter sw = new StringWriter();
-					        try (PrintWriter pw = new PrintWriter(sw);
-					             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
-					            program.printSExp(sp);
-					        }
-					        if (debug) System.out.println(sw);
+//							program.printSExp(printer);
+//							if (debug) System.out.println("AFTER CSE:");
+//					        StringWriter sw = new StringWriter();
+//					        try (PrintWriter pw = new PrintWriter(sw);
+//					             SExpPrinter sp = new CodeWriterSExpPrinter(pw)) {
+//					            program.printSExp(sp);
+//					        }
+//					        if (debug) System.out.println(sw);
 				        }
 						
 						
