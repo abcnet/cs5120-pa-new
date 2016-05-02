@@ -287,7 +287,7 @@ public class IRGenerate {
 			        	 
 			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_initial_assem.dot");
 			        	 
-			        	 program.regAlloc(false && enableREG, enableMC);
+			        	 program.regAlloc(enableREG, enableMC);
 					     
 			        	 program.createAssemCFG(finalAssemGraph, pathToFile + "_final_assem.dot");
 			        	 
