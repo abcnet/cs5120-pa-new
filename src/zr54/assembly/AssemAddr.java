@@ -57,7 +57,7 @@ public class AssemAddr extends AssemOperand{
 		String r2Str = "";
 		if(r2 != null){
 			r2Str = r2.toString();
-			r2Str = r2Str.contains("(")?"%r15":r2Str;
+			r2Str = r2Str.contains("(")?"%r11":r2Str;
 		}
 		
 		switch(type){
@@ -90,7 +90,7 @@ public class AssemAddr extends AssemOperand{
 		if(r2!=null){
 			String r2Str = r2.toString();
 			if (r2Str.contains("(")){
-				retStr += "	movq	" + r2Str + ", %r15\n";
+				retStr += "	movq	" + r2Str + ", %r11\n";
 			}
 		}
 		return retStr;

@@ -38,6 +38,7 @@ public class AssemFunc {
 	public static final boolean debugStep2 = false;
 	public static final boolean debugREG = false;
 	public static final boolean debugColor = false;
+	public static final boolean debugNodeNotInInterGraph = false;
 	
     
 //    public static final boolean debugMCWorklist = true;
@@ -95,7 +96,7 @@ public class AssemFunc {
 		if(enableREG){
 			InterferenceGraphNode node = this.interGraph.map.get(name);
 			if(node == null) {
-//				if(debugInterference)System.err.println("InterferenceGraphNode is null for " + name);
+				if(debugNodeNotInInterGraph)System.err.println("InterferenceGraphNode is null for " + name);
 				node = this.interGraph.add(name);
 				
 			}

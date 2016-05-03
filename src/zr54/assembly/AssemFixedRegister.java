@@ -59,7 +59,7 @@ public class AssemFixedRegister extends AssemOperand implements AssemReg{
 		case rdi:
 		case r8:
 		case r9:
-		case r11:
+		case r15:
 		case r12:
 		case r13:
 			return true;

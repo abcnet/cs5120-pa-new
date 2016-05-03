@@ -28,7 +28,6 @@ public class InterferenceGraphNode {
 	public InterferenceGraphNode(String varName){
 		if(varName.contains("%")){
 			containsReg = true;
-			
 			if(varName.equals("%rax")) {isPreColored = true; color = Reg.rax;}
 			if(varName.equals("%rbx")) {isPreColored = true; color = Reg.rbx;}
 			if(varName.equals("%rcx")) {isPreColored = true; color = Reg.rcx;}
@@ -37,10 +36,9 @@ public class InterferenceGraphNode {
 			if(varName.equals("%rsi")) {isPreColored = true; color = Reg.rsi;}
 			if(varName.equals("%r8")) {isPreColored = true; color = Reg.r8;}
 			if(varName.equals("%r9")) {isPreColored = true; color = Reg.r9;}
-			if(varName.equals("%r11")) {isPreColored = true; color = Reg.r11;}
+			if(varName.equals("%r15")) {isPreColored = true; color = Reg.r15;}
 			if(varName.equals("%r12")) {isPreColored = true; color = Reg.r12;}
 			if(varName.equals("%r13")) {isPreColored = true; color = Reg.r13;}
-			
 		}
 		
 		
@@ -189,7 +187,6 @@ public class InterferenceGraphNode {
 		for(InterferenceGraphNode neighbor: this.adjLists){
 			if(neighbor.color == null) continue;
 			switch(neighbor.color){
-
 			case rax: availRegs[0] = false; break;
 			case rbx: availRegs[1] = false; break;
 			case rcx: availRegs[2] = false; break;
@@ -198,7 +195,7 @@ public class InterferenceGraphNode {
 			case rsi: availRegs[5] = false; break;
 			case r8: availRegs[6] = false; break;
 			case r9: availRegs[7] = false; break;
-			case r11: availRegs[8] = false; break;
+			case r15: availRegs[8] = false; break;
 			case r12: availRegs[9] = false; break;
 			case r13: availRegs[10] = false; break;
 			default:
@@ -215,7 +212,7 @@ public class InterferenceGraphNode {
 		if(availRegs[5]) {color = Reg.rsi; return true;}
 		if(availRegs[6]) {color = Reg.r8; return true;}
 		if(availRegs[7]) {color = Reg.r9; return true;}
-		if(availRegs[8]) {color = Reg.r11; return true;}
+		if(availRegs[8]) {color = Reg.r15; return true;}
 		if(availRegs[9]) {color = Reg.r12; return true;}
 		if(availRegs[10]) {color = Reg.r13; return true;}
 		this.isSpilled = true;
