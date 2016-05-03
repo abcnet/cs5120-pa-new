@@ -256,7 +256,7 @@ public class IRCall extends IRExpr {
 			nRet = 0;
 			nArgs = 0;
 		}else{
-			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
+			String rawFuncName = callee.substring(2, callee.lastIndexOf('_')).replaceAll("__", "_");
 			FuncSignature sign = funcs.lookup(rawFuncName);
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;

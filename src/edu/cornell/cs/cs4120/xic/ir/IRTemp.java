@@ -68,7 +68,7 @@ public class IRTemp extends IRExpr {
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
 
-		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_'));
+		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_')).replaceAll("__", "_");
 		boolean gt2 = funcs.lookup(rawFuncName).getFunctionReturnTypes().getTuple().size() > 2;
 		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
 			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
@@ -98,8 +98,12 @@ public class IRTemp extends IRExpr {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
 
-		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_'));
-		boolean gt2 = funcs.lookup(rawFuncName).getFunctionReturnTypes().getTuple().size() > 2;
+		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_')).replaceAll("__", "_");
+		boolean gt2 = funcs.
+				lookup(rawFuncName)
+				.getFunctionReturnTypes().
+				getTuple().
+				size() > 2;
 		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
 			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
 			return new AssemArgTemp(idx, gt2);
