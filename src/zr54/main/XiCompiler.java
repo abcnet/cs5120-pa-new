@@ -136,7 +136,7 @@ class XiCompiler {
         boolean initialAssemGraph = false;
         boolean finalAssemGraph = false;
         
-        
+        boolean nohelp = false;
 
         while ((c = g.getopt()) != -1) {
             switch(c) {
@@ -176,6 +176,7 @@ class XiCompiler {
                           break;
                 case 12:
                 	System.out.println("cf\nreg\nmc\nuce\ncse\ncopy\ndce\ncp\n");
+                	nohelp = true;
                 	break;
                 case 13:
                 	arg = g.getOptarg();
@@ -240,7 +241,7 @@ class XiCompiler {
             System.exit(0);
         }
 
-        if (g.getOptind() == argv.length) {
+        if (g.getOptind() == argv.length && !nohelp) {
             System.out.println("No source file names provided");
             System.out.println(usage);
         }
