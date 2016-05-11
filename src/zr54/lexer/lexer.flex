@@ -210,6 +210,7 @@ HexDigit              = [0-9a-fA-F]
   ";"                            { return symbol(sym.SEMICOLON, ";"); }
   ","                            { return symbol(sym.COMMA, ","); }
   ":"                            { return symbol(sym.COLON, ":"); }
+  "."							 { return symbol(sym.DOT, "."); }
   
   /* operators */
   "="                            { return symbol(sym.EQ, "="); }
