@@ -45,7 +45,8 @@ parser code {:
 terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, BOOLEAN_LITERAL,
          LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ,
          GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
-         HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK;
+         HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
+         CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE;
 
 nonterminal AstNode arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, functionReturnType, typesList, bracket, brackets, methods, method, optionalSemicolon;
           

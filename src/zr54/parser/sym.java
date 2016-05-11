@@ -8,10 +8,13 @@ package zr54.parser;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
+  public static final int NEW = 44;
+  public static final int EXTENDS = 45;
   public static final int UNDERSCORE = 40;
   public static final int LENGTH = 36;
   public static final int LT = 18;
   public static final int INTEGER_LITERAL = 3;
+  public static final int CLASS = 42;
   public static final int error = 1;
   public static final int INT = 32;
   public static final int MINUS = 22;
@@ -20,6 +23,7 @@ public class sym {
   public static final int BOOLEAN_LITERAL = 6;
   public static final int SEMICOLON = 13;
   public static final int LTEQ = 29;
+  public static final int BREAK = 46;
   public static final int ELSE = 34;
   public static final int IDENTIFIER = 2;
   public static final int LRBRACK = 41;
@@ -38,6 +42,7 @@ public class sym {
   public static final int GT = 17;
   public static final int NOTEQ = 30;
   public static final int DIV = 38;
+  public static final int CONTINUE = 47;
   public static final int RBRACK = 12;
   public static final int NOT = 19;
   public static final int RBRACE = 10;
@@ -46,6 +51,7 @@ public class sym {
   public static final int AND = 23;
   public static final int EQEQ = 27;
   public static final int GTEQ = 28;
+  public static final int THIS = 43;
   public static final int STRING_LITERAL = 4;
   public static final int WHILE = 35;
   public static final int LBRACE = 9;
@@ -92,7 +98,13 @@ public class sym {
   "DIV",
   "USE",
   "UNDERSCORE",
-  "LRBRACK"
+  "LRBRACK",
+  "CLASS",
+  "THIS",
+  "NEW",
+  "EXTENDS",
+  "BREAK",
+  "CONTINUE"
   };
 }
 
