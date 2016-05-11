@@ -187,6 +187,14 @@ HexDigit              = [0-9a-fA-F]
   "length"                       { return symbol(sym.LENGTH, "length"); }
   "use"                          { return symbol(sym.USE, "use"); }
   "_"							 { return symbol(sym.UNDERSCORE, "_"); }
+  "class"						 { return symbol(sym.CLASS, "class"); }
+  "this"						 { return symbol(sym.THIS, "this"); }
+  "new"						 	 { return symbol(sym.NEW, "new"); }
+  "extends"						 { return symbol(sym.EXTENDS, "extends"); }
+  "break"						 { return symbol(sym.BREAK, "break"); }
+  "continue"					 { return symbol(sym.CONTINUE, "continue"); }
+  
+  
   
   /* boolean literals */
   "true"                         { return symbol(sym.BOOLEAN_LITERAL, "true"); }
