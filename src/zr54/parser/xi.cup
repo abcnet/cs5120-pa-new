@@ -58,7 +58,10 @@ nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type
             emptyBracket, emptyBrackets, newVariables,
             variable, newVariable, expressions, methods, method, arrayLiteral, optionalSemicolon,
             block, optionalReturn, minusExpression;
-nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, functionCall;            
+nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, functionCall;    
+
+//new for oXi
+nonterminal AstNode classDef, classDefs, classField, classMethod, classFieldsOrMethods, newObject;
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -72,6 +75,27 @@ precedence nonassoc NOT;
 
 
 start with program;
+
+//new for oXi 
+classDefs             ::= classDefs:cs classDef:c
+                      | classDef:c          
+                      ;
+
+classDef				::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsOrMethods RBRACE:rb {: :}
+					  ;
+					  
+classFieldsOrMethods	::= classFieldsOrMethods classMethod
+						  | classFieldsOrMethods classField
+						  |	classMethod
+						  | classField
+						  ; 
+
+classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
+                      ;
+
+classField			::= IDENTIFIER:id COLON type:t  
+					  ;
+//the above are new for oXi
 
 
 singleUse           ::= USE:u IDENTIFIER:id optionalSemicolon  {: RESULT = new DefaultNode("useSpecifier", null, new DefaultNode("USE", u), new DefaultNode("IDENTIFIER", id)); :}
@@ -246,9 +270,9 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT 
                       ;
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
-                     
+//TODO: not complete					
+                      | uses:us classDefs:cs methods:ms	{: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
                       | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
-                      
                       | error:e               {:  :}
                       ;
 
