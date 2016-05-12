@@ -61,7 +61,7 @@ nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type
 nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, functionCall;    
 
 //new for oXi
-nonterminal AstNode classDef, classDefs, classField, classMethod, classFieldsOrMethods, newObject;
+nonterminal AstNode classDef, classDefs, classField, classMethod, classFieldsMethods, newObject;
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -77,23 +77,28 @@ precedence nonassoc NOT;
 start with program;
 
 //new for oXi 
-classDefs             ::= classDefs:cs classDef:c
-                      | classDef:c          
+classDefs           ::= classDefs:cs classDef:c {: RESULT = new DefaultNode("classDefs", null); RESULT.addGrandChildren(cs); RESULT.addChild(c); :}
+                      | classDef:c {: RESULT = new DefaultNode("classDefs", null, c); :}          
                       ;
 
-classDef				::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsOrMethods RBRACE:rb {: :}
+classDef			::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsMethods:fm RBRACE:rb 
+						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); :}
 					  ;
 					  
-classFieldsOrMethods	::= classFieldsOrMethods classMethod
-						  | classFieldsOrMethods classField
-						  |	classMethod
-						  | classField
+classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
+						  | classFieldsMethods:fm classField:f {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(f); :}
+						  |	classMethod:m	{: RESULT = new DefaultNode("classFieldsMethods", null, m); :}
+						  | classField:f	{: RESULT = new DefaultNode("classFieldsMethods", null, f); :}
 						  ; 
 
 classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
+                        {: RESULT = new ClassMethodNode("classMethod", id);
+                           RESULT.addChild(a); RESULT.addChild(r);
+                           RESULT.addChild(os);
+                           if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       ;
 
-classField			::= IDENTIFIER:id COLON type:t  
+classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
 					  ;
 //the above are new for oXi
 
@@ -271,7 +276,7 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT 
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
 //TODO: not complete					
-                      | uses:us classDefs:cs methods:ms	{: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
+                      | uses:us classDefs:cs methods:ms	{: RESULT = new DefaultNode("program", null, us, cs); RESULT.addChild(ms); :}
                       | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
                       | error:e               {:  :}
                       ;
