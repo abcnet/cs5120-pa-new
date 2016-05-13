@@ -226,6 +226,11 @@ public abstract class AstNode {
     		child.registerFunctionSignature(funcs, isInterface, ixiFile);
     }
     
+    public void registerClassSignature(ClassSymbolTable classes) throws XiException {
+    	 for(AstNode child : children) 
+    		 child.registerClassSignature(classes);
+    }
+    
     /**
      * get children
      * @return

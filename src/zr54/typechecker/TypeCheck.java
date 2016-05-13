@@ -87,4 +87,8 @@ public class TypeCheck {
 		root.registerFunctionSignature(funcs, false, file);
 	}
 	
+	public static void registerAllClasses(ClassSymbolTable classes, AstNode root, String file) throws XiException {
+		root.registerClassSignature(classes);
+	}
+	
 }

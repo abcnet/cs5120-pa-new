@@ -10,11 +10,14 @@ public class Type {
     public static int UNIT = 3;
     public static int VOID = 4;
     public static int TUPLE = 5;
+    public static int CLASS = 6;
+    public static int NULL = 7;
     
     private int type = 0;
     private int dimension = 0;
     private boolean isFunctionCall = false;
     private ArrayList<Type> tuple = new ArrayList<Type>();
+    private String className = null;
     /**
      * Empty constructor
      */
@@ -42,6 +45,17 @@ public class Type {
     	this.tuple = tuple;
     	this.isFunctionCall = true;
     }
+    
+    /**
+     * Constructor for class type
+     * @return
+     */
+    public Type(String c, int d) {
+    	this.type = CLASS;
+    	this.className = c;
+    	this.dimension = d;
+    }
+    
     public Type functionCallTrue(){
     	this.isFunctionCall = true;
     	return this;
@@ -78,6 +92,10 @@ public class Type {
     public ArrayList<Type> getTuple() {
     	return tuple;
     }
+    
+    public String getClassName() {
+    	return className;
+    }
    /**
     * Check if two types match with each other
     * @param t
@@ -95,7 +113,19 @@ public class Type {
     			if (this.tuple.get(i).matches(t.tuple.get(i))==false) return false;
     		}
     		return true;
-    	}else{
+    	}else if(this.type == CLASS) {
+    		if(t.type == CLASS && this.className.equals(t.className) && this.dimension == t.dimension) 
+    			return true;
+    		if(t.type == NULL)
+    			return true;
+    		return false;
+    	}
+    	else if(this.type == NULL) {
+    		if(t.type == CLASS || t.type == NULL)
+    			return true;
+    		return false;
+    	}
+    	else {
     		return true;
     	}
     }

@@ -23,6 +23,7 @@ import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
 import zr54.parser.AstNode;
 import zr54.parser.parser;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.TypeCheck;
 import zr54.main.XiException;
@@ -91,6 +92,7 @@ public class IRGenerate {
 				//System.out.print(root.toString());
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
+				ClassSymbolTable classes = new ClassSymbolTable();
 				
 				try {
 					//first need load all interface files and register function signatures
@@ -105,6 +107,7 @@ public class IRGenerate {
 					}
 					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile);
+					TypeCheck.registerAllClasses(classes, root, srcFile);
 					root.typeCheck(vars, funcs);
 					
 					
