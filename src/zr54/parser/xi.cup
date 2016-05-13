@@ -51,7 +51,7 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
          CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT;
 
-nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty,
+nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty, multipleArgumentsWithSingleTypeNonEmpty,
             argumentsWithType, optionalArgumentsWithType, functionReturnType,
             statements, optionalStatements, statement, typesList, assignment,
             ifStatement, whileStatement, nonEmptyBracket, nonEmptyBrackets,
@@ -61,7 +61,7 @@ nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type
 nonterminal AstNode expression, argument, arrayIndices, varArrayIndices, functionCall;    
 
 //new for oXi
-nonterminal AstNode classDef, classDefs, classField, classMethod, classFieldsMethods, newObject;
+nonterminal AstNode classDef, classDefs, classField, classMethod, classFieldsMethods, newObject, fieldAccess;
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -101,8 +101,13 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
 classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
 					  ;
 
+fieldAccess         ::= IDENTIFIER DOT IDENTIFIER
+                      | fieldAccess DOT IDENTIFIER
+                      ;
 
-					  
+newObject           ::= NEW IDENTIFIER DOT IDENTIFIER	LPAREN expressions:es RPAREN	
+                      | NEW IDENTIFIER DOT IDENTIFIER LPAREN RPAREN   		  
+                      ;
 //the above are new for oXi
 
 
