@@ -4,16 +4,14 @@ import java.util.*;
 
 public class ClassDefination {
 	private String name = "";
-	private FuncSymbolTable methods = new FuncSymbolTable();
+	private HashMap<String, FuncSignature> methods = new HashMap<String, FuncSignature>();
+	private HashMap<String, Integer> methodIdx = new HashMap<String, Integer>();
 	private HashMap<String, Type> fields = new HashMap<String, Type>(); 
+	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
 	private ClassDefination superClass = null;
 	
 	public ClassDefination(String n) {
 		name = n;
-	}
-	
-	public FuncSymbolTable getFuncTable() {
-		return methods;
 	}
 	
 	public ClassDefination getSuperClass() {
@@ -27,13 +25,126 @@ public class ClassDefination {
 	public void addField(String name, Type type) {
 		fields.put(name, type);
 	}
+
+	public void addMethod(String name, ArrayList<Type> argTypes, ArrayList<Type> retTypes) {
+    	FuncSignature f = new FuncSignature(name, argTypes, retTypes);
+    	//TODO: need to check if method is duplicated
+    	methods.put(name, f);
+	}
+	
+	public int getMethodIdx(String name) {
+		if(methodIdx.containsKey(name))
+			return methodIdx.get(name);
+		else if(superClass != null)
+			return superClass.getMethodIdx(name);
+		else
+			return -1;
+	}
+
+	public int getFieldIdx(String name) {
+		if(fieldIdx.containsKey(name)) 
+			return fieldIdx.get(name);
+		else if(superClass != null)
+			return superClass.getMethodIdx(name);
+		return -1;
+	}
 	
 	public FuncSignature getMethod(String name) {
-		return methods.lookup(name);
+		if(methods.containsKey(name))
+			return methods.get(name);
+		else if(superClass != null)
+			return superClass.getMethod(name);
+		else
+			return null;
 	}
 	
 	public Type getFieldType(String name) {
-		return fields.get(name);
+		if(fields.containsKey(name))
+			return fields.get(name);
+		else if(superClass != null)
+			return superClass.getFieldType(name);
+		else 
+			return null;
+	}
+	
+	/**
+	 * get the maximum method index, return -1 if there is no method
+	 * @return
+	 */
+	public int getMaxMethodIdx() {
+		if(superClass != null) {
+			if(methodIdx.size() > 0) 
+				return Math.max(Collections.max(methodIdx.values()), superClass.getMaxMethodIdx());
+			else
+				return superClass.getMaxMethodIdx();
+		}
+		else {
+			if(methodIdx.size() > 0)
+				return Collections.max(methodIdx.values());
+			else
+				return -1;
+		}
+	}
+	
+	/**
+	 * get the maximum field index, return -1, if there is no field
+	 * @return
+	 */
+	public int getMaxFieldIdx() {
+		if(superClass != null) {
+			if(fieldIdx.size() > 0) 
+				return Math.max(Collections.max(fieldIdx.values()), superClass.getMaxFieldIdx());
+			else
+				return superClass.getMaxFieldIdx();
+		}
+		else {
+			if(fieldIdx.size() > 0)
+				return Collections.max(fieldIdx.values());
+			else
+				return -1;
+		}
+	}
+	
+	//assuming that super class has done index determination
+	public void determineIndices() {
+		int superMaxFieldIdx = -1;
+		int superMaxMethodIdx = -1;
+		if(superClass != null)  {
+			superMaxFieldIdx = superClass.getMaxFieldIdx();
+			superMaxMethodIdx = superClass.getMaxMethodIdx();
+		}
+		
+		int fieldCount = 0;
+		for(String f : fields.keySet()) {
+			if(superClass != null) {
+				if(superClass.getFieldIdx(f) != -1) 
+					fieldIdx.put(f, superClass.getFieldIdx(f));
+				else {
+					fieldIdx.put(f, superMaxFieldIdx + fieldCount + 1);
+					fieldCount++;
+				}
+			}
+			else {
+				fieldIdx.put(f, fieldCount);
+				fieldCount++;
+			}
+		}
+		
+		int methodCount = 0;
+		for(String m : methods.keySet()) {
+			if(superClass != null) {
+				if(superClass.getMethodIdx(m) != -1) 
+					methodIdx.put(m, superClass.getMethodIdx(m));
+				else {
+					methodIdx.put(m, superMaxMethodIdx + methodCount + 1);
+					methodCount++;
+				}
+			}
+			else {
+				methodIdx.put(m, methodCount);
+				methodCount++;
+			}
+		}
 	}
 	
 }

@@ -63,7 +63,7 @@ public class ClassNode extends AstNode{
 		ClassDefination classSig = new ClassDefination((String)symbol.value);
 		
 		for(ClassMethodNode method : methods) {
-			method.registerClassMethodSignature(classSig.getFuncTable());
+			method.registerClassMethodSignature(classSig);
 		}
 		
 		for(AstNode field : fields) {
@@ -80,6 +80,7 @@ public class ClassNode extends AstNode{
 			}
 		}
 		
+		classSig.determineIndices();
 		classes.addClass((String)symbol.value, classSig);
 	} 
 	

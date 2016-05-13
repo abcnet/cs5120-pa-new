@@ -3,6 +3,7 @@ package zr54.parser;
 import java.util.ArrayList;
 
 import zr54.main.XiException;
+import zr54.typechecker.ClassDefination;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -35,26 +36,27 @@ public class ClassMethodNode extends AstNode {
 		return false;
 	}
 	
-	public void registerClassMethodSignature(FuncSymbolTable methods) throws XiException {
+	public void registerClassMethodSignature(ClassDefination classDef) throws XiException {
 		String funcName = (String) symbol.value;
-		FuncSignature funcSig = methods.lookup(funcName);
+		FuncSignature funcSig = classDef.getMethod(funcName);
 		
 		VarSymbolTable newVars = new VarSymbolTable();
+		FuncSymbolTable funcs = new FuncSymbolTable();
 		//get the argument and return types of this function
 		AstNode argNode = children.get(0);
 		AstNode retNode = children.get(1);
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, methods, false));
+			argTypes.add(arg.typeCheck(newVars, funcs, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, methods, false));
+			retTypes.add(ret.typeCheck(newVars, funcs, false));
 				
 		if(funcSig != null) {
 			throw new XiException(symbol, "Method '" + (String) symbol.value + "' redefined", "Semantic");
 		}
 		else {
-			methods.add((String) symbol.value, argTypes, retTypes);
+			classDef.addMethod((String) symbol.value, argTypes, retTypes);
 		}
 	}
 	
