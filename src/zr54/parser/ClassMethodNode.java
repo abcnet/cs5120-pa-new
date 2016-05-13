@@ -19,7 +19,8 @@ public class ClassMethodNode extends AstNode {
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
 			throws XiException {
 		// TODO Auto-generated method stub
-		return null;
+		// not finished!
+				return new Type();
 	}
 
 	@Override

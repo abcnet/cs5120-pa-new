@@ -46,10 +46,12 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ,
          GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
-         CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT;
+         CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT, NULL;
 
 nonterminal AstNode arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, functionReturnType, typesList, bracket, brackets, methods, method, optionalSemicolon;
           
+//new for oXi
+nonterminal AstNode classDef, classMethod, classMethods;
 
 precedence nonassoc ELSE;
 precedence nonassoc EQ;
@@ -64,7 +66,24 @@ precedence nonassoc NOT;
 
 start with methods;
 
+// new for oXi
 
+classDef      ::= CLASS:c IDENTIFIER:id LBRACE:lb classMethods:fm RBRACE:rb 
+            {: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
+                  | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb classMethods:fm RBRACE:rb
+                    {: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
+            ;
+classMethods  ::= classMethods:fm classMethod:m    {: RESULT = new DefaultNode("classMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
+               
+              | classMethod:m {: RESULT = new DefaultNode("classMethods", null, m); :}
+              
+              ; 
+
+classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r 
+                        {: RESULT = new ClassMethodNode("classMethod", id);
+                           RESULT.addChild(a); RESULT.addChild(r);:}
+                      ;
+// end of new for oXi
 
 arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
@@ -81,6 +100,7 @@ brackets            ::= bracket:b brackets:bs   {: RESULT = new TypeNode("bracke
 type                ::= arrayType:a     {: RESULT = a; :}
                       | INT:i             {: RESULT = new TypeNode("INT", i); :}
                       | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
+                      | IDENTIFIER:t   {: RESULT = new TypeNode("IDENTIFIER", t); :}
                       ;
 
 argumentWithType    ::= IDENTIFIER:id COLON type:t  {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
@@ -104,6 +124,7 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new DefaultNode(
 method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r 
                         {: RESULT = new MethodNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r); :}
+                      | classDef:cd {: RESULT =  cd; :}
                       ;
 
 
@@ -112,23 +133,11 @@ optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
                             |                      {: RESULT = new DefaultNode("forceParen", null); :}
                             ;
 
-
-
-
-
 optionalSemicolon   ::= SEMICOLON
                       |
                       ;
 
 
-
-
-
-
-
-
 methods             ::= methods:ms method:m   {: RESULT = new DefaultNode("methods", null); RESULT.addGrandChildren(ms); RESULT.addChild(m); :}
                       | method:m              {: RESULT = new DefaultNode("methods", null, m); :}
                       ;
-
-
