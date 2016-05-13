@@ -182,6 +182,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | fieldAccess:fa {: RESULT = fa; :}
                       | newObject:no {: RESULT = no; :}
                       | THIS:t {: RESULT = new ThisNode("this", t); :}
+                      | NULL:n {: RESULT = new NullNode("null", n); :}
                       ;
 
 arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); :}
