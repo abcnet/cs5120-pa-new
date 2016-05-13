@@ -1159,6 +1159,9 @@ class CUP$parser$actions {
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-5).left;
                 int idright = CUP$parser$stack.elementAt(CUP$parser$top-5).right;
                 Symbol id = CUP$parser$stack.elementAt(CUP$parser$top-5).<Symbol> value();
+                int sleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int sright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol s = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int lbleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int lbright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol lb = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
@@ -1168,7 +1171,7 @@ class CUP$parser$actions {
                 int rbleft = CUP$parser$stack.peek().left;
                 int rbright = CUP$parser$stack.peek().right;
                 Symbol rb = CUP$parser$stack.peek().<Symbol> value();
-                 RESULT = xxx; 
+                 RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("classDef",41, CUP$parser$stack.elementAt(CUP$parser$top-6), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1366,7 +1369,16 @@ class CUP$parser$actions {
         case 16: // fieldAccess ::= THIS DOT IDENTIFIER 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int tleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int tright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol t = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
+                int dleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int dright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol d = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
+                int fleft = CUP$parser$stack.peek().left;
+                int fright = CUP$parser$stack.peek().right;
+                Symbol f = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new ClassFieldAccessNode("fieldAccess", d, new ThisNode("this", t), new ClassFieldNode("field", f)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("fieldAccess",47, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1831,10 +1843,13 @@ class CUP$parser$actions {
         case 50: // multipleArgumentsWithSingleTypeNonEmpty ::= twoOrMoreIdentifies COLON typeNonEmpty 
             {
                 AstNode RESULT = null;
+                int idsleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int idsright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                AstNode ids = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = xxx; 
+                 RESULT = new MultiDeclarationNode("multiDeclaration", null, ids, t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("multipleArgumentsWithSingleTypeNonEmpty",9, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1843,7 +1858,13 @@ class CUP$parser$actions {
         case 51: // twoOrMoreIdentifies ::= IDENTIFIER COMMA IDENTIFIER 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int id1left = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int id1right = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol id1 = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
+                int id2left = CUP$parser$stack.peek().left;
+                int id2right = CUP$parser$stack.peek().right;
+                Symbol id2 = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new DefaultNode("identifiers", null, new VariableNode("variable", id1), new VariableNode("variable", id2)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("twoOrMoreIdentifies",10, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1852,7 +1873,13 @@ class CUP$parser$actions {
         case 52: // twoOrMoreIdentifies ::= twoOrMoreIdentifies COMMA IDENTIFIER 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int idsleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int idsright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                AstNode ids = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
+                int idleft = CUP$parser$stack.peek().left;
+                int idright = CUP$parser$stack.peek().right;
+                Symbol id = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = ids; ids.addChild(new VariableNode("variable", id)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("twoOrMoreIdentifies",10, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -1993,7 +2020,10 @@ class CUP$parser$actions {
         case 64: // argument ::= THIS 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int tleft = CUP$parser$stack.peek().left;
+                int tright = CUP$parser$stack.peek().right;
+                Symbol t = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new ThisNode("this", t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("argument",37, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2236,7 +2266,10 @@ class CUP$parser$actions {
         case 79: // method ::= argumentWithTypeNonEmpty 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int aleft = CUP$parser$stack.peek().left;
+                int aright = CUP$parser$stack.peek().right;
+                AstNode a = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = a; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",30, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2245,7 +2278,10 @@ class CUP$parser$actions {
         case 80: // method ::= multipleArgumentsWithSingleTypeNonEmpty 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int mleft = CUP$parser$stack.peek().left;
+                int mright = CUP$parser$stack.peek().right;
+                AstNode m = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = m; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",30, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2413,7 +2449,10 @@ class CUP$parser$actions {
         case 94: // statement ::= BREAK 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int bleft = CUP$parser$stack.peek().left;
+                int bright = CUP$parser$stack.peek().right;
+                Symbol b = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new BreakContinueNode("break", b); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",16, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2422,7 +2461,10 @@ class CUP$parser$actions {
         case 95: // statement ::= CONTINUE 
             {
                 AstNode RESULT = null;
-                 RESULT = xxx; 
+                int cleft = CUP$parser$stack.peek().left;
+                int cright = CUP$parser$stack.peek().right;
+                Symbol c = CUP$parser$stack.peek().<Symbol> value();
+                 RESULT = new BreakContinueNode("continue", c); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",16, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
