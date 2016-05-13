@@ -207,6 +207,8 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       | classDef:cd {: RESULT =  cd; :}
+                      | argumentWithTypeNonEmpty  {: RESULT = xxx; :}
+                      | multipleArgumentsWithSingleTypeNonEmpty  {: RESULT = xxx; :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
