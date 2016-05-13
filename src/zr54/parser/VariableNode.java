@@ -23,7 +23,7 @@ public class VariableNode extends ExprNode{
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		type = vars.lookup((String)symbol.value);
 		if (type == null){

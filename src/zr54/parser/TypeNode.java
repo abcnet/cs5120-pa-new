@@ -37,7 +37,7 @@ public class TypeNode extends AstNode {
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException {
 
 		if(name.equals("INT"))
 			type = new Type(Type.INT, 0);
@@ -45,10 +45,10 @@ public class TypeNode extends AstNode {
 			type = new Type(Type.BOOL, 0);
 		else if(name.equals("bracket") || name.equals("brackets")) {
 			if(children.size() > 0) {
-				type = children.get(0).typeCheck(vars, funcs);
+				type = children.get(0).typeCheck(vars, funcs, false);
 				type.incDimension();
 				if(children.size()==2){
-					Type t = children.get(1).typeCheck(vars, funcs);
+					Type t = children.get(1).typeCheck(vars, funcs, false);
 					if (t.getType()==Type.BOOL||t.getDimension()!=0){
 						throw new XiException(symbol.left,symbol.right, "Expect int inside [], but found " + t, "Semantic");
 					}

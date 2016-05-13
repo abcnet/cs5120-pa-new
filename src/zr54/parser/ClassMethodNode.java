@@ -16,7 +16,7 @@ public class ClassMethodNode extends AstNode {
 	}
 	
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile)
 			throws XiException {
 		// TODO Auto-generated method stub
 		// not finished!
@@ -46,9 +46,9 @@ public class ClassMethodNode extends AstNode {
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, methods));
+			argTypes.add(arg.typeCheck(newVars, methods, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, methods));
+			retTypes.add(ret.typeCheck(newVars, methods, false));
 				
 		if(funcSig != null) {
 			throw new XiException(symbol, "Method '" + (String) symbol.value + "' redefined", "Semantic");

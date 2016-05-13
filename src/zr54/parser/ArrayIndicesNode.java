@@ -25,10 +25,10 @@ public class ArrayIndicesNode extends BinaryExprNode{
 	 * Type-checking method for array access (e.g., a[0][1]) nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
-		Type t2 = this.children.get(1).typeCheck(vars, funcs);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs, false);
 
 		if(t1.getDimension()<1){
 			throw new XiException(this.children.get(0).getFirstSymbol(),"First operand of array access must be array", "Semantic");

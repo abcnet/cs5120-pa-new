@@ -24,8 +24,8 @@ public class NotNode extends UnaryExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
 
 		if ((t1.getType() == Type.BOOL )
 				&& (t1.getDimension() == 0 )) {

@@ -52,7 +52,7 @@ public class TypeCheck {
 					}
 					errFile = srcFile;
 					registerAllFunctions(funcs, root, srcFile);
-					root.typeCheck(vars, funcs);
+					root.typeCheck(vars, funcs, false);
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {

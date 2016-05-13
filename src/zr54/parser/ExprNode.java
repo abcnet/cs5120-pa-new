@@ -20,7 +20,7 @@ public abstract class ExprNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-	public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException;
+	public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException;
 	
 	/**
 	 * Generate IR

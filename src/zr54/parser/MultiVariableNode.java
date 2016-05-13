@@ -21,10 +21,10 @@ public class MultiVariableNode extends DefaultNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 		type = new Type(Type.TUPLE, 0);
 		for(AstNode n : children)
-			type.addTupleEntry(n.typeCheck(vars, funcs));
+			type.addTupleEntry(n.typeCheck(vars, funcs, false));
 
 		return type;
 	}

@@ -26,11 +26,11 @@ public class ReturnNode extends StmtNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		Type t=new Type();
 		for(AstNode n : children)
-			t.addTupleEntry(n.typeCheck(vars, funcs));
+			t.addTupleEntry(n.typeCheck(vars, funcs, false));
 
 		vars.returned = t.getTuple();
 

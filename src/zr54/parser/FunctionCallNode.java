@@ -39,7 +39,7 @@ public class FunctionCallNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		FuncSignature f = funcs.lookup((String) symbol.value);
 		if (f==null){
@@ -51,7 +51,7 @@ public class FunctionCallNode extends ExprNode{
 		}
 		for(int i=0;i<args.getTuple().size();i++){
 			AstNode node = this.children.get(i);
-			Type l=node.typeCheck(vars, funcs);
+			Type l=node.typeCheck(vars, funcs, false);
 			if(l.matches(args.getTuple().get(i))==false){
 				throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
 

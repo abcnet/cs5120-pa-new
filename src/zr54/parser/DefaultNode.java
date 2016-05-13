@@ -40,10 +40,10 @@ public class DefaultNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		for(AstNode n : children)
-			n.typeCheck(vars, funcs);
+			n.typeCheck(vars, funcs, false);
 		type = new Type();
 
 		return type;

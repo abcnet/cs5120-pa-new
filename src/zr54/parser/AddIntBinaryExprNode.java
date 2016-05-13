@@ -27,9 +27,9 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	 * Type-checking method for integer addition (binary expression) nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
-		Type t2 = this.children.get(1).typeCheck(vars, funcs);
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs, false);
 
 		if ((t1.getType() == t2.getType() )
 				&& (t1.getDimension() == t2.getDimension())) {

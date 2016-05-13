@@ -208,12 +208,13 @@ public abstract class AstNode {
 
 	/**
 	 * type checking
+	 * @param insideWhile TODO
 	 * @param vars: variable symbol table
 	 * @param funcs: function symbo table
 	 * @return type
 	 * @throws XiException
 	 */
-    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException;
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException;
 
     /**
      * register function signature 

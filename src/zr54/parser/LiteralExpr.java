@@ -46,7 +46,7 @@ public class LiteralExpr extends ExprNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs){
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile){
 
 		type = new Type(this.literalType, this.dimension);
 		return type;

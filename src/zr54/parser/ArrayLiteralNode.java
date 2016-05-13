@@ -35,13 +35,13 @@ public class ArrayLiteralNode extends ExprNode{
 	 * Type-checking method for array literal nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 		if(this.children.size()==0){
 			return new Type(Type.INT, 1);
 		}
-		Type t0=this.children.get(0).typeCheck(vars, funcs),t;
+		Type t0=this.children.get(0).typeCheck(vars, funcs, false),t;
 		for (int i=1; i<this.children.size();i++){
-			t=this.children.get(i).typeCheck(vars, funcs);
+			t=this.children.get(i).typeCheck(vars, funcs, false);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
 				throw new XiException(this.children.get(i).getFirstSymbol(),"elements of array literal do not match", "Semantic");
 			}

@@ -27,12 +27,12 @@ public class AssignStmtNode extends StmtNode{
 	 * Type-checking method for assignment statement nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		Type left, right;
 
-		right=this.children.get(1).typeCheck(vars, funcs);
-		left=this.children.get(0).typeCheck(vars, funcs);
+		right=this.children.get(1).typeCheck(vars, funcs, false);
+		left=this.children.get(0).typeCheck(vars, funcs, false);
 
 		
 		if(left.getType()!=Type.TUPLE){

@@ -16,8 +16,8 @@ public class FunctionCallAsStmt extends FunctionCallNode {
 		this.children=f.children;
 	}
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
-		Type t = super.typeCheck(vars, funcs);
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+		Type t = super.typeCheck(vars, funcs, insideWhile);
 		if(t.getType()!=Type.TUPLE||t.getTuple().size()!=0){
 			throw new XiException(this.getFirstSymbol(),"Function return values must be explicitly discarded using _", "Semantic");
 		}

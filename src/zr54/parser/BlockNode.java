@@ -40,10 +40,10 @@ public class BlockNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
-		this.children.get(0).typeCheck(tempScope, funcs);
+		this.children.get(0).typeCheck(tempScope, funcs, false);
 		vars.returned = tempScope.returned;
 		type = new Type();
 

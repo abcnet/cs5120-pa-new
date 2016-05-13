@@ -25,7 +25,7 @@ public class ClassFieldAccessNode extends ExprNode {
 	}
 	
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile)
 			throws XiException {
 		// TODO Auto-generated method stub
 		// not finished!

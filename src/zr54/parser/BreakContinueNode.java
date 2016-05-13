@@ -16,17 +16,12 @@ public class BreakContinueNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
-		// not finished
-		if(this.name.equals("break")){
-			
-		}else if (this.name.equals("continue")){
-			
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+		if(insideWhile){
+			return new Type();
 		}else{
-			
+			throw new XiException(symbol, this.name + " outside while loop", "Semantic");
 		}
-		type = new Type();
-		return type;
 	}
 	
 	/**

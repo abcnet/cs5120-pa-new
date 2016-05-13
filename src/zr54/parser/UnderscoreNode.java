@@ -22,7 +22,7 @@ public class UnderscoreNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 		type = new Type(Type.UNIT, 0);  
 		return type;
 	}

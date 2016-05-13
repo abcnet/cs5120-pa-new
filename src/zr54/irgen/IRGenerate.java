@@ -108,7 +108,7 @@ public class IRGenerate {
 					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile);
 					TypeCheck.registerAllClasses(classes, root, srcFile);
-					root.typeCheck(vars, funcs);
+					root.typeCheck(vars, funcs, false);
 					
 					
 					int slash = srcFile.lastIndexOf('/');

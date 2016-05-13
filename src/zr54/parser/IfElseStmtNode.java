@@ -28,19 +28,19 @@ public class IfElseStmtNode extends StmtNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
 
 		if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
 			throw new XiException(this.children.get(0).symbol.left, 
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
-		this.children.get(1).typeCheck(tempScope, funcs);
+		this.children.get(1).typeCheck(tempScope, funcs, false);
 		ArrayList<Type> returned1 = tempScope.returned;
-		this.children.get(2).typeCheck(tempScope, funcs);
+		this.children.get(2).typeCheck(tempScope, funcs, false);
 		ArrayList<Type> returned2 = tempScope.returned;
 		if(returned1.size()!=returned2.size()){
 			throw new XiException(this.children.get(2).symbol,"Mismatched return types", "Semantic");

@@ -21,7 +21,7 @@ public class DeclarationNode extends AstNode {
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException {
 
 		if(symbol != null) {
 			if(vars.lookup((String) symbol.value) != null) {
@@ -30,7 +30,7 @@ public class DeclarationNode extends AstNode {
 				throw new XiException(this.symbol.left,this.symbol.right,"Cannot declare funciton name as variable " + (String)symbol.value, "Semantic");
 			}
 			else {
-				type = children.get(0).typeCheck(vars, funcs);
+				type = children.get(0).typeCheck(vars, funcs, false);
 				vars.add((String) symbol.value, type);
 			}
 		}

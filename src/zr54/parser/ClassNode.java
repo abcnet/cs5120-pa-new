@@ -24,7 +24,7 @@ public class ClassNode extends AstNode{
 	}
 	
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile)
 			throws XiException {
 		// TODO Auto-generated method stub
 		// not finished!
@@ -69,11 +69,11 @@ public class ClassNode extends AstNode{
 		for(AstNode field : fields) {
 			if(field instanceof DeclarationNode) {
 				TypeNode t = (TypeNode) field.children.get(0);
-				classSig.addField((String) field.symbol.value, t.typeCheck(new VarSymbolTable(), new FuncSymbolTable()));
+				classSig.addField((String) field.symbol.value, t.typeCheck(new VarSymbolTable(), new FuncSymbolTable(), false));
 			}
 			else if(field instanceof MultiDeclarationNode) {
 				AstNode vars = field.children.get(0);
-				Type t = field.children.get(1).typeCheck(new VarSymbolTable(), new FuncSymbolTable()); 
+				Type t = field.children.get(1).typeCheck(new VarSymbolTable(), new FuncSymbolTable(), false); 
 				for(AstNode var : vars.children) {
 					classSig.addField((String)var.symbol.value, t);					
 				}

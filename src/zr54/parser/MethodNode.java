@@ -33,12 +33,12 @@ public class MethodNode extends AstNode{
 	/*
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs) throws XiException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException {
 
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
 		for(AstNode n : children) {
-			n.typeCheck(newVars, funcs);
+			n.typeCheck(newVars, funcs, false);
 		}		
 		int m=newVars.toReturn.size();
 
@@ -87,9 +87,9 @@ public class MethodNode extends AstNode{
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, funcs));
+			argTypes.add(arg.typeCheck(newVars, funcs, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, funcs));
+			retTypes.add(ret.typeCheck(newVars, funcs, false));
 				
 		if(funcSig != null) {
 			if(isInterface) {
