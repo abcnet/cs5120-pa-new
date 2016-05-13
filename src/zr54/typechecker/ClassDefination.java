@@ -1,7 +1,7 @@
 package zr54.typechecker;
 import java.util.*;
 
-import sun.reflect.generics.scope.MethodScope;
+
 public class ClassDefination {
 	private String name = "";
 	private FuncSymbolTable methods = new FuncSymbolTable();
