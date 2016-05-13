@@ -203,6 +203,7 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
+                      | classDef {: RESULT =  xxx :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
@@ -296,7 +297,7 @@ functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT 
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
 //TODO: not complete					
-                      | uses:us classDefs:cs methods:ms	{: RESULT = new DefaultNode("program", null, us, cs); RESULT.addChild(ms); :}
+                      
                       | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
                       | error:e               {:  :}
                       ;
