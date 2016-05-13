@@ -36,6 +36,7 @@ createPoint(x: int, y:int): Point {
 }
 
 main(args:int[][]) {
-	println("class")
+	p: Point = createPoint(1, 2)
+	println(unparseInt(p.x))
 }
 

@@ -7,10 +7,19 @@ import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
 
 public class ClassMethodCallNode extends ExprNode {
+	//v is method name, first child is the object, second child is a node whose children are arguments 
+	//if there is only one child, it means that the method has no argument except for "this"
 
-	public ClassMethodCallNode(String t, Symbol v) {
+	public ClassMethodCallNode(String t, Symbol v, AstNode c) {
 		super(t, v);
-		// TODO Auto-generated constructor stub
+		addChild(c);
+	}
+	
+	
+	public ClassMethodCallNode(String t, Symbol v, AstNode c1, AstNode c2) {
+		super(t, v);
+		addChild(c1);
+		addChild(c2);
 	}
 
 	@Override

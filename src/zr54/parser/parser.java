@@ -2299,7 +2299,7 @@ class CUP$parser$actions {
                 int eleft = CUP$parser$stack.peek().left;
                 int eright = CUP$parser$stack.peek().right;
                 AstNode e = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new xxx(xxx, eq, a, e); 
+                 RESULT = new AssignStmtNode("assignment", eq, a, e); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",30, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3165,7 +3165,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, fc, es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3186,7 +3186,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, v, es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3207,7 +3207,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, fa, es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3228,7 +3228,7 @@ class CUP$parser$actions {
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, no, es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3237,10 +3237,16 @@ class CUP$parser$actions {
         case 145: // functionCall ::= THIS DOT IDENTIFIER LPAREN expressions RPAREN 
             {
                 AstNode RESULT = null;
+                int tleft = CUP$parser$stack.elementAt(CUP$parser$top-5).left;
+                int tright = CUP$parser$stack.elementAt(CUP$parser$top-5).right;
+                Symbol t = CUP$parser$stack.elementAt(CUP$parser$top-5).<Symbol> value();
+                int fleft = CUP$parser$stack.elementAt(CUP$parser$top-3).left;
+                int fright = CUP$parser$stack.elementAt(CUP$parser$top-3).right;
+                Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-3).<Symbol> value();
                 int esleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int esright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode es = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, new ThisNode("this", t), es); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-5), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3258,7 +3264,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, fc); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3276,7 +3282,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, v); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3294,7 +3300,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, fa); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3312,7 +3318,7 @@ class CUP$parser$actions {
                 int fleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int fright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
-                xxx 
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, no); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -3321,7 +3327,13 @@ class CUP$parser$actions {
         case 150: // functionCall ::= THIS DOT IDENTIFIER LPAREN RPAREN 
             {
                 AstNode RESULT = null;
-                xxx 
+                int tleft = CUP$parser$stack.elementAt(CUP$parser$top-4).left;
+                int tright = CUP$parser$stack.elementAt(CUP$parser$top-4).right;
+                Symbol t = CUP$parser$stack.elementAt(CUP$parser$top-4).<Symbol> value();
+                int fleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
+                int fright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
+                Symbol f = CUP$parser$stack.elementAt(CUP$parser$top-2).<Symbol> value();
+                 RESULT = new ClassMethodCallNode("classMethodCall", f, new ThisNode("this", t)); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("functionCall",40, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
