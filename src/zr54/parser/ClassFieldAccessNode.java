@@ -28,7 +28,8 @@ public class ClassFieldAccessNode extends ExprNode {
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
 			throws XiException {
 		// TODO Auto-generated method stub
-		return null;
+		// not finished!
+		return new Type();
 	}
 
 	@Override
