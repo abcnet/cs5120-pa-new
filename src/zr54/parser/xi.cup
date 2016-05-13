@@ -51,7 +51,7 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
          CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT;
 
-nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty, multipleArgumentsWithSingleTypeNonEmpty,
+nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty, multipleArgumentsWithSingleTypeNonEmpty, twoOrMoreIdentifies,
             argumentsWithType, optionalArgumentsWithType, functionReturnType,
             statements, optionalStatements, statement, typesList, assignment,
             ifStatement, whileStatement, nonEmptyBracket, nonEmptyBrackets,
@@ -107,10 +107,10 @@ fieldAccess         ::= IDENTIFIER:o DOT:d IDENTIFIER:f {: RESULT = new ClassFie
                       | varArrayIndices:v  DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, v, new ClassFieldNode("field", f)); :}
                       | fieldAccess DOT IDENTIFIER {: RESULT = xxx; :}
                       | newObject DOT IDENTIFIER {: RESULT = xxx; :}
+                      | THIS DOT IDENTIFIER {: RESULT = xxx; :}
                       ;
 
-newObject           ::= NEW IDENTIFIER DOT IDENTIFIER	LPAREN expressions:es RPAREN	 {: RESULT = xxx; :}
-                      | NEW IDENTIFIER DOT IDENTIFIER LPAREN RPAREN   		  {: RESULT = xxx; :}
+newObject           ::= NEW IDENTIFIER
                       ;
 //the above are new for oXi
 
@@ -159,7 +159,11 @@ argumentWithTypeNonEmpty::=IDENTIFIER:id COLON typeNonEmpty:t  {: RESULT = new D
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
-
+multipleArgumentsWithSingleTypeNonEmpty::= twoOrMoreIdentifies COLON typeNonEmpty:t {: RESULT = xxx; :}
+;
+twoOrMoreIdentifies ::= IDENTIFIER COMMA IDENTIFIER {: RESULT = xxx; :}
+                      | twoOrMoreIdentifies COMMA IDENTIFIER {: RESULT = xxx; :}
+                      ;
 argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); :}
                       | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
                       | CHARACTER_LITERAL:cl    {: RESULT = new LiteralExpr("CHARACTER_LITERAL", new Symbol(cl.sym, cl.left, cl.right, cl.value), Type.INT, 0); :}
@@ -171,6 +175,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | varArrayIndices:v  {: RESULT = v; :}
                       | fieldAccess {: RESULT = xxx; :}
                       | newObject {: RESULT = xxx; :}
+                      | THIS {: RESULT = xxx; :}
                       ;
 
 arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); :}
