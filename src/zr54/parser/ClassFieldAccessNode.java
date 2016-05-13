@@ -8,9 +8,10 @@ import zr54.typechecker.VarSymbolTable;
 
 public class ClassFieldAccessNode extends ExprNode {
 
-	public ClassFieldAccessNode(String t, Symbol v) {
+	public ClassFieldAccessNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v);
-
+		addChild(c1);
+		addChild(c2);
 	}
 
 	/**

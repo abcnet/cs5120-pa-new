@@ -101,13 +101,10 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
 classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
 					  ;
 
-fieldAccess         ::= IDENTIFIER DOT IDENTIFIER {: RESULT = xxx; :}
-                     
-                    
-                      | functionCall:fc         DOT IDENTIFIER {: RESULT = xxx; :}
-                      
+fieldAccess         ::= IDENTIFIER:o DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, new VariableNode("object", o), new ClassFieldNode("field", f)); :}
+                      | functionCall:fc         DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, fc, new ClassFieldNode("field", f)); :}
                       //| arrayIndices:ai         DOT IDENTIFIER {: RESULT = xxx; :}
-                      | varArrayIndices:v  DOT IDENTIFIER {: RESULT = xxx; :}
+                      | varArrayIndices:v  DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, v, new ClassFieldNode("field", f)); :}
                       | fieldAccess DOT IDENTIFIER {: RESULT = xxx; :}
                       | newObject DOT IDENTIFIER {: RESULT = xxx; :}
                       ;
