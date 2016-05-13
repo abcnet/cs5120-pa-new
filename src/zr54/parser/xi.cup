@@ -83,7 +83,8 @@ classDefs           ::= classDefs:cs classDef:c {: RESULT = new DefaultNode("cla
 
 classDef			::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsMethods:fm RBRACE:rb 
 						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
-            | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER LBRACE:lb classFieldsMethods:fm RBRACE:rb {: RESULT = xxx; :}
+           			  | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb classFieldsMethods:fm RBRACE:rb
+           			    {: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
 					  ;
 					  
 classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
@@ -108,7 +109,7 @@ fieldAccess         ::= IDENTIFIER:o DOT:d IDENTIFIER:f {: RESULT = new ClassFie
                       | varArrayIndices:v  DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, v, new ClassFieldNode("field", f)); :}
                       | fieldAccess:fa DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, fa, new ClassFieldNode("field", f)); :}
                       | newObject:no DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, no, new ClassFieldNode("field", f)); :}
-                      | THIS DOT IDENTIFIER {: RESULT = xxx; :}
+                      | THIS:t DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, new ThisNode("this", t), new ClassFieldNode("field", f)); :}
                       ;
 newObject           ::= NEW:n IDENTIFIER:id 	 {: RESULT = new NewObjectNode("newObject", n, new ClassNameNode("className", id)); :}
 
@@ -160,10 +161,10 @@ argumentWithTypeNonEmpty::=IDENTIFIER:id COLON typeNonEmpty:t  {: RESULT = new D
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
-multipleArgumentsWithSingleTypeNonEmpty::= twoOrMoreIdentifies COLON typeNonEmpty:t {: RESULT = xxx; :}
+multipleArgumentsWithSingleTypeNonEmpty::= twoOrMoreIdentifies:ids COLON typeNonEmpty:t {: RESULT = new MultiDeclarationNode("multiDeclaration", null, ids, t); :}
 ;
-twoOrMoreIdentifies ::= IDENTIFIER COMMA IDENTIFIER {: RESULT = xxx; :}
-                      | twoOrMoreIdentifies COMMA IDENTIFIER {: RESULT = xxx; :}
+twoOrMoreIdentifies ::= IDENTIFIER:id1 COMMA IDENTIFIER:id2 {: RESULT = new DefaultNode("identifiers", null, new VariableNode("variable", id1), new VariableNode("variable", id2)); :}
+                      | twoOrMoreIdentifies:ids COMMA IDENTIFIER:id {: RESULT = ids; ids.addChild(new VariableNode("variable", id)); :}
                       ;
 argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOOLEAN_LITERAL", new Symbol(bl.sym, bl.left, bl.right, bl.value), Type.BOOL, 0); :}
                       | INTEGER_LITERAL:il      {: RESULT = new LiteralExpr("INTEGER_LITERAL", new Symbol(il.sym, il.left, il.right, il.value), Type.INT, 0); :}
@@ -176,7 +177,7 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | varArrayIndices:v  {: RESULT = v; :}
                       | fieldAccess:fa {: RESULT = fa; :}
                       | newObject:no {: RESULT = no; :}
-                      | THIS {: RESULT = xxx; :}
+                      | THIS:t {: RESULT = new ThisNode("this", t); :}
                       ;
 
 arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); :}
@@ -227,8 +228,8 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | whileStatement:s                         {: RESULT = s; :}
                       | argumentWithTypeNonEmpty:a optionalSemicolon     {: RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
-                      | BREAK  {: RESULT = xxx; :}
-                      | CONTINUE  {: RESULT = xxx; :}
+                      | BREAK: b  {: RESULT = new BreakContinueNode("break", b); :}
+                      | CONTINUE:c  {: RESULT = new BreakContinueNode("continue", c); :}
                       ;
 
 optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new ReturnNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}

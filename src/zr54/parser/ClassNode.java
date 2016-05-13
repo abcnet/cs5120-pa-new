@@ -12,6 +12,7 @@ public class ClassNode extends AstNode{
 	
 	ArrayList<ClassMethodNode> methods = new ArrayList<ClassMethodNode>();
 	ArrayList<ClassFieldNode> fields = new ArrayList<ClassFieldNode>();
+	ClassNameNode superClass = null;
 	
 	public ClassNode(String t, Symbol v) {
 		super(t, v);
@@ -43,6 +44,9 @@ public class ClassNode extends AstNode{
 			}
 			else if(child instanceof ClassFieldNode) {
 				fields.add((ClassFieldNode)child);
+			}
+			else if(child instanceof ClassNameNode) {
+				superClass = (ClassNameNode) child;
 			}
 		}
 	}
