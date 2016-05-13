@@ -83,6 +83,7 @@ classDefs           ::= classDefs:cs classDef:c {: RESULT = new DefaultNode("cla
 
 classDef			::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsMethods:fm RBRACE:rb 
 						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
+            | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER LBRACE:lb classFieldsMethods:fm RBRACE:rb {: RESULT = xxx; :}
 					  ;
 					  
 classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
@@ -226,6 +227,8 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | whileStatement:s                         {: RESULT = s; :}
                       | argumentWithTypeNonEmpty:a optionalSemicolon     {: RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
+                      | BREAK  {: RESULT = xxx; :}
+                      | CONTINUE  {: RESULT = xxx; :}
                       ;
 
 optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new ReturnNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
