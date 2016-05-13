@@ -101,12 +101,12 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
 classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
 					  ;
 
-fieldAccess         ::= IDENTIFIER DOT IDENTIFIER
-                      | fieldAccess DOT IDENTIFIER
+fieldAccess         ::= IDENTIFIER DOT IDENTIFIER {: RESULT = xxx; :}
+                      | fieldAccess DOT IDENTIFIER {: RESULT = xxx; :}
                       ;
 
-newObject           ::= NEW IDENTIFIER DOT IDENTIFIER	LPAREN expressions:es RPAREN	
-                      | NEW IDENTIFIER DOT IDENTIFIER LPAREN RPAREN   		  
+newObject           ::= NEW IDENTIFIER DOT IDENTIFIER	LPAREN expressions:es RPAREN	 {: RESULT = xxx; :}
+                      | NEW IDENTIFIER DOT IDENTIFIER LPAREN RPAREN   		  {: RESULT = xxx; :}
                       ;
 //the above are new for oXi
 
@@ -178,6 +178,7 @@ arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT
 varArrayIndices     ::= IDENTIFIER:id LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new VariableNode("IDENTIFIER", id), a); :}
                       | functionCall:fc  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fc, a); :}
                       | varArrayIndices:v LBRACK:lb expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), v, a); :}
+                      | fieldAccess LBRACK:lb expression:a RBRACK {: RESULT = xxx; :}
                       ;
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
@@ -245,6 +246,7 @@ variable            ::= UNDERSCORE:us                     {: RESULT = new Unders
                       | IDENTIFIER:id                     {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a                {: RESULT = a; :}
                       | varArrayIndices:a                 {: RESULT = a; :}
+                      | fieldAccess {: RESULT = xxx; :}
                       ;
 newVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                      
