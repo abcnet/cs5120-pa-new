@@ -252,10 +252,10 @@ optionalSemicolon   ::= SEMICOLON
                       ;
 
 ifStatement         ::= IF:i LPAREN expression:e RPAREN statement:s1 ELSE statement:s2  {: RESULT = new IfElseStmtNode("ifStatement", i, e, s1, s2); :}
-                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new IfWhileStmtNode("ifStatement", i, e, s); :}
+                      | IF:i LPAREN expression:e RPAREN statement:s                     {: RESULT = new IfStmtNode("ifStatement", i, e, s); :}
                       ;
 
-whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new IfWhileStmtNode("whileStatement", w, e, s); :}
+whileStatement      ::= WHILE:w LPAREN expression:e RPAREN statement:s  {: RESULT = new WhileStmtNode("whileStatement", w, e, s); :}
                       ;
 
 assignment          ::= newVariables:vs COMMA newVariable:v EQ:eq expression:e   {: DefaultNode node = new MultiVariableNode("variables", null);

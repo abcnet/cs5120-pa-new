@@ -2630,7 +2630,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new IfWhileStmtNode("ifStatement", i, e, s); 
+                 RESULT = new IfStmtNode("ifStatement", i, e, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("ifStatement",19, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2648,7 +2648,7 @@ class CUP$parser$actions {
                 int sleft = CUP$parser$stack.peek().left;
                 int sright = CUP$parser$stack.peek().right;
                 AstNode s = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new IfWhileStmtNode("whileStatement", w, e, s); 
+                 RESULT = new WhileStmtNode("whileStatement", w, e, s); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("whileStatement",20, CUP$parser$stack.elementAt(CUP$parser$top-4), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
