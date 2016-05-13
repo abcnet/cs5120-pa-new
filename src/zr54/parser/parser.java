@@ -40,7 +40,7 @@ public class parser
     "\000\242\000\002\002\004\000\002\054\004\000\002\054" +
     "\003\000\002\053\007\000\002\053\011\000\002\057\004" +
     "\000\002\057\004\000\002\057\003\000\002\057\003\000" +
-    "\002\057\003\000\002\056\013\000\002\055\005\000\002" +
+    "\002\056\013\000\002\055\005\000\002\055\003\000\002" +
     "\061\005\000\002\061\005\000\002\061\005\000\002\061" +
     "\005\000\002\061\005\000\002\061\005\000\002\060\004" +
     "\000\002\003\005\000\002\005\004\000\002\005\004\000" +
@@ -96,11 +96,11 @@ public class parser
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\u0125\000\012\003\013\004\021\051\006\054\012\001" +
+    "\000\u0124\000\012\003\013\004\021\051\006\054\012\001" +
     "\002\000\010\002\uffb0\004\uffb0\054\uffb0\001\002\000\010" +
-    "\002\uff61\004\uff61\054\uff61\001\002\000\004\004\u0126\001" +
+    "\002\uff61\004\uff61\054\uff61\001\002\000\004\004\u0125\001" +
     "\002\000\010\002\uff66\004\021\054\012\001\002\000\010" +
-    "\002\uffb1\004\uffb1\054\uffb1\001\002\000\004\002\u0125\001" +
+    "\002\uffb1\004\uffb1\054\uffb1\001\002\000\004\002\u0124\001" +
     "\002\000\004\004\u010b\001\002\000\004\002\uff65\001\002" +
     "\000\004\022\u0109\001\002\000\006\020\377\021\u0100\001" +
     "\002\000\010\004\uff63\051\uff63\054\uff63\001\002\000\010" +
@@ -803,25 +803,24 @@ public class parser
     "\026\111\027\116\030\107\031\112\032\101\033\102\035" +
     "\114\036\115\037\113\040\106\041\104\050\110\054\uffae" +
     "\001\002\000\006\013\u010d\057\u010c\001\002\000\004\004" +
-    "\u0121\001\002\000\004\004\u0111\001\002\000\006\004\u011f" +
+    "\u0120\001\002\000\004\004\u0111\001\002\000\006\004\u0111" +
     "\014\u011e\001\002\000\006\004\ufffa\014\ufffa\001\002\000" +
-    "\006\004\ufff8\014\ufff8\001\002\000\010\011\u0113\020\022" +
+    "\006\004\ufff6\014\ufff6\001\002\000\010\011\u0113\020\022" +
     "\021\u0114\001\002\000\006\004\ufff9\014\ufff9\001\002\000" +
     "\006\004\257\012\uffaa\001\002\000\010\004\265\042\266" +
-    "\043\264\001\002\000\006\004\ufff6\014\ufff6\001\002\000" +
+    "\043\264\001\002\000\006\004\ufff7\014\ufff7\001\002\000" +
     "\004\012\u0117\001\002\000\006\013\uffb5\021\273\001\002" +
     "\000\004\013\u0119\001\002\000\032\004\313\013\326\014" +
     "\uffac\034\314\045\325\046\055\047\uffac\052\277\055\324" +
     "\056\044\060\307\061\317\001\002\000\006\014\uff9c\047" +
-    "\330\001\002\000\004\014\u011c\001\002\000\006\004\ufff7" +
-    "\014\ufff7\001\002\000\006\004\ufffc\014\ufffc\001\002\000" +
-    "\010\002\ufffe\004\ufffe\054\ufffe\001\002\000\006\011\u0113" +
-    "\021\u0114\001\002\000\006\004\ufffb\014\ufffb\001\002\000" +
-    "\004\013\u0122\001\002\000\004\004\u0111\001\002\000\006" +
-    "\004\u011f\014\u0124\001\002\000\010\002\ufffd\004\ufffd\054" +
-    "\ufffd\001\002\000\004\002\001\001\002\000\012\004\uff9a" +
-    "\017\333\051\uff9a\054\uff9a\001\002\000\010\004\uffee\051" +
-    "\uffee\054\uffee\001\002" });
+    "\330\001\002\000\004\014\u011c\001\002\000\006\004\ufff8" +
+    "\014\ufff8\001\002\000\006\004\ufffc\014\ufffc\001\002\000" +
+    "\010\002\ufffe\004\ufffe\054\ufffe\001\002\000\006\004\ufffb" +
+    "\014\ufffb\001\002\000\004\013\u0121\001\002\000\004\004" +
+    "\u0111\001\002\000\006\004\u0111\014\u0123\001\002\000\010" +
+    "\002\ufffd\004\ufffd\054\ufffd\001\002\000\004\002\001\001" +
+    "\002\000\012\004\uff9a\017\333\051\uff9a\054\uff9a\001\002" +
+    "\000\010\004\uffee\051\uffee\054\uffee\001\002" });
 
   /** Access to parse-action table. */
   @Override
@@ -830,7 +829,7 @@ public class parser
   /** {@code reduce_goto} table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\u0125\000\026\002\010\003\015\004\017\011\013\012" +
+    "\000\u0124\000\026\002\010\003\015\004\017\011\013\012" +
     "\003\013\016\014\014\037\006\040\004\053\007\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
     "\016\011\013\012\003\013\016\014\014\040\375\053\007" +
@@ -1003,20 +1002,21 @@ public class parser
     "\045\050\046\u0109\047\044\050\056\051\046\052\064\060" +
     "\063\061\053\001\001\000\002\001\001\000\002\001\001" +
     "\000\002\001\001\000\014\013\u010f\014\014\055\u0111\056" +
-    "\u010e\057\u010d\001\001\000\006\055\u011f\056\u011c\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\010\011\255\015\257\016\u0115\001\001" +
-    "\000\006\005\024\007\u0114\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\017\u0117\001\001\000\002\001\001" +
-    "\000\046\011\320\012\275\013\307\014\014\020\301\021" +
-    "\u0119\022\310\024\314\025\315\026\317\033\302\034\322" +
-    "\035\304\043\311\051\277\052\321\060\305\061\300\001" +
-    "\001\000\004\044\u011a\001\001\000\002\001\001\000\002" +
+    "\u010e\057\u010d\001\001\000\012\013\u010f\014\014\055\u011e" +
+    "\056\u011c\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\010\011\255\015\257" +
+    "\016\u0115\001\001\000\006\005\024\007\u0114\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\017\u0117\001\001" +
+    "\000\002\001\001\000\046\011\320\012\275\013\307\014" +
+    "\014\020\301\021\u0119\022\310\024\314\025\315\026\317" +
+    "\033\302\034\322\035\304\043\311\051\277\052\321\060" +
+    "\305\061\300\001\001\000\004\044\u011a\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
     "\001\000\002\001\001\000\002\001\001\000\014\013\u010f" +
-    "\014\014\055\u0111\056\u010e\057\u0122\001\001\000\006\055" +
-    "\u011f\056\u011c\001\001\000\002\001\001\000\002\001\001" +
-    "\000\004\042\u0126\001\001\000\002\001\001" });
+    "\014\014\055\u0111\056\u010e\057\u0121\001\001\000\012\013" +
+    "\u010f\014\014\055\u011e\056\u011c\001\001\000\002\001\001" +
+    "\000\002\001\001\000\004\042\u0125\001\001\000\002\001" +
+    "\001" });
 
   /** Access to {@code reduce_goto} table. */
   @Override
@@ -1265,19 +1265,7 @@ class CUP$parser$actions {
             return CUP$parser$result;
 
         /*. . . . . . . . . . . . . . . . . . . .*/
-        case 9: // classFieldsMethods ::= multipleArgumentsWithSingleTypeNonEmpty 
-            {
-                AstNode RESULT = null;
-                int mleft = CUP$parser$stack.peek().left;
-                int mright = CUP$parser$stack.peek().right;
-                AstNode m = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = m; 
-                CUP$parser$result = parser.getSymbolFactory().newSymbol("classFieldsMethods",45, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
-            }
-            return CUP$parser$result;
-
-        /*. . . . . . . . . . . . . . . . . . . .*/
-        case 10: // classMethod ::= IDENTIFIER LPAREN optionalArgumentsWithType RPAREN functionReturnType LBRACE optionalStatements optionalReturn RBRACE 
+        case 9: // classMethod ::= IDENTIFIER LPAREN optionalArgumentsWithType RPAREN functionReturnType LBRACE optionalStatements optionalReturn RBRACE 
             {
                 AstNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-8).left;
@@ -1307,7 +1295,7 @@ class CUP$parser$actions {
             return CUP$parser$result;
 
         /*. . . . . . . . . . . . . . . . . . . .*/
-        case 11: // classField ::= IDENTIFIER COLON type 
+        case 10: // classField ::= IDENTIFIER COLON type 
             {
                 AstNode RESULT = null;
                 int idleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
@@ -1318,6 +1306,18 @@ class CUP$parser$actions {
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
                  RESULT = new DeclarationNode("argumentWithType", id, t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("classField",43, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
+            }
+            return CUP$parser$result;
+
+        /*. . . . . . . . . . . . . . . . . . . .*/
+        case 11: // classField ::= multipleArgumentsWithSingleTypeNonEmpty 
+            {
+                AstNode RESULT = null;
+                int mleft = CUP$parser$stack.peek().left;
+                int mright = CUP$parser$stack.peek().right;
+                AstNode m = CUP$parser$stack.peek().<AstNode> value();
+                 RESULT = m; 
+                CUP$parser$result = parser.getSymbolFactory().newSymbol("classField",43, CUP$parser$stack.peek(), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
 
@@ -1892,10 +1892,13 @@ class CUP$parser$actions {
                 int idsleft = CUP$parser$stack.elementAt(CUP$parser$top-2).left;
                 int idsright = CUP$parser$stack.elementAt(CUP$parser$top-2).right;
                 AstNode ids = CUP$parser$stack.elementAt(CUP$parser$top-2).<AstNode> value();
+                int cleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
+                int cright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
+                Symbol c = CUP$parser$stack.elementAt(CUP$parser$top-1).<Symbol> value();
                 int tleft = CUP$parser$stack.peek().left;
                 int tright = CUP$parser$stack.peek().right;
                 AstNode t = CUP$parser$stack.peek().<AstNode> value();
-                 RESULT = new MultiDeclarationNode("multiDeclaration", null, ids, t); 
+                 RESULT = new MultiDeclarationNode("multiDeclaration", c, ids, t); 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("multipleArgumentsWithSingleTypeNonEmpty",9, CUP$parser$stack.elementAt(CUP$parser$top-2), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

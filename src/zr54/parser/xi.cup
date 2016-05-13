@@ -91,7 +91,6 @@ classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new De
 						  | classFieldsMethods:fm classField:f {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(f); :}
 						  |	classMethod:m	{: RESULT = new DefaultNode("classFieldsMethods", null, m); :}
 						  | classField:f	{: RESULT = new DefaultNode("classFieldsMethods", null, f); :}
-              | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
 						  ; 
 
 classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
@@ -102,6 +101,7 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                       ;
 
 classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
+		              | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
 					  ;
 
 fieldAccess         ::= IDENTIFIER:o DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, new VariableNode("object", o), new ClassFieldNode("field", f)); :}
@@ -166,7 +166,7 @@ argumentWithTypeNonEmpty::=IDENTIFIER:id COLON typeNonEmpty:t  {: RESULT = new D
 argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT = new DefaultNode("argumentsWithType", null); RESULT.addGrandChildren(as); RESULT.addChild(a); :}
                       | argumentWithType:a                            {: RESULT = new DefaultNode("argumentsWithType", null, a); :}
                       ;
-multipleArgumentsWithSingleTypeNonEmpty::= twoOrMoreIdentifies:ids COLON typeNonEmpty:t {: RESULT = new MultiDeclarationNode("multiDeclaration", null, ids, t); :}
+multipleArgumentsWithSingleTypeNonEmpty::= twoOrMoreIdentifies:ids COLON:c typeNonEmpty:t {: RESULT = new MultiDeclarationNode("multiDeclaration", c, ids, t); :}
 ;
 twoOrMoreIdentifies ::= IDENTIFIER:id1 COMMA IDENTIFIER:id2 {: RESULT = new DefaultNode("identifiers", null, new VariableNode("variable", id1), new VariableNode("variable", id2)); :}
                       | twoOrMoreIdentifies:ids COMMA IDENTIFIER:id {: RESULT = ids; ids.addChild(new VariableNode("variable", id)); :}
