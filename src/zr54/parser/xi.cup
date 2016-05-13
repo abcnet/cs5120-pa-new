@@ -165,6 +165,8 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | arrayLiteral:al         {: RESULT = al; :}
                       | arrayIndices:ai         {: RESULT = ai; :}
                       | varArrayIndices:v  {: RESULT = v; :}
+                      | fieldAccess {: RESULT = xxx; :}
+                      | newObject {: RESULT = xxx; :}
                       ;
 
 arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), ai, a); :}
