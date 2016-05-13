@@ -213,6 +213,7 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                       | classDef:cd {: RESULT =  cd; :}
                       | argumentWithTypeNonEmpty  {: RESULT = xxx; :}
                       | multipleArgumentsWithSingleTypeNonEmpty  {: RESULT = xxx; :}
+                      | argumentWithType:a EQ:eq expression:e {: RESULT = new xxx(xxx, eq, a, e); :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
@@ -304,6 +305,21 @@ expressions         ::= expression:e                             {: RESULT = new
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
                       | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("forceParen", id);:}
                       | LENGTH:l LPAREN expression:e RPAREN            {: RESULT = new LengthNode("length", l, e); :}
+                      
+                      | functionCall:fc         DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {:xxx :}
+                      //| arrayIndices:ai         DOT IDENTIFIER  LPAREN expressions:es RPAREN {:xxx :}
+                      | varArrayIndices:v  DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {:xxx :}
+                      | fieldAccess:fa DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {:xxx :}
+                      | newObject:no DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {:xxx :}
+                      | THIS DOT IDENTIFIER  LPAREN expressions:es RPAREN {:xxx :}
+                      
+                      | functionCall:fc         DOT:d IDENTIFIER:f  LPAREN RPAREN    {:xxx :}
+                      //| arrayIndices:ai         DOT IDENTIFIER  LPAREN RPAREN    {:xxx :}
+                      | varArrayIndices:v  DOT:d IDENTIFIER:f  LPAREN RPAREN    {:xxx :}
+                      | fieldAccess:fa DOT:d IDENTIFIER:f  LPAREN RPAREN    {:xxx :}
+                      | newObject:no DOT:d IDENTIFIER:f  LPAREN RPAREN    {:xxx :}
+                      | THIS DOT IDENTIFIER  LPAREN RPAREN    {:xxx :}
+                      
                       ;
 
 program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
