@@ -247,6 +247,7 @@ variable            ::= UNDERSCORE:us                     {: RESULT = new Unders
                       | argumentWithType:a                {: RESULT = a; :}
                       | varArrayIndices:a                 {: RESULT = a; :}
                       | fieldAccess {: RESULT = xxx; :}
+                      | newObject {: RESULT = xxx; :}
                       ;
 newVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                      
