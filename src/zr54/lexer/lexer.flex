@@ -193,6 +193,7 @@ HexDigit              = [0-9a-fA-F]
   "extends"						 { return symbol(sym.EXTENDS, "extends"); }
   "break"						 { return symbol(sym.BREAK, "break"); }
   "continue"					 { return symbol(sym.CONTINUE, "continue"); }
+  "null"           { return symbol(sym.NULL, "continue"); }
   
   
   

@@ -49,7 +49,7 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK, SEMICOLON, COMMA, COLON, EQ,
          GT, LT, NOT, MULT, PLUS, MINUS, AND, OR, MOD, IF, EQEQ, GTEQ, LTEQ, NOTEQ,
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
-         CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT;
+         CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT, NULL;
 
 nonterminal AstNode program, singleUse, uses, arrayType, arrayTypeNonEmpty, type, typeNonEmpty,  argumentWithType, argumentWithTypeNonEmpty, multipleArgumentsWithSingleTypeNonEmpty, twoOrMoreIdentifies,
             argumentsWithType, optionalArgumentsWithType, functionReturnType,
