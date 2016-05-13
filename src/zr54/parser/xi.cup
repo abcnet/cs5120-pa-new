@@ -102,7 +102,14 @@ classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("arg
 					  ;
 
 fieldAccess         ::= IDENTIFIER DOT IDENTIFIER {: RESULT = xxx; :}
+                     
+                    
+                      | functionCall:fc         DOT IDENTIFIER {: RESULT = xxx; :}
+                      
+                      //| arrayIndices:ai         DOT IDENTIFIER {: RESULT = xxx; :}
+                      | varArrayIndices:v  DOT IDENTIFIER {: RESULT = xxx; :}
                       | fieldAccess DOT IDENTIFIER {: RESULT = xxx; :}
+                      | newObject DOT IDENTIFIER {: RESULT = xxx; :}
                       ;
 
 newObject           ::= NEW IDENTIFIER DOT IDENTIFIER	LPAREN expressions:es RPAREN	 {: RESULT = xxx; :}
