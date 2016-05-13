@@ -6,13 +6,12 @@ import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
 
-public class NewObjectNode extends ExprNode {
+public class ClassNameNode extends AstNode {
 
-	public NewObjectNode(String t, Symbol v, AstNode c) {
+	public ClassNameNode(String t, Symbol v) {
 		super(t, v);
-		addChild(c);
 	}
-
+	
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs)
 			throws XiException {
@@ -21,9 +20,15 @@ public class NewObjectNode extends ExprNode {
 	}
 
 	@Override
+	public void generateIR(FuncSymbolTable funcs) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
 	public boolean isConst() {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

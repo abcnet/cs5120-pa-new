@@ -105,12 +105,12 @@ fieldAccess         ::= IDENTIFIER:o DOT:d IDENTIFIER:f {: RESULT = new ClassFie
                       | functionCall:fc         DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, fc, new ClassFieldNode("field", f)); :}
                       //| arrayIndices:ai         DOT IDENTIFIER {: RESULT = xxx; :}
                       | varArrayIndices:v  DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, v, new ClassFieldNode("field", f)); :}
-                      | fieldAccess DOT IDENTIFIER {: RESULT = xxx; :}
-                      | newObject DOT IDENTIFIER {: RESULT = xxx; :}
+                      | fieldAccess:fa DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, fa, new ClassFieldNode("field", f)); :}
+                      | newObject:no DOT:d IDENTIFIER:f {: RESULT = new ClassFieldAccessNode("fieldAccess", d, no, new ClassFieldNode("field", f)); :}
                       | THIS DOT IDENTIFIER {: RESULT = xxx; :}
                       ;
+newObject           ::= NEW:n IDENTIFIER:id 	 {: RESULT = new NewObjectNode("newObject", n, new ClassNameNode("className", id)); :}
 
-newObject           ::= NEW IDENTIFIER
                       ;
 //the above are new for oXi
 
@@ -173,8 +173,8 @@ argument            ::= BOOLEAN_LITERAL:bl      {: RESULT = new LiteralExpr("BOO
                       | arrayLiteral:al         {: RESULT = al; :}
                       | arrayIndices:ai         {: RESULT = ai; :}
                       | varArrayIndices:v  {: RESULT = v; :}
-                      | fieldAccess {: RESULT = xxx; :}
-                      | newObject {: RESULT = xxx; :}
+                      | fieldAccess:fa {: RESULT = fa; :}
+                      | newObject:no {: RESULT = no; :}
                       | THIS {: RESULT = xxx; :}
                       ;
 
@@ -189,7 +189,7 @@ arrayIndices        ::= arrayIndices:ai LBRACK:lb expression:a RBRACK  {: RESULT
 varArrayIndices     ::= IDENTIFIER:id LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), new VariableNode("IDENTIFIER", id), a); :}
                       | functionCall:fc  LBRACK:lb expression:a RBRACK    {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fc, a); :}
                       | varArrayIndices:v LBRACK:lb expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), v, a); :}
-                      | fieldAccess LBRACK:lb expression:a RBRACK {: RESULT = xxx; :}
+                      | fieldAccess:fa LBRACK:lb expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fa, a);:}
                       ;
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
@@ -205,7 +205,7 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
-                      | classDef {: RESULT =  xxx :}
+                      | classDef:cd {: RESULT =  cd; :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
@@ -258,7 +258,7 @@ variable            ::= UNDERSCORE:us                     {: RESULT = new Unders
                       | IDENTIFIER:id                     {: RESULT = new VariableNode("IDENTIFIER", id); :}
                       | argumentWithType:a                {: RESULT = a; :}
                       | varArrayIndices:a                 {: RESULT = a; :}
-                      | fieldAccess {: RESULT = xxx; :}
+                      | fieldAccess:fa 					  {: RESULT = fa; :}
                       ;
 newVariable       ::= UNDERSCORE:us                     {: RESULT = new UnderscoreNode("UNDERSCORE", us); :}
                      
