@@ -16,7 +16,7 @@ import java.util.*;
 public class ClassNode extends AstNode{
 	
 	ArrayList<ClassMethodNode> methods = new ArrayList<ClassMethodNode>();
-	ArrayList<ClassFieldNode> fields = new ArrayList<ClassFieldNode>();
+	ArrayList<AstNode> fields = new ArrayList<AstNode>();
 	ClassNameNode superClass = null;
 	
 	public ClassNode(String t, Symbol v) {
@@ -47,12 +47,13 @@ public class ClassNode extends AstNode{
 			if(child instanceof ClassMethodNode) {
 				methods.add((ClassMethodNode)child);
 			}
-			else if(child instanceof ClassFieldNode) {
-				fields.add((ClassFieldNode)child);
-			}
 			else if(child instanceof ClassNameNode) {
 				superClass = (ClassNameNode) child;
 			}
+			else {
+				fields.add(child);
+			}
+
 		}
 	}
 	
@@ -62,6 +63,20 @@ public class ClassNode extends AstNode{
 		
 		for(ClassMethodNode method : methods) {
 			method.registerClassMethodSignature(classSig.getFuncTable());
+		}
+		
+		for(AstNode field : fields) {
+			if(field instanceof DeclarationNode) {
+				TypeNode t = (TypeNode) field.children.get(0);
+				classSig.addField((String) field.symbol.value, t.typeCheck(new VarSymbolTable(), new FuncSymbolTable()));
+			}
+			else if(field instanceof MultiDeclarationNode) {
+				AstNode vars = field.children.get(0);
+				Type t = field.children.get(1).typeCheck(new VarSymbolTable(), new FuncSymbolTable()); 
+				for(AstNode var : vars.children) {
+					classSig.addField((String)var.symbol.value, t);					
+				}
+			}
 		}
 		
 		classes.addClass((String)symbol.value, classSig);
