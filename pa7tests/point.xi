@@ -2,7 +2,7 @@ use io
 use conv
 
 class Point {
-	x: int
+	x, y: int
 	
 	move(dx: int, dy: int) {
 		x = x + dx
@@ -13,7 +13,7 @@ class Point {
 		return x, y
 	}		
 	
-	y: int
+
 	
 	add(p: Point) : Point {
 		return createPoint(x + p.x, y + p.y)

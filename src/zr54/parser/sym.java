@@ -21,6 +21,7 @@ public class sym {
   public static final int BREAK = 46;
   public static final int ELSE = 34;
   public static final int IF = 26;
+  public static final int NULL = 49;
   public static final int CHARACTER_LITERAL = 5;
   public static final int LPAREN = 7;
   public static final int DOT = 48;
@@ -106,7 +107,8 @@ public class sym {
   "EXTENDS",
   "BREAK",
   "CONTINUE",
-  "DOT"
+  "DOT",
+  "NULL"
   };
 }
 

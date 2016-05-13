@@ -91,6 +91,7 @@ classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new De
 						  | classFieldsMethods:fm classField:f {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(f); :}
 						  |	classMethod:m	{: RESULT = new DefaultNode("classFieldsMethods", null, m); :}
 						  | classField:f	{: RESULT = new DefaultNode("classFieldsMethods", null, f); :}
+              | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
 						  ; 
 
 classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
@@ -238,6 +239,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | block: b                                 {: RESULT = b; :}
                       | BREAK: b  {: RESULT = new BreakContinueNode("break", b); :}
                       | CONTINUE:c  {: RESULT = new BreakContinueNode("continue", c); :}
+                      | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
                       ;
 
 optionalReturn      ::= RETURN:ret expressions:e optionalSemicolon {: RESULT = new ReturnNode("optionalReturn", ret); RESULT.addGrandChildren(e); :}
