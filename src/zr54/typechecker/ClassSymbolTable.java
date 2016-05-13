@@ -2,13 +2,13 @@ package zr54.typechecker;
 import java.util.*; 
 
 public class ClassSymbolTable {
-	private HashMap<String, ClassSignature> table = new HashMap<String, ClassSignature>();
+	private HashMap<String, ClassDefination> table = new HashMap<String, ClassDefination>();
 	
-	public void addClass(String name, ClassSignature c) {
+	public void addClass(String name, ClassDefination c) {
 		table.put(name, c);
 	}
 	
-	public ClassSignature getClass(String name) {
+	public ClassDefination getClass(String name) {
 		return table.get(name);
 	}
 	
