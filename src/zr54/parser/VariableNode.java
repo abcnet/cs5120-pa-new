@@ -3,6 +3,7 @@ package zr54.parser;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -23,7 +24,7 @@ public class VariableNode extends ExprNode{
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		type = vars.lookup((String)symbol.value);
 		if (type == null){
@@ -38,7 +39,7 @@ public class VariableNode extends ExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		this.irNode = new IRTemp(getRegName());
 	}
 	

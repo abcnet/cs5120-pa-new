@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -27,9 +28,9 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	 * Type-checking method for integer addition (binary expression) nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
-		Type t2 = this.children.get(1).typeCheck(vars, funcs, false);
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
 
 		if ((t1.getType() == t2.getType() )
 				&& (t1.getDimension() == t2.getDimension())) {
@@ -49,8 +50,8 @@ public class AddIntBinaryExprNode extends IntBinaryExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		AstNode c1 = children.get(0);
 		AstNode c2 = children.get(1);
 

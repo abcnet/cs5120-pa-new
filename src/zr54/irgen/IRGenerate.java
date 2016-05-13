@@ -103,12 +103,12 @@ public class IRGenerate {
 						String ixiFile = libPath + interfaceName + ".ixi";
 						String ixiDstFile = libPath + interfaceName + ".typed";
 						errFile = ixiFile;
-						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
+						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
 					}
 					errFile = srcFile;
-					TypeCheck.registerAllFunctions(funcs, root, srcFile);
+					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					TypeCheck.registerAllClasses(classes, root, srcFile);
-					root.typeCheck(vars, funcs, false);
+					root.typeCheck(vars, funcs, classes, "", false);
 					
 					
 					int slash = srcFile.lastIndexOf('/');
@@ -124,7 +124,7 @@ public class IRGenerate {
 					for(int i=0;i<methods.getChildren().size();i++){
 						curr = methods.getChildren().get(i);
 						if(curr.getIRNode()==null){
-							curr.generateIR(funcs);
+							curr.generateIR(funcs, classes, "", null);
 						}
 						program.appendFunc((IRFuncDecl)curr.getIRNode());
 					}

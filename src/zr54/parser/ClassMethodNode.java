@@ -3,6 +3,7 @@ package zr54.parser;
 import java.util.ArrayList;
 
 import zr54.main.XiException;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -16,7 +17,7 @@ public class ClassMethodNode extends AstNode {
 	}
 	
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile)
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
 		// TODO Auto-generated method stub
 		// not finished!
@@ -24,7 +25,7 @@ public class ClassMethodNode extends AstNode {
 	}
 
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -35,7 +36,7 @@ public class ClassMethodNode extends AstNode {
 		return false;
 	}
 	
-	public void registerClassMethodSignature(FuncSymbolTable methods) throws XiException {
+	public void registerClassMethodSignature(FuncSymbolTable methods, ClassSymbolTable classes, String currClass) throws XiException {
 		String funcName = (String) symbol.value;
 		FuncSignature funcSig = methods.lookup(funcName);
 		
@@ -46,9 +47,9 @@ public class ClassMethodNode extends AstNode {
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, methods, false));
+			argTypes.add(arg.typeCheck(newVars, methods, classes, currClass, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, methods, false));
+			retTypes.add(ret.typeCheck(newVars, methods, classes, currClass, false));
 				
 		if(funcSig != null) {
 			throw new XiException(symbol, "Method '" + (String) symbol.value + "' redefined", "Semantic");

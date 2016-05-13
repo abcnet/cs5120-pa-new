@@ -208,23 +208,27 @@ public abstract class AstNode {
 
 	/**
 	 * type checking
+	 * @param classes TODO
+	 * @param currClass TODO
 	 * @param insideWhile TODO
 	 * @param vars: variable symbol table
 	 * @param funcs: function symbo table
 	 * @return type
 	 * @throws XiException
 	 */
-    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException;
+    public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException;
 
     /**
      * register function signature 
      * @param funcs
      * @param isInterface
+     * @param classes TODO
+     * @param currClass TODO
      * @throws XiException
      */
-    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String ixiFile) throws XiException {
+    public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String ixiFile, ClassSymbolTable classes, String currClass) throws XiException {
     	for(AstNode child : children)
-    		child.registerFunctionSignature(funcs, isInterface, ixiFile);
+    		child.registerFunctionSignature(funcs, isInterface, ixiFile, classes, currClass);
     }
     
     public void registerClassSignature(ClassSymbolTable classes) throws XiException {
@@ -267,9 +271,12 @@ public abstract class AstNode {
     
 	/**
 	 * Generate IR
+	 * @param classes TODO
+	 * @param currClass TODO
+	 * @param currWhile TODO
 	 * @param funcs: function symbol table
 	 */
-    public abstract void generateIR(FuncSymbolTable funcs);
+    public abstract void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile);
     
     public abstract boolean isConst();
     
@@ -314,7 +321,10 @@ public abstract class AstNode {
     	return null;
     }
     
+    public String getSymbolName(){
+    	return (String)this.symbol.value;
+    }
     
-    public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel){}
+    public void getIRControl(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile, String trueLabel, String falseLabel){}
 }
 

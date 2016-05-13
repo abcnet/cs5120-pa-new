@@ -21,7 +21,7 @@ public class DeclarationNode extends AstNode {
 	/**
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException {
 
 		if(symbol != null) {
 			if(vars.lookup((String) symbol.value) != null) {
@@ -30,7 +30,7 @@ public class DeclarationNode extends AstNode {
 				throw new XiException(this.symbol.left,this.symbol.right,"Cannot declare funciton name as variable " + (String)symbol.value, "Semantic");
 			}
 			else {
-				type = children.get(0).typeCheck(vars, funcs, false);
+				type = children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 				vars.add((String) symbol.value, type);
 			}
 		}
@@ -47,12 +47,12 @@ public class DeclarationNode extends AstNode {
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 //		System.out.println((String) this.symbol.value);
 
 		if(this.type.getDimension() > 0) {
 			for(AstNode child : children) 
-				child.generateIR(funcs);
+				child.generateIR(funcs, classes, currClass, currWhile);
 			if(children.get(0).irNode != null)
 				this.irNode = new IRESeq(new IRMove(new IRTemp(getRegName()),
 													(IRExpr)children.get(0).irNode),

@@ -1,5 +1,6 @@
 package zr54.parser;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 public abstract class UnaryExprNode extends ExprNode{
 
@@ -19,8 +20,8 @@ public abstract class UnaryExprNode extends ExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override 
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		
 	}
 }

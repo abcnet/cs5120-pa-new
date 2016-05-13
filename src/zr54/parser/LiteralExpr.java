@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
@@ -46,7 +47,7 @@ public class LiteralExpr extends ExprNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile){
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile){
 
 		type = new Type(this.literalType, this.dimension);
 		return type;
@@ -57,7 +58,7 @@ public class LiteralExpr extends ExprNode {
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// TODO Auto-generated method stub
 		if (this.name.equals("INTEGER_LITERAL")){
 			this.irNode = new IRConst(Long.parseLong((String)this.symbol.value));
@@ -108,7 +109,7 @@ public class LiteralExpr extends ExprNode {
 		}
 	}
 	
-	public void getIRControl(FuncSymbolTable funcs, String trueLabel, String falseLabel) {
+	public void getIRControl(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile, String trueLabel, String falseLabel) {
 		if (this.dimension==0 && this.type.getType() == Type.BOOL){
 			if (((String)this.symbol.value).equals("true")) {
 				this.irNode = new IRJump(new IRName(trueLabel));

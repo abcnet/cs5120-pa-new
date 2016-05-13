@@ -1,6 +1,7 @@
 package zr54.parser;
 
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -21,10 +22,10 @@ public class MultiVariableNode extends DefaultNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		type = new Type(Type.TUPLE, 0);
 		for(AstNode n : children)
-			type.addTupleEntry(n.typeCheck(vars, funcs, false));
+			type.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, false));
 
 		return type;
 	}
@@ -34,8 +35,8 @@ public class MultiVariableNode extends DefaultNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		this.irNode = children.get(0).getIRNode();
 	}
 

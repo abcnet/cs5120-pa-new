@@ -45,9 +45,9 @@ public abstract class StmtNode extends DefaultNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		for(AstNode n : children)
-			n.typeCheck(vars, funcs, false);
+			n.typeCheck(vars, funcs, classes, currClass, false);
 
 		type = new Type();
 		return type;
@@ -59,8 +59,8 @@ public abstract class StmtNode extends DefaultNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		for(AstNode n : children)
-			n.generateIR(funcs);
+			n.generateIR(funcs, classes, currClass, currWhile);
 	}
 }

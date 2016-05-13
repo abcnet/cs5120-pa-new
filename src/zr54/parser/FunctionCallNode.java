@@ -8,6 +8,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.FuncSymbolTable;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -39,7 +40,7 @@ public class FunctionCallNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		FuncSignature f = funcs.lookup((String) symbol.value);
 		if (f==null){
@@ -51,7 +52,7 @@ public class FunctionCallNode extends ExprNode{
 		}
 		for(int i=0;i<args.getTuple().size();i++){
 			AstNode node = this.children.get(i);
-			Type l=node.typeCheck(vars, funcs, false);
+			Type l=node.typeCheck(vars, funcs, classes, currClass, false);
 			if(l.matches(args.getTuple().get(i))==false){
 				throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
 
@@ -72,13 +73,13 @@ public class FunctionCallNode extends ExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		AstNode curr;
 		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR(funcs);
+				curr.generateIR(funcs, classes, currClass, currWhile);
 			}
 			l.add((IRExpr)curr.irNode);
 		}

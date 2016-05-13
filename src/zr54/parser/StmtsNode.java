@@ -26,9 +26,9 @@ public class StmtsNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		for(AstNode n : children)
-			n.typeCheck(vars, funcs, false);
+			n.typeCheck(vars, funcs, classes, currClass, false);
 
 		type = new Type();
 		return type;
@@ -39,8 +39,8 @@ public class StmtsNode extends StmtNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		List<IRStmt> stmts = new ArrayList<IRStmt>();
 		for (int i = 0; i < this.children.size(); i++) {
 			if(this.children.get(i).irNode instanceof IRExpr){

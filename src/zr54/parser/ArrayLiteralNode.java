@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -35,13 +36,13 @@ public class ArrayLiteralNode extends ExprNode{
 	 * Type-checking method for array literal nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		if(this.children.size()==0){
 			return new Type(Type.INT, 1);
 		}
-		Type t0=this.children.get(0).typeCheck(vars, funcs, false),t;
+		Type t0=this.children.get(0).typeCheck(vars, funcs, classes, currClass, false),t;
 		for (int i=1; i<this.children.size();i++){
-			t=this.children.get(i).typeCheck(vars, funcs, false);
+			t=this.children.get(i).typeCheck(vars, funcs, classes, currClass, false);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
 				throw new XiException(this.children.get(i).getFirstSymbol(),"elements of array literal do not match", "Semantic");
 			}
@@ -56,8 +57,8 @@ public class ArrayLiteralNode extends ExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		int len = children.size();
 		
 		//use a different name for each array

@@ -3,6 +3,7 @@ package zr54.parser;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -25,10 +26,10 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
-		Type t2 = this.children.get(1).typeCheck(vars, funcs, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
 		if(t1.getType()!=Type.INT || t1.getDimension()!=0){
 			throw new XiException(this.children.get(0).getFirstSymbol(),"Operands of " + this.symbol.value +  " must be int", "Semantic");
 		}
@@ -46,8 +47,8 @@ public class GtLtGeLeNode extends BoolBinaryExprNode {
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		if (this.symbol.sym == sym.GT) {
 			this.irNode = new IRBinOp(OpType.GT,
 					(IRExpr)this.children.get(0).irNode,

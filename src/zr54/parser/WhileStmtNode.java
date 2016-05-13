@@ -23,18 +23,18 @@ public class WhileStmtNode extends IfWhileStmtNode{
 	 * Generate IR
 	 * @param funcs: function symbol table
 	 */
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
 		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
 		if (this.children.get(0).symbol.sym == sym.AND
 			|| this.children.get(0).symbol.sym == sym.OR
 			|| ((String)this.children.get(0).symbol.value).equals("true")
 			|| ((String)this.children.get(0).symbol.value).equals("false")) {
-			this.children.get(0).getIRControl(funcs, trueLabel, falseLabel);
+			this.children.get(0).getIRControl(funcs, classes, currClass, currWhile, trueLabel, falseLabel);
 		} else {
-			this.children.get(0).generateIR(funcs);
+			this.children.get(0).generateIR(funcs, classes, currClass, currWhile);
 		}
-		this.children.get(1).generateIR(funcs);
+		this.children.get(1).generateIR(funcs, classes, currClass, currWhile);
 		if (this.name.equals("whileStatement")) {
 			String label = "L_"+Integer.toString(AstNode.counter++);
 			if (this.children.get(0).symbol.sym == sym.AND
