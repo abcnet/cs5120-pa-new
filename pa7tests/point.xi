@@ -15,25 +15,25 @@ class Point {
 	
 	y: int
 	
-//	add(p: Point) : Point {
-//		return createPoint(x + p.x, y + p.y)
-//	}
+	add(p: Point) : Point {
+		return createPoint(x + p.x, y + p.y)
+	}
 
-//	initPoint(x0: int, y0: int): Point {
-//		x = x0
-//		y = y0
-//		return this
-// 	} 
+	initPoint(x0: int, y0: int): Point {
+		x = x0
+		y = y0
+		return this
+ 	} 
 
-//	clone(): Point { return createPoint(x, y) }
+	clone(): Point { return createPoint(x, y) }
 
-//	equals(p: Point) : bool { return this == p }
+	equals(p: Point) : bool { return this == p }
 
 }
 
-//createPoint(x: int, y:int): Point {
-//	return new Point.initPoint(x, y)
-//}
+createPoint(x: int, y:int): Point {
+	return new Point.initPoint(x, y)
+}
 
 main(args:int[][]) {
 	println("class")

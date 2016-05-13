@@ -82,7 +82,7 @@ classDefs           ::= classDefs:cs classDef:c {: RESULT = new DefaultNode("cla
                       ;
 
 classDef			::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsMethods:fm RBRACE:rb 
-						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); :}
+						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
 					  ;
 					  
 classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
@@ -100,6 +100,9 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
 
 classField			::= IDENTIFIER:id COLON type:t {: RESULT = new DeclarationNode("argumentWithType", id, t); :}
 					  ;
+
+
+					  
 //the above are new for oXi
 
 
@@ -134,6 +137,7 @@ nonEmptyBrackets    ::= nonEmptyBracket:b emptyBrackets:bs   {: RESULT = new Typ
 type                ::= arrayType:a     {: RESULT = a; :}
                       | INT:i             {: RESULT = new TypeNode("INT", i); :}
                       | BOOL:b            {: RESULT = new TypeNode("BOOL", b); :}
+                      | IDENTIFIER:t	  {: RESULT = new TypeNode("IDENTIFIER", t); :}
                       ;
 typeNonEmpty        ::= arrayTypeNonEmpty:a     {: RESULT = a; :}
                       | INT:i             {: RESULT = new TypeNode("INT", i); :}
