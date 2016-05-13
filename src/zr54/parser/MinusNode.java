@@ -2,6 +2,7 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -24,9 +25,9 @@ public class MinusNode extends UnaryExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 
 		if ((t1.getType() == Type.INT)
 				&& (t1.getDimension() == 0)) {
@@ -43,7 +44,7 @@ public class MinusNode extends UnaryExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// TODO Auto-generated method stub
 		
 		AstNode child = children.get(0);
@@ -51,7 +52,7 @@ public class MinusNode extends UnaryExprNode{
 			long value = Long.parseLong("-" + (String)child.symbol.value);
 			this.irNode = new IRConst(value);
 		} else {
-			super.generateIR(funcs);
+			super.generateIR(funcs, classes, currClass, currWhile);
 			this.irNode = new IRBinOp(IRBinOp.OpType.SUB, 
 									   new IRConst(0),
 									   (IRExpr) child.getIRNode());

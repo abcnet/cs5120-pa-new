@@ -6,6 +6,7 @@ import java.util.List;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -27,12 +28,12 @@ public class AssignStmtNode extends StmtNode{
 	 * Type-checking method for assignment statement nodes
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		Type left, right;
 
-		right=this.children.get(1).typeCheck(vars, funcs, false);
-		left=this.children.get(0).typeCheck(vars, funcs, false);
+		right=this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
+		left=this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 
 		
 		if(left.getType()!=Type.TUPLE){
@@ -88,8 +89,8 @@ public class AssignStmtNode extends StmtNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		ArrayList<IRStmt> moves = new ArrayList<IRStmt>();
 		
 		if((children.get(0) instanceof UnderscoreNode)

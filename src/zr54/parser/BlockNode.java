@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -40,10 +41,10 @@ public class BlockNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
-		this.children.get(0).typeCheck(tempScope, funcs, false);
+		this.children.get(0).typeCheck(tempScope, funcs, classes, currClass, false);
 		vars.returned = tempScope.returned;
 		type = new Type();
 
@@ -55,8 +56,8 @@ public class BlockNode extends StmtNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
-		super.generateIR(funcs);
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		super.generateIR(funcs, classes, currClass, currWhile);
 		if (this.children.size() == 1) {
 			assert(this.irNode != null);
 			this.irNode = this.children.get(0).irNode;

@@ -2,6 +2,7 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -25,9 +26,9 @@ public class LengthNode extends ExprNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 		if  (t1.getDimension() >= 1) {
 			type = new Type(Type.INT,0);
 		} else {
@@ -42,9 +43,9 @@ public class LengthNode extends ExprNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// TODO Auto-generated method stub
-		super.generateIR(funcs);
+		super.generateIR(funcs, classes, currClass, currWhile);
 		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.SUB, 
 											(IRExpr) children.get(0).irNode,
 											new IRConst(8)));

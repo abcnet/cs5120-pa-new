@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -28,19 +29,19 @@ public class IfElseStmtNode extends StmtNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 
 		if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
 			throw new XiException(this.children.get(0).symbol.left, 
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
-		this.children.get(1).typeCheck(tempScope, funcs, false);
+		this.children.get(1).typeCheck(tempScope, funcs, classes, currClass, false);
 		ArrayList<Type> returned1 = tempScope.returned;
-		this.children.get(2).typeCheck(tempScope, funcs, false);
+		this.children.get(2).typeCheck(tempScope, funcs, classes, currClass, false);
 		ArrayList<Type> returned2 = tempScope.returned;
 		if(returned1.size()!=returned2.size()){
 			throw new XiException(this.children.get(2).symbol,"Mismatched return types", "Semantic");
@@ -63,7 +64,7 @@ public class IfElseStmtNode extends StmtNode {
 	 * Generate IR
 	 * @param funcs: function symbol table
 	 */
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
 		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
 		String endLabel = "L_end_"+Integer.toString(AstNode.counter++);
@@ -71,12 +72,12 @@ public class IfElseStmtNode extends StmtNode {
 			|| this.children.get(0).symbol.sym == sym.OR
 			|| ((String)this.children.get(0).symbol.value).equals("true")
 			|| ((String)this.children.get(0).symbol.value).equals("false")) {
-			this.children.get(0).getIRControl(funcs, trueLabel, falseLabel);
+			this.children.get(0).getIRControl(funcs, classes, currClass, currWhile, trueLabel, falseLabel);
 		} else {
-			this.children.get(0).generateIR(funcs);
+			this.children.get(0).generateIR(funcs, classes, currClass, currWhile);
 		}
-		this.children.get(1).generateIR(funcs);
-		this.children.get(2).generateIR(funcs);
+		this.children.get(1).generateIR(funcs, classes, currClass, currWhile);
+		this.children.get(2).generateIR(funcs, classes, currClass, currWhile);
 		if (this.name.equals("ifStatement")) {
 			if (this.children.get(0).symbol.sym == sym.AND
 					|| this.children.get(0).symbol.sym == sym.OR

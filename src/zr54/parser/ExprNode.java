@@ -20,15 +20,15 @@ public abstract class ExprNode extends AstNode{
 	 * type checking
 	 */
 	@Override
-	public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException;
+	public abstract Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException;
 	
 	/**
 	 * Generate IR
 	 * @param funcs: function symbol table
 	 */
 	@Override 
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		for(AstNode n : children)
-			n.generateIR(funcs);	
+			n.generateIR(funcs, classes, currClass, currWhile);	
 	}
 }

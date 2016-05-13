@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.main.XiException;
@@ -26,11 +27,11 @@ public class ReturnNode extends StmtNode {
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		Type t=new Type();
 		for(AstNode n : children)
-			t.addTupleEntry(n.typeCheck(vars, funcs, false));
+			t.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, false));
 
 		vars.returned = t.getTuple();
 
@@ -43,14 +44,14 @@ public class ReturnNode extends StmtNode {
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// TODO Auto-generated method stub
 		AstNode curr;
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
 		for (int i=0;i<this.children.size();i++){
 			curr=this.children.get(i);
 			if(curr.irNode==null){
-				curr.generateIR(funcs);
+				curr.generateIR(funcs, classes, currClass, currWhile);
 			}
 			l.add(new IRMove(new IRTemp(Configuration.ABSTRACT_RET_PREFIX + i), 
 					(IRExpr)curr.irNode));

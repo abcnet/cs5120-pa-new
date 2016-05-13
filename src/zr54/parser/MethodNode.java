@@ -33,12 +33,12 @@ public class MethodNode extends AstNode{
 	/*
 	 * type checking
 	 */
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException {
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException {
 
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = funcs.lookup((String)symbol.value).getFunctionReturnTypes().getTuple();
 		for(AstNode n : children) {
-			n.typeCheck(newVars, funcs, false);
+			n.typeCheck(newVars, funcs, classes, currClass, false);
 		}		
 		int m=newVars.toReturn.size();
 
@@ -76,7 +76,7 @@ public class MethodNode extends AstNode{
 	 * @param isInterface: true if this is an unimplemented function in interface file, false if this is an implemented function  
 	 */
 	@Override
-	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String file) throws XiException{
+	public void registerFunctionSignature(FuncSymbolTable funcs, boolean isInterface, String file, ClassSymbolTable classes, String currClass) throws XiException{
 		String funcName = (String) symbol.value;
 		FuncSignature funcSig = funcs.lookup(funcName);
 		
@@ -87,9 +87,9 @@ public class MethodNode extends AstNode{
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, funcs, false));
+			argTypes.add(arg.typeCheck(newVars, funcs, classes, currClass, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, funcs, false));
+			retTypes.add(ret.typeCheck(newVars, funcs, classes, currClass, false));
 				
 		if(funcSig != null) {
 			if(isInterface) {
@@ -124,7 +124,7 @@ public class MethodNode extends AstNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		AstNode.currMethod = (String)this.symbol.value; 
 		AstNode curr;
 		
@@ -142,7 +142,7 @@ public class MethodNode extends AstNode{
 			curr=this.children.get(2).children.get(i);
 			
 			if(curr.irNode==null){
-				curr.generateIR(funcs);
+				curr.generateIR(funcs, classes, currClass, currWhile);
 			}
 			if(curr.irNode instanceof IRSeq){
 				l.addAll(((IRSeq)curr.irNode).stmts());

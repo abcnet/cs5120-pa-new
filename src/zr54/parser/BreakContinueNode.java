@@ -2,6 +2,7 @@ package zr54.parser;
 
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
@@ -16,7 +17,7 @@ public class BreakContinueNode extends StmtNode{
 	 * type checking
 	 */
 	@Override
-	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, boolean insideWhile) throws XiException{
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		if(insideWhile){
 			return new Type();
 		}else{
@@ -29,7 +30,7 @@ public class BreakContinueNode extends StmtNode{
 	 * @param funcs: function symbol table
 	 */
 	@Override
-	public void generateIR(FuncSymbolTable funcs) {
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// not finished
 		if(this.name.equals("break")){
 			

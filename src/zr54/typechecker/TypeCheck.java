@@ -38,6 +38,7 @@ public class TypeCheck {
 				//System.out.print(root.toString());
 				VarSymbolTable vars = new VarSymbolTable();
 				FuncSymbolTable funcs = new FuncSymbolTable();
+				ClassSymbolTable classes = new ClassSymbolTable();
 				
 				try {
 					//first need load all interface files and register function signatures
@@ -48,11 +49,12 @@ public class TypeCheck {
 						String ixiFile = libPath + interfaceName + ".ixi";
 						String ixiDstFile = libPath + interfaceName + ".typed";
 						errFile = ixiFile;
-						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs); 
+						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
 					}
 					errFile = srcFile;
-					registerAllFunctions(funcs, root, srcFile);
-					root.typeCheck(vars, funcs, false);
+					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
+					TypeCheck.registerAllClasses(classes, root, srcFile);
+					root.typeCheck(vars, funcs, classes, "", false);
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
@@ -79,12 +81,14 @@ public class TypeCheck {
 	
 	/**
 	 * Register all function signatures during first pass
+	 * @param classes TODO
+	 * @param currClass TODO
 	 * @param funcs: function symbol table
 	 * @param root: root node of the program
 	 * @throws XiException
 	 */
-	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root, String file) throws XiException{
-		root.registerFunctionSignature(funcs, false, file);
+	public static void registerAllFunctions(FuncSymbolTable funcs, AstNode root, String file, ClassSymbolTable classes, String currClass) throws XiException{
+		root.registerFunctionSignature(funcs, false, file, classes, currClass);
 	}
 	
 	public static void registerAllClasses(ClassSymbolTable classes, AstNode root, String file) throws XiException {
