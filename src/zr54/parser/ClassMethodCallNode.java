@@ -28,6 +28,11 @@ public class ClassMethodCallNode extends ExprNode {
 			throws XiException {
 		// TODO Auto-generated method stub
 		// not finished!
+		for(AstNode n : children)
+			n.typeCheck(vars, funcs, classes, currClass, insideWhile);
+		AstNode objectAST = children.get(0);
+		AstNode methodAST = children.get(1);
+		Type objectType = objectAST.getType();
 				return new Type();
 	}
 
