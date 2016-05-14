@@ -2,23 +2,23 @@ package zr54.typechecker;
 import java.util.*;
 
 
-public class ClassDefination {
+public class ClassDef {
 	private String name = "";
 	private HashMap<String, FuncSignature> methods = new HashMap<String, FuncSignature>();
 	private HashMap<String, Integer> methodIdx = new HashMap<String, Integer>();
 	private HashMap<String, Type> fields = new HashMap<String, Type>(); 
 	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
-	private ClassDefination superClass = null;
+	private ClassDef superClass = null;
 	
-	public ClassDefination(String n) {
+	public ClassDef(String n) {
 		name = n;
 	}
 	
-	public ClassDefination getSuperClass() {
+	public ClassDef getSuperClass() {
 		return superClass;
 	}
 	
-	public void setSuperClass(ClassDefination s) {
+	public void setSuperClass(ClassDef s) {
 		superClass = s;
 	}
 	

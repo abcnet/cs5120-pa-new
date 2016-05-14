@@ -1,7 +1,7 @@
 package zr54.parser;
 
 import zr54.main.XiException;
-import zr54.typechecker.ClassDefination;
+import zr54.typechecker.ClassDef;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
@@ -60,7 +60,7 @@ public class ClassNode extends AstNode{
 	
 	@Override
 	public void registerClassSignature(ClassSymbolTable classes) throws XiException {
-		ClassDefination classSig = new ClassDefination((String)symbol.value);
+		ClassDef classSig = new ClassDef((String)symbol.value);
 		
 		for(ClassMethodNode method : methods) {
 			method.registerClassMethodSignature(classSig, classes, (String)this.symbol.value);

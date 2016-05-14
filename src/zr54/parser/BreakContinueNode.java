@@ -33,11 +33,11 @@ public class BreakContinueNode extends StmtNode{
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// not finished
 		if(this.name.equals("break")){
-			
+			// not finished
 		}else if (this.name.equals("continue")){
-			
+			// not finished
 		}else{
-			
+			System.err.println("should never reach this line");
 		}
 	}
 

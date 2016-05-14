@@ -3,7 +3,7 @@ package zr54.parser;
 import java.util.ArrayList;
 
 import zr54.main.XiException;
-import zr54.typechecker.ClassDefination;
+import zr54.typechecker.ClassDef;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
@@ -38,7 +38,7 @@ public class ClassMethodNode extends AstNode {
 	}
 	
 
-	public void registerClassMethodSignature(ClassDefination classDef, ClassSymbolTable classes, String currClass) throws XiException {
+	public void registerClassMethodSignature(ClassDef classDef, ClassSymbolTable classes, String currClass) throws XiException {
 
 		String funcName = (String) symbol.value;
 		FuncSignature funcSig = classDef.getMethod(funcName);
