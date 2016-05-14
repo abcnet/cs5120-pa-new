@@ -28,9 +28,17 @@ public class ClassNode extends AstNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-				return new Type();
+		
+		VarSymbolTable newVars = new VarSymbolTable(vars);
+		
+		//first check all fields and put in vars table
+		for(AstNode n : fields)
+			n.typeCheck(newVars, funcs, classes, (String) symbol.value, insideWhile);
+		
+		for(ClassMethodNode n : methods)
+			n.typeCheck(newVars, funcs, classes, (String) symbol.value, insideWhile);
+
+		return new Type();
 	}
 
 	@Override
