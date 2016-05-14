@@ -1,5 +1,16 @@
 package zr54.parser;
 
+import java.util.ArrayList;
+
+import edu.cornell.cs.cs4120.xic.ir.IRExp;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
+import edu.cornell.cs.cs4120.xic.ir.IRReturn;
+import edu.cornell.cs.cs4120.xic.ir.IRSeq;
+import edu.cornell.cs.cs4120.xic.ir.IRStmt;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
 import zr54.typechecker.ClassSymbolTable;
@@ -26,9 +37,7 @@ public class ClassMethodCallNode extends ExprNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-				return new Type();
+		return new Type();
 	}
 
 	@Override
@@ -37,4 +46,10 @@ public class ClassMethodCallNode extends ExprNode {
 		return false;
 	}
 
+	
+	@Override
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+	}
+
+	
 }

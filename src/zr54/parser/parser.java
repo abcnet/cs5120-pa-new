@@ -1286,7 +1286,7 @@ class CUP$parser$actions {
                 int releft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int reright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode re = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = new ClassMethodNode("classMethod", id);
+                 RESULT = new ClassMethodNode("classMethod", id, l);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); 

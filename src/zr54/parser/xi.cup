@@ -94,7 +94,7 @@ classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new De
 						  ; 
 
 classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r LBRACE:l optionalStatements:os optionalReturn:re RBRACE
-                        {: RESULT = new ClassMethodNode("classMethod", id);
+                        {: RESULT = new ClassMethodNode("classMethod", id, l);
                            RESULT.addChild(a); RESULT.addChild(r);
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
