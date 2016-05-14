@@ -16,9 +16,11 @@ public class ClassNameNode extends AstNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-				return new Type();
+		String className = (String)symbol.value;
+		if(classes.getClass(className) == null)
+			throw new XiException(symbol, "Undefined class name" + className, "Semantic");
+		else
+			return new Type(className, 0);
 	}
 
 	@Override
