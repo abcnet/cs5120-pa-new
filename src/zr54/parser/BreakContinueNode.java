@@ -19,7 +19,8 @@ public class BreakContinueNode extends StmtNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		if(insideWhile){
-			return new Type();
+			type = new Type();
+			return type;
 		}else{
 			throw new XiException(symbol, this.name + " outside while loop", "Semantic");
 		}

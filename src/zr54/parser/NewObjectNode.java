@@ -24,8 +24,10 @@ public class NewObjectNode extends ExprNode {
 		String className = (String)children.get(0).symbol.value;
 		if(classes.getClass(className) == null)
 			throw new XiException(children.get(0).symbol, "Undefined class name" + className, "Semantic");
-		else
-			return new Type(className, 0);
+		else {
+			type = new Type(className, 0);
+			return type;
+		}
 	}
 
 	@Override

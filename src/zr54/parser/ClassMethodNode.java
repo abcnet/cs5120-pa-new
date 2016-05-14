@@ -123,9 +123,9 @@ public class ClassMethodNode extends AstNode {
 		ArrayList<Type> argTypes = new ArrayList<Type>();
 		ArrayList<Type> retTypes = new ArrayList<Type>(); 
 		for(AstNode arg : argNode.children) 
-			argTypes.add(arg.typeCheck(newVars, funcs, classes, currClass, false));
+			argTypes.add(arg.typeCheck(newVars, funcs, null, currClass, false));
 		for(AstNode ret : retNode.children) 
-			retTypes.add(ret.typeCheck(newVars, funcs, classes, currClass, false));
+			retTypes.add(ret.typeCheck(newVars, funcs, null, currClass, false));
 
 
 		if(funcSig != null) {

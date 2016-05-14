@@ -106,8 +106,8 @@ public class IRGenerate {
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
 					}
 					errFile = srcFile;
-					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					TypeCheck.registerAllClasses(classes, root, srcFile);
+					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					root.typeCheck(vars, funcs, classes, "", false);
 					
 					
@@ -126,7 +126,15 @@ public class IRGenerate {
 						if(curr.getIRNode()==null){
 							curr.generateIR(funcs, classes, "", null);
 						}
-						program.appendFunc((IRFuncDecl)curr.getIRNode());
+						
+						if(curr.getIRNode() instanceof IRFuncDecl) 
+							program.appendFunc((IRFuncDecl)curr.getIRNode());
+						else if(curr.getIRNode() instanceof IRCompUnit) {
+							IRCompUnit classIR = (IRCompUnit) curr.getIRNode();
+							for(IRFuncDecl func : classIR.functions().values()) {
+								program.appendFunc(func);
+							}
+						}
 					}
 					
 //					program.printSExp(printer);

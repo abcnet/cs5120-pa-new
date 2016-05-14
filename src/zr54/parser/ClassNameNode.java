@@ -19,8 +19,10 @@ public class ClassNameNode extends AstNode {
 		String className = (String)symbol.value;
 		if(classes.getClass(className) == null)
 			throw new XiException(symbol, "Undefined class name" + className, "Semantic");
-		else
-			return new Type(className, 0);
+		else {
+			type = new Type(className, 0);
+			return type;
+		}
 	}
 
 	@Override

@@ -40,26 +40,27 @@ public class ClassFieldAccessNode extends ExprNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-		for(AstNode n : children)
-			n.typeCheck(vars, funcs, classes, currClass, insideWhile);
+
 		AstNode objectAST = children.get(0);
 		AstNode field = children.get(1);
+		objectAST.typeCheck(vars, funcs, classes, currClass, insideWhile);
 		Type objectType = objectAST.getType();
+		
 		if(objectType.getType() != Type.CLASS){
 			throw new XiException(objectAST.symbol, objectAST.getSymbolName() + " is not an object type", "Semantic");
+		
 		}
-		String classNameOfObejct = objectAST.getType().getClassName();
-		ClassDef objectClassDef = classes.getClass(classNameOfObejct);
+		String className = objectAST.getType().getClassName();
+		ClassDef objectClassDef = classes.getClass(className);
 		if(objectClassDef == null){
-			throw new XiException(objectAST.symbol, objectAST.getSymbolName() + " cannot be found", "Semantic");
+			throw new XiException(objectAST.symbol, "unknown class " + className, "Semantic");
 		}
 		int fieldIdx = objectClassDef.getFieldIdx(field.getSymbolName());
-		if(fieldIdx == -1){
-			throw new XiException(field.symbol, "Class " + classNameOfObejct + " does not have field " + field.getSymbolName(), "Semantic");
+		if(fieldIdx == -1) {
+			throw new XiException(field.symbol, "Class " + className + " does not have field " + field.getSymbolName(), "Semantic");
 		}
-		return new Type();
+		type = objectClassDef.getFieldType((String)field.symbol.value); 
+		return type;
 	}
 
 	@Override

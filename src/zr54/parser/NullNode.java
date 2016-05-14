@@ -17,7 +17,8 @@ public class NullNode extends AstNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		return new Type(Type.NULL, 0);
+		type = new Type(Type.NULL, 0);
+		return type;
 	}
 
 	@Override

@@ -38,7 +38,8 @@ public class ClassNode extends AstNode{
 		for(ClassMethodNode n : methods)
 			n.typeCheck(newVars, funcs, classes, (String) symbol.value, insideWhile);
 
-		return new Type();
+		type = new Type();
+		return type;
 	}
 
 	@Override
@@ -84,11 +85,11 @@ public class ClassNode extends AstNode{
 		for(AstNode field : fields) {
 			if(field instanceof DeclarationNode) {
 				TypeNode t = (TypeNode) field.children.get(0);
-				classSig.addField((String) field.symbol.value, t.typeCheck(new VarSymbolTable(), new FuncSymbolTable(), classes, (String)this.symbol.value, false));
+				classSig.addField((String) field.symbol.value, t.typeCheck(new VarSymbolTable(), new FuncSymbolTable(), null, (String)this.symbol.value, false));
 			}
 			else if(field instanceof MultiDeclarationNode) {
 				AstNode vars = field.children.get(0);
-				Type t = field.children.get(1).typeCheck(new VarSymbolTable(), new FuncSymbolTable(), classes, (String)this.symbol.value, false); 
+				Type t = field.children.get(1).typeCheck(new VarSymbolTable(), new FuncSymbolTable(), null, (String)this.symbol.value, false); 
 				for(AstNode var : vars.children) {
 					classSig.addField((String)var.symbol.value, t);					
 				}

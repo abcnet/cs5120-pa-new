@@ -18,7 +18,7 @@ public class MultiDeclarationNode extends StmtNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		AstNode variables = children.get(0);
-		Type type = children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
+		Type cType = children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
 		
 		for(AstNode var : variables.children) {
 			String varName = (String) var.symbol.value;
@@ -29,11 +29,12 @@ public class MultiDeclarationNode extends StmtNode {
 				throw new XiException(var.symbol.left, var.symbol.right, "Cannot declare funciton name as variable " + varName, "Semantic");
 			}
 			else {
-				vars.add(varName, type);
+				vars.add(varName, cType);
 			}
 		}
-		
-		return new Type();
+
+		type = new Type();
+		return type;
 	}
 
 	

@@ -59,6 +59,13 @@ public class TypeNode extends AstNode {
 			else
 				throw new XiException(symbol.left,symbol.right, "Array without INT/BOOL type", "Semantic");
 		}
+		else if(name.equals("IDENTIFIER")) {
+			String className = (String)symbol.value;
+			if(classes != null && classes.getClass(className) == null) {
+				throw new XiException(symbol, "Undefined type: " + className, "Semantic");				
+			}
+			return new Type(className, 0);
+		}
 		else
 			type = new Type();
 		return type;

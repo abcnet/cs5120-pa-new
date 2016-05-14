@@ -16,9 +16,8 @@ public class ClassFieldNode extends AstNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-				return new Type();
+		type = new Type();
+		return type;
 	}
 
 	@Override

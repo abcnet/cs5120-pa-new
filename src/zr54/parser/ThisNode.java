@@ -21,8 +21,10 @@ public class ThisNode extends ExprNode {
 			throws XiException {
 		if(currClass.isEmpty())
 			throw new XiException(symbol, "'This' must be used in class method", "Semantic");
-		else
-			return new Type(currClass, 0);
+		else {
+			type = new Type(currClass, 0);
+			return type;
+		}
 	}
 
 	@Override
