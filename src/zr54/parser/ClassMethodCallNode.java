@@ -37,7 +37,14 @@ public class ClassMethodCallNode extends ExprNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		return new Type();
+		for(AstNode n : children)
+			n.typeCheck(vars, funcs, classes, currClass, insideWhile);
+		AstNode objectAST = children.get(0);
+		AstNode methodAST = children.get(1);
+		Type objectType = objectAST.getType();
+		//not finished
+				return new Type();
+
 	}
 
 	@Override
@@ -49,6 +56,7 @@ public class ClassMethodCallNode extends ExprNode {
 	
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		
 	}
 
 	
