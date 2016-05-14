@@ -23,8 +23,7 @@ public class ClassNameNode extends AstNode {
 
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
-		// TODO Auto-generated method stub
-		
+		//nothing to do here
 	}
 
 	@Override

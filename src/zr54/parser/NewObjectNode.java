@@ -1,7 +1,11 @@
 package zr54.parser;
 
+import java.util.ArrayList;
+
+import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
+import zr54.typechecker.ClassDefination;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -24,8 +28,27 @@ public class NewObjectNode extends ExprNode {
 
 	@Override
 	public boolean isConst() {
-		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override 
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		ClassNameNode className = (ClassNameNode) children.get(0);
+		ClassDefination classDef = classes.getClass((String)className.symbol.value);
+		int maxFieldIdx = classDef.getMaxFieldIdx();
+		
+		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+		String objName = "_OBJ_" + (String)className.symbol.value + "_" + AstNode.counter++;
+		
+		stmts.add(new IRMove(new IRTemp(objName), 
+				 new IRCall(new IRName("_I_alloc_i"), 
+							new IRConst(8 * (maxFieldIdx + 1)))));
+		
+		stmts.add(new IRMove(new IRMem(new IRTemp(objName)),
+							 new IRName("_DV_" + (String)className.symbol.value)));
+		
+		this.irNode = new IRESeq(new IRSeq(stmts), new IRTemp(objName));
+		
 	}
 	
 }

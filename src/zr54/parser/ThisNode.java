@@ -1,5 +1,8 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRConst;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
 import zr54.typechecker.ClassSymbolTable;
@@ -23,8 +26,12 @@ public class ThisNode extends ExprNode {
 
 	@Override
 	public boolean isConst() {
-		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		this.irNode = new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0);		
 	}
 
 }
