@@ -1,5 +1,10 @@
 package zr54.parser;
 
+import zr54.main.XiException;
+import zr54.typechecker.ClassSymbolTable;
+import zr54.typechecker.FuncSymbolTable;
+import zr54.typechecker.Type;
+import zr54.typechecker.VarSymbolTable;
 import java_cup.runtime.Symbol;
 
 public class MultiDeclarationNode extends StmtNode {
@@ -9,5 +14,28 @@ public class MultiDeclarationNode extends StmtNode {
 		addChild(c1);
 		addChild(c2);
 	}
+
+	@Override
+	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
+		AstNode variables = children.get(0);
+		Type type = children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
+		
+		for(AstNode var : variables.children) {
+			String varName = (String) var.symbol.value;
+			
+			if(vars.lookup(varName) != null) {
+				throw new XiException(var.symbol.left, var.symbol.right, "Duplicate Variable " + varName, "Semantic");
+			}else if(funcs.lookup(varName) != null)	{
+				throw new XiException(var.symbol.left, var.symbol.right, "Cannot declare funciton name as variable " + varName, "Semantic");
+			}
+			else {
+				type = children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
+				vars.add(varName, type);
+			}
+		}
+		
+		return new Type();
+	}
+
 	
 }

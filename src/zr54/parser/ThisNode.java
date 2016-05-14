@@ -19,9 +19,10 @@ public class ThisNode extends ExprNode {
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile)
 			throws XiException {
-		// TODO Auto-generated method stub
-		// not finished!
-				return new Type();
+		if(currClass.isEmpty())
+			throw new XiException(symbol, "'This' must be used in class method", "Semantic");
+		else
+			return new Type(currClass, 0);
 	}
 
 	@Override

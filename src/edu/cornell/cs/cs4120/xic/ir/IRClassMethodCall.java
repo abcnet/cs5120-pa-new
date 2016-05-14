@@ -11,6 +11,7 @@ import zr54.cfg.CpLattice;
 import zr54.typechecker.FuncSymbolTable;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 
+//Don't use this class!
 public class IRClassMethodCall extends IRExpr{
 
 	@Override
