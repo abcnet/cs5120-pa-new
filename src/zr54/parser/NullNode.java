@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRConst;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
 import zr54.typechecker.ClassSymbolTable;
@@ -23,8 +24,7 @@ public class NullNode extends AstNode {
 
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
-		// TODO Auto-generated method stub
-		
+		this.irNode = new IRConst(0);		
 	}
 
 	@Override

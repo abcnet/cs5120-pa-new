@@ -12,4 +12,5 @@ public class ClassSymbolTable {
 		return table.get(name);
 	}
 	
+	
 }

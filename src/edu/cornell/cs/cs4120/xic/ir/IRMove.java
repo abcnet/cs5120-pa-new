@@ -110,6 +110,7 @@ public class IRMove extends IRStmt {
      */
 	@Override
 	public OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs) {
+		//TODO: expr can be a 
 		
 		if(target instanceof IRMem) {
 			IRMem memTarget = (IRMem) target;
