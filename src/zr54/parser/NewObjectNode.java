@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
-import zr54.typechecker.ClassDefination;
+import zr54.typechecker.ClassDef;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -34,7 +34,7 @@ public class NewObjectNode extends ExprNode {
 	@Override 
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		ClassNameNode className = (ClassNameNode) children.get(0);
-		ClassDefination classDef = classes.getClass((String)className.symbol.value);
+		ClassDef classDef = classes.getClass((String)className.symbol.value);
 		int maxFieldIdx = classDef.getMaxFieldIdx();
 		
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
