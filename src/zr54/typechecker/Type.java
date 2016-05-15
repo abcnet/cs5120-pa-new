@@ -184,6 +184,9 @@ public class Type {
 //        			s+=", ";
 //        		}
         	}
+    	}else if(type == CLASS){
+    		s += "o" + this.className.length() + this.className;
+    		
     	}
     	
     	return s;

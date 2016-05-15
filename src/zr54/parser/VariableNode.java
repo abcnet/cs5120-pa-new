@@ -16,6 +16,8 @@ import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
 public class VariableNode extends ExprNode{
+	
+	public boolean isGlobal = false;
 
 	boolean isField = false;
 	String className = "";
@@ -76,6 +78,16 @@ public class VariableNode extends ExprNode{
 	
 	@Override
 	public String getRegName() {
-		return (String)symbol.value + "_" + AstNode.currMethod;
+		
+		if(isGlobal){
+			if(this.type == null){
+				System.err.println("Typecheck must be performed before accessing global variable");
+				
+			}
+			return "_I_g_" + this.getSymbolName().replaceAll("_", "__") + "_" + this.type.toABIString();
+		}else{
+			return (String)symbol.value + "_" + AstNode.currMethod;
+		}
+		
 	}
 }
