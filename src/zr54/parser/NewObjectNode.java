@@ -49,7 +49,7 @@ public class NewObjectNode extends ExprNode {
 							new IRConst(8 * (maxFieldIdx + 1)))));
 		
 		stmts.add(new IRMove(new IRMem(new IRTemp(objName)),
-							 new IRName("_DV_" + (String)className.symbol.value)));
+							 new IRName("_I_vt_" + (String)className.symbol.value)));
 		
 		this.irNode = new IRESeq(new IRSeq(stmts), new IRTemp(objName));
 		
