@@ -40,28 +40,21 @@ public class MethodNode extends AstNode{
 		for(AstNode n : children) {
 			n.typeCheck(newVars, funcs, classes, currClass, false);
 		}		
-		int m=newVars.toReturn.size();
+		int m = newVars.toReturn.size();
 
-		int n=newVars.returned.size();
+		int n = newVars.returned.size();
 		Symbol s;
-		if(m==0){
-			if(n>0){
-
+		if(m == 0){
+			if(n > 0)
 				throw new XiException(symbol.left,symbol.right,"Unexpeced return", "Semantic");
-			}
 		}else{
-			if(n==0){
-
+			if(n == 0)
 				throw new XiException(this.lrace,"Missing return", "Semantic");
-			}
-			if(m!=n){
-
+			if(m != n)
 				throw new XiException(symbol.left,symbol.right,"Incorrect number of values returned", "Semantic");
-			}
-			for(int i=0;i<m;i++){
-				if(newVars.toReturn.get(i).matches(newVars.returned.get(i))==false){
+			for(int i = 0; i < m; i++){
+				if(newVars.toReturn.get(i).matches(newVars.returned.get(i)) == false)
 					throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
-				}
 			}
 		}
 

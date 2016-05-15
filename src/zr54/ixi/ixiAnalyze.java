@@ -36,6 +36,7 @@ public class ixiAnalyze {
 			try{
 				s = p.parse();
 				AstNode root = s.value();
+				registerAllClasses(root, classes, ixiFile);
 				registerAllFunctions(root, funcs, ixiFile, classes, "");
 			}catch(Exception e){
 				
@@ -62,5 +63,7 @@ public class ixiAnalyze {
 		root.registerFunctionSignature(funcs, true, ixiFile, classes, currClass);		
 	}
 	
-	
+	public static void registerAllClasses(AstNode root, ClassSymbolTable classes, String ixiFile) throws XiException {
+		root.registerClassSignature(classes);
+	}
 }

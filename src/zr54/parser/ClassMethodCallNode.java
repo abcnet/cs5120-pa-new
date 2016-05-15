@@ -34,7 +34,6 @@ public class ClassMethodCallNode extends ExprNode {
  		for(AstNode n : children)
 			n.typeCheck(vars, funcs, classes, currClass, insideWhile);
 		AstNode object = children.get(0);
-		AstNode arguments = children.get(1);
 		Type objectType = object.typeCheck(vars, funcs, classes, currClass, insideWhile);
 		
 		if(objectType.getType() != Type.CLASS) {
@@ -46,20 +45,28 @@ public class ClassMethodCallNode extends ExprNode {
 			throw new XiException(symbol, "Name "+ (String)symbol.value+ " cannot be resolved", "Semantic");
 		}
 
-		Type args = f.getFunctionArgTypes();
-		if(args.getTuple().size() != arguments.children.size()){
-			throw new XiException(symbol, "incorrect number of function arguments", "Semantic");
-		}
 		
-		for(int i= 0; i < args.getTuple().size(); i++){
-			AstNode node = arguments.children.get(i);
-			Type l = node.typeCheck(vars, funcs, classes, currClass, insideWhile);
-			if(l.matches(args.getTuple().get(i)) == false){
-				throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
+		Type args = f.getFunctionArgTypes();
+		if(args.getTuple().size() > 0) {
 
+			if(children.size() < 2) {
+				throw new XiException(symbol, "incorrect number of function arguments", "Semantic");
+			}
+			
+			AstNode arguments = children.get(1);
+			if(args.getTuple().size() != arguments.children.size()){
+				throw new XiException(symbol, "incorrect number of function arguments", "Semantic");
+			}
+
+			for(int i= 0; i < args.getTuple().size(); i++){
+				AstNode node = arguments.children.get(i);
+				Type l = node.typeCheck(vars, funcs, classes, currClass, insideWhile);
+				if(l.matches(args.getTuple().get(i)) == false){
+					throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
+
+				}
 			}
 		}
-
 		type = f.getFunctionReturnTypes();
 		if (type != null && type.getTuple().size()==1){
 			return type.getTuple().get(0).functionCallTrue();

@@ -79,6 +79,12 @@ public class ClassNode extends AstNode{
 	public void registerClassSignature(ClassSymbolTable classes) throws XiException {
 		ClassDef classSig = new ClassDef((String)symbol.value);
 		
+		if(superClass != null) {
+			if(classes.getClass((String) superClass.symbol.value) == null) 
+				throw new XiException(superClass.symbol, "Super class " + (String) superClass.symbol.value + " is not declared", "Semantic");
+			classSig.setSuperClass(classes.getClass((String) superClass.symbol.value));
+		}
+		
 		for(ClassMethodNode method : methods) {
 			method.registerClassMethodSignature(classSig, classes, (String)this.symbol.value);
 		}
@@ -97,6 +103,7 @@ public class ClassNode extends AstNode{
 			}
 		}
 		
+
 		classSig.determineIndices();
 		classes.addClass((String)symbol.value, classSig);
 	} 

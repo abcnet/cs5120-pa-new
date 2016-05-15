@@ -85,6 +85,10 @@ classDef			::= CLASS:c IDENTIFIER:id LBRACE:lb classFieldsMethods:fm RBRACE:rb
 						{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
            			  | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb classFieldsMethods:fm RBRACE:rb
            			    {: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
+           			  | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb RBRACE:rb
+           			    {: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); ((ClassNode) RESULT).findMethodsAndFields(); :}
+           			  | CLASS:c IDENTIFIER:id LBRACE:lb RBRACE:rb 
+						{: RESULT = new ClassNode("classDef", id); ((ClassNode) RESULT).findMethodsAndFields(); :}
 					  ;
 					  
 classFieldsMethods	::= classFieldsMethods:fm classMethod:m    {: RESULT = new DefaultNode("classFieldsMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
@@ -200,6 +204,7 @@ varArrayIndices     ::= IDENTIFIER:id LBRACK:lb expression:a RBRACK    {: RESULT
                       | fieldAccess:fa LBRACK:lb expression:a RBRACK {: RESULT = new ArrayIndicesNode("arrayIndices", new Symbol(sym.LRBRACK, lb.left, lb.right, "[]"), fa, a);:}
                       ;
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
+                      | COLON LPAREN typesList:tl RPAREN    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
                       ;
 

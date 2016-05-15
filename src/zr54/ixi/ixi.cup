@@ -69,10 +69,14 @@ start with methods;
 // new for oXi
 
 classDef      ::= CLASS:c IDENTIFIER:id LBRACE:lb classMethods:fm RBRACE:rb 
-            {: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
-                  | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb classMethods:fm RBRACE:rb
+            		{: RESULT = new ClassNode("classDef", id); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
+                | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb classMethods:fm RBRACE:rb
                     {: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); RESULT.addGrandChildren(fm); ((ClassNode) RESULT).findMethodsAndFields(); :}
-            ;
+                | CLASS:c IDENTIFIER:id EXTENDS IDENTIFIER:s LBRACE:lb RBRACE:rb
+           			{: RESULT = new ClassNode("classDef", id); RESULT.addChild(new ClassNameNode("className", s)); ((ClassNode) RESULT).findMethodsAndFields(); :}
+                | CLASS:c IDENTIFIER:id LBRACE:lb RBRACE:rb 
+					{: RESULT = new ClassNode("classDef", id); ((ClassNode) RESULT).findMethodsAndFields(); :}
+	            ;
 classMethods  ::= classMethods:fm classMethod:m    {: RESULT = new DefaultNode("classMethods", null); RESULT.addGrandChildren(fm); RESULT.addChild(m); :}
                
               | classMethod:m {: RESULT = new DefaultNode("classMethods", null, m); :}
@@ -87,6 +91,7 @@ classMethod         ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
 
 arrayType           ::= INT:i brackets:bs    {: bs.addChildLeftMost(new TypeNode("INT", i)); RESULT = bs; :}
                       | BOOL:b brackets:bs   {: bs.addChildLeftMost(new TypeNode("BOOL", b)); RESULT = bs; :}
+                      | IDENTIFIER:t brackets:bs  {: bs.addChildLeftMost(new TypeNode("IDENTIFIER", t)); RESULT = bs; :}
                       ;
 
 
@@ -113,6 +118,7 @@ argumentsWithType   ::= argumentsWithType:as COMMA argumentWithType:a {: RESULT 
 
 
 functionReturnType  ::= COLON typesList:tl    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
+                      |	COLON LPAREN typesList:tl RPAREN    {: RESULT = new DefaultNode("functionReturnType", null); RESULT.addGrandChildren(tl); :}
                       |                       {: RESULT = new DefaultNode("forceParen", null); :}
                       ;
 

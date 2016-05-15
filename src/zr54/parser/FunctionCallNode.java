@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassDef;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
@@ -14,6 +15,9 @@ import zr54.typechecker.Type;
 import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 public class FunctionCallNode extends ExprNode{
+
+	boolean isClassMethod = false;
+	String className = "";
 
 	/**
 	 * constructor
@@ -43,24 +47,35 @@ public class FunctionCallNode extends ExprNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		FuncSignature f = funcs.lookup((String) symbol.value);
-		if (f==null){
-			throw new XiException(symbol.left, symbol.right,"Name "+ (String)symbol.value+ " cannot be resolved", "Semantic");
+		if (f == null){
+			ClassDef classDef = classes.getClass(currClass);
+			if(classDef != null) {
+				f = classDef.getMethod((String) symbol.value);
+				if(f == null)
+					throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
+				else {
+					isClassMethod = true;
+					className = classDef.getName();
+				}
+			}
+			else
+				throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
 		}
+		
 		Type args = f.getFunctionArgTypes();
-		if(args.getTuple().size()!=this.children.size()){
+		if(args.getTuple().size() != this.children.size()){
 			throw new XiException(symbol.left, symbol.right,"incorrect number of function arguments", "Semantic");
 		}
-		for(int i=0;i<args.getTuple().size();i++){
+		for(int i = 0; i < args.getTuple().size(); i++){
 			AstNode node = this.children.get(i);
-			Type l=node.typeCheck(vars, funcs, classes, currClass, false);
-			if(l.matches(args.getTuple().get(i))==false){
+			Type l = node.typeCheck(vars, funcs, classes, currClass, false);
+			if(l.matches(args.getTuple().get(i)) == false){
 				throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
-
 			}
 		}
 
 		type = f.getFunctionReturnTypes();
-		if (type!=null&&type.getTuple().size()==1){
+		if (type != null && type.getTuple().size() == 1){
 			return type.getTuple().get(0).functionCallTrue();
 		}
 
