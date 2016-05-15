@@ -168,7 +168,7 @@ public class IRCanonicalGenerate {
 						}
 						
 					}
-					node = new IRESeq((IRStmt) s, new IRCall(((IRCall) node).target(), arg_list));
+					node = new IRESeq((IRStmt) s, new IRCall(((IRCall) node).funcSignature, ((IRCall) node).target(), arg_list));
 					changed = true;
 					break;
 				}
@@ -206,7 +206,7 @@ public class IRCanonicalGenerate {
 			if (node instanceof IRCall) {
 				String var = "__var_" + Integer.toString(AstNode.counter++);
 				node = new IRESeq(new IRMove(new IRTemp(var),
-						                     new IRCall(((IRCall) node).target(), ((IRCall) node).args())),
+						                     new IRCall(((IRCall) node).funcSignature, ((IRCall) node).target(), ((IRCall) node).args())),
 						          new IRTemp(var));
 			}
 			for (int i = 0; i < node.children.size(); i++) {

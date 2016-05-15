@@ -9,6 +9,7 @@ import zr54.assembly.AssemJump;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /** RETURN statement */
@@ -53,7 +54,7 @@ public class IRReturn extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		instrs.add(new AssemJump(f.name() + "_EPILOGUE"));
 		return null;
 	}

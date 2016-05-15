@@ -70,7 +70,7 @@ public class ClassDef {
 			return "";
 		}else{
 			String s = f.toString();
-			return "_I_" + this.name + "_" + s.substring(2);
+			return "_I_" + this.name.replaceAll("_", "__") + "_" + s.substring(2);
 		}
 	}
 	
@@ -183,7 +183,7 @@ public class ClassDef {
 			String m = this.reverseMethodIdx.get(index);
 			FuncSignature fs = this.methods.get(m);
 			String s = fs.toString();
-			return "_I_" + this.name + "_" + s.substring(2);
+			return "_I_" + this.name.replaceAll("_", "__") + "_" + s.substring(2);
 		}else{
 			return "0";
 		}

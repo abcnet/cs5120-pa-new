@@ -10,6 +10,7 @@ import zr54.assembly.AssemLabel;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -78,7 +79,7 @@ public class IRLabel extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		instrs.add(new AssemLabel(name));		
 		
 		return null;

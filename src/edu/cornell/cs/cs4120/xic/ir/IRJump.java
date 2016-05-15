@@ -11,6 +11,7 @@ import zr54.assembly.AssemJump;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -102,7 +103,7 @@ public class IRJump extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		if(target instanceof IRName) {
 			IRName label = (IRName) target;
 			instrs.add(new AssemJump(label.name()));

@@ -295,7 +295,7 @@ public class IRGenerate {
 					        	assemStringWriter.close();
 					        }
 			        }else{
-			        	 program.genIntermediateAssem(null, null, funcs);
+			        	 program.genIntermediateAssem(null, null, funcs, classes, "");
 			        	 
 			        	 program.createAssemCFG(initialAssemGraph, pathToFile + "_initial_assem.dot");
 			        	 

@@ -77,6 +77,9 @@ public class ClassNode extends AstNode{
 	
 	@Override
 	public void registerClassSignature(ClassSymbolTable classes) throws XiException {
+		if(this.getSymbolName().equals("MyButton")){
+			System.out.println("MyButton");
+		}
 		ClassDef classSig = new ClassDef((String)symbol.value);
 		
 		if(superClass != null) {

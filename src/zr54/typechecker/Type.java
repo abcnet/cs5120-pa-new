@@ -208,7 +208,8 @@ public class Type {
 //        		}
         	}
     	}else if(type == CLASS){
-    		s += "o" + this.className.length() + this.className;
+    		String escapedClassName = this.className.replaceAll("_", "__");
+    		s += "o" + escapedClassName.length() + escapedClassName;
     		
     	}
     	

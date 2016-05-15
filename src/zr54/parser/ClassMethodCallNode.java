@@ -113,7 +113,7 @@ public class ClassMethodCallNode extends ExprNode {
 		int methodIdx = classDef.getMethodIdx((String) symbol.value);
 		
 		this.irNode = new IRESeq(move,
-								 new IRCall(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+								 new IRCall(classDef.getMethod((String) symbol.value), new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 										 						  new IRMem(new IRTemp(objName)),
 										 						  new IRConst(8 * methodIdx))), l));
 	}

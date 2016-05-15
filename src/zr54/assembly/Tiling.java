@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.xic.ir.*;
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp.OpType;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 public class Tiling {
@@ -310,7 +311,7 @@ public class Tiling {
 	}
 	
 	
-	static public AssemAddr intermediateLeaTiling(IRBinOp node, ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs){
+	static public AssemAddr intermediateLeaTiling(IRBinOp node, ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass){
 		IRExpr left = node.left();
 		IRExpr right = node.right();
 		
@@ -334,8 +335,8 @@ public class Tiling {
 						||((IRConst) _leftleft.left()).value() == 8)) {
 						
 						IRConst _w = (IRConst) _leftleft.left();
-						AssemOperand r1 = _leftleft.right().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r1 = _leftleft.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -351,8 +352,8 @@ public class Tiling {
 							  ||((IRConst) _leftleft.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _leftleft.right();
-						AssemOperand r1 = _leftleft.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r1 = _leftleft.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -373,8 +374,8 @@ public class Tiling {
 							||((IRConst) _leftright.left()).value() == 8)) {
 
 						IRConst _w = (IRConst) _leftright.left();
-						AssemOperand r2 = _left.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r1 = _leftright.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r2 = _left.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r1 = _leftright.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
@@ -390,8 +391,8 @@ public class Tiling {
 							||((IRConst) _leftright.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _leftright.right();
-						AssemOperand r2 = _left.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r1 = _leftright.left().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r2 = _left.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r1 = _leftright.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -402,8 +403,8 @@ public class Tiling {
 			}
 			
 			//((r1 + r2) + k)
-			AssemOperand r1 = _left.left().genIntermediateAssem(instrs, f, funcs);
-			AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs);
+			AssemOperand r1 = _left.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			AssemOperand r2 = _left.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 			AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(r1, t1));
@@ -432,8 +433,8 @@ public class Tiling {
 						||((IRConst) _rightleft.left()).value() == 8)) {
 						
 						IRConst _w = (IRConst) _rightleft.left();
-						AssemOperand r1 = _rightleft.right().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r1 = _rightleft.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -448,8 +449,8 @@ public class Tiling {
 							||((IRConst) _rightleft.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _rightleft.right();
-						AssemOperand r1 = _rightleft.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r1 = _rightleft.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -471,8 +472,8 @@ public class Tiling {
 							||((IRConst) _rightright.left()).value() == 8)) {
 
 						IRConst _w = (IRConst) _rightright.left();
-						AssemOperand r2 = _right.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r1 = _rightright.right().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r2 = _right.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r1 = _rightright.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -487,8 +488,8 @@ public class Tiling {
 							||((IRConst) _rightright.right()).value() == 8)) {
 
 						IRConst _w = (IRConst) _rightright.right();
-						AssemOperand r2 = _right.left().genIntermediateAssem(instrs, f, funcs);
-						AssemOperand r1 = _rightright.left().genIntermediateAssem(instrs, f, funcs);
+						AssemOperand r2 = _right.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+						AssemOperand r1 = _rightright.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 						instrs.add(new AssemMove(r1, t1));
@@ -499,8 +500,8 @@ public class Tiling {
 			}
 			
 			//(k + (r1 + r2))
-			AssemOperand r1 = _right.left().genIntermediateAssem(instrs, f, funcs);
-			AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs);
+			AssemOperand r1 = _right.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			AssemOperand r2 = _right.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 			AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(r1, t1));
@@ -523,8 +524,8 @@ public class Tiling {
 					||((IRConst) _left.left()).value() == 8)) {
 				
 				IRConst _const = (IRConst) (_left.left());
-				AssemOperand r1 = _left.right().genIntermediateAssem(instrs, f, funcs);
-				AssemOperand r2 = right.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand r1 = _left.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				AssemOperand r2 = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 				AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(r1, t1));
@@ -539,8 +540,8 @@ public class Tiling {
 					||((IRConst) _left.right()).value() == 8)) {
 				
 				IRConst _const = (IRConst) (_left.right());
-				AssemOperand r1 = _left.left().genIntermediateAssem(instrs, f, funcs);			
-				AssemOperand r2 = right.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand r1 = _left.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);			
+				AssemOperand r2 = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 				AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(r1, t1));
@@ -561,8 +562,8 @@ public class Tiling {
 					||((IRConst) _right.left()).value() == 4
 					||((IRConst) _right.left()).value() == 8)	) {
 				IRConst _const = (IRConst) (_right.left());
-				AssemOperand r2 = left.genIntermediateAssem(instrs, f, funcs);
-				AssemOperand r1 = _right.right().genIntermediateAssem(instrs, f, funcs);
+				AssemOperand r2 = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				AssemOperand r1 = _right.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 				AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(r1, t1));
@@ -576,8 +577,8 @@ public class Tiling {
 					||((IRConst) _right.right()).value() == 4
 					||((IRConst) _right.right()).value() == 8)) {
 				IRConst _const = (IRConst) (_right.right());
-				AssemOperand r2 = left.genIntermediateAssem(instrs, f, funcs);
-				AssemOperand r1 = _right.left().genIntermediateAssem(instrs, f, funcs);
+				AssemOperand r2 = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				AssemOperand r1 = _right.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 				AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(r1, t1));
@@ -590,7 +591,7 @@ public class Tiling {
 		if (node.opType() == OpType.ADD
 				&& (left instanceof IRConst)
 				&& ((IRConst) left).isIn32BitRange()) {
-			AssemOperand r = right.genIntermediateAssem(instrs, f, funcs);
+			AssemOperand r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(r, t));
 			return new AssemAddr((int)((IRConst) left).value(), t);
@@ -600,7 +601,7 @@ public class Tiling {
 		if (node.opType() == OpType.ADD
 				&& (right instanceof IRConst)
 				&& ((IRConst) right).isIn32BitRange()) {
-			AssemOperand l = left.genIntermediateAssem(instrs, f, funcs);
+			AssemOperand l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(l, t));
 			return new AssemAddr((int)((IRConst) right).value(), t);
@@ -608,8 +609,8 @@ public class Tiling {
 		
 		//(r1 + r2)
 		if (node.opType() == OpType.ADD) {
-			AssemOperand l = left.genIntermediateAssem(instrs, f, funcs);
-			AssemOperand r = right.genIntermediateAssem(instrs, f, funcs);
+			AssemOperand l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			AssemOperand r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 			AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(l, t1));

@@ -9,6 +9,8 @@ import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
+import zr54.typechecker.ClassDef;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
 import zr54.cfg.CopyLattice;
@@ -96,16 +98,33 @@ public class IRTemp extends IRExpr {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
+		
 
-		String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_')).replaceAll("__", "_");
-		boolean gt2 = funcs.
-				lookup(rawFuncName)
-				.getFunctionReturnTypes().
-				getTuple().
-				size() > 2;
+		
 		if(name.startsWith(Configuration.ABSTRACT_ARG_PREFIX)) {
 			int idx = Integer.parseInt(name.substring(Configuration.ABSTRACT_ARG_PREFIX.length()));
+			
+			boolean gt2;
+			String className = f.getClassName();
+			if(className.equals("")){
+				String rawFuncName = f.name().substring(2, f.name().lastIndexOf('_')).replaceAll("__", "_");
+				gt2 = funcs.
+						lookup(rawFuncName)
+						.getFunctionReturnTypes().
+						getTuple().
+						size() > 2;
+			}else{
+				ClassDef cd = classes.getClass(className);
+				String methodName = f.getMethodName();
+				gt2 = cd
+						.getMethod(methodName)
+						.getFunctionReturnTypes()
+						.getTuple()
+						.size() > 2;
+				
+			}
+
 			return new AssemArgTemp(idx, gt2);
 		}
 		else if(name.startsWith(Configuration.ABSTRACT_RET_PREFIX)) {

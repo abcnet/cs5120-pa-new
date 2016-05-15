@@ -7,6 +7,7 @@ import edu.cornell.cs.cs4120.util.InternalCompilerError;
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.visit.AggregateVisitor;
 import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
 import zr54.cfg.CpEntry;
@@ -151,14 +152,14 @@ public class IRMem extends IRExpr {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		f.count++;
 		AssemVar assemOperand = new AssemVar("t" + f.count, f.assemFunc);
 				
 		boolean generated = false;
 
 		if(expr instanceof IRBinOp) {
-			AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)expr, instrs, f, funcs);
+			AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)expr, instrs, f, funcs, classes, currClass);
 			
 			if(addr != null) {
 				AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
@@ -169,7 +170,7 @@ public class IRMem extends IRExpr {
 		}
 		
 		if(!generated) {
-			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
+			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
 			AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
 			instrs.add(new AssemMove(src, t1));

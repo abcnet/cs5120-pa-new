@@ -15,6 +15,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.InsnMapsBuilder;
 import zr54.assembly.*;
 import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.cfg.*;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /** An IR function declaration */
@@ -221,7 +222,7 @@ public class IRFuncDecl extends IRNode {
     @Override
     public AssemOperand genIntermediateAssem(
             ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-            FuncSymbolTable funcs) {
+            FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
         // TODO Auto-generated method stub
         this.assemFunc = new AssemFunc(this);
         
@@ -247,7 +248,7 @@ public class IRFuncDecl extends IRNode {
 //              + " pushq   %rbp\n"
 //              + " movq    %rsp, %rbp\n");
         ArrayList<AssemInstruction> bodyInsts = new ArrayList<AssemInstruction>();
-        this.body.genIntermediateAssem(bodyInsts, this, funcs);
+        this.body.genIntermediateAssem(bodyInsts, this, funcs, classes, currClass);
 //      bodyWriter.flush();
         int c=getReserved()+count+retSpace+argSpace;
         if(c%2==1){
@@ -379,5 +380,43 @@ public class IRFuncDecl extends IRNode {
     @Override
 	public void replacePropagatedConsts(CpLattice cpl) {
 	}
+    
+    
+    public boolean isClassMethod(){
+    	return this.name.charAt(2) == '_' && this.name.charAt(3) != '_';
+    }
+    
+    public String getClassName(){
+    	if(this.isClassMethod()){
+    		int index = this.name.indexOf('_', 3);
+    		while(this.name.charAt(index + 1) == '_'){
+    			index = this.name.indexOf('_', index + 2);
+    		}
+    		return this.name.substring(3, index).replaceAll("__", "_");
+    	}else{
+    		return "";
+    	}
+    }
+    
+    public String getMethodName(){
+    	if(this.isClassMethod()){
+    		int index = this.name.indexOf('_', 3);
+    		while(this.name.charAt(index + 1) == '_'){
+    			index = this.name.indexOf('_', index + 2);
+    		}
+    		int reverseIndex = name.lastIndexOf('_');
+    		while(this.name.charAt(reverseIndex - 1) == '_'){
+    			reverseIndex = name.lastIndexOf('_', reverseIndex - 2);
+    		}
+    		return name.substring(index + 1, reverseIndex);
+    	}else{
+    		int reverseIndex = name.lastIndexOf('_');
+    		while(this.name.charAt(reverseIndex - 1) == '_'){
+    			reverseIndex = name.lastIndexOf('_', reverseIndex - 2);
+    		}
+    		return name.substring(2, reverseIndex).replaceAll("__", "_");
+    	}
+    }
+    
     
 }

@@ -10,6 +10,7 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -100,9 +101,9 @@ public class IRExp extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		// TODO Auto-generated method stub
-		return expr.genIntermediateAssem(instrs, f, funcs);
+		return expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 	}
 	
 	@Override

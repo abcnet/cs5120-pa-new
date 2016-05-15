@@ -13,6 +13,7 @@ import zr54.assembly.AssemInstruction;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -139,10 +140,10 @@ public class IRSeq extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		
 		for(IRStmt s : stmts)
-			s.genIntermediateAssem(instrs, f, funcs);
+			s.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 		return null;
 	}
 	

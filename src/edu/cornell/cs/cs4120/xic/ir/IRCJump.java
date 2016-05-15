@@ -17,6 +17,7 @@ import zr54.assembly.AssemMove;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -201,7 +202,7 @@ public class IRCJump extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		// TODO Auto-generated method stub
 		if(expr instanceof IRBinOp &&
 				( (((IRBinOp) expr).opType() == IRBinOp.OpType.EQ) 
@@ -235,8 +236,8 @@ public class IRCJump extends IRStmt {
 				}
 				instrs.add(new AssemComments("CJUMP BinOp " + jmpStr));
 //				sw.write("# CJUMP BinOp " + jmpStr + "\n");
-				AssemOperand l = binExpr.left().genIntermediateAssem(instrs, f, funcs);
-				AssemOperand r = binExpr.right().genIntermediateAssem(instrs, f, funcs);
+				AssemOperand l = binExpr.left().genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				AssemOperand r = binExpr.right().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);
 				instrs.add(new AssemMove(l, rax));
 				instrs.add(new AssemBinInst("cmpq", r, rax));
@@ -254,7 +255,7 @@ public class IRCJump extends IRStmt {
 										
 			}
 			else {
-				AssemOperand cond = expr.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand cond = expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 //				if(cond.type == OpTarget.TempType.TEMP)
 //					sw.write("# CJUMP t" + cond.num + "\n");
 				AssemFixedRegister rax = new AssemFixedRegister(Reg.rax);

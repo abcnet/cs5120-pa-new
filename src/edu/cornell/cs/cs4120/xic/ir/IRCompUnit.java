@@ -17,6 +17,7 @@ import zr54.assembly.AssemProgram;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpLattice;
 import zr54.cfg.IRCFG;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -248,10 +249,10 @@ public class IRCompUnit extends IRNode {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		AssemProgram assemProgram = new AssemProgram(this);
 		for (IRFuncDecl func : functions.values()){
-			func.genIntermediateAssem(null, func, funcs);
+			func.genIntermediateAssem(null, func, funcs, classes, currClass);
 			assemProgram.assemFuncs.add(func.assemFunc);
 		}
 		return null;

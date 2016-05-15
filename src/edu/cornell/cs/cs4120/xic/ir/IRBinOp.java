@@ -13,6 +13,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
 import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -433,7 +434,7 @@ public class IRBinOp extends IRExpr {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		 // TODO Auto-generated method stub
 		 AssemVar assemOperand = new AssemVar("t" + ++f.count, f.assemFunc);
 		 
@@ -491,7 +492,7 @@ public class IRBinOp extends IRExpr {
 		 case SUB:
 
 			 boolean matched = false;
-			 AssemAddr addr = Tiling.intermediateLeaTiling(this, instrs, f, funcs);
+			 AssemAddr addr = Tiling.intermediateLeaTiling(this, instrs, f, funcs, classes, currClass);
 
 			 if(addr != null) {
 				 instrs.add(new AssemLea(addr, assemOperand));
@@ -499,8 +500,8 @@ public class IRBinOp extends IRExpr {
 			 }
 
 			 if(!matched){                
-				 l = left.genIntermediateAssem(instrs, f, funcs);
-				 r = right.genIntermediateAssem(instrs, f, funcs);
+				 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				 instrs.add(new AssemMove(l, trax));
 				 instrs.add(new AssemBinInst(opStr, r, trax));
 				 instrs.add(new AssemMove(trax, assemOperand));
@@ -509,8 +510,8 @@ public class IRBinOp extends IRExpr {
 		 case MUL:
 		 case HMUL:
 
-			 l = left.genIntermediateAssem(instrs, f, funcs);
-			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 instrs.add(new AssemMove(l, trax));
 
 			 if(right instanceof IRConst) {
@@ -530,8 +531,8 @@ public class IRBinOp extends IRExpr {
 		 case DIV:
 		 case MOD:
 
-			 l = left.genIntermediateAssem(instrs, f, funcs);
-			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 
 			 instrs.add(new AssemBinInst("xorq", trdx, trdx));
 			 instrs.add(new AssemMove(l, trax));
@@ -554,8 +555,8 @@ public class IRBinOp extends IRExpr {
 		 case OR:
 		 case XOR:
 			 
-			 l = left.genIntermediateAssem(instrs, f, funcs);
-			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 instrs.add(new AssemMove(l, trax));
 			 instrs.add(new AssemBinInst(opStr, r, trax));
 			 instrs.add(new AssemMove(trax, assemOperand));
@@ -568,8 +569,8 @@ public class IRBinOp extends IRExpr {
 		 case LEQ:
 		 case GEQ:
 			 
-			 l = left.genIntermediateAssem(instrs, f, funcs);
-			 r = right.genIntermediateAssem(instrs, f, funcs);
+			 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 AssemVar tmp = new AssemVar("t" + ++f.count, f.assemFunc);
 			 instrs.add(new AssemMove(l, tmp));
 			 instrs.add(new AssemBinInst(opStr, r, tmp));

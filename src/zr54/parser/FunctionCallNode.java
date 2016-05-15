@@ -114,7 +114,7 @@ public class FunctionCallNode extends ExprNode{
 			ClassDef classDef = classes.getClass(className);
 			int methodIdx = classDef.getMethodIdx((String) symbol.value);
 			
-			this.irNode = new IRCall(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+			this.irNode = new IRCall(classDef.getMethod((String) symbol.value), new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
 														   new IRMem(new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0)),
 														   new IRConst(8 * methodIdx))), l);
 		}
@@ -128,7 +128,8 @@ public class FunctionCallNode extends ExprNode{
 				}
 				l.add((IRExpr)curr.irNode);
 			}
-			this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);			
+			FuncSignature f = funcs.lookup((String)symbol.value);
+			this.irNode=new IRCall(f, new IRName(f.toString()),l);			
 		}
 
 	}

@@ -14,6 +14,7 @@ import zr54.assembly.AssemFixedRegister.Reg;
 import zr54.assembly.OpTarget.TempType;
 import zr54.cfg.CpEntry;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSignature;
 import zr54.typechecker.FuncSymbolTable;
 
@@ -24,6 +25,7 @@ import zr54.typechecker.FuncSymbolTable;
 public class IRCall extends IRExpr {
     private IRExpr target;
     private List<IRExpr> args;
+    public FuncSignature funcSignature = null;
 
     /**
      *
@@ -44,8 +46,9 @@ public class IRCall extends IRExpr {
      * @param target address of the code for this function call
      * @param args arguments of this function call
      */
-    public IRCall(IRExpr target, List<IRExpr> args) {
+    public IRCall(FuncSignature funcSignature, IRExpr target, List<IRExpr> args) {
     	super();
+    	this.funcSignature = funcSignature;
         this.target = target;
         this.args = args;
         this.children.add(target);
@@ -88,7 +91,7 @@ public class IRCall extends IRExpr {
             results.add(newExpr);
         }
 
-        if (modified) return new IRCall(target, results);
+        if (modified) return new IRCall(funcSignature, target, results);
 
         return this;
     }
@@ -239,7 +242,7 @@ public class IRCall extends IRExpr {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 
 		String callee = "";
 		if(this.target instanceof IRName)
@@ -262,9 +265,9 @@ public class IRCall extends IRExpr {
 			nRet = 0;
 			nArgs = 0;
 		}else{
-			String rawFuncName = callee.substring(2, callee.lastIndexOf('_')).replaceAll("__", "_");
-			FuncSignature sign = funcs.lookup(rawFuncName);
-			nRet = sign.getFunctionReturnTypes().getTuple().size();
+//			String rawFuncName = callee.substring(2, callee.lastIndexOf('_')).replaceAll("__", "_");
+//			FuncSignature sign = funcs.lookup(rawFuncName);
+			nRet = this.funcSignature.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;
 			nArgs = this.args().size()+(gt2?1:0);
 			argSpace = nArgs>6?(nArgs-6):0;
@@ -330,7 +333,7 @@ public class IRCall extends IRExpr {
 				}
 				
 			}else{
-				t = arg.genIntermediateAssem(instrs, f, funcs);
+				t = arg.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 //				s = t.getTarget(false);
 				AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
 				instrs.add(new AssemMove(t, argTarg));

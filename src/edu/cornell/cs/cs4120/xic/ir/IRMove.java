@@ -10,6 +10,7 @@ import edu.cornell.cs.cs4120.xic.ir.visit.IRVisitor;
 import zr54.assembly.*;
 import zr54.cfg.CopyLattice;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 
 /**
@@ -189,15 +190,15 @@ public class IRMove extends IRStmt {
 	@Override
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
-			FuncSymbolTable funcs) {
+			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 		
 		if(target instanceof IRMem) {
 			IRMem memTarget = (IRMem) target;
 			boolean generated = false;
-			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);	
+			AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);	
 
 			if( memTarget.expr() instanceof IRBinOp) {
-				AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)memTarget.expr(), instrs, f, funcs);
+				AssemOperand addr = Tiling.intermediateLeaTiling((IRBinOp)memTarget.expr(), instrs, f, funcs, classes, currClass);
 
 				if(addr != null) {
 
@@ -215,7 +216,7 @@ public class IRMove extends IRStmt {
 			
 			if(!generated) {
 				//TODO: shall we evaluate src or addr first?
-				AssemOperand addr = memTarget.expr().genIntermediateAssem(instrs, f, funcs);
+				AssemOperand addr = memTarget.expr().genIntermediateAssem(instrs, f, funcs, classes, currClass);
 
 				if(expr instanceof IRConst) {
 					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
@@ -233,7 +234,7 @@ public class IRMove extends IRStmt {
 		}
 		else {
 			if(expr instanceof IRConst) {
-				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 								
 				long constValue = ((IRConst) expr).value();
 				if((constValue > Integer.MAX_VALUE || constValue < Integer.MIN_VALUE)
@@ -249,8 +250,8 @@ public class IRMove extends IRStmt {
 			}
 			else {
 				System.out.println(expr);
-				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
-				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
+				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				
 				if(src instanceof AssemAddr && dst instanceof AssemAddr) {
 					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);

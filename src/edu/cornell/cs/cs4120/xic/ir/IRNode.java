@@ -17,6 +17,7 @@ import zr54.cfg.CFG;
 import zr54.cfg.CFGNode;
 import zr54.cfg.CopyLattice;
 import zr54.cfg.CpLattice;
+import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.assembly.*;
 
@@ -109,7 +110,7 @@ public abstract class IRNode {
      */
     public abstract OpTarget genAssem(StringWriter sw, IRFuncDecl f, FuncSymbolTable funcs);
     
-    public abstract AssemOperand genIntermediateAssem(ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs);
+    public abstract AssemOperand genIntermediateAssem(ArrayList<AssemInstruction> instrs, IRFuncDecl f, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass);
     
     public CFGNode getCFGNode(CFG cfg){
     	return cfg.outgoingGraph.getNode(this);
