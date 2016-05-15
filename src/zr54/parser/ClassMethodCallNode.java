@@ -42,7 +42,7 @@ public class ClassMethodCallNode extends ExprNode {
 		
 		FuncSignature f = classes.getClass(objectType.getClassName()).getMethod((String)symbol.value);
 		if (f==null){
-			throw new XiException(symbol, "Name "+ (String)symbol.value+ " cannot be resolved", "Semantic");
+			throw new XiException(symbol, "No method "+ (String)symbol.value+ " for class " + objectType.getClassName(), "Semantic");
 		}
 
 		

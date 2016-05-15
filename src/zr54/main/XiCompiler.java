@@ -266,7 +266,7 @@ class XiCompiler {
             if(typecheck){
             	TypeCheck.typeCheckAndPrint(src, diagDst + ".typed", libPath+"/");
             }
-            
+//            String typed = typecheck?(diagDst + ".typed"):"/dev/null";
             if(irrun){
             	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
             }else if(irgen){
