@@ -6,6 +6,7 @@ public class ClassDef {
 	private String name = "";
 	private HashMap<String, FuncSignature> methods = new HashMap<String, FuncSignature>();
 	private HashMap<String, Integer> methodIdx = new HashMap<String, Integer>();
+	public HashMap<Integer, String> reverseMethodIdx = new HashMap<Integer, String>();
 	private HashMap<String, Type> fields = new HashMap<String, Type>(); 
 	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
 	private ClassDef superClass = null;
@@ -45,7 +46,7 @@ public class ClassDef {
 		if(fieldIdx.containsKey(name)) 
 			return fieldIdx.get(name);
 		else if(superClass != null)
-			return superClass.getMethodIdx(name);
+			return superClass.getFieldIdx(name);
 		return -1;
 	}
 	
@@ -133,18 +134,34 @@ public class ClassDef {
 		int methodCount = 0;
 		for(String m : methods.keySet()) {
 			if(superClass != null) {
-				if(superClass.getMethodIdx(m) != -1) 
-					methodIdx.put(m, superClass.getMethodIdx(m));
+				if(superClass.getMethodIdx(m) != -1) {
+					mutualPut(m, superClass.getMethodIdx(m));
+				}
+				
 				else {
-					methodIdx.put(m, superMaxMethodIdx + methodCount + 1);
+					mutualPut(m, superMaxMethodIdx + methodCount + 1);
 					methodCount++;
 				}
 			}
 			else {
-				methodIdx.put(m, methodCount);
+				mutualPut(m, methodCount);
 				methodCount++;
 			}
 		}
 	}
 	
+	private void mutualPut(String m, int index){
+		this.methodIdx.put(m, index);
+		this.reverseMethodIdx.put(index, m);
+	}
+	
+	public String getIthMethodABI(int index){
+		if(index >= this.reverseMethodIdx.size()){
+			System.err.println("Trying to access " + index + "th method that does not exist in class " + this.name);
+			return "";
+		}
+		//not finished
+		return "";
+		
+	}
 }

@@ -95,4 +95,8 @@ public class TypeCheck {
 		root.registerClassSignature(classes);
 	}
 	
+	public static void registerAllGlobalVariables(){
+		// not finished
+	}
+	
 }
