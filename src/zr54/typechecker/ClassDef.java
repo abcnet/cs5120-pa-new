@@ -143,12 +143,12 @@ public class ClassDef {
 				}
 				
 				else {
-					mutualPut(m, superMaxMethodIdx + methodCount + 1);
+					mutualPut(m, superMaxMethodIdx + methodCount + 2);
 					methodCount++;
 				}
 			}
 			else {
-				mutualPut(m, methodCount);
+				mutualPut(m, methodCount + 1);
 				methodCount++;
 			}
 		}
