@@ -128,10 +128,13 @@ public class ClassMethodNode extends AstNode {
 			retTypes.add(ret.typeCheck(newVars, funcs, null, currClass, false));
 
 
-		if(funcSig != null) {
+		if(classDef.getNonInheritedMethod(funcName) != null) {
 			throw new XiException(symbol, "Method '" + (String) symbol.value + "' redefined", "Semantic");
 		}
-		else {
+		else if(funcSig != null) {
+			//TODO: need to check if the new definition matches the inherited method
+		}
+		else{
 			classDef.addMethod((String) symbol.value, argTypes, retTypes);
 		}
 	}

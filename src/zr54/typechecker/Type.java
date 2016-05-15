@@ -116,6 +116,7 @@ public class Type {
     	}else if(this.type == CLASS) {
     		if(t.type == CLASS && this.className.equals(t.className) && this.dimension == t.dimension) 
     			return true;
+    		//TODO: need to check if is super class
     		if(t.type == NULL)
     			return true;
     		return false;

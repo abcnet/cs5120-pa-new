@@ -63,6 +63,10 @@ public class ClassDef {
 			return null;
 	}
 	
+	public FuncSignature getNonInheritedMethod(String name) {
+		return methods.get(name);
+	}
+	
 	public Type getFieldType(String name) {
 		if(fields.containsKey(name))
 			return fields.get(name);

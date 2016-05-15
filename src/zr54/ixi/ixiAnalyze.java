@@ -33,17 +33,11 @@ public class ixiAnalyze {
 			p.setScanner(l);
 
 			Symbol s;
-			try{
-				s = p.parse();
-				AstNode root = s.value();
-				registerAllClasses(root, classes, ixiFile);
-				registerAllFunctions(root, funcs, ixiFile, classes, "");
-			}catch(Exception e){
-				
-			}
-			
-//			printer.flush();
 
+			s = p.parse();
+			AstNode root = s.value();
+			registerAllClasses(root, classes, ixiFile);
+			registerAllFunctions(root, funcs, ixiFile, classes, "");
 		} else {
 			System.out.println("error: '" + ixiFile + "' does not exist");
 		}
