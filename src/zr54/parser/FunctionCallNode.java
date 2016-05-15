@@ -1,11 +1,18 @@
 package zr54.parser;
 import java.util.ArrayList;
 
+import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
 import edu.cornell.cs.cs4120.xic.ir.IRCall;
+import edu.cornell.cs.cs4120.xic.ir.IRConst;
+import edu.cornell.cs.cs4120.xic.ir.IRESeq;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRMem;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
 import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
 import zr54.typechecker.ClassDef;
 import zr54.typechecker.FuncSymbolTable;
@@ -91,19 +98,39 @@ public class FunctionCallNode extends ExprNode{
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		//TODO: if this is a class method
-		
-		AstNode curr;
-		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
-		for (int i=0;i<this.children.size();i++){
-			curr=this.children.get(i);
-			if(curr.irNode==null){
-				curr.generateIR(funcs, classes, currClass, currWhile);
+
+		if(isClassMethod) {
+			AstNode curr;
+			ArrayList<IRExpr> l = new ArrayList<IRExpr>();
+			l.add(new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0));
+			for (int i=0;i<this.children.size();i++){
+				curr=this.children.get(i);
+				if(curr.irNode==null){
+					curr.generateIR(funcs, classes, currClass, currWhile);
+				}
+				l.add((IRExpr)curr.irNode);
 			}
-			l.add((IRExpr)curr.irNode);
+			
+			ClassDef classDef = classes.getClass(className);
+			int methodIdx = classDef.getMethodIdx((String) symbol.value);
+			
+			this.irNode = new IRCall(new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+														   new IRMem(new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0)),
+														   new IRConst(8 * methodIdx))), l);
 		}
-		
-		funcs.lookup((String)symbol.value);
-		this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);
+		else {
+			AstNode curr;
+			ArrayList<IRExpr> l = new ArrayList<IRExpr>();
+			for (int i=0;i<this.children.size();i++){
+				curr=this.children.get(i);
+				if(curr.irNode==null){
+					curr.generateIR(funcs, classes, currClass, currWhile);
+				}
+				l.add((IRExpr)curr.irNode);
+			}
+			this.irNode=new IRCall(new IRName(funcs.lookup((String)symbol.value).toString()),l);			
+		}
+
 	}
 
 	@Override
