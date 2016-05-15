@@ -176,7 +176,15 @@ public class ClassDef {
 		}else{
 			return "0";
 		}
-		
-		
 	}
+	
+	public boolean isSubclassOf(String superName) {
+		if(name.equals(superName))
+			return true;
+		else if(superClass != null) 
+			return superClass.isSubclassOf(superName);
+		else 
+			return false;
+	}
+	
 }

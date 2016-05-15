@@ -116,20 +116,39 @@ public class Type {
     	}else if(this.type == CLASS) {
     		if(t.type == CLASS && this.className.equals(t.className) && this.dimension == t.dimension) 
     			return true;
-    		//TODO: need to check if is super class
-    		if(t.type == NULL)
-    			return true;
-    		return false;
+    		else
+    			return false;
     	}
     	else if(this.type == NULL) {
-    		if(t.type == CLASS || t.type == NULL)
+    		if(t.type == NULL)
     			return true;
-    		return false;
+    		else 
+    			return false;
     	}
     	else {
     		return true;
     	}
     }
+    
+    public boolean isSubclassOf(Type t, ClassSymbolTable classes) {
+    	if(this.type == CLASS && t.type == CLASS) {
+    		ClassDef thisClass = classes.getClass(className);
+    		return thisClass.isSubclassOf(t.className);
+    	}
+    	else if(this.type == NULL && t.type == CLASS) {
+    		return true;
+    	}
+    	else if(this.type == TUPLE && t.type == TUPLE && this.tuple.size() == t.tuple.size()) {
+    		for(int i = 0; i < this.tuple.size(); i++) {
+    			if(!this.tuple.get(i).isSubclassOf(t.tuple.get(i), classes))
+    				return false;
+    		}
+    		return true;
+    	}
+    	else
+    		return false;
+    }
+    
     /**
      * Generating the string to represent the type for debugging purpose.
      */
@@ -146,7 +165,6 @@ public class Type {
     		s="unit";
     	}else if(type==VOID){
     		s="void";
-    		
     	}else if(type==TUPLE){
     		for(int i=0;i<tuple.size();i++){
         		s+=tuple.get(i).toString();
@@ -154,6 +172,10 @@ public class Type {
         			s+=", ";
         		}
         	}
+    	} else if(type == CLASS) {
+    		s=className;
+    	} else if(type == NULL) {
+    		s="null";
     	}
     	for(int i=0;i<dimension;i++){
     		s+="[]";

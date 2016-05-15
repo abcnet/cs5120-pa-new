@@ -46,7 +46,8 @@ public class AssignStmtNode extends StmtNode{
 			}else{
 				//left 1, right 1 check
 				if(!left.matches(right)){
-					throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
+					if(!right.isSubclassOf(left, classes))
+						throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
 				}
 			}
 			
@@ -69,10 +70,11 @@ public class AssignStmtNode extends StmtNode{
 
 						Type l=left.getTuple().get(i);
 						Type r=right.getTuple().get(i);
-						if(l.matches(r)==false){
-							AstNode node = this.children.get(0).getChildren().get(i);
-							throw new XiException(node.symbol,"Expected "+r+", but found "+l, "Semantic");
-
+						if(!l.matches(r)){
+							if(!r.isSubclassOf(l, classes)) {
+								AstNode node = this.children.get(0).getChildren().get(i);
+								throw new XiException(node.symbol,"Expected "+r+", but found "+l, "Semantic");
+							}
 						}
 					}
 				}

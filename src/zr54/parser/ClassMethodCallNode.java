@@ -61,8 +61,9 @@ public class ClassMethodCallNode extends ExprNode {
 			for(int i= 0; i < args.getTuple().size(); i++){
 				AstNode node = arguments.children.get(i);
 				Type l = node.typeCheck(vars, funcs, classes, currClass, insideWhile);
-				if(l.matches(args.getTuple().get(i)) == false){
-					throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
+				if(!l.matches(args.getTuple().get(i))){
+					if(!l.isSubclassOf(args.getTuple().get(i), classes))
+						throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");
 
 				}
 			}
@@ -88,7 +89,6 @@ public class ClassMethodCallNode extends ExprNode {
 		AstNode curr;
 		ArrayList<IRExpr> l = new ArrayList<IRExpr>();
 		AstNode object = children.get(0);
-		AstNode arguments = children.get(1);
 		
 		
 		String objName = "_OBJ_TMP_" + AstNode.counter++; 
@@ -97,15 +97,19 @@ public class ClassMethodCallNode extends ExprNode {
 		IRMove move = new IRMove(new IRTemp(objName), (IRExpr) object.irNode);
 		
 		l.add(new IRTemp(objName));
-		for (int i = 0; i < arguments.children.size(); i++){
-			curr = arguments.children.get(i);
-			if(curr.irNode == null){
-				curr.generateIR(funcs, classes, currClass, currWhile);
+		
+		if(children.size() > 1) {
+			AstNode arguments = children.get(1);
+			for (int i = 0; i < arguments.children.size(); i++){
+				curr = arguments.children.get(i);
+				if(curr.irNode == null){
+					curr.generateIR(funcs, classes, currClass, currWhile);
+				}
+				l.add((IRExpr)curr.irNode);
 			}
-			l.add((IRExpr)curr.irNode);
 		}
-
-		ClassDef classDef = classes.getClass(object.type.getClassName());
+		
+		ClassDef classDef = classes.getClass(object.type.toString());
 		int methodIdx = classDef.getMethodIdx((String) symbol.value);
 		
 		this.irNode = new IRESeq(move,
