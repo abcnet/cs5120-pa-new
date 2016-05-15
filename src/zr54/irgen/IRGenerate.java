@@ -154,8 +154,8 @@ public class IRGenerate {
 			        }
 			        
 					//Generate canonical IR
-					//IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-					//program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
+					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 					if(!disableDiagFileWrite){
 						program.printSExp(printer);
@@ -332,7 +332,7 @@ public class IRGenerate {
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.errorMessage(errFile));
-					if(errOutput)System.out.println(e.errorMessage(errFile));
+					System.out.println(e.errorMessage(errFile));
 					return false;
 				}finally{
 					printer.flush();
