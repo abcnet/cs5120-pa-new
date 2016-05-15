@@ -101,7 +101,7 @@ public class ClassMethodNode extends AstNode {
 			
 		}
 		l.add(new IRReturn());
-		this.irNode = new IRFuncDecl(classes.getClass(currClass).getMethod((String) symbol.value).toString(), new IRSeq(l));
+		this.irNode = new IRFuncDecl(classes.getClass(currClass).getMethodABI((String) symbol.value), new IRSeq(l));
 	}
 
 	@Override

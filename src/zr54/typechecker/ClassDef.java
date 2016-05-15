@@ -63,6 +63,17 @@ public class ClassDef {
 			return null;
 	}
 	
+	public String getMethodABI(String name){
+		FuncSignature f = getMethod(name);
+		if(f == null){
+			System.err.println("No method " + name + " in class " + this.name);
+			return "";
+		}else{
+			String s = f.toString();
+			return "_I_" + this.name + "_" + s.substring(2);
+		}
+	}
+	
 	public FuncSignature getNonInheritedMethod(String name) {
 		return methods.get(name);
 	}

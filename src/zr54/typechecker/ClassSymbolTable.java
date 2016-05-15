@@ -28,5 +28,14 @@ public class ClassSymbolTable {
 		
 	}
 	
+	public String populateSizeTable(){
+		StringWriter s = new StringWriter();
+		for(String className : table.keySet()){
+			ClassDef classDef = table.get(className);
+			String sizeConst = "_I_";
+		}
+		return s.toString();
+	}
+	
 	
 }
