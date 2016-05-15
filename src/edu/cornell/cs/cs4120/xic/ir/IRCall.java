@@ -40,6 +40,21 @@ public class IRCall extends IRExpr {
         for (int i = 0; i < this.args.size(); i++)
         	this.children.add(this.args.get(i));
     }
+    
+    
+    /**
+    *
+    * @param target address of the code for this function call
+    * @param args arguments of this function call
+    */
+    public IRCall(IRExpr target, List<IRExpr> args) {
+    	super();
+    	this.target = target;
+        this.args = args;
+        this.children.add(target);
+        for (int i = 0; i < this.args.size(); i++)
+        	this.children.add(this.args.get(i));
+   }
 
     /**
      *
