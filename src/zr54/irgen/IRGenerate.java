@@ -33,7 +33,7 @@ public class IRGenerate {
 	
 	public static boolean debug = false;
 	public static boolean debugCF = false;
-	
+	public static boolean debugCanonical = false;
 	public static boolean debugAssem = false;
 	public static boolean debugPA6 = false;
 	
@@ -193,6 +193,9 @@ public class IRGenerate {
 				            CheckCanonicalIRVisitor cv = new CheckCanonicalIRVisitor();
 				            if (debug)System.out.print("Canonical?: ");
 				            if (debug)System.out.println(cv.visit(program));
+				            if (debugCanonical)System.out.print("Canonical?: ");
+				            if (debugCanonical)System.out.println(cv.visit(program));
+				       
 				        }
 				        
 						
