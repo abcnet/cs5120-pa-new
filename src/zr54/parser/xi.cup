@@ -309,13 +309,14 @@ expressions         ::= expression:e                             {: RESULT = new
 functionCall        ::= IDENTIFIER:id LPAREN expressions:es RPAREN    {: RESULT = new FunctionCallNode("functionCall", id); RESULT.addGrandChildren(es); :}
                       | IDENTIFIER:id LPAREN RPAREN                   {: RESULT = new FunctionCallNode("forceParen", id);:}
                       | LENGTH:l LPAREN expression:e RPAREN            {: RESULT = new LengthNode("length", l, e); :}
-                      
+                      | IDENTIFIER:id DOT:d IDENTIFIER:f LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, new VariableNode("object", id), es); :} 
                       | functionCall:fc         DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, fc, es); :}
                       //| arrayIndices:ai         DOT IDENTIFIER  LPAREN expressions:es RPAREN {:xxx :}
                       | varArrayIndices:v  DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, v, es); :}
                       | fieldAccess:fa DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, fa, es); :}
                       | newObject:no DOT:d IDENTIFIER:f  LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, no, es); :}
                       | THIS:t DOT IDENTIFIER:f  LPAREN expressions:es RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, new ThisNode("this", t), es); :}
+                      | IDENTIFIER:id DOT:d IDENTIFIER:f LPAREN RPAREN {: RESULT = new ClassMethodCallNode("classMethodCall", f, new VariableNode("object", id)); :}
                       | functionCall:fc         DOT:d IDENTIFIER:f  LPAREN RPAREN    {: RESULT = new ClassMethodCallNode("classMethodCall", f, fc); :}
                       //| arrayIndices:ai         DOT IDENTIFIER  LPAREN RPAREN    {:xxx :}
                       | varArrayIndices:v  DOT:d IDENTIFIER:f  LPAREN RPAREN    {: RESULT = new ClassMethodCallNode("classMethodCall", f, v); :}
