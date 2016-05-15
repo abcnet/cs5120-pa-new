@@ -285,6 +285,7 @@ public class IRGenerate {
 					        	FileWriter as = new FileWriter(assemFile, false);
 					        	
 					        	as.write(assemStringWriter.toString());
+					        	as.write(classes.getDispatchTable());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){
@@ -306,6 +307,7 @@ public class IRGenerate {
 					        	FileWriter as = new FileWriter(assemFile, false);
 					        	
 					        	as.write(program.assemProgram.toString());
+					        	as.write(classes.getDispatchTable());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){
