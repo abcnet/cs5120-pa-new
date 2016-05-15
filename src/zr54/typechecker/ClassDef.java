@@ -164,8 +164,15 @@ public class ClassDef {
 			System.err.println("Trying to access " + index + "th method that does not exist in class " + this.name);
 			return "";
 		}
-		//not finished
-		return "";
+		if(this.reverseMethodIdx.containsKey(index)){
+			String m = this.reverseMethodIdx.get(index);
+			FuncSignature fs = this.methods.get(m);
+			String s = fs.toString();
+			return "_I_" + this.name + "_" + s.substring(2);
+		}else{
+			return "0";
+		}
+		
 		
 	}
 }
