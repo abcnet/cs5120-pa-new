@@ -248,6 +248,7 @@ public class IRMove extends IRStmt {
 				
 			}
 			else {
+				System.out.println(expr);
 				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs);
 				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs);
 				

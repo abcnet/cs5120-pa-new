@@ -240,8 +240,14 @@ public class IRCall extends IRExpr {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		String callee = ((IRName)this.target).name();
+
+		String callee = "";
+		if(this.target instanceof IRName)
+			callee = ((IRName)this.target).name();
+		else if(this.target instanceof IRMem) {
+			
+		}
+			 
 		boolean gt2;
 		int nRet;
 		int argSpace = 0;

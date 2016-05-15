@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.SExpPrinter;
 import zr54.assembly.AssemInstruction;
+import zr54.assembly.AssemLabelOffsetOperand;
 import zr54.assembly.AssemOperand;
 import zr54.assembly.OpTarget;
 import zr54.cfg.CpEntry;
@@ -63,8 +64,7 @@ public class IRName extends IRExpr {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AssemLabelOffsetOperand(name, 0);
 	}
 	
 	public CpEntry propConstVal(CpLattice cpl) {
