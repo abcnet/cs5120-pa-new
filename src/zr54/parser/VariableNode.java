@@ -1,8 +1,14 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
+import edu.cornell.cs.cs4120.xic.ir.IRConst;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
+import edu.cornell.cs.cs4120.xic.ir.IRMem;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
+import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
 import java_cup.runtime.Symbol;
+import zr54.typechecker.ClassDef;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
@@ -11,6 +17,8 @@ import zr54.typechecker.VarSymbolTable;
 
 public class VariableNode extends ExprNode{
 
+	boolean isField = false;
+	String className = "";
 	/**
 	 * constructor
 	 * @param t
@@ -28,7 +36,18 @@ public class VariableNode extends ExprNode{
 
 		type = vars.lookup((String)symbol.value);
 		if (type == null){
-			throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
+			ClassDef classDef = classes.getClass(currClass);
+			if(classDef != null) {
+				if(classDef.getFieldType((String) symbol.value) == null)
+					throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
+				else {
+					isField = true;
+					className = classDef.getName();
+					type = classDef.getFieldType((String) symbol.value);
+				}
+			}
+			else
+				throw new XiException(symbol.left,symbol.right, "Name " + (String) symbol.value + " cannot be resolved", "Semantic");
 		}
 		return type;
 	}
@@ -40,7 +59,13 @@ public class VariableNode extends ExprNode{
 	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
-		this.irNode = new IRTemp(getRegName());
+		if(!isField)
+			this.irNode = new IRTemp(getRegName());
+		else {
+			IRExpr thisNode = new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + "0");
+			int fieldIdx = classes.getClass(className).getFieldIdx((String) symbol.value);
+			this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, thisNode, new IRConst(8 * fieldIdx)));
+		}
 	}
 	
 	@Override

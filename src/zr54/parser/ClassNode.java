@@ -35,8 +35,9 @@ public class ClassNode extends AstNode{
 		for(AstNode n : fields)
 			n.typeCheck(newVars, funcs, classes, (String) symbol.value, insideWhile);
 		
+		VarSymbolTable newNewVars = new VarSymbolTable(vars);
 		for(ClassMethodNode n : methods)
-			n.typeCheck(newVars, funcs, classes, (String) symbol.value, insideWhile);
+			n.typeCheck(newNewVars, funcs, classes, (String) symbol.value, insideWhile);
 
 		type = new Type();
 		return type;

@@ -10,6 +10,10 @@ public class ClassDef {
 	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
 	private ClassDef superClass = null;
 	
+	public String getName() {
+		return name;
+	}
+	
 	public ClassDef(String n) {
 		name = n;
 	}

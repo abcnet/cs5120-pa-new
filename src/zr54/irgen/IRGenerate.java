@@ -154,8 +154,8 @@ public class IRGenerate {
 			        }
 			        
 					//Generate canonical IR
-					IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
-					program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
+					//IRCanonicalGenerate irCanonGen = new IRCanonicalGenerate();
+					//program = (IRCompUnit) irCanonGen.generateCanonicalIR(program);
 					
 					if(!disableDiagFileWrite){
 						program.printSExp(printer);
