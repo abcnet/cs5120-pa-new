@@ -104,10 +104,12 @@ public class FuncSignature {
      * @param ret: returned value types
      * @return true if matches
      */
-    public boolean typeMatch(Type args, Type ret) {
+    public boolean typeMatch(Type args, Type ret, ClassSymbolTable classes) {
     	Type thisArgs = this.getFunctionArgTypes();
     	Type thisRet = this.getFunctionReturnTypes();
     	if(ret.matches(thisRet) && args.matches(thisArgs))
+    		return true;
+    	else if(ret.isSubclassOf(thisRet, classes) && args.isSubclassOf(thisArgs, classes))
     		return true;
     	else
     		return false;

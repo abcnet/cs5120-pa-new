@@ -58,8 +58,9 @@ public class ClassMethodNode extends AstNode {
 				throw new XiException(symbol.left,symbol.right,"Incorrect number of values returned", "Semantic");
 			}
 			for(int i=0;i<m;i++){
-				if(newVars.toReturn.get(i).matches(newVars.returned.get(i))==false){
-					throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
+				if(!newVars.toReturn.get(i).matches(newVars.returned.get(i))){
+					if(!newVars.returned.get(i).isSubclassOf(newVars.toReturn.get(i), classes))
+						throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
 				}
 			}
 		}

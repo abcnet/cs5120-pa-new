@@ -53,8 +53,10 @@ public class MethodNode extends AstNode{
 			if(m != n)
 				throw new XiException(symbol.left,symbol.right,"Incorrect number of values returned", "Semantic");
 			for(int i = 0; i < m; i++){
-				if(newVars.toReturn.get(i).matches(newVars.returned.get(i)) == false)
-					throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
+				if(!newVars.toReturn.get(i).matches(newVars.returned.get(i))) {
+					if(!newVars.returned.get(i).isSubclassOf(newVars.toReturn.get(i), classes))
+						throw new XiException(symbol.left,symbol.right,"Incorrect type(s) returned", "Semantic");
+				}
 			}
 		}
 
@@ -87,7 +89,7 @@ public class MethodNode extends AstNode{
 		if(funcSig != null) {
 			if(isInterface) {
 				//need to check whether the signature matches
-				if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
+				if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes), classes))
 					throw new XiException(symbol, "Function signature of '" + (String) symbol.value 
 							+"' does not match", "Semantic");
 			}
@@ -96,7 +98,7 @@ public class MethodNode extends AstNode{
 				if(!funcSig.isInterface())
 					throw new XiException(symbol, "Function '" + (String) symbol.value + "' redefined", "Semantic");
 				else {
-					if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes)))
+					if(!funcSig.typeMatch(new Type(argTypes), new Type(retTypes), classes))
 						throw new XiException(symbol, "Function signature '" + (String) symbol.value 
 								+  "' does not match", "Semantic");
 					else
