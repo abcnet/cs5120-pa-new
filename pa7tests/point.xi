@@ -37,6 +37,7 @@ createPoint(x: int, y:int): Point {
 
 main(args:int[][]) {
 	p: Point = createPoint(1, 2)
+	p.clone().clone()
 	println(unparseInt(p.x))
 }
 

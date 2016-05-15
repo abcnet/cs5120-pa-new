@@ -214,9 +214,9 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       | classDef:cd {: RESULT =  cd; :}
-                      | argumentWithTypeNonEmpty:a  {: RESULT = a; :}
-                      | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
-                      | argumentWithType:a EQ:eq expression:e {: RESULT = new AssignStmtNode("assignment", eq, a, e); :}
+                      | argumentWithTypeNonEmpty:a optionalSemicolon {: RESULT = a; :}
+                      | multipleArgumentsWithSingleTypeNonEmpty:m optionalSemicolon {: RESULT = m; :}
+                      | argumentWithType:a EQ:eq expression:e optionalSemicolon {: RESULT = new AssignStmtNode("assignment", eq, a, e); :}
                       ;
 
 optionalStatements  ::= statements:s {: RESULT = s; :}
