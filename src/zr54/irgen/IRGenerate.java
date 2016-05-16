@@ -106,7 +106,7 @@ public class IRGenerate {
 						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
 					}
 					errFile = srcFile;
-					TypeCheck.registerAllClasses(classes, root, srcFile);
+					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					root.typeCheck(vars, funcs, classes, "", false);
 					

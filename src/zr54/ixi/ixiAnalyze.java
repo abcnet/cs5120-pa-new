@@ -58,6 +58,6 @@ public class ixiAnalyze {
 	}
 	
 	public static void registerAllClasses(AstNode root, ClassSymbolTable classes, String ixiFile) throws XiException {
-		root.registerClassSignature(classes);
+		root.registerClassSignature(classes, true);
 	}
 }

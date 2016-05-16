@@ -12,6 +12,7 @@ public class ClassDef {
 	private HashMap<String, Type> fields = new HashMap<String, Type>(); 
 	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
 	private ClassDef superClass = null;
+	boolean isInterface = false;
 	
 	public String getName() {
 		return name;
@@ -19,6 +20,11 @@ public class ClassDef {
 	
 	public ClassDef(String n) {
 		name = n;
+	}
+	
+	public ClassDef(String n, boolean ixi) {
+		name = n;
+		isInterface = ixi;
 	}
 	
 	public ClassDef getSuperClass() {

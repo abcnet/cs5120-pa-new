@@ -53,7 +53,7 @@ public class TypeCheck {
 					}
 					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
-					TypeCheck.registerAllClasses(classes, root, srcFile);
+					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					root.typeCheck(vars, funcs, classes, "", false);
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
@@ -91,8 +91,8 @@ public class TypeCheck {
 		root.registerFunctionSignature(funcs, false, file, classes, currClass);
 	}
 	
-	public static void registerAllClasses(ClassSymbolTable classes, AstNode root, String file) throws XiException {
-		root.registerClassSignature(classes);
+	public static void registerAllClasses(ClassSymbolTable classes, AstNode root, boolean isInterface, String file) throws XiException {
+		root.registerClassSignature(classes, isInterface);
 	}
 	
 	public static void registerAllGlobalVariables(){
