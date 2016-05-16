@@ -118,6 +118,7 @@ public class IRGenerate {
 						if(curr instanceof AssignStmtNode){
 							
 						}else if(curr instanceof MultiDeclarationNode){
+							MultiDeclarationNode node = (MultiDeclarationNode)curr;
 							
 						}else if(curr instanceof DeclarationNode){
 							DeclarationNode node = (DeclarationNode)curr;

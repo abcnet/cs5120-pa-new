@@ -86,7 +86,7 @@ public class ClassSymbolTable {
 								+ "	incq	%rcx\n"
 								+ "	jmp	" + vtLoopLabel + "\n");
 			}else{
-				s.write("	movq	$" + 8 * (classDef.getMaxFieldIdx() + 2) + ", _I_size_" + sizeLabel + "(%rip)\n");
+				s.write("	movq	$" + 8 * (classDef.getMaxFieldIdx() + 2) + ", " + sizeLabel + "(%rip)\n");
 			}
 			s.write(vtSelf + ":\n");
 			for(int index: classDef.reverseMethodIdx.keySet()){

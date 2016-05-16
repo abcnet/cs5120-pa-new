@@ -5,6 +5,9 @@ import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
 import zr54.typechecker.VarSymbolTable;
+
+import java.io.StringWriter;
+
 import java_cup.runtime.Symbol;
 
 public class MultiDeclarationNode extends StmtNode {
@@ -35,6 +38,10 @@ public class MultiDeclarationNode extends StmtNode {
 
 		type = new Type();
 		return type;
+	}
+	
+	public void writeGlobalVarData(StringWriter s){
+		
 	}
 
 	
