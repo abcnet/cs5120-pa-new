@@ -20,7 +20,12 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	
 	
 	public String toString(){
-		return assemFunc.getVarString(varName);
+		if(varName.substring(0, 4).equals("_I_g_")){
+			return varName + "(%rip)";
+		}else{
+			return assemFunc.getVarString(varName);
+		}
+		
 	}
 
 

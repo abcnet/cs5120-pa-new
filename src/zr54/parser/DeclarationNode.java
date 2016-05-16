@@ -1,5 +1,7 @@
 package zr54.parser;
 
+import java.io.StringWriter;
+
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
@@ -7,6 +9,7 @@ import zr54.main.XiException;
 
 
 public class DeclarationNode extends AstNode {
+	boolean isGlobal = false;
 	
 	/**
 	 * constructor
@@ -79,8 +82,22 @@ public class DeclarationNode extends AstNode {
 	 */
 	@Override
 	public String getRegName(){
-		return (String)symbol.value + "_" + AstNode.currMethod;
+		if(isGlobal){
+			return "_I_g_" + this.getSymbolName().replaceAll("_", "__") + "_" + this.getType().toABIString();
+		}else{
+			return (String)symbol.value + "_" + AstNode.currMethod;
+		}
+		
 
+	}
+	
+	public void writeGlobalVarData(StringWriter s){
+		isGlobal = true;
+		String varName = this.getSymbolName();
+		String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + this.getType().toABIString();
+		s.write("	.bss\n	.align	8\n"
+				+ ".globl " + varABI + "\n" + varABI + ":\n"
+						+ "	.zero	8\n	.text\n\n");
 	}
 	
 }

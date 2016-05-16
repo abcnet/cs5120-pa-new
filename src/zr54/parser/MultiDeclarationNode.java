@@ -41,6 +41,14 @@ public class MultiDeclarationNode extends StmtNode {
 	}
 	
 	public void writeGlobalVarData(StringWriter s){
+		AstNode variables = children.get(0);
+		for(AstNode var : variables.children) {
+			String varName = (String) var.symbol.value;
+			String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + var.getType().toABIString();
+			s.write("	.bss\n	.align	8\n"
+					+ ".globl " + varABI + "\n" + varABI + ":\n"
+							+ "	.zero	8\n	.text\n\n");
+		}
 		
 	}
 

@@ -26,7 +26,7 @@ public class IRGenerate {
 	public static boolean debugCanonical = false;
 	public static boolean debugAssem = false;
 	public static boolean debugPA6 = false;
-	
+	public static boolean debugGlobalVars = true;
 	
 	/**
 	 * Generete the IR
@@ -116,17 +116,15 @@ public class IRGenerate {
 						
 						// Global variables
 						if(curr instanceof AssignStmtNode){
-							
+							AssignStmtNode node = (AssignStmtNode)curr;
+							program.appendFunc(node.writeGlobalVarDataAndGetInitializationFunc(funcs, classes, globalVarsData));
+
 						}else if(curr instanceof MultiDeclarationNode){
 							MultiDeclarationNode node = (MultiDeclarationNode)curr;
-							
+							node.writeGlobalVarData(globalVarsData);
 						}else if(curr instanceof DeclarationNode){
 							DeclarationNode node = (DeclarationNode)curr;
-							String varName = node.getSymbolName();
-							String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + node.getType().toABIString();
-							globalVarsData.write("	.bss\n	.align	8\n"
-									+ ".globl " + varABI + "\n" + varABI + ":\n"
-											+ "	.zero	8\n	.text\n\n");
+							node.writeGlobalVarData(globalVarsData);
 						}
 						
 						if(curr.getIRNode()==null){
@@ -141,6 +139,8 @@ public class IRGenerate {
 							for(IRFuncDecl func : classIR.functions().values()) {
 								program.appendFunc(func);
 							}
+						}else if(debugGlobalVars){
+							System.out.println(curr.getIRNode().getClass().getSimpleName());
 						}
 					}
 					
