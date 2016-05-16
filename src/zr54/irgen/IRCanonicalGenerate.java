@@ -186,9 +186,9 @@ public class IRCanonicalGenerate {
 					node = new IRSeq((IRStmt) s);
 					changed = true;
 				}
-				else {
-					node.children.set(0, moveESEQup(node.children.get(0)));
-				}
+//				else {
+//					node.children.set(0, moveESEQup(node.children.get(0)));
+//				}
 				
 			}
 		}
