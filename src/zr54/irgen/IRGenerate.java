@@ -1,13 +1,7 @@
 package zr54.irgen;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
+
 import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
@@ -21,13 +15,9 @@ import zr54.assembly.AssemInstruction;
 import zr54.cse.CSE;
 import zr54.ixi.ixiAnalyze;
 import zr54.lexer.Lexer;
-import zr54.parser.AstNode;
-import zr54.parser.parser;
-import zr54.typechecker.ClassSymbolTable;
-import zr54.typechecker.FuncSymbolTable;
-import zr54.typechecker.TypeCheck;
+import zr54.parser.*;
 import zr54.main.XiException;
-import zr54.typechecker.VarSymbolTable;
+import zr54.typechecker.*;
 
 public class IRGenerate {
 	
@@ -109,7 +99,7 @@ public class IRGenerate {
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					root.typeCheck(vars, funcs, classes, "", false);
-					
+					StringWriter globalVarsData = new StringWriter();
 					
 					int slash = srcFile.lastIndexOf('/');
 					int dot = srcFile.indexOf('.', slash+1);
@@ -123,9 +113,25 @@ public class IRGenerate {
 					AstNode methods = root.getChildren().get(1), curr;
 					for(int i=0;i<methods.getChildren().size();i++){
 						curr = methods.getChildren().get(i);
+						
+						// Global variables
+						if(curr instanceof AssignStmtNode){
+							
+						}else if(curr instanceof MultiDeclarationNode){
+							
+						}else if(curr instanceof DeclarationNode){
+							DeclarationNode node = (DeclarationNode)curr;
+							String varName = node.getSymbolName();
+							String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + node.getType().toABIString();
+							globalVarsData.write("	.bss\n	.align	8\n"
+									+ ".globl " + varABI + "\n" + varABI + ":\n"
+											+ "	.zero	8\n	.text\n\n");
+						}
+						
 						if(curr.getIRNode()==null){
 							curr.generateIR(funcs, classes, "", null);
 						}
+						
 						
 						if(curr.getIRNode() instanceof IRFuncDecl) 
 							program.appendFunc((IRFuncDecl)curr.getIRNode());
@@ -290,6 +296,7 @@ public class IRGenerate {
 					        	as.write(assemStringWriter.toString());
 //					        	as.write(classes.getDispatchTable());
 					        	as.write(classes.populateSizeAndVT());
+					        	as.write(globalVarsData.toString());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){
@@ -313,6 +320,7 @@ public class IRGenerate {
 					        	as.write(program.assemProgram.toString());
 //					        	as.write(classes.getDispatchTable());
 					        	as.write(classes.populateSizeAndVT());
+					        	as.write(globalVarsData.toString());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){

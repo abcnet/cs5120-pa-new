@@ -71,7 +71,7 @@ public class ClassSymbolTable {
 				s.write("	call	_I_init_" + superClassEscapaed + "\n"
 						+ "	movq	_I_size_" + superClassEscapaed + "(%rip), %rax\n"
 						+ "	addq	$" + 8 * (classDef.getMaxFieldIdx() + 2) + ", %rax\n"
-						+ "	movq	%rax, _I_size_" + sizeLabel + "(%rip)\n");
+						+ "	movq	%rax, " + sizeLabel + "(%rip)\n");
 				
 				String vtLoopLabel = "L_vtloop_" + escaped;
 				
@@ -91,7 +91,7 @@ public class ClassSymbolTable {
 			s.write(vtSelf + ":\n");
 			for(int index: classDef.reverseMethodIdx.keySet()){
 				s.write("	leaq	" + classDef.getIthMethodABI(index) + "(%rip), %rax\n"
-						+ "	movq	%rax, " + dv + "+" + index + "(%rip)\n");
+						+ "	movq	%rax, " + dv + "+" + (index*8) + "(%rip)\n");
 			}
 			
 			s.write(retLabel + ":\n	ret\n\n");

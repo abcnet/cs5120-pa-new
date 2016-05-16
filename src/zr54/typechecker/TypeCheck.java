@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringWriter;
+
 import zr54.ixi.*;
 import java_cup.runtime.Symbol;
 import zr54.lexer.Lexer;
@@ -97,6 +99,13 @@ public class TypeCheck {
 	
 	public static void registerAllGlobalVariables(){
 		// not finished
+	}
+	
+	public static String globalVarsData(AstNode root){
+		StringWriter s = new StringWriter();
+		s.write("\n");
+		
+		return s.toString();
 	}
 	
 }
