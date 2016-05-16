@@ -262,9 +262,6 @@ public class IRCall extends IRExpr {
 		String callee = "";
 		if(this.target instanceof IRName)
 			callee = ((IRName)this.target).name();
-		else if(this.target instanceof IRMem) {
-			
-		}
 			 
 		boolean gt2;
 		int nRet;
@@ -359,9 +356,14 @@ public class IRCall extends IRExpr {
 //					sw.write("	movq	" + s + ", " + argTarg + "\n");
 //				}
 			}
-			
-			
 		}
+
+		if(this.target instanceof IRMem) {
+			AssemOperand addr = this.target.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+			instrs.add(new AssemMove(addr, new AssemFixedRegister(Reg.r10)));
+			callee = "*%r10";
+		}
+		
 		instrs.add(new AssemCall(callee, nArgs));
 		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rax), new AssemAddr(-80, new AssemFixedRegister(Reg.rbp))));
 		instrs.add(new AssemMove(new AssemFixedRegister(Reg.rdi), new AssemFixedRegister(Reg.rbx)));
