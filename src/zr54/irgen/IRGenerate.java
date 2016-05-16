@@ -286,7 +286,7 @@ public class IRGenerate {
 					        if (debugAssem) System.out.println(assemStringWriter);
 					        try{
 					        	FileWriter as = new FileWriter(assemFile, false);
-					        	
+					        	as.write(classes.getClassInit());
 					        	as.write(assemStringWriter.toString());
 //					        	as.write(classes.getDispatchTable());
 					        	as.write(classes.populateSizeAndVT());
@@ -309,7 +309,7 @@ public class IRGenerate {
 			        	 
 					        try{
 					        	FileWriter as = new FileWriter(assemFile, false);
-					        	
+					        	as.write(classes.getClassInit());
 					        	as.write(program.assemProgram.toString());
 //					        	as.write(classes.getDispatchTable());
 					        	as.write(classes.populateSizeAndVT());
