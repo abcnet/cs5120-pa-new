@@ -182,8 +182,14 @@ public class IRCanonicalGenerate {
 				IRNode s = e.children.get(0);
 				IRNode e1 = e.children.get(1);
 				//TODO: should not throw away e1!!!
-				node = new IRSeq((IRStmt) s);
-				changed = true;
+				if(!(e1 instanceof IRESeq)) {
+					node = new IRSeq((IRStmt) s);
+					changed = true;
+				}
+				else {
+					node.children.set(0, moveESEQup(node.children.get(0)));
+				}
+				
 			}
 		}
 		

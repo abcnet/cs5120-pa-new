@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
 import edu.cornell.cs.cs4120.xic.ir.IRExp;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import java_cup.runtime.Symbol;
@@ -33,6 +34,15 @@ public class FunctionCallAsStmt extends StmtNode {
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		children.get(0).generateIR(funcs, classes, currClass, currWhile);
 		this.irNode=new IRExp((IRExpr) children.get(0).irNode);
+	}
+	
+	/**
+	 * print this node
+	 * @param printer: the printer
+	 */
+	@Override
+	public void print(CodeWriterSExpPrinter printer) {
+		children.get(0).print(printer);
 	}
 
 }
