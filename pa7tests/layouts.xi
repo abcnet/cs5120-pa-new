@@ -1,8 +1,8 @@
 use qt
-
 bg: QButtonGroup // global to prevent GC
 
 main(args: int[][]) {
+
     app: QApplication, _ = qapplication(args)
 
     // We use it modeless here

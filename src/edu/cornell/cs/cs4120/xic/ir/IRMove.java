@@ -203,9 +203,17 @@ public class IRMove extends IRStmt {
 				if(addr != null) {
 
 					if(!(src instanceof AssemConst)) {
-						AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
-						instrs.add(new AssemMove(src, t));
-						instrs.add(new AssemMove(t, addr));
+						if(expr instanceof IRName) {
+							//might be buggy
+							AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
+							instrs.add(new AssemLea((AssemLabelOffsetOperand)src, t));
+							instrs.add(new AssemMove(t, addr));
+						}
+						else {
+							AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
+							instrs.add(new AssemMove(src, t));
+							instrs.add(new AssemMove(t, addr));
+						}
 					}
 					else
 						instrs.add(new AssemMove(src, addr));
@@ -224,11 +232,20 @@ public class IRMove extends IRStmt {
 					instrs.add(new AssemMove(new AssemConst(((IRConst) expr).value()), new AssemAddr(t)));
 				}
 				else {
-					AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
-					AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
-					instrs.add(new AssemMove(src, t1));
-					instrs.add(new AssemMove(addr, t2));
-					instrs.add(new AssemMove(t1, new AssemAddr(t2)));
+					if(expr instanceof IRName) {
+						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
+						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
+						instrs.add(new AssemLea((AssemLabelOffsetOperand)src, t1));
+						instrs.add(new AssemMove(addr, t2));
+						instrs.add(new AssemMove(t1, new AssemAddr(t2)));
+					}
+					else {
+						AssemVar t1 = new AssemVar("t" + ++f.count, f.assemFunc);
+						AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
+						instrs.add(new AssemMove(src, t1));
+						instrs.add(new AssemMove(addr, t2));
+						instrs.add(new AssemMove(t1, new AssemAddr(t2)));
+					}
 				}
 			}
 		}
@@ -251,13 +268,24 @@ public class IRMove extends IRStmt {
 			else {
 				AssemOperand src = expr.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 				AssemOperand dst = target.genIntermediateAssem(instrs, f, funcs, classes, currClass);
-				
-				if(src instanceof AssemAddr && dst instanceof AssemAddr) {
-					AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
-					instrs.add(new AssemMove(src, t));
-					instrs.add(new AssemMove(t, dst));
-				}else{
-					instrs.add(new AssemMove(src, dst));
+				if(expr instanceof IRName) {
+					if(dst instanceof AssemVar) {
+						instrs.add(new AssemLea((AssemLabelOffsetOperand)src, (AssemVar)dst));
+					}
+					else {
+						AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
+						instrs.add(new AssemLea((AssemLabelOffsetOperand)src, t));
+						instrs.add(new AssemMove(t, dst));
+					}
+				}
+				else {
+					if(src instanceof AssemAddr && dst instanceof AssemAddr) {
+						AssemVar t = new AssemVar("t" + ++f.count, f.assemFunc);
+						instrs.add(new AssemMove(src, t));
+						instrs.add(new AssemMove(t, dst));
+					}else{
+						instrs.add(new AssemMove(src, dst));
+					}
 				}
 			}
 		}
