@@ -4,6 +4,8 @@ import java.util.*;
 
 public class ClassDef {
 	private String name = "";
+	private ArrayList<String> methodsInOrder = new ArrayList<String>();
+	private ArrayList<String> fieldsInOrder = new ArrayList<String>();
 	private HashMap<String, FuncSignature> methods = new HashMap<String, FuncSignature>();
 	private HashMap<String, Integer> methodIdx = new HashMap<String, Integer>();
 	public HashMap<Integer, String> reverseMethodIdx = new HashMap<Integer, String>();
@@ -29,12 +31,14 @@ public class ClassDef {
 	
 	public void addField(String name, Type type) {
 		fields.put(name, type);
+		fieldsInOrder.add(name);
 	}
 
 	public void addMethod(String name, ArrayList<Type> argTypes, ArrayList<Type> retTypes) {
     	FuncSignature f = new FuncSignature(name, argTypes, retTypes);
     	//TODO: need to check if method is duplicated
     	methods.put(name, f);
+    	methodsInOrder.add(name);
 	}
 	
 	public int getMethodIdx(String name) {
@@ -144,7 +148,7 @@ public class ClassDef {
 		}
 		
 		int fieldCount = 0;
-		for(String f : fields.keySet()) {
+		for(String f : fieldsInOrder) {
 			if(superClass != null) {
 				if(superClass.getFieldIdx(f) != -1) 
 					fieldIdx.put(f, superClass.getFieldIdx(f));
@@ -159,8 +163,13 @@ public class ClassDef {
 			}
 		}
 		
+		if(name.equals("QTimer")) {
+			int debug;
+			debug = 0;
+		}
+		
 		int methodCount = 0;
-		for(String m : methods.keySet()) {
+		for(String m : methodsInOrder) {
 			if(superClass != null) {
 				if(superClass.getMethodIdx(m) != -1) {
 					mutualPut(m, superClass.getMethodIdx(m));

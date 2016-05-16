@@ -110,6 +110,10 @@ public class ClassMethodCallNode extends ExprNode {
 		}
 		
 		ClassDef classDef = classes.getClass(object.type.toString());
+		if(((String) symbol.value).equals("setInterval")) {
+			int debug;
+			debug = 0;
+		}
 		int methodIdx = classDef.getMethodIdx((String) symbol.value);
 		
 		this.irNode = new IRESeq(move,
