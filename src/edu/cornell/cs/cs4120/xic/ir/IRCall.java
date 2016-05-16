@@ -175,7 +175,7 @@ public class IRCall extends IRExpr {
 			nRet = 0;
 		}else{
 			String rawFuncName = callee.substring(2, callee.lastIndexOf('_'));
-			FuncSignature sign = funcs.lookup(rawFuncName);
+			FuncSignature sign = funcs.lookup(rawFuncName); // no longer correct for object-oriented features
 			nRet = sign.getFunctionReturnTypes().getTuple().size();
 			gt2 = nRet>2;
 			int nArgs = this.args().size()+(gt2?1:0);

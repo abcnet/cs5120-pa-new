@@ -184,15 +184,15 @@ public class ClassDef {
 	}
 	
 	public String getIthMethodABI(int index){
-		if(index >= this.reverseMethodIdx.size()){
-			System.err.println("Trying to access " + index + "th method that does not exist in class " + this.name);
-			return "";
-		}
+//		if(index >= this.reverseMethodIdx.size()){
+////			System.err.println("Trying to access " + index + "th method that does not exist in class " + this.name);
+//			return "0";
+//		}
 		if(this.reverseMethodIdx.containsKey(index)){
 			String m = this.reverseMethodIdx.get(index);
 			FuncSignature fs = this.methods.get(m);
 			String s = fs.toString();
-			return "_I_" + this.name.replaceAll("_", "__") + "_" + s.substring(2);
+			return "_I_" + name.replaceAll("_", "__") + "_" + s.substring(2);
 		}else{
 			return "0";
 		}
@@ -205,6 +205,10 @@ public class ClassDef {
 			return superClass.isSubclassOf(superName);
 		else 
 			return false;
+	}
+	
+	public String escapedName(){
+		return name.replaceAll("_", "__");
 	}
 	
 }

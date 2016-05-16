@@ -289,6 +289,7 @@ public class IRGenerate {
 					        	
 					        	as.write(assemStringWriter.toString());
 					        	as.write(classes.getDispatchTable());
+					        	as.write(classes.populateSizeTable());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){
@@ -311,6 +312,7 @@ public class IRGenerate {
 					        	
 					        	as.write(program.assemProgram.toString());
 					        	as.write(classes.getDispatchTable());
+					        	as.write(classes.populateSizeTable());
 					        	as.flush();
 						        as.close();
 					        }catch(IOException e){

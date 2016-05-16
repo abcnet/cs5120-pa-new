@@ -134,6 +134,7 @@ public class ClassMethodNode extends AstNode {
 		}
 		else if(funcSig != null) {
 			//TODO: need to check if the new definition matches the inherited method
+			classDef.addMethod((String) symbol.value, argTypes, retTypes);
 		}
 		else{
 			classDef.addMethod((String) symbol.value, argTypes, retTypes);
