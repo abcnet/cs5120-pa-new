@@ -63,6 +63,15 @@ public class ClassDef {
 			return null;
 	}
 	
+	public ClassDef whichClassHasMethod(String name) {
+		if(methods.containsKey(name))
+			return this;
+		else if(superClass != null)
+			return superClass.whichClassHasMethod(name);
+		else
+			return null;
+	}
+	
 	public String getMethodABI(String name){
 		FuncSignature f = getMethod(name);
 		if(f == null){
