@@ -304,6 +304,12 @@ public class IRCall extends IRExpr {
 		String s;
 		IRExpr arg;
 		int i;
+//		AssemOperand[] argsOperand = new AssemOperand[this.args.size()];
+//		for(i = 0; i < this.args.size(); i++){
+//			argsOperand[i] = arg.genIntermediateAssem(instrs, f, funcs, classes, currClass);
+//		}
+		
+		ArrayList<AssemInstruction> moves = new ArrayList<AssemInstruction>();
 		for(i = 0; i < this.args.size(); i++){
 			
 			int num2 = gt2?(i+1):i;
@@ -335,20 +341,20 @@ public class IRCall extends IRExpr {
 				if(argTarg instanceof AssemAddr && !((IRConst)arg).isIn32BitRange()){
 					
 					AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
-					instrs.add(new AssemMove(new AssemConst(((IRConst)arg).value()), r));
-					instrs.add(new AssemMove(r, argTarg));
+					moves.add(new AssemMove(new AssemConst(((IRConst)arg).value()), r));
+					moves.add(new AssemMove(r, argTarg));
 //					sw.write("	movq	$" + ((IRConst)arg).value() + ", %r10\n"
 //							+"	movq	%r10, " + argTarg + "\n");
 				}else{
-					instrs.add(new AssemMove(new AssemConst(((IRConst)arg).value()), argTarg));
+					moves.add(new AssemMove(new AssemConst(((IRConst)arg).value()), argTarg));
 //					sw.write("	movq	$" + ((IRConst)arg).value() + ", " + argTarg + "\n");
 				}
 				
 			}else{
 				t = arg.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 //				s = t.getTarget(false);
-				AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
-				instrs.add(new AssemMove(t, argTarg));
+//				AssemVar r = new AssemVar("t" + ++f.count, f.assemFunc);
+				moves.add(new AssemMove(t, argTarg));
 //				if(s.contains("(")&&argTarg.contains("(")){
 //					sw.write("	movq	" + s + ", %r10\n"
 //							+"	movq	%r10, " + argTarg + "\n");
@@ -357,6 +363,8 @@ public class IRCall extends IRExpr {
 //				}
 			}
 		}
+		
+		instrs.addAll(moves);
 
 		if(this.target instanceof IRMem) {
 			AssemOperand addr = this.target.genIntermediateAssem(instrs, f, funcs, classes, currClass);
