@@ -91,13 +91,23 @@ public class DeclarationNode extends AstNode {
 
 	}
 	
-	public void writeGlobalVarData(StringWriter s){
+	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		isGlobal = true;
 		String varName = this.getSymbolName();
 		String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + this.getType().toABIString();
+		String init = "_I_ginit_" + varName.replaceAll("_", "__");
 		s.write("	.bss\n	.align	8\n"
 				+ ".globl " + varABI + "\n" + varABI + ":\n"
 						+ "	.zero	8\n	.text\n\n");
+		
+		this.generateIR(funcs, classes, "", null);
+		if(this.irNode instanceof IRESeq){
+			s.write(".section .ctors\n	.align 8\n	.quad	" + init + "\n	.text\n\n");
+			return new IRFuncDecl(init, ((IRESeq)this.irNode).stmt());
+		}else{
+			return null;
+		}
+		
 	}
 	
 }

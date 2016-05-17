@@ -128,7 +128,7 @@ public class AssignStmtNode extends StmtNode{
 		
 	}
 	
-	public IRFuncDecl writeGlobalVarDataAndGetInitializationFunc(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
+	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		DeclarationNode left = (DeclarationNode)this.children.get(0);
 		left.isGlobal = true;
 		String varName = left.getSymbolName();
@@ -141,13 +141,13 @@ public class AssignStmtNode extends StmtNode{
 		this.generateIR(funcs, classes, "", null);
 		 
 		if(this.irNode instanceof IRSeq){
-			List<IRStmt> stmts = ((IRSeq)this.irNode).stmts();
-			stmts.add(new IRReturn());
-			return new IRFuncDecl(init, new IRSeq(stmts));
+//			List<IRStmt> stmts = ((IRSeq)this.irNode).stmts();
+//			stmts.add(new IRReturn());
+			return new IRFuncDecl(init, (IRSeq)this.irNode);
 		}else{
 			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
 			stmts.add((IRStmt)this.irNode);
-			stmts.add(new IRReturn());
+//			stmts.add(new IRReturn());
 			
 			return new IRFuncDecl(init, new IRSeq(stmts));
 		}

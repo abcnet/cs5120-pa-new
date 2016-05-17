@@ -40,16 +40,19 @@ public class CFG {
 				}
 			}  else {
 				int j = i + 1;
-				while (seq.children.get(j) instanceof IRLabel) {
-					j++;
+				if(j < seq.children.size()){
+					while (seq.children.get(j) instanceof IRLabel) {
+						j++;
+					}
+					if (seq.children.get(j).visitedCFG == true) {
+						child = outgoingGraph.getNode(seq.children.get(j));
+					} else {
+						seq.children.get(j).visitedCFG = true;
+						child = new CFGNode(seq.children.get(j), j);
+						outgoingGraph.addNode(child);
+					}
 				}
-				if (seq.children.get(j).visitedCFG == true) {
-					child = outgoingGraph.getNode(seq.children.get(j));
-				} else {
-					seq.children.get(j).visitedCFG = true;
-					child = new CFGNode(seq.children.get(j), j);
-					outgoingGraph.addNode(child);
-				}
+				
 			}
 			addEdges(currNode, child, false);
 			

@@ -8,6 +8,7 @@ import zr54.typechecker.VarSymbolTable;
 
 import java.io.StringWriter;
 
+import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
 import java_cup.runtime.Symbol;
 
 public class MultiDeclarationNode extends StmtNode {
@@ -41,7 +42,7 @@ public class MultiDeclarationNode extends StmtNode {
 		return type;
 	}
 	
-	public void writeGlobalVarData(StringWriter s){
+	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		AstNode variables = children.get(0);
 		for(AstNode var : variables.children) {
 			String varName = (String) var.symbol.value;
@@ -55,7 +56,8 @@ public class MultiDeclarationNode extends StmtNode {
 					+ ".globl " + varABI + "\n" + varABI + ":\n"
 							+ "	.zero	8\n	.text\n\n");
 		}
-		
+		// not finished
+		return null;
 	}
 
 	

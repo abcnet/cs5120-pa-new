@@ -118,14 +118,14 @@ public class IRGenerate {
 						// Global variables
 						if(curr instanceof AssignStmtNode){
 							AssignStmtNode node = (AssignStmtNode)curr;
-							program.appendFunc(node.writeGlobalVarDataAndGetInitializationFunc(funcs, classes, globalVarsData));
+							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
 
 						}else if(curr instanceof MultiDeclarationNode){
 							MultiDeclarationNode node = (MultiDeclarationNode)curr;
-							node.writeGlobalVarData(globalVarsData);
+							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
 						}else if(curr instanceof DeclarationNode){
 							DeclarationNode node = (DeclarationNode)curr;
-							node.writeGlobalVarData(globalVarsData);
+							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
 						}
 						
 						if(curr.getIRNode()==null){

@@ -52,8 +52,11 @@ public class IRCompUnit extends IRNode {
     }
 
     public void appendFunc(IRFuncDecl func) {
-        functions.put(func.name(), func);
-        this.children.add(func);
+    	if(func != null){
+    		 functions.put(func.name(), func);
+    	     this.children.add(func);
+    	}
+       
     }
 
     public String name() {
