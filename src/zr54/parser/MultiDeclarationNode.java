@@ -49,7 +49,7 @@ public class MultiDeclarationNode extends StmtNode {
 					+ varName
 					.replaceAll("_", "__")
 					+ "_" 
-					+ this.getType()
+					+ var.getType()
 					.toABIString();
 			s.write("	.bss\n	.align	8\n"
 					+ ".globl " + varABI + "\n" + varABI + ":\n"

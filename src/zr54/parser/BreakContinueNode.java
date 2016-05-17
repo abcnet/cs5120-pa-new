@@ -34,7 +34,7 @@ public class BreakContinueNode extends StmtNode{
 		if(this.name.equals("break")){
 			this.irNode = new IRJump(new IRName(currWhile.falseLabel));
 		}else if (this.name.equals("continue")){
-			// not finished
+			this.irNode =  new IRJump(new IRName(currWhile.startLabel));
 		}else{
 			System.err.println("should never reach this line");
 		}
