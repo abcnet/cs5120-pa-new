@@ -96,6 +96,11 @@ public class Type {
     public String getClassName() {
     	return className;
     }
+    
+    public void setClassName(String c) {
+    	className = c;
+    }
+    
    /**
     * Check if two types match with each other
     * @param t
@@ -133,6 +138,7 @@ public class Type {
     public boolean isSubclassOf(Type t, ClassSymbolTable classes) {
     	if(this.type == CLASS && t.type == CLASS) {
     		if(className == null){
+    			System.out.println(t.dimension);
     			System.out.println("className is null");
     			System.out.println(this.toString());
     			return false;

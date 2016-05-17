@@ -34,7 +34,10 @@ public class EqNotEqNode extends BoolBinaryExprNode{
 		if ((t1.getType() == t2.getType() )
 				&& (t1.getDimension() == t2.getDimension())) {
 			type = new Type(Type.BOOL, 0);
-		} else {
+		} else if(t2.isSubclassOf(t1, classes) || t1.isSubclassOf(t2, classes)) {
+			type = new Type(Type.BOOL, 0);
+		}
+		else {
 			throw new XiException(this.symbol.left,this.symbol.right,"operands of '" + this.symbol.value +  "' do not match", "Semantic");
 		}
 

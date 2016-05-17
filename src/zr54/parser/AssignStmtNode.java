@@ -32,7 +32,7 @@ public class AssignStmtNode extends StmtNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		Type left, right;
-
+		
 		right=this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
 		left=this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
 
@@ -54,6 +54,7 @@ public class AssignStmtNode extends StmtNode{
 					if(right == null){
 						System.out.println("right " + right + " is null!");
 					}
+					
 					if(!right.isSubclassOf(left, classes))
 						throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
 				}

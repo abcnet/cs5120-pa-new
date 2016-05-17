@@ -38,7 +38,9 @@ public class ArrayIndicesNode extends BinaryExprNode{
 			throw new XiException(this.children.get(1).getFirstSymbol(),"Second operand of array access must be int", "Semantic");
 		}
 		type = new Type(t1.getType(), t1.getDimension()-1);
-
+		if(type.getType() == Type.CLASS) {
+			type.setClassName(t1.getClassName());
+		}
 		return type;
 	} 
 	
