@@ -97,15 +97,15 @@ public class TypeCheck {
 		root.registerClassSignature(classes, isInterface);
 	}
 	
-	public static void registerAllGlobalVariables(){
-		// not finished
-	}
+//	public static void registerAllGlobalVariables(){
+//		// not finished
+//	}
 	
-	public static String globalVarsData(AstNode root){
-		StringWriter s = new StringWriter();
-		s.write("\n");
-		
-		return s.toString();
-	}
+//	public static String globalVarsData(AstNode root){
+//		StringWriter s = new StringWriter();
+//		s.write("\n");
+//		
+//		return s.toString();
+//	}
 	
 }
