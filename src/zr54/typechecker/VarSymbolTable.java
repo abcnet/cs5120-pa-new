@@ -8,6 +8,7 @@ public class VarSymbolTable {
     private VarSymbolTable parent;
     private HashMap<String, Type> table;
     public static HashSet<String> globalVars = new HashSet<String>();
+    public static HashSet<String> allVars = new HashSet<String>();
     public ArrayList<Type> toReturn = null; 
     public ArrayList<Type> returned = new ArrayList<Type>();
     public static boolean debugGlobal = true;
@@ -48,6 +49,7 @@ public class VarSymbolTable {
  * @return 1 if succeed and 0 if the variable is already in it
  */
     public int add(String var, Type t) {
+    	VarSymbolTable.allVars.add(var);
         if (this.lookup(var) == null) {
            table.put(var, t);
            return 1;
@@ -77,9 +79,6 @@ public class VarSymbolTable {
     }
     
     public static boolean isGlobal(String s){
-    	if(debugGlobal && s.equals("DIM")){
-    		System.out.println(s);
-    	}
     	
     	return VarSymbolTable.globalVars.contains(s);
     	

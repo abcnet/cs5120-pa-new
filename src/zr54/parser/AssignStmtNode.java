@@ -47,6 +47,12 @@ public class AssignStmtNode extends StmtNode{
 			}else{
 				//left 1, right 1 check
 				if(!left.matches(right)){
+					if(left == null){
+						System.out.println(left);
+					}
+					if(right == null){
+						System.out.println(right);
+					}
 					if(!right.isSubclassOf(left, classes))
 						throw new XiException(this.children.get(0).getFirstSymbol(),"Cannot assign "+right+" to "+left, "Semantic");
 				}
