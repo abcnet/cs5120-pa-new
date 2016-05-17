@@ -34,7 +34,7 @@ public class ThisNode extends ExprNode {
 	
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
-		this.irNode = new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0);		
+		this.irNode = new IRTemp(Configuration.ABSTRACT_THIS_REG);		
 	}
 
 }
