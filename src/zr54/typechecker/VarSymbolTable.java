@@ -77,9 +77,6 @@ public class VarSymbolTable {
     }
     
     public static boolean isGlobal(String s){
-    	if(debugGlobal && s.equals("DIM")){
-    		System.out.println(s);
-    	}
     	
     	return VarSymbolTable.globalVars.contains(s);
     	
