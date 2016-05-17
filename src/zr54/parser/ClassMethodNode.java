@@ -75,6 +75,8 @@ public class ClassMethodNode extends AstNode {
 		AstNode curr;
 		
 		ArrayList<IRStmt> l = new ArrayList<IRStmt>();
+		l.add(new IRMove(new IRTemp(Configuration.ABSTRACT_THIS_REG),
+						 new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + 0)));
 		int i;
 		
 		for (i=0;i<this.children.get(0).children.size();i++){

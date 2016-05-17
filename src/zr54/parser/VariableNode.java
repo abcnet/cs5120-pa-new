@@ -65,7 +65,7 @@ public class VariableNode extends ExprNode{
 		if(!isField)
 			this.irNode = new IRTemp(getRegName());
 		else {
-			IRExpr thisNode = new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + "0");
+			IRExpr thisNode = new IRTemp(Configuration.ABSTRACT_THIS_REG);
 			int fieldIdx = classes.getClass(className).getFieldIdx((String) symbol.value);
 			this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, thisNode, new IRConst(8 * fieldIdx)));
 		}

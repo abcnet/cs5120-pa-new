@@ -10,6 +10,9 @@ public class Configuration {
     /** Prefix for return registers */
     public static final String ABSTRACT_RET_PREFIX = "_RET";
 
+    /** Name of register for "this" in class method*/
+    public static final String ABSTRACT_THIS_REG = "___THIS";
+    
     /** Word size; assumes a 64-bit architecture */
     public static final int WORD_SIZE = 8;
 }

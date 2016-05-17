@@ -157,14 +157,14 @@ public class ClassDef {
 		for(String f : fieldsInOrder) {
 			if(superClass != null) {
 				if(superClass.getFieldIdx(f) != -1) 
-					fieldIdx.put(f, superClass.getFieldIdx(f));
+					fieldIdx.put(f, superClass.getFieldIdx(f) + 1);
 				else {
-					fieldIdx.put(f, superMaxFieldIdx + fieldCount + 1);
+					fieldIdx.put(f, superMaxFieldIdx + fieldCount + 2);
 					fieldCount++;
 				}
 			}
 			else {
-				fieldIdx.put(f, fieldCount);
+				fieldIdx.put(f, fieldCount + 1);
 				fieldCount++;
 			}
 		}
