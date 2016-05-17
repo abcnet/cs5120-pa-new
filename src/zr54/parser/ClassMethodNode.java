@@ -81,9 +81,9 @@ public class ClassMethodNode extends AstNode {
 		
 		for (i=0;i<this.children.get(0).children.size();i++){
 			curr=this.children.get(0).children.get(i);
-			
+			int i1 = i + 1;
 			l.add(new IRMove(new IRTemp(curr.getRegName()), 
-					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i + 1)));
+					new IRTemp(Configuration.ABSTRACT_ARG_PREFIX + i1)));
 		}
 
 		for (i=0;i<this.children.get(2).children.size();i++){
