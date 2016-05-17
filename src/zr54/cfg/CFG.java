@@ -44,9 +44,9 @@ public class CFG {
 					while (seq.children.get(j) instanceof IRLabel) {
 						j++;
 					}
-					if (seq.children.get(j).visitedCFG == true) {
+					if (j < seq.children.size() && seq.children.get(j).visitedCFG == true) {
 						child = outgoingGraph.getNode(seq.children.get(j));
-					} else {
+					} else if(j < seq.children.size()){
 						seq.children.get(j).visitedCFG = true;
 						child = new CFGNode(seq.children.get(j), j);
 						outgoingGraph.addNode(child);
