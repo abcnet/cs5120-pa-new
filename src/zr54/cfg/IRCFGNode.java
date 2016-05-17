@@ -218,6 +218,9 @@ public class IRCFGNode {
 		if(stmt instanceof IRMove){
 			IRMove move = (IRMove) stmt;
 			if(move.target() instanceof IRTemp) {
+				if(((IRTemp)move.target()).name().startsWith("_I_g_"))
+					return false;
+				
 				IRTemp target = (IRTemp) move.target();
 				if(!(target.name().startsWith(Configuration.ABSTRACT_ARG_PREFIX)
 						||target.name().startsWith(Configuration.ABSTRACT_RET_PREFIX))) {
