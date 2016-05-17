@@ -25,7 +25,7 @@ public class MultiVariableNode extends DefaultNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		type = new Type(Type.TUPLE, 0);
 		for(AstNode n : children)
-			type.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, false));
+			type.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, insideWhile));
 
 		return type;
 	}

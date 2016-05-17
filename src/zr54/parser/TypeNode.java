@@ -45,10 +45,10 @@ public class TypeNode extends AstNode {
 			type = new Type(Type.BOOL, 0);
 		else if(name.equals("bracket") || name.equals("brackets")) {
 			if(children.size() > 0) {
-				type = children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+				type = children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
 				type.incDimension();
 				if(children.size()==2){
-					Type t = children.get(1).typeCheck(vars, funcs, classes, currClass, false);
+					Type t = children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
 					if (t.getType()==Type.BOOL||t.getDimension()!=0){
 						throw new XiException(symbol.left,symbol.right, "Expect int inside [], but found " + t, "Semantic");
 					}

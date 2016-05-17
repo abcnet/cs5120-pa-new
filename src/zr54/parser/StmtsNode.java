@@ -28,7 +28,7 @@ public class StmtsNode extends StmtNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 		for(AstNode n : children)
-			n.typeCheck(vars, funcs, classes, currClass, false);
+			n.typeCheck(vars, funcs, classes, currClass, insideWhile);
 
 		type = new Type();
 		return type;

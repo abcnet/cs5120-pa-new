@@ -207,7 +207,7 @@ class XiCompiler {
                 	}
                 	break;
                 case 15:
-                	old = true;
+//                	old = true;
                 	break;
                 
                 case 16: specifiedCF = true; enableCF = true; disableAll(); break;

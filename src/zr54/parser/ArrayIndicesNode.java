@@ -28,8 +28,8 @@ public class ArrayIndicesNode extends BinaryExprNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
-		Type t2 = this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
+		Type t2 = this.children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
 
 		if(t1.getDimension()<1){
 			throw new XiException(this.children.get(0).getFirstSymbol(),"First operand of array access must be array", "Semantic");

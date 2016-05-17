@@ -44,7 +44,7 @@ public class BlockNode extends StmtNode{
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
-		this.children.get(0).typeCheck(tempScope, funcs, classes, currClass, false);
+		this.children.get(0).typeCheck(tempScope, funcs, classes, currClass, insideWhile);
 		vars.returned = tempScope.returned;
 		type = new Type();
 

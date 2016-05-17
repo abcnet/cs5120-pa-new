@@ -33,8 +33,8 @@ public class AssignStmtNode extends StmtNode{
 
 		Type left, right;
 		
-		right=this.children.get(1).typeCheck(vars, funcs, classes, currClass, false);
-		left=this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		right=this.children.get(1).typeCheck(vars, funcs, classes, currClass, insideWhile);
+		left=this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
 
 		
 		if(left.getType()!=Type.TUPLE){

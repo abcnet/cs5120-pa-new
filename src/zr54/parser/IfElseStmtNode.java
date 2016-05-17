@@ -33,15 +33,15 @@ public class IfElseStmtNode extends StmtNode {
 
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
 
 		if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
 			throw new XiException(this.children.get(0).symbol.left, 
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
-		this.children.get(1).typeCheck(tempScope, funcs, classes, currClass, false);
+		this.children.get(1).typeCheck(tempScope, funcs, classes, currClass, insideWhile);
 		ArrayList<Type> returned1 = tempScope.returned;
-		this.children.get(2).typeCheck(tempScope, funcs, classes, currClass, false);
+		this.children.get(2).typeCheck(tempScope, funcs, classes, currClass, insideWhile);
 		ArrayList<Type> returned2 = tempScope.returned;
 		if(returned1.size()!=returned2.size()){
 			throw new XiException(this.children.get(2).symbol,"Mismatched return types", "Semantic");

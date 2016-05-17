@@ -38,7 +38,7 @@ public class ClassMethodNode extends AstNode {
 		VarSymbolTable newVars = new VarSymbolTable(vars);
 		newVars.toReturn = classes.getClass(currClass).getMethod((String) symbol.value).getFunctionReturnTypes().getTuple();
 		for(AstNode n : children) {
-			n.typeCheck(newVars, funcs, classes, currClass, false);
+			n.typeCheck(newVars, funcs, classes, currClass, insideWhile);
 		}		
 		int m=newVars.toReturn.size();
 		int n=newVars.returned.size();

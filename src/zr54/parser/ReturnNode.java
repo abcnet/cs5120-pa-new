@@ -31,7 +31,7 @@ public class ReturnNode extends StmtNode {
 
 		Type t=new Type();
 		for(AstNode n : children)
-			t.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, false));
+			t.addTupleEntry(n.typeCheck(vars, funcs, classes, currClass, insideWhile));
 
 		vars.returned = t.getTuple();
 

@@ -27,7 +27,7 @@ public class MinusNode extends UnaryExprNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
 
 		if ((t1.getType() == Type.INT)
 				&& (t1.getDimension() == 0)) {

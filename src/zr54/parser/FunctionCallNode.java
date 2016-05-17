@@ -75,7 +75,7 @@ public class FunctionCallNode extends ExprNode{
 		}
 		for(int i = 0; i < args.getTuple().size(); i++){
 			AstNode node = this.children.get(i);
-			Type l = node.typeCheck(vars, funcs, classes, currClass, false);
+			Type l = node.typeCheck(vars, funcs, classes, currClass, insideWhile);
 			if(!l.matches(args.getTuple().get(i))){
 				if(!l.isSubclassOf(args.getTuple().get(i), classes))
 					throw new XiException(node.symbol,"Expected "+args.getTuple().get(i)+", but found "+l, "Semantic");

@@ -40,9 +40,9 @@ public class ArrayLiteralNode extends ExprNode{
 		if(this.children.size()==0){
 			return new Type(Type.INT, 1);
 		}
-		Type t0=this.children.get(0).typeCheck(vars, funcs, classes, currClass, false),t;
+		Type t0=this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile),t;
 		for (int i=1; i<this.children.size();i++){
-			t=this.children.get(i).typeCheck(vars, funcs, classes, currClass, false);
+			t=this.children.get(i).typeCheck(vars, funcs, classes, currClass, insideWhile);
 			if(t0.getType()!=t.getType() || t0.getDimension()!=t.getDimension()){
 				throw new XiException(this.children.get(i).getFirstSymbol(),"elements of array literal do not match", "Semantic");
 			}

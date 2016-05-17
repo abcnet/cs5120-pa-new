@@ -28,7 +28,7 @@ public abstract class IfWhileStmtNode extends StmtNode{
 	@Override
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, false);
+		Type t1 = this.children.get(0).typeCheck(vars, funcs, classes, currClass, insideWhile);
 		VarSymbolTable tempScope = new VarSymbolTable(vars);
 
 		if (t1.getType() != Type.BOOL || t1.getDimension() != 0 ){
