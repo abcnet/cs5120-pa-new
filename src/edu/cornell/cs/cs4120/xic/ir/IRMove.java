@@ -192,14 +192,14 @@ public class IRMove extends IRStmt {
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
 
-		if(target instanceof IRTemp) {
-			IRTemp tmp = (IRTemp) target;
-			if(tmp.name().equals("_I_g_mainWidget_o7QWidget")) {
-				int debug;
-				debug = 0;
-				System.out.print("temp");
-			}
-		}
+//		if(target instanceof IRTemp) {
+//			IRTemp tmp = (IRTemp) target;
+//			if(tmp.name().equals("_I_g_mainWidget_o7QWidget")) {
+//				int debug;
+//				debug = 0;
+//				System.out.print("temp");
+//			}
+//		}
 		
 		instrs.add(new AssemComments(this.toString().replaceAll("\n", " ")));
 
