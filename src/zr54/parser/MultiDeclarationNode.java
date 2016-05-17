@@ -44,7 +44,12 @@ public class MultiDeclarationNode extends StmtNode {
 		AstNode variables = children.get(0);
 		for(AstNode var : variables.children) {
 			String varName = (String) var.symbol.value;
-			String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + var.getType().toABIString();
+			String varABI = "_I_g_" 
+					+ varName
+					.replaceAll("_", "__")
+					+ "_" 
+					+ this.getType()
+					.toABIString();
 			s.write("	.bss\n	.align	8\n"
 					+ ".globl " + varABI + "\n" + varABI + ":\n"
 							+ "	.zero	8\n	.text\n\n");

@@ -6,6 +6,7 @@ import zr54.main.XiException;
 import zr54.typechecker.*;
 
 public class WhileStmtNode extends IfWhileStmtNode{
+	public String falseLabel;
 	/**
 	 * constructor
 	 * @param t
@@ -15,6 +16,7 @@ public class WhileStmtNode extends IfWhileStmtNode{
 	 */
 	public WhileStmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v, c1, c2);
+		falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
 
 	}
 	
@@ -25,7 +27,7 @@ public class WhileStmtNode extends IfWhileStmtNode{
 	 */
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		String trueLabel = "L_true_"+Integer.toString(AstNode.counter++);
-		String falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+
 		if (this.children.get(0).symbol.sym == sym.AND
 			|| this.children.get(0).symbol.sym == sym.OR
 			|| ((String)this.children.get(0).symbol.value).equals("true")

@@ -2,10 +2,8 @@ package zr54.parser;
 
 import java_cup.runtime.Symbol;
 import zr54.main.XiException;
-import zr54.typechecker.ClassSymbolTable;
-import zr54.typechecker.FuncSymbolTable;
-import zr54.typechecker.Type;
-import zr54.typechecker.VarSymbolTable;
+import zr54.typechecker.*;
+import edu.cornell.cs.cs4120.xic.ir.*;
 
 public class BreakContinueNode extends StmtNode{
 
@@ -34,7 +32,7 @@ public class BreakContinueNode extends StmtNode{
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		// not finished
 		if(this.name.equals("break")){
-			// not finished
+			this.irNode = new IRJump(new IRName(currWhile.falseLabel));
 		}else if (this.name.equals("continue")){
 			// not finished
 		}else{

@@ -63,6 +63,7 @@ public class ClassSymbolTable {
 			String init = "_I_init_" + escaped;
 			String retLabel = "L_init_RET_" + escaped;
 			s.write(".globl	" + init + "\n" + init + ":\n"
+					+ "	subq	$8, %rsp\n"
 					+ "	cmpq	$0, " + sizeLabel + "(%rip)\n"
 					+ "	jne	" + retLabel + "\n");
 			String vtSelf = "L_vtself_" + escaped;
@@ -94,7 +95,7 @@ public class ClassSymbolTable {
 						+ "	movq	%rax, " + dv + "+" + (index*8) + "(%rip)\n");
 			}
 			
-			s.write(retLabel + ":\n	ret\n\n");
+			s.write(retLabel + ":\n	addq	$8, %rsp\n	ret\n\n");
 		}
 		return s.toString();
 	}
