@@ -132,14 +132,21 @@ public class Type {
     
     public boolean isSubclassOf(Type t, ClassSymbolTable classes) {
     	if(this.type == CLASS && t.type == CLASS) {
+    		if(className == null){
+    			System.out.println("className is null");
+    			System.out.println(this.toString());
+    			return false;
+    		}
     		ClassDef thisClass = classes.getClass(className);
     		if(thisClass == null){
+    			System.out.println("thisClass is null");
     			System.out.println(this.toString());
-//    			return false;
+    			return false;
     		}
     		if(t.className == null){
+    			System.out.println("t.className is null");
     			System.out.println(t.toString());
-//    			return false;
+    			return false;
     		}
     		return thisClass.isSubclassOf(t.className);
     	}

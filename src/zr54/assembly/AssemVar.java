@@ -9,7 +9,12 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	public static boolean debug = true;
 	
 	public AssemVar(String varName, AssemFunc assemFunc){
-		this.varName = varName + "_" + assemFunc.irFuncDecl.name();
+		if(varName.length() >= 5 && varName.substring(0, 5).equals("_I_g_")){
+			this.varName = varName;
+		}else{
+			this.varName = varName + "_" + assemFunc.irFuncDecl.name();
+		}
+		
 		this.assemFunc = assemFunc;
 		assemFunc.addVar(this);
 //		if(assemFunc.varSet.contains(varName)==false){
@@ -20,7 +25,7 @@ public class AssemVar extends AssemOperand implements AssemReg{
 	
 	
 	public String toString(){
-		if(varName.substring(0, 4).equals("_I_g_")){
+		if(varName.length() >= 5 && varName.substring(0, 5).equals("_I_g_")){
 			return varName + "(%rip)";
 		}else{
 			return assemFunc.getVarString(varName);

@@ -23,7 +23,7 @@ do
       then
      # echo $filename
         "$SRCDIR/xic" -libpath "$SRCDIR/library" -d "$SRCDIR/assembly/" -sourcepath "$1" "$filename"
-	    "./pa5_student/runtime/linkxi.sh" "$SRCDIR/assembly/${filename%.*}.s" -o "$SRCDIR/assembly/${filename%.*}"
+	    "./runtime/linkxi.sh" "$SRCDIR/assembly/${filename%.*}.s" -o "$SRCDIR/assembly/${filename%.*}"
 	    "$SRCDIR/assembly/${filename%.*}" > "$SRCDIR/output/${filename%.*}.out"
 	    echo "Difference between $1/${filename%.*}.irsol.nml and $SRCDIR/output/${filename%.*}.out:"
 	    diff "$1/${filename%.*}.irsol.nml" "$SRCDIR/output/${filename%.*}.out"
