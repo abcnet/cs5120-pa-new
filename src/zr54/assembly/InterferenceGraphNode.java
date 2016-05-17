@@ -171,6 +171,11 @@ public class InterferenceGraphNode {
 		if(debugCoalesce && this.degree() + another.degree() < AssemFunc.numAvailRegs){
 			System.out.println("Should coalesce");
 		}
+		
+		if(this.degree() <= 1 || another.degree() <= 1){
+			return true;
+		}
+		
 		HashSet<InterferenceGraphNode> tmp = (HashSet<InterferenceGraphNode>) this.adjLists.clone();
 		tmp.addAll(another.adjLists);
 		int numHighDegreeNeighbors = 0;

@@ -9,6 +9,7 @@ import edu.cornell.cs.cs4120.xic.ir.*;
 import zr54.cfg.AssemCFG;
 import zr54.cfg.AssemCFGEdge;
 import zr54.cfg.AssemCFGNode;
+import zr54.typechecker.VarSymbolTable;
 public class AssemFunc {
 	public IRFuncDecl irFuncDecl;
 	public ArrayList<AssemInstruction> instList = new ArrayList<AssemInstruction>();
@@ -77,7 +78,11 @@ public class AssemFunc {
       + "	.align  4\n"
       + irFuncDecl.name()+":\n");
       for (AssemInstruction inst: instList){
-    	  sw.write(inst + "\n");
+    	  String line = inst.toString();
+    	  if(!line.isEmpty()){
+    		  sw.write(line + "\n");
+    	  }
+    	  
       }
       sw.flush();
       String s = sw.toString();
@@ -275,6 +280,16 @@ public class AssemFunc {
         			n.liveVarsOut = new HashSet<String>();
         		}
         		this.liveVarAnalyze(enableMC);
+        		
+        		for(String var:VarSymbolTable.allVars){
+        			InterferenceGraphNode node = this.interGraph.map.get(var);
+        			if(node == null) {
+//        				if(debugNodeNotInInterGraph)System.err.println("InterferenceGraphNode is null for " + name);
+        				node = this.interGraph.add(var);
+        				
+        			}
+        		}
+        		
         		int i = 0;
         		while(i < this.workListMoves.size()){
         			AssemMove move = this.workListMoves.get(i);
