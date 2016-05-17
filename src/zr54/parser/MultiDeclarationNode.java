@@ -32,6 +32,7 @@ public class MultiDeclarationNode extends StmtNode {
 				throw new XiException(var.symbol.left, var.symbol.right, "Cannot declare funciton name as variable " + varName, "Semantic");
 			}
 			else {
+				var.type = cType;
 				vars.add(varName, cType);
 			}
 		}

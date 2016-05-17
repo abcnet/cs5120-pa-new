@@ -84,7 +84,7 @@ public class VariableNode extends ExprNode{
 		if(isGlobal){
 			if(this.type == null){
 				System.err.println("Typecheck must be performed before accessing global variable");
-				
+				System.out.println(this.toString());
 			}
 			return "_I_g_" + this.getSymbolName().replaceAll("_", "__") + "_" + this.type.toABIString();
 		}else{
