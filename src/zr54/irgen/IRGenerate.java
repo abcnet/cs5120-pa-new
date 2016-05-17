@@ -26,7 +26,7 @@ public class IRGenerate {
 	public static boolean debugCanonical = false;
 	public static boolean debugAssem = false;
 	public static boolean debugPA6 = false;
-	public static boolean debugGlobalVars = true;
+	public static boolean debugGlobalVars = false;
 	
 	/**
 	 * Generete the IR
@@ -99,6 +99,7 @@ public class IRGenerate {
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					root.typeCheck(vars, funcs, classes, "", false);
+					vars.makeGlobal();
 					StringWriter globalVarsData = new StringWriter();
 					
 					int slash = srcFile.lastIndexOf('/');

@@ -36,7 +36,7 @@ public class VariableNode extends ExprNode{
 	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
-		this.isGlobal = vars.isGlobal((String)symbol.value);
+		
 		type = vars.lookup((String)symbol.value);
 		if (type == null){
 			ClassDef classDef = classes.getClass(currClass);
@@ -62,6 +62,7 @@ public class VariableNode extends ExprNode{
 	 */
 	@Override
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
+		this.isGlobal = VarSymbolTable.isGlobal((String)symbol.value);
 		if(!isField)
 			this.irNode = new IRTemp(getRegName());
 		else {
