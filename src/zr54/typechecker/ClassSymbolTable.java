@@ -81,7 +81,7 @@ public class ClassSymbolTable {
 						+ "	jge	" + vtSelf + "\n"
 						+ "	leaq	_I_vt_" + superClassEscapaed + "(%rip), %rax\n"
 								+ "	movq	(%rax,%rcx,8), %rdx\n"
-								+ "	leaq	_I_vt_" + dv + "(%rip), %rax\n"
+								+ "	leaq	" + dv + "(%rip), %rax\n"
 								+ "	movq	%rdx, (%rax,%rcx,8)\n"
 								+ "	incq	%rcx\n"
 								+ "	jmp	" + vtLoopLabel + "\n");
