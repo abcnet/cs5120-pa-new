@@ -45,7 +45,6 @@ public class ClassMethodCallNode extends ExprNode {
 			throw new XiException(symbol, "No method "+ (String)symbol.value+ " for class " + objectType.getClassName(), "Semantic");
 		}
 
-		
 		Type args = f.getFunctionArgTypes();
 		if(args.getTuple().size() > 0) {
 
@@ -70,7 +69,7 @@ public class ClassMethodCallNode extends ExprNode {
 		}
 		type = f.getFunctionReturnTypes();
 		if (type != null && type.getTuple().size()==1){
-			return type.getTuple().get(0).functionCallTrue();
+			type = type.getTuple().get(0).functionCallTrue();
 		}
 
 		return type;

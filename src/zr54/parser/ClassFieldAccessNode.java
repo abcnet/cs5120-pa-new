@@ -42,15 +42,15 @@ public class ClassFieldAccessNode extends ExprNode {
 			throws XiException {
 
 		AstNode objectAST = children.get(0);
+		
 		AstNode field = children.get(1);
 		objectAST.typeCheck(vars, funcs, classes, currClass, insideWhile);
 		Type objectType = objectAST.getType();
 		
 		if(objectType.getType() != Type.CLASS){
 			throw new XiException(objectAST.symbol, objectAST.getSymbolName() + " is not an object type", "Semantic");
-		
 		}
-		String className = objectAST.getType().getClassName();
+		String className = objectType.getClassName();
 		ClassDef objectClassDef = classes.getClass(className);
 		if(objectClassDef == null){
 			throw new XiException(objectAST.symbol, "unknown class " + className, "Semantic");
