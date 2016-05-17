@@ -7,6 +7,7 @@ import zr54.typechecker.*;
 
 public class WhileStmtNode extends IfWhileStmtNode{
 	public String falseLabel;
+	public String startLabel;
 	/**
 	 * constructor
 	 * @param t
@@ -17,6 +18,7 @@ public class WhileStmtNode extends IfWhileStmtNode{
 	public WhileStmtNode(String t, Symbol v, AstNode c1, AstNode c2) {
 		super(t, v, c1, c2);
 		falseLabel = "L_false_"+Integer.toString(AstNode.counter++);
+		startLabel = "L_"+Integer.toString(AstNode.counter++);
 
 	}
 	
@@ -38,23 +40,23 @@ public class WhileStmtNode extends IfWhileStmtNode{
 		}
 		this.children.get(1).generateIR(funcs, classes, currClass, currWhile);
 		if (this.name.equals("whileStatement")) {
-			String label = "L_"+Integer.toString(AstNode.counter++);
+//			String label = 
 			if (this.children.get(0).symbol.sym == sym.AND
 					|| this.children.get(0).symbol.sym == sym.OR
 					|| ((String)this.children.get(0).symbol.value).equals("true")
 					|| ((String)this.children.get(0).symbol.value).equals("false")) {
-			this.irNode = new IRSeq(new IRLabel(label),
+			this.irNode = new IRSeq(new IRLabel(startLabel),
 					                (IRStmt)this.children.get(0).irNode,
 					                new IRLabel(trueLabel),
 					                (IRStmt)this.children.get(1).irNode,
-					                new IRJump(new IRName(label)),
+					                new IRJump(new IRName(startLabel)),
 					                new IRLabel(falseLabel));
 			} else {
-				this.irNode = new IRSeq(new IRLabel(label),
+				this.irNode = new IRSeq(new IRLabel(startLabel),
 						new IRCJump((IRExpr)this.children.get(0).irNode, trueLabel, falseLabel),
 		                new IRLabel(trueLabel),
 		                (IRStmt)this.children.get(1).irNode,
-		                new IRJump(new IRName(label)),
+		                new IRJump(new IRName(startLabel)),
 		                new IRLabel(falseLabel));
 			}
 		}
