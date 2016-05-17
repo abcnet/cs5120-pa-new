@@ -39,14 +39,14 @@ public class NewObjectNode extends ExprNode {
 	public void generateIR(FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, WhileStmtNode currWhile) {
 		ClassNameNode className = (ClassNameNode) children.get(0);
 		ClassDef classDef = classes.getClass((String)className.symbol.value);
-		int maxFieldIdx = classDef.getMaxFieldIdx();
 		
 		ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
 		String objName = "_OBJ_" + (String)className.symbol.value + "_" + AstNode.counter++;
-		
+		String sizeName = "_OBJ_SIZE_" + (String) className.symbol.value + "_" + AstNode.counter++;
+		stmts.add(new IRMove(new IRTemp(sizeName), new IRName("_I_size_" + (String)className.symbol.value)));
 		stmts.add(new IRMove(new IRTemp(objName), 
 				 new IRCall(new IRName("_I_alloc_i"), 
-							new IRConst(8 * (maxFieldIdx + 1)))));
+						 	new IRTemp(sizeName))));
 		
 		stmts.add(new IRMove(new IRMem(new IRTemp(objName)),
 							 new IRName("_I_vt_" + (String)className.symbol.value)));
