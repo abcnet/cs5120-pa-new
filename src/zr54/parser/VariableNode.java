@@ -36,6 +36,7 @@ public class VariableNode extends ExprNode{
 	 */
 	public Type typeCheck(VarSymbolTable vars, FuncSymbolTable funcs, ClassSymbolTable classes, String currClass, boolean insideWhile) throws XiException{
 
+		this.isGlobal = vars.isGlobal((String)symbol.value);
 		type = vars.lookup((String)symbol.value);
 		if (type == null){
 			ClassDef classDef = classes.getClass(currClass);

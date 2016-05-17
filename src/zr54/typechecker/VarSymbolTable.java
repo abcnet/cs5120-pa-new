@@ -2,10 +2,12 @@ package zr54.typechecker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class VarSymbolTable {
     private VarSymbolTable parent;
     private HashMap<String, Type> table;
+    private HashSet<String> globalVars = new HashSet<String>();
     public ArrayList<Type> toReturn = null; 
     public ArrayList<Type> returned = new ArrayList<Type>();
 
@@ -65,5 +67,15 @@ public class VarSymbolTable {
      */
     public VarSymbolTable getParent() {
         return this.parent;
+    }
+    
+    public void makeGlobal(){
+    	for(String var: this.table.keySet()){
+    		this.globalVars.add(var);
+    	}
+    }
+    
+    public boolean isGlobal(String s){
+    	return this.globalVars.contains(s);
     }
 }
