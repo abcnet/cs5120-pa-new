@@ -47,13 +47,13 @@ class ColoredPoint extends Point {
 	}
 	col: Color
 	color(): Color { return col }
-//	clone(): ColoredPoint { return createColoredPoint(x, y, col) }
+	clone(): ColoredPoint { return createColoredPoint(x, y, col) }
 	
 }
 
-//createColoredPoint(x:int, y:int, c:Color): ColoredPoint {
-//	return new ColoredPoint.initColoredPoint(x, y, c)
-//}
+createColoredPoint(x:int, y:int, c:Color): ColoredPoint {
+	return new ColoredPoint.initColoredPoint(x, y, c)
+}
 
 main(args:int[][]) {
 	p: Point = createPoint(123, 321)
@@ -65,12 +65,15 @@ main(args:int[][]) {
 		println("y = " + unparseInt(y))
 	}
 
-//	col: Color = new Color
-//	col.r = 255
-//	col.g = 100
-//	col.b = 150
-//	cp: ColoredPoint = createColoredPoint(123, 321, col)
-//	cp2: ColoredPoint = cp.clone()
-//	println("r = " + unparseInt(cp2.color().r))
+	col: Color = new Color
+	col.r = 255
+	col.g = 100
+	col.b = 150
+	cp: ColoredPoint = createColoredPoint(123, 321, col)
+	cp2: ColoredPoint = cp.clone()
+	println("r = " + unparseInt(cp2.color().r))
+	println("g = " + unparseInt(cp2.color().g))
+	println("b = " + unparseInt(cp2.col.b))
+
 }
 
