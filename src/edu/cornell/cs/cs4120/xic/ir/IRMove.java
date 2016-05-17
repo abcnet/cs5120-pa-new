@@ -191,7 +191,7 @@ public class IRMove extends IRStmt {
 	public AssemOperand genIntermediateAssem(
 			ArrayList<AssemInstruction> instrs, IRFuncDecl f,
 			FuncSymbolTable funcs, ClassSymbolTable classes, String currClass) {
-		
+
 		if(target instanceof IRTemp) {
 			IRTemp tmp = (IRTemp) target;
 			if(tmp.name().equals("_I_g_mainWidget_o7QWidget")) {
@@ -201,6 +201,8 @@ public class IRMove extends IRStmt {
 			}
 		}
 		
+		instrs.add(new AssemComments(this.toString().replaceAll("\n", " ")));
+
 		if(target instanceof IRMem) {
 			IRMem memTarget = (IRMem) target;
 			boolean generated = false;
