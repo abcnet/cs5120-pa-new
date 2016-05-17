@@ -77,7 +77,7 @@ public class ClassSymbolTable {
 				
 				s.write("	xorq	%rcx, %rcx\n"
 						+ vtLoopLabel + ":\n"
-						+ "	cmpq	$" + (classDef.getSuperClass().getMaxMethodIdx() + 2) * 8 + ", %rcx\n"
+						+ "	cmpq	$" + (classDef.getSuperClass().getMaxMethodIdx() + 1) + ", %rcx\n"
 						+ "	jge	" + vtSelf + "\n"
 						+ "	leaq	_I_vt_" + superClassEscapaed + "(%rip), %rax\n"
 								+ "	movq	(%rax,%rcx,8), %rdx\n"

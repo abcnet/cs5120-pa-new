@@ -135,9 +135,11 @@ public class Type {
     		ClassDef thisClass = classes.getClass(className);
     		if(thisClass == null){
     			System.out.println(this.toString());
+//    			return false;
     		}
     		if(t.className == null){
     			System.out.println(t.toString());
+//    			return false;
     		}
     		return thisClass.isSubclassOf(t.className);
     	}
