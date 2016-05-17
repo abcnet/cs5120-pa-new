@@ -35,7 +35,7 @@ public abstract class IfWhileStmtNode extends StmtNode{
 			throw new XiException(this.children.get(0).symbol.left, 
 					this.children.get(0).symbol.right,"predicate of if statement must be bool type", "Semantic");
 		}
-		this.children.get(1).typeCheck(tempScope, funcs, classes, currClass, this.name.equals("whileStatement"));
+		this.children.get(1).typeCheck(tempScope, funcs, classes, currClass, this.name.equals("whileStatement") || insideWhile);
 		vars.returned = tempScope.returned;
 		type = new Type();
 		return type;

@@ -34,11 +34,11 @@ public class WhileStmtNode extends IfWhileStmtNode{
 			|| this.children.get(0).symbol.sym == sym.OR
 			|| ((String)this.children.get(0).symbol.value).equals("true")
 			|| ((String)this.children.get(0).symbol.value).equals("false")) {
-			this.children.get(0).getIRControl(funcs, classes, currClass, currWhile, trueLabel, falseLabel);
+			this.children.get(0).getIRControl(funcs, classes, currClass, this, trueLabel, falseLabel);
 		} else {
-			this.children.get(0).generateIR(funcs, classes, currClass, currWhile);
+			this.children.get(0).generateIR(funcs, classes, currClass, this);
 		}
-		this.children.get(1).generateIR(funcs, classes, currClass, currWhile);
+		this.children.get(1).generateIR(funcs, classes, currClass, this);
 		if (this.name.equals("whileStatement")) {
 //			String label = 
 			if (this.children.get(0).symbol.sym == sym.AND
