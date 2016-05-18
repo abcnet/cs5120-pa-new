@@ -71,7 +71,7 @@ public class ClassSymbolTable {
 				String superClassEscapaed = classDef.getSuperClass().escapedName();
 				s.write("	call	_I_init_" + superClassEscapaed + "\n"
 						+ "	movq	_I_size_" + superClassEscapaed + "(%rip), %rax\n"
-						+ "	addq	$" + 8 * (classDef.getMaxFieldIdx() + 2) + ", %rax\n"
+						+ "	addq	$" + 8 * classDef.getFieldsInOrder().size() + ", %rax\n"
 						+ "	movq	%rax, " + sizeLabel + "(%rip)\n");
 				
 				String vtLoopLabel = "L_vtloop_" + escaped;
@@ -87,7 +87,7 @@ public class ClassSymbolTable {
 								+ "	incq	%rcx\n"
 								+ "	jmp	" + vtLoopLabel + "\n");
 			}else{
-				s.write("	movq	$" + 8 * (classDef.getMaxFieldIdx() + 2) + ", " + sizeLabel + "(%rip)\n");
+				s.write("	movq	$" + 8 * (classDef.getFieldsInOrder().size() + 1) + ", " + sizeLabel + "(%rip)\n");
 			}
 			s.write(vtSelf + ":\n");
 			for(int index: classDef.reverseMethodIdx.keySet()){

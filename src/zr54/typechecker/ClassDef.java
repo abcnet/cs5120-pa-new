@@ -11,6 +11,7 @@ public class ClassDef {
 	public HashMap<Integer, String> reverseMethodIdx = new HashMap<Integer, String>();
 	private HashMap<String, Type> fields = new HashMap<String, Type>(); 
 	private HashMap<String, Integer> fieldIdx = new HashMap<String, Integer>();	
+	private HashMap<String, Integer> fieldIdxInThisClass = new HashMap<String, Integer>();
 	private ClassDef superClass = null;
 	boolean isInterface = false;
 	
@@ -39,6 +40,10 @@ public class ClassDef {
 		fields.put(name, type);
 		fieldsInOrder.add(name);
 	}
+	
+	public ArrayList<String> getFieldsInOrder() { 
+		return fieldsInOrder;
+	}
 
 	public void addMethod(String name, ArrayList<Type> argTypes, ArrayList<Type> retTypes) {
     	FuncSignature f = new FuncSignature(name, argTypes, retTypes);
@@ -61,6 +66,15 @@ public class ClassDef {
 			return fieldIdx.get(name);
 		else if(superClass != null)
 			return superClass.getFieldIdx(name);
+		return -1;
+	}
+	
+
+	public int getFieldIdxInThisClass(String name) {
+		if(fieldIdxInThisClass.containsKey(name))
+			return fieldIdxInThisClass.get(name);
+		else if(superClass != null)
+			return superClass.getFieldIdxInThisClass(name);
 		return -1;
 	}
 	
@@ -144,6 +158,7 @@ public class ClassDef {
 		}
 	}
 	
+	
 	//assuming that super class has done index determination
 	public void determineIndices() {
 		int superMaxFieldIdx = -1;
@@ -155,6 +170,7 @@ public class ClassDef {
 		
 		int fieldCount = 0;
 		for(String f : fieldsInOrder) {
+			fieldIdxInThisClass.put(f, fieldCount + 1);
 			if(superClass != null) {
 				if(superClass.getFieldIdx(f) != -1) 
 					fieldIdx.put(f, superClass.getFieldIdx(f) + 1);
