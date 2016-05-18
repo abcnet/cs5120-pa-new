@@ -11,9 +11,9 @@ public class AssemMul extends AssemInstruction{
 	
 	public String toString() {
 		String s = operand.toString();
-		if(s.contains("(")){
-			return "	movq	" + s + ", %r10\n	imulq	%r10\n	movq %r10, " + s;
-		}
+//		if(s.contains("(")){
+//			return "	movq	" + s + ", %r10\n	imulq	%r10\n	movq %r10, " + s;
+//		}
 		return "	imulq	" + operand;
 	}
 
