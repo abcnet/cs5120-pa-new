@@ -27,6 +27,7 @@ public class IRGenerate {
 	public static boolean debugAssem = false;
 	public static boolean debugPA6 = false;
 	public static boolean debugGlobalVars = false;
+	public static ArrayList<IRStmt> globalInitStmts = new  ArrayList<IRStmt>();
 	
 	/**
 	 * Generete the IR
@@ -118,14 +119,14 @@ public class IRGenerate {
 						// Global variables
 						if(curr instanceof AssignStmtNode){
 							AssignStmtNode node = (AssignStmtNode)curr;
-							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
+							node.globalVarInit(funcs, classes, globalVarsData);
 
 						}else if(curr instanceof MultiDeclarationNode){
 							MultiDeclarationNode node = (MultiDeclarationNode)curr;
-							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
+							node.globalVarInit(funcs, classes, globalVarsData);
 						}else if(curr instanceof DeclarationNode){
 							DeclarationNode node = (DeclarationNode)curr;
-							program.appendFunc(node.globalVarInit(funcs, classes, globalVarsData));
+							node.globalVarInit(funcs, classes, globalVarsData);
 						}
 						
 						if(curr.getIRNode()==null){
@@ -143,6 +144,10 @@ public class IRGenerate {
 						}else if(debugGlobalVars){
 							System.out.println(curr.getIRNode().getClass().getSimpleName());
 						}
+					}
+					
+					if(IRGenerate.globalInitStmts.size() > 0){
+						program.appendFunc(new IRFuncDecl("_INIT_GLOBAL_", new IRSeq(IRGenerate.globalInitStmts)));
 					}
 					
 //					program.printSExp(printer);
@@ -320,7 +325,9 @@ public class IRGenerate {
 					        	FileWriter as = new FileWriter(assemFile, false);
 					        	as.write(classes.getClassInit());
 					        	as.write(program.assemProgram.toString());
-//					        	as.write(classes.getDispatchTable());
+					        	if(IRGenerate.globalInitStmts.size() > 0){
+					        		as.write(".section .ctors\n	.align 8\n	.quad	_INIT_GLOBAL_\n	.text\n\n");
+								}
 					        	as.write(classes.populateSizeAndVT());
 					        	as.write(globalVarsData.toString());
 					        	as.flush();

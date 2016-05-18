@@ -56,7 +56,7 @@ public class MultiDeclarationNode extends StmtNode {
 		}
 	}
 	
-	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
+	public void globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		AstNode variables = children.get(0);
 
 		
@@ -77,11 +77,11 @@ public class MultiDeclarationNode extends StmtNode {
 		if(cType.getDimension() > 0){
 			String init = "_I_init_" + count++;
 			s.write(".section .ctors\n	.align 8\n	.quad	" + init + "\n	.text\n\n");
-			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
+//			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
 			//todo
-			return new IRFuncDecl(init, new IRSeq(stmts));
+//			return new IRFuncDecl(init, new IRSeq(stmts));
 		}else{
-			return null;
+//			return null;
 		}
 	}
 

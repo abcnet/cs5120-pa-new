@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import edu.cornell.cs.cs4120.xic.ir.*;
 import java_cup.runtime.*;
 import zr54.typechecker.*;
+import zr54.irgen.IRGenerate;
 import zr54.main.XiException;
 
 
@@ -91,7 +92,7 @@ public class DeclarationNode extends AstNode {
 
 	}
 	
-	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
+	public void globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		isGlobal = true;
 		String varName = this.getSymbolName();
 		String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + this.getType().toABIString();
@@ -102,10 +103,9 @@ public class DeclarationNode extends AstNode {
 		
 		this.generateIR(funcs, classes, "", null);
 		if(this.irNode instanceof IRESeq){
-			s.write(".section .ctors\n	.align 8\n	.quad	" + init + "\n	.text\n\n");
-			return new IRFuncDecl(init, ((IRESeq)this.irNode).stmt());
-		}else{
-			return null;
+			
+			IRGenerate.globalInitStmts.add(((IRESeq)this.irNode).stmt());
+//			return new IRFuncDecl(init, ((IRESeq)this.irNode).stmt());
 		}
 		
 	}

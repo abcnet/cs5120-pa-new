@@ -10,6 +10,7 @@ import java_cup.runtime.Symbol;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
 import zr54.typechecker.Type;
+import zr54.irgen.IRGenerate;
 import zr54.main.XiException;
 import zr54.typechecker.VarSymbolTable;
 
@@ -128,28 +129,28 @@ public class AssignStmtNode extends StmtNode{
 		
 	}
 	
-	public IRFuncDecl globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
+	public void globalVarInit(FuncSymbolTable funcs, ClassSymbolTable classes, StringWriter s){
 		DeclarationNode left = (DeclarationNode)this.children.get(0);
 		left.isGlobal = true;
 		String varName = left.getSymbolName();
 		String varABI = "_I_g_" + varName.replaceAll("_", "__") + "_" + left.getType().toABIString();
-		String init = "_I_ginit_" + varName.replaceAll("_", "__");
+//		String init = "_I_ginit_" + varName.replaceAll("_", "__");
 		s.write("	.bss\n	.align	8\n"
 				+ ".globl " + varABI + "\n" + varABI + ":\n"
-						+ "	.zero	8\n	.text\n\n"
-						+ ".section .ctors\n	.align 8\n	.quad	" + init + "\n	.text\n\n");
+						+ "	.zero	8\n	.text\n\n");
 		this.generateIR(funcs, classes, "", null);
 		 
 		if(this.irNode instanceof IRSeq){
 //			List<IRStmt> stmts = ((IRSeq)this.irNode).stmts();
 //			stmts.add(new IRReturn());
-			return new IRFuncDecl(init, (IRSeq)this.irNode);
+			IRGenerate.globalInitStmts.addAll(((IRSeq)this.irNode).stmts());
+//			return new IRFuncDecl(init, (IRSeq)this.irNode);
 		}else{
-			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
-			stmts.add((IRStmt)this.irNode);
+//			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
+			IRGenerate.globalInitStmts.add((IRStmt)this.irNode);
 //			stmts.add(new IRReturn());
 			
-			return new IRFuncDecl(init, new IRSeq(stmts));
+//			return new IRFuncDecl(init, new IRSeq(stmts));
 		}
 		
 	}
