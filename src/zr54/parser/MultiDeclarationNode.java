@@ -9,9 +9,13 @@ import zr54.typechecker.VarSymbolTable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import edu.cornell.cs.cs4120.xic.ir.IRESeq;
+import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRFuncDecl;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
 import edu.cornell.cs.cs4120.xic.ir.IRSeq;
 import edu.cornell.cs.cs4120.xic.ir.IRStmt;
+import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import java_cup.runtime.Symbol;
 
 public class MultiDeclarationNode extends StmtNode {
@@ -51,8 +55,16 @@ public class MultiDeclarationNode extends StmtNode {
 		if(cType.getDimension() > 0){
 			for(AstNode child : children) 
 				child.generateIR(funcs, classes, currClass, currWhile);
+			
 			AstNode ids = children.get(0);
-			//todo
+			AstNode typeNode = children.get(1);
+			
+			ArrayList<IRStmt> stmts = new ArrayList<IRStmt>();
+			for(AstNode var : ids.children) {
+				stmts.add(new IRMove(new IRTemp(var.getRegName()), (IRExpr)typeNode.irNode));
+			}
+			this.irNode = new IRSeq(stmts);
+
 		}
 	}
 	
