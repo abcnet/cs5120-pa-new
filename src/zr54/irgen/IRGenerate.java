@@ -268,7 +268,7 @@ public class IRGenerate {
 
 //			        if(enableCP) program.doConstPropagation();
 			        if(enableCF) program.doConstFolding(); 
-			        if(enableUCE) program.doUCE();
+//			        if(enableUCE) program.doUCE();
 			        if(enableCOPY) program.doCopyPropagation();
 			        if(enableDCE) program.doDeadCodeElim();
 

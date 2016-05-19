@@ -24,7 +24,7 @@ class XiCompiler {
 	static boolean enableCF = true;
 	static boolean enableREG = true;
 	static boolean enableMC = true;
-	static boolean enableUCE = true;
+	static boolean enableUCE = false;
 	static boolean enableCSE = true;
 	static boolean enableCOPY = true;
 	static boolean enableDCE = true;
