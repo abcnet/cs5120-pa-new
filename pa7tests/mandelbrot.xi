@@ -38,7 +38,7 @@ plots: int[2][][]
 
 mkMatrix(d: int): int[][] {
     arr: int[d][]
-    c: int = 0
+    c: int 
     while (c < d) {
         row: int[d]
         arr[c] = row
@@ -318,7 +318,15 @@ mandelbrot(x:int, y:int):int {
     // escapes if |z| > 4
     while ((a_2 + b_2 < 4*SCALEROOT*SCALEROOT) & (i < maxiter)) {
         // Note: (a+bi)^2 = (a^2-b^2) + (2*a*b)i
+
         ah:int = a/SCALEROOT
+	
+//	println(unparseInt(a))
+
+//	println(unparseInt(SCALEROOT))
+
+//	println(unparseInt(ah))
+
         al:int = a%SCALEROOT
         bh:int = b/SCALEROOT
         bl:int = b%SCALEROOT
@@ -326,8 +334,8 @@ mandelbrot(x:int, y:int):int {
         b_2 = bh*bh + 2*(bh*bl)/SCALEROOT
         a = x + a_2 - b_2
         b = y + 2*ah*bh + 2*(ah*bl)/SCALEROOT + 2*(bh*al)/SCALEROOT
-
         i = i + 1
+	
     }
     histogram[i] = histogram[i] + 1
     return i
