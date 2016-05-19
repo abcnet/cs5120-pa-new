@@ -151,6 +151,7 @@ class XiCompiler {
                         break;
                 case 4: arg = g.getOptarg();
                         srcPath = arg;
+                        srcPathSet = true;
                         break;
                 case 5: arg = g.getOptarg();
                 		libPath = arg;

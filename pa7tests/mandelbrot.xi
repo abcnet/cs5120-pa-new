@@ -315,22 +315,43 @@ mandelbrot(x:int, y:int):int {
     hpos:int = 0
 
     i:int = 0
+    println("a = " + unparseInt(a))
+    println("b = " + unparseInt(b))
+    println("a_2 = " + unparseInt(a_2))
+    println("b_2 = " + unparseInt(b_2))
+    println("hpos = " + unparseInt(hpos))
     // escapes if |z| > 4
     while ((a_2 + b_2 < 4*SCALEROOT*SCALEROOT) & (i < maxiter)) {
         // Note: (a+bi)^2 = (a^2-b^2) + (2*a*b)i
+        println("========================================")
+        println("i = " + unparseInt(i))
+        
 
         ah:int = a/SCALEROOT
+        println("--------------------")
+        println("a = " + unparseInt(a))
+        println("SCALEROOT = " + unparseInt(SCALEROOT))
+        println("ah = a/SCALEROOT = " + unparseInt(ah))
 	
-//	println(unparseInt(a))
-
-//	println(unparseInt(SCALEROOT))
-
-//	println(unparseInt(ah))
+        
 
         al:int = a%SCALEROOT
+        println("--------------------")
+        println("a = " + unparseInt(a))
+        println("SCALEROOT = " + unparseInt(SCALEROOT))
+        println("al = a%SCALEROOT = " + unparseInt(al))
         bh:int = b/SCALEROOT
+        println("--------------------")
+        println("b = " + unparseInt(b))
+        println("SCALEROOT = " + unparseInt(SCALEROOT))
+        println("bh = b/SCALEROOT = " + unparseInt(bh))
         bl:int = b%SCALEROOT
+        println("--------------------")
+        println("b = " + unparseInt(b))
+        println("SCALEROOT = " + unparseInt(SCALEROOT))
+        println("bl = b%SCALEROOT = " + unparseInt(bl))
         a_2 = ah*ah + 2*(ah*al)/SCALEROOT
+        
         b_2 = bh*bh + 2*(bh*bl)/SCALEROOT
         a = x + a_2 - b_2
         b = y + 2*ah*bh + 2*(ah*bl)/SCALEROOT + 2*(bh*al)/SCALEROOT
