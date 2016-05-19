@@ -48,7 +48,7 @@ terminal Symbol IDENTIFIER, INTEGER_LITERAL, STRING_LITERAL, CHARACTER_LITERAL, 
          HIGHMULT, INT, BOOL, ELSE, WHILE, LENGTH, RETURN, DIV, USE, UNDERSCORE, LRBRACK, 
          CLASS, THIS, NEW, EXTENDS, BREAK, CONTINUE, DOT, NULL;
 
-nonterminal AstNode arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, functionReturnType, typesList, bracket, brackets, methods, method, optionalSemicolon;
+nonterminal AstNode program, singleUse, uses, arrayType, type, argumentWithType, argumentsWithType, optionalArgumentsWithType, functionReturnType, typesList, bracket, brackets, methods, method, optionalSemicolon;
           
 //new for oXi
 nonterminal AstNode classDef, classMethod, classMethods;
@@ -64,7 +64,7 @@ precedence left MULT, HIGHMULT, DIV, MOD;
 precedence nonassoc NOT;
 
 
-start with methods;
+start with program;
 
 // new for oXi
 
@@ -132,8 +132,17 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(a); RESULT.addChild(r); :}
                       | classDef:cd {: RESULT =  cd; :}
                       ;
-
-
+program             ::= uses:us  methods:ms   {: RESULT = new DefaultNode("program", null, us, ms); :}
+//TODO: not complete          
+                      
+                      | methods:ms            {: RESULT = new DefaultNode("program", null, new DefaultNode("forceParen", null), ms); :}
+                      | error:e               {:  :}
+                      ;
+uses                ::= uses:us singleUse:su  {: RESULT = new DefaultNode("uses", null); RESULT.addGrandChildren(us); RESULT.addChild(su); :}
+                      | singleUse:su          {: RESULT = new DefaultNode("uses", null, su); :}
+                      ;
+singleUse           ::= USE:u IDENTIFIER:id optionalSemicolon  {: RESULT = new DefaultNode("useSpecifier", null, new DefaultNode("USE", u), new DefaultNode("IDENTIFIER", id)); :}
+                      ;
 
 optionalArgumentsWithType ::=  argumentsWithType:a {: RESULT = a; :}
                             |                      {: RESULT = new DefaultNode("forceParen", null); :}

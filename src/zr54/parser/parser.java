@@ -1122,7 +1122,7 @@ public class parser
     	}
     	catch(XiException e) {
       //printer.printAtom(e.errorMessage(file));
-    		if(!silent)System.out.println(e.errorMessage(file));
+    		System.out.println(e.errorMessage(file));
     	}
     }
 

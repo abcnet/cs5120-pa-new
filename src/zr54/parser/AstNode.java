@@ -26,7 +26,7 @@ public abstract class AstNode {
 	//this is used to distinguish variables of the same name in different methods
 	public static String currMethod = "";
 	
-	protected String name = "";
+	public final String name;
 	protected Symbol symbol = null;
 	protected ArrayList<AstNode> children = new ArrayList<AstNode>();
 	protected AstNode parent = null;
@@ -39,6 +39,7 @@ public abstract class AstNode {
 	 * Default constructor
 	 */
 	public AstNode() {
+		name = "";
 	}
 
 	/**
