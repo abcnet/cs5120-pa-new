@@ -308,6 +308,8 @@ assign_color(iterations: int): Color {
 // via repeated application of function f(z) = z^2 + c.
 // Returns maxiter if it doesn't escape in maxiter iterations.
 mandelbrot(x:int, y:int):int {
+    println("x = " + unparseInt(x))
+    println("y = " + unparseInt(y))
     a:int = 0
     b:int = 0
     a_2:int = 0
@@ -351,7 +353,7 @@ mandelbrot(x:int, y:int):int {
         println("SCALEROOT = " + unparseInt(SCALEROOT))
         println("bl = b%SCALEROOT = " + unparseInt(bl))
         a_2 = ah*ah + 2*(ah*al)/SCALEROOT
-        
+
         b_2 = bh*bh + 2*(bh*bl)/SCALEROOT
         a = x + a_2 - b_2
         b = y + 2*ah*bh + 2*(ah*bl)/SCALEROOT + 2*(bh*al)/SCALEROOT
