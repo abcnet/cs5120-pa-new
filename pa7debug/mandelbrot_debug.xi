@@ -25,6 +25,8 @@ histogram: int[HISTLEN]
 plots: int[2][][]
 
 mandelbrot(x:int, y:int):int {
+    println("x = " + unparseInt(x))
+    println("y = " + unparseInt(y))
     a:int = 0
     b:int = 0
     a_2:int = 0
@@ -70,8 +72,14 @@ mandelbrot(x:int, y:int):int {
         a_2 = ah*ah + 2*(ah*al)/SCALEROOT
         
         b_2 = bh*bh + 2*(bh*bl)/SCALEROOT
+
         a = x + a_2 - b_2
         b = y + 2*ah*bh + 2*(ah*bl)/SCALEROOT + 2*(bh*al)/SCALEROOT
+        
+        println("a_2 = ah*ah + 2*(ah*al)/SCALEROOT = " + unparseInt(a_2))
+        println("b_2 = bh*bh + 2*(bh*bl)/SCALEROOT = " + unparseInt(b_2))
+        println("a = x + a_2 - b_2 = " + unparseInt(a))
+        println("b = y + 2*ah*bh + 2*(ah*bl)/SCALEROOT + 2*(bh*al)/SCALEROOT = " + unparseInt(b))
         i = i + 1
 	
     }
@@ -84,6 +92,6 @@ main(args:int[][]) {
     println(unparseInt(10000007/10))
     println(unparseInt(10000007%10))
     println(unparseInt(10000007*10))
-    println(unparseInt(mandelbrot(0, 0)))
+    println(unparseInt(mandelbrot(-49938432, -50331648)))
 
 }

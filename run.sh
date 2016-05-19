@@ -24,7 +24,7 @@ SRCDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
       then
       # echo $filename
-      "$SRCDIR/xic" -libpath "$SRCDIR/library" "$1" 
+      "$SRCDIR/xic"  -libpath "$SRCDIR/library" "$1" 
 	    "QtXi/linkqt.sh" "$DIR/${filename%.*}.s" -o "$DIR/${filename%.*}"
       echo "Running $DIR/${filename%.*}"
 	    "$DIR/${filename%.*}"

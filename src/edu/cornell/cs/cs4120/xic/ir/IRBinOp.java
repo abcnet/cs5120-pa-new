@@ -534,8 +534,11 @@ public class IRBinOp extends IRExpr {
 			 l = left.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 r = right.genIntermediateAssem(instrs, f, funcs, classes, currClass);
 			 
-			 instrs.add(new AssemBinInst("xorq", trdx, trdx));
+//			 instrs.add(new AssemBinInst("xorq", trdx, trdx));
+			 
 			 instrs.add(new AssemMove(l, trax));
+			 instrs.add(new AssemMove(trax, trdx));
+			 instrs.add(new AssemBinInst("sarq", new AssemConst(63), trdx));
 			 
 			 if(right instanceof IRConst) {
 				 AssemVar t2 = new AssemVar("t" + ++f.count, f.assemFunc);
