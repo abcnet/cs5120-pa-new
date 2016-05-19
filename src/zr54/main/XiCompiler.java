@@ -21,13 +21,13 @@ class XiCompiler {
 	static boolean specifiedDCE = false;
 	static boolean specifiedCP = false;
     
-	static boolean enableCF = false;
+	static boolean enableCF = true;
 	static boolean enableREG = true;
 	static boolean enableMC = true;
 	static boolean enableUCE = true;
-	static boolean enableCSE = false;
-	static boolean enableCOPY = false;
-	static boolean enableDCE = false;
+	static boolean enableCSE = true;
+	static boolean enableCOPY = true;
+	static boolean enableDCE = true;
 	static boolean enableCP = false;
     
     static void disableAll(){
