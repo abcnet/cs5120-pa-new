@@ -1,5 +1,6 @@
 package zr54.parser;
 
+import zr54.irgen.IRGenerate;
 import zr54.main.XiException;
 import zr54.typechecker.ClassSymbolTable;
 import zr54.typechecker.FuncSymbolTable;
@@ -87,13 +88,7 @@ public class MultiDeclarationNode extends StmtNode {
 
 		}
 		if(cType.getDimension() > 0){
-			String init = "_I_init_" + count++;
-			s.write(".section .ctors\n	.align 8\n	.quad	" + init + "\n	.text\n\n");
-//			ArrayList<IRStmt> stmts = new  ArrayList<IRStmt>();
-			//todo
-//			return new IRFuncDecl(init, new IRSeq(stmts));
-		}else{
-//			return null;
+			IRGenerate.globalInitStmts.add((IRSeq)this.irNode);
 		}
 	}
 
