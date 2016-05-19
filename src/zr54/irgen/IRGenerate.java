@@ -87,6 +87,9 @@ public class IRGenerate {
 				
 				try {
 					//first need load all interface files and register function signatures
+					if(root == null || root.getChildren() == null || root.getChildren().size() == 0){
+						return false;
+					}
 					AstNode useNode = root.getChildren().get(0);
 					if(useNode.name.equals("uses")){
 						for(AstNode useSpec : useNode.getChildren()) {
