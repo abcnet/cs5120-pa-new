@@ -21,7 +21,7 @@ public class AssemMove extends AssemBinInst{
 	}
 	
 	public String toString(){
-		if(coalesced && !dst.toString().contains("rip")){
+		if(coalesced && !dst.toString().contains("rip") && !src.toString().contains("rip")){
 			return "";
 //			String s = "#	coalesced move\n";
 //			return s + super.toString().replaceAll("\n", "\n#") + "\n#	End of coalesced move";

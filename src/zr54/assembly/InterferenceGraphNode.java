@@ -26,7 +26,7 @@ public class InterferenceGraphNode {
 
 	
 	public InterferenceGraphNode(String varName){
-		if(varName.contains("%")){
+		if(varName.contains("%") || varName.startsWith("_I_g_")){
 			containsReg = true;
 			if(varName.equals("%rax")) {isPreColored = true; color = Reg.rax;}
 			if(varName.equals("%rbx")) {isPreColored = true; color = Reg.rbx;}
