@@ -261,7 +261,9 @@ class XiCompiler {
             String dDst = dPath + "/" + tmp.substring(0, tmp.lastIndexOf(".")) + ".s";
             
             if(lex){
-            	LexerOutput.writeLexAnalysis(src, diagDst + ".lexed");
+            	if(!LexerOutput.writeLexAnalysis(src, diagDst + ".lexed")){
+            		return;
+            	};
             }
             if(parse){
             	 ParsePrint.parseAndPrint(src, diagDst + ".parsed");
@@ -272,11 +274,11 @@ class XiCompiler {
             }
 //            String typed = typecheck?(diagDst + ".typed"):"/dev/null";
             if(irrun){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", true, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode, typecheck);
             }else if(irgen){
-            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
+            	IRGenerate.IRGenAndPrint(src, diagDst + ".ir", libPath+"/", false, false, dDst, true, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode, typecheck);
             }else{
-            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode);
+            	IRGenerate.IRGenAndPrint(src, diagDst, libPath+"/", false, true, dDst, false, initialIRGraph, finalIRGraph, initialAssemGraph, finalAssemGraph, old, enableCF, enableREG, enableMC, enableUCE, enableCSE, enableCOPY, enableDCE, enableCP, initialIRCode, finalIRCode, typecheck);
             }
             
             

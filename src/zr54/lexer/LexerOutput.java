@@ -69,7 +69,7 @@ public class LexerOutput {
 	 * @param outFile: the output *.lexed file
 	 * @throws IOException
 	 */
-	public static void writeLexAnalysis(String inFile, String outFile) 
+	public static boolean writeLexAnalysis(String inFile, String outFile) 
 			throws Exception {
 
 		FileInputStream inp = new FileInputStream(inFile);
@@ -89,7 +89,7 @@ public class LexerOutput {
 	        	 writer.write(e.getMessage());
 //	        	 writer.write(e.errorMessage(inFile));
 		        writer.close();
-		        return;
+		        return false;
 	        }
             
 	        
@@ -112,5 +112,6 @@ public class LexerOutput {
             
         }
         writer.close();
+        return true;
 	}
 };

@@ -48,6 +48,7 @@ public class IRGenerate {
 	 * @param enableCP TODO
 	 * @param initialIRCode TODO
 	 * @param finalIRCode TODO
+	 * @param typechecked TODO
 	 * @param silentMode: when set, no diagnostic files are written
 	 * @param srcFile: input file path
 	 * @param dstFile: output file path
@@ -62,7 +63,7 @@ public class IRGenerate {
 			boolean finalIRGraph, boolean initialAssemGraph, 
 			boolean finalAssemGraph, boolean genOldAssem, boolean enableCF,
 			boolean enableREG, boolean enableMC, boolean enableUCE, boolean enableCSE,
-			boolean enableCOPY, boolean enableDCE, boolean enableCP, boolean initialIRCode, boolean finalIRCode) throws Exception {
+			boolean enableCOPY, boolean enableDCE, boolean enableCP, boolean initialIRCode, boolean finalIRCode, boolean typechecked) throws Exception {
 		
 		FileOutputStream fs = new FileOutputStream(disableDiagFileWrite?"/dev/null":dstFile);
 		
@@ -360,7 +361,7 @@ public class IRGenerate {
 				}catch(XiException e) {
 					//System.out.println(e.getLine()+":"+e.getColumn()+" error:"+e.getMessage());
 					printer.printAtom(e.errorMessage(errFile));
-					System.out.println(e.errorMessage(errFile));
+					if(!typechecked)System.out.println(e.errorMessage(errFile));
 					return false;
 				}finally{
 					printer.flush();
