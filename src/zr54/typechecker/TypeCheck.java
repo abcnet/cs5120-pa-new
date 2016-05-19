@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -69,9 +70,12 @@ public class TypeCheck {
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					root.typeCheck(vars, funcs, classes, "", false);
-					printer.flush();
-					fs.flush();
-					printer.printAtom("Valid Xi Program");
+//					printer.flush();
+					printer.close();
+					fs.close();
+					FileWriter fw = new FileWriter(dstFile);
+					fw.write("Valid Xi Program");
+					fw.close();
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
 					System.out.println(e.errorMessage(errFile));
