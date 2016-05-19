@@ -45,18 +45,32 @@ public class TypeCheck {
 				try {
 					//first need load all interface files and register function signatures
 					AstNode useNode = root.getChildren().get(0);
-					for(AstNode useSpec : useNode.getChildren()) {
-						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
-						
-						String ixiFile = libPath + interfaceName + ".ixi";
-						String ixiDstFile = libPath + interfaceName + ".typed";
-						errFile = ixiFile;
-						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
+					if(useNode.name.equals("uses")){
+						for(AstNode useSpec : useNode.getChildren()) {
+							String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
+							
+							String ixiFile = libPath + interfaceName + ".ixi";
+//							String ixiDstFile = libPath + interfaceName + ".typed";
+							errFile = ixiFile;
+							printer.flush();
+							fs.flush();
+							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
+						}
 					}
+//					for(AstNode useSpec : useNode.getChildren()) {
+//						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
+//						
+//						String ixiFile = libPath + interfaceName + ".ixi";
+//						String ixiDstFile = libPath + interfaceName + ".typed";
+//						errFile = ixiFile;
+//						ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
+//					}
 					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					root.typeCheck(vars, funcs, classes, "", false);
+					printer.flush();
+					fs.flush();
 					printer.printAtom("Valid Xi Program");
 					//System.out.println("Valid Xi Program");
 				}catch(XiException e) {
@@ -97,15 +111,5 @@ public class TypeCheck {
 		root.registerClassSignature(classes, isInterface);
 	}
 	
-//	public static void registerAllGlobalVariables(){
-//		// not finished
-//	}
-	
-//	public static String globalVarsData(AstNode root){
-//		StringWriter s = new StringWriter();
-//		s.write("\n");
-//		
-//		return s.toString();
-//	}
-	
+
 }

@@ -88,14 +88,17 @@ public class IRGenerate {
 				try {
 					//first need load all interface files and register function signatures
 					AstNode useNode = root.getChildren().get(0);
-					for(AstNode useSpec : useNode.getChildren()) {
-						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
-						
-						String ixiFile = libPath + interfaceName + ".ixi";
-						String ixiDstFile = libPath + interfaceName + ".typed";
-						errFile = ixiFile;
-						ixiAnalyze.typeCheckAndPrint(ixiFile, fs, funcs, classes); 
+					if(useNode.name.equals("uses")){
+						for(AstNode useSpec : useNode.getChildren()) {
+							String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
+							
+							String ixiFile = libPath + interfaceName + ".ixi";
+//							String ixiDstFile = libPath + interfaceName + ".typed";
+							errFile = ixiFile;
+							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
+						}
 					}
+					
 					errFile = srcFile;
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");

@@ -8,6 +8,7 @@ import zr54.lexer.*;
 import zr54.parser.*;
 import zr54.typechecker.*;
 import zr54.irgen.*;
+import zr54.ixi.ixiAnalyze;
 
 class XiCompiler {
 	
@@ -153,6 +154,7 @@ class XiCompiler {
                         break;
                 case 5: arg = g.getOptarg();
                 		libPath = arg;
+                		libPathSet = true;
                 		break;
                 case 6: irgen = true;
                 		break;
@@ -265,6 +267,7 @@ class XiCompiler {
             }
             if(typecheck){
             	TypeCheck.typeCheckAndPrint(src, diagDst + ".typed", libPath+"/");
+            	ixiAnalyze.analyzedUses.clear();
             }
 //            String typed = typecheck?(diagDst + ".typed"):"/dev/null";
             if(irrun){
