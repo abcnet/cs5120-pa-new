@@ -69,13 +69,23 @@ public class ClassDef {
 		return -1;
 	}
 	
-
+	//start from 1
 	public int getFieldIdxInThisClass(String name) {
 		if(fieldIdxInThisClass.containsKey(name))
 			return fieldIdxInThisClass.get(name);
 		else if(superClass != null)
 			return superClass.getFieldIdxInThisClass(name);
 		return -1;
+	}
+	
+	public ClassDef whichClassHasField(String name) {
+		if(fieldIdxInThisClass.containsKey(name))
+			return this;
+		else if(superClass != null) {
+			return superClass.whichClassHasField(name);
+		}
+		else
+			return null;
 	}
 	
 	public FuncSignature getMethod(String name) {
@@ -167,10 +177,13 @@ public class ClassDef {
 			superMaxFieldIdx = superClass.getMaxFieldIdx();
 			superMaxMethodIdx = superClass.getMaxMethodIdx();
 		}
+
+		for(int i = 0; i < fieldsInOrder.size(); i++) {
+			fieldIdxInThisClass.put(fieldsInOrder.get(i), i+1);
+		}
 		
 		int fieldCount = 0;
 		for(String f : fieldsInOrder) {
-			fieldIdxInThisClass.put(f, fieldCount + 1);
 			if(superClass != null) {
 				if(superClass.getFieldIdx(f) != -1) 
 					fieldIdx.put(f, superClass.getFieldIdx(f) + 1);

@@ -2,8 +2,11 @@ package zr54.parser;
 
 import edu.cornell.cs.cs4120.xic.ir.IRBinOp;
 import edu.cornell.cs.cs4120.xic.ir.IRConst;
+import edu.cornell.cs.cs4120.xic.ir.IRESeq;
 import edu.cornell.cs.cs4120.xic.ir.IRExpr;
 import edu.cornell.cs.cs4120.xic.ir.IRMem;
+import edu.cornell.cs.cs4120.xic.ir.IRMove;
+import edu.cornell.cs.cs4120.xic.ir.IRName;
 import edu.cornell.cs.cs4120.xic.ir.IRNode;
 import edu.cornell.cs.cs4120.xic.ir.IRTemp;
 import edu.cornell.cs.cs4120.xic.ir.interpret.Configuration;
@@ -67,8 +70,30 @@ public class VariableNode extends ExprNode{
 			this.irNode = new IRTemp(getRegName());
 		else {
 			IRExpr thisNode = new IRTemp(Configuration.ABSTRACT_THIS_REG);
-			int fieldIdx = classes.getClass(className).getFieldIdx((String) symbol.value);
-			this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, thisNode, new IRConst(8 * fieldIdx)));
+			ClassDef thisClass = classes.getClass(className).whichClassHasField((String) symbol.value);
+			
+			if(thisClass == null)
+				System.out.print("error: field" + symbol.value + "not found");
+			ClassDef superClass = thisClass.getSuperClass();
+			
+			int fieldIdx = thisClass.getFieldIdxInThisClass((String) symbol.value);
+			
+			if(superClass == null) {
+				this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, thisNode, new IRConst(8 * fieldIdx)));
+			}
+			else {
+				String sizeMem = "_SIZE_MEM_" + AstNode.counter++;
+				IRMove move = new IRMove(new IRTemp(sizeMem), new IRName("_I_size_" + superClass.getName()));
+				IRMem mem = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+												  thisNode, 
+												  new IRBinOp(IRBinOp.OpType.ADD,
+														      new IRMem(new IRTemp(sizeMem)),
+														      new IRConst(8 * (fieldIdx - 1)))));
+				this.irNode = new IRESeq(move, mem);
+			}
+			
+//			int fieldIdx = classes.getClass(className).getFieldIdx((String) symbol.value);
+//			this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, thisNode, new IRConst(8 * fieldIdx)));
 		}
 	}
 	

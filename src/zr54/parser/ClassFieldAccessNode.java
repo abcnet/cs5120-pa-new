@@ -32,8 +32,27 @@ public class ClassFieldAccessNode extends ExprNode {
 		AstNode object = children.get(0);
 		AstNode field = children.get(1);
 		String classNameOfObejct = object.getType().getClassName();
-		int fieldIdx = classes.getClass(classNameOfObejct).getFieldIdx(field.getSymbolName());
-		this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, (IRExpr)(object.irNode), new IRConst(8 * fieldIdx)));
+		ClassDef thisClass = classes.getClass(classNameOfObejct).whichClassHasField(field.getSymbolName());
+		if(thisClass == null)
+			System.out.print("error: field" + field.getSymbolName() + "not found");
+		ClassDef superClass = thisClass.getSuperClass();
+		int fieldIdx = thisClass.getFieldIdxInThisClass(field.getSymbolName());
+		
+		if(superClass == null) {
+			this.irNode = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, (IRExpr)(object.irNode), new IRConst(8 * fieldIdx)));
+		}
+		else {
+			String sizeMem = "_SIZE_MEM_" + AstNode.counter++;
+
+			IRMove move = new IRMove(new IRTemp(sizeMem), new IRName("_I_size_" + superClass.getName()));
+		
+			IRMem mem = new IRMem(new IRBinOp(IRBinOp.OpType.ADD, 
+											  (IRExpr)(object.irNode), 
+											  new IRBinOp(IRBinOp.OpType.ADD,
+													      new IRMem(new IRTemp(sizeMem)),
+													      new IRConst(8 * (fieldIdx - 1)))));
+			this.irNode = new IRESeq(move, mem);
+		}
 
 	}
 	
