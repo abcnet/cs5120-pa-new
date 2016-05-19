@@ -219,7 +219,7 @@ method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN 
                            RESULT.addChild(os);
                            if(os != null) os.addChild(re); else RESULT.addChild(re); :}
                       | classDef:cd {: RESULT =  cd; :}
-                      | argumentWithTypeNonEmpty:a optionalSemicolon {: RESULT = a; :}
+                      | argumentWithTypeNonEmpty:a optionalSemicolon {: ((DeclarationNode)a).mustInit = true; RESULT = a; :}
                       | multipleArgumentsWithSingleTypeNonEmpty:m optionalSemicolon {: RESULT = m; :}
                       | argumentWithType:a EQ:eq expression:e optionalSemicolon {: RESULT = new AssignStmtNode("assignment", eq, a, e); :}
                       ;
@@ -240,7 +240,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | assignment:a optionalSemicolon           {: RESULT = a; :}
                       | ifStatement:s                            {: RESULT = s; :}
                       | whileStatement:s                         {: RESULT = s; :}
-                      | argumentWithTypeNonEmpty:a optionalSemicolon     {: RESULT = a; :}
+                      | argumentWithTypeNonEmpty:a optionalSemicolon     {: ((DeclarationNode)a).mustInit = true; RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
                       | BREAK: b  {: RESULT = new BreakContinueNode("break", b); :}
                       | CONTINUE:c  {: RESULT = new BreakContinueNode("continue", c); :}

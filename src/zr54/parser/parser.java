@@ -2417,7 +2417,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = a; 
+                 ((DeclarationNode)a).mustInit = true; RESULT = a; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("method",30, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;
@@ -2576,7 +2576,7 @@ class CUP$parser$actions {
                 int aleft = CUP$parser$stack.elementAt(CUP$parser$top-1).left;
                 int aright = CUP$parser$stack.elementAt(CUP$parser$top-1).right;
                 AstNode a = CUP$parser$stack.elementAt(CUP$parser$top-1).<AstNode> value();
-                 RESULT = a; 
+                 ((DeclarationNode)a).mustInit = true; RESULT = a; 
                 CUP$parser$result = parser.getSymbolFactory().newSymbol("statement",16, CUP$parser$stack.elementAt(CUP$parser$top-1), CUP$parser$stack.peek(), RESULT);
             }
             return CUP$parser$result;

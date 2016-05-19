@@ -11,6 +11,7 @@ import zr54.main.XiException;
 
 public class DeclarationNode extends AstNode {
 	boolean isGlobal = false;
+	public boolean mustInit = false;
 	
 	/**
 	 * constructor
