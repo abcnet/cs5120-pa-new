@@ -159,6 +159,9 @@ public class Type {
     	else if(this.type == NULL && t.type == CLASS) {
     		return true;
     	}
+    	else if(this.type == NULL && t.dimension > 0) {
+    		return true;
+    	}
     	else if(this.type == TUPLE && t.type == TUPLE && this.tuple.size() == t.tuple.size()) {
     		for(int i = 0; i < this.tuple.size(); i++) {
     			if(!this.tuple.get(i).isSubclassOf(t.tuple.get(i), classes))

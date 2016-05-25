@@ -63,7 +63,10 @@ public class DeclarationNode extends AstNode {
 													(IRExpr)children.get(0).irNode),
 										 new IRTemp(getRegName()));
 			else
-				this.irNode = new IRTemp(getRegName());
+				if(mustInit)
+					this.irNode = new IRMove(new IRTemp(getRegName()), new IRConst(0));
+				else
+					this.irNode = new IRTemp(getRegName());
 				
 			
 		}

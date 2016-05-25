@@ -242,7 +242,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | whileStatement:s                         {: RESULT = s; :}
                       | argumentWithTypeNonEmpty:a optionalSemicolon     {: ((DeclarationNode)a).mustInit = true; RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
-                      | BREAK: b  {: RESULT = new BreakContinueNode("break", b); :}
+                      | BREAK: b optionalSemicolon {: RESULT = new BreakContinueNode("break", b); :}
                       | CONTINUE:c  {: RESULT = new BreakContinueNode("continue", c); :}
                       | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
                       ;
