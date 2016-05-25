@@ -243,7 +243,7 @@ statement           ::= functionCall:f optionalSemicolon         {: RESULT = new
                       | argumentWithTypeNonEmpty:a optionalSemicolon     {: ((DeclarationNode)a).mustInit = true; RESULT = a; :}
                       | block: b                                 {: RESULT = b; :}
                       | BREAK: b optionalSemicolon {: RESULT = new BreakContinueNode("break", b); :}
-                      | CONTINUE:c  {: RESULT = new BreakContinueNode("continue", c); :}
+                      | CONTINUE:c  optionalSemicolon {: RESULT = new BreakContinueNode("continue", c); :}
                       | multipleArgumentsWithSingleTypeNonEmpty:m  {: RESULT = m; :}
                       ;
 
