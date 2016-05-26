@@ -1,7 +1,8 @@
 package zr54.irgen;
 
 import java.io.*;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import edu.cornell.cs.cs4120.util.CodeWriterSExpPrinter;
@@ -99,10 +100,13 @@ public class IRGenerate {
 							String ixiFile = libPath + interfaceName + ".ixi";
 //							String ixiDstFile = libPath + interfaceName + ".typed";
 							errFile = ixiFile;
-							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
+							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName, null); 
 						}
 					}
-					
+					String selfixi = srcFile.substring(0, srcFile.lastIndexOf(".xi")) + ".ixi";
+					if(new File(selfixi).isFile()){
+						ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, "", selfixi);
+					}
 					errFile = srcFile;
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");

@@ -18,18 +18,19 @@ public class ixiAnalyze {
 	 * @param classes TODO
 	 * @param libPath TODO
 	 * @param interfaceName TODO
+	 * @param fullixiPath TODO
 	 * @param ixiFile: path of input *.ixi file
 	 * @param fs: output stream (*.typed file)
 	 * @param funcs: current function symbol table
 	 * @throws Exception
 	 */
-	public static void typeCheckAndPrint(FileOutputStream fs, FuncSymbolTable funcs, ClassSymbolTable classes, String libPath, String interfaceName) throws Exception {
+	public static void typeCheckAndPrint(FileOutputStream fs, FuncSymbolTable funcs, ClassSymbolTable classes, String libPath, String interfaceName, String fullixiPath) throws Exception {
 		if(analyzedUses.contains(interfaceName)){
 			return;
 		}else{
 			analyzedUses.add(interfaceName);
 		}
-		String ixiFile = libPath + interfaceName + ".ixi";
+		String ixiFile = (fullixiPath != null)?fullixiPath:(libPath + interfaceName + ".ixi");
 		CodeWriterSExpPrinter printer = new CodeWriterSExpPrinter(fs);
 		File f = new File(ixiFile);
 		if (f.exists()) {
@@ -51,7 +52,7 @@ public class ixiAnalyze {
 
 //							String ixiDstFile = libPath + interfaceName + ".typed";
 							errFile = ixiFile;
-							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, (String) useSpec.getChildren().get(1).getValue().value); 
+							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, (String) useSpec.getChildren().get(1).getValue().value, null); 
 						}
 					}
 					

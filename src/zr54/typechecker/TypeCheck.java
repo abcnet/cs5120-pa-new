@@ -55,17 +55,13 @@ public class TypeCheck {
 							errFile = ixiFile;
 							printer.flush();
 							fs.flush();
-							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
+							ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName, null); 
 						}
 					}
-//					for(AstNode useSpec : useNode.getChildren()) {
-//						String interfaceName = (String) useSpec.getChildren().get(1).getValue().value;
-//						
-//						String ixiFile = libPath + interfaceName + ".ixi";
-//						String ixiDstFile = libPath + interfaceName + ".typed";
-//						errFile = ixiFile;
-//						ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, interfaceName); 
-//					}
+					String selfixi = srcFile.substring(0, srcFile.lastIndexOf(".xi")) + ".ixi";
+					if(new File(selfixi).isFile()){
+						ixiAnalyze.typeCheckAndPrint(fs, funcs, classes, libPath, "", selfixi);
+					}
 					errFile = srcFile;
 					TypeCheck.registerAllFunctions(funcs, root, srcFile, classes, "");
 					TypeCheck.registerAllClasses(classes, root, false, srcFile);

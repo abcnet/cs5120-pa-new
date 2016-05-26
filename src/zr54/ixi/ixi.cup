@@ -16,6 +16,7 @@ parser code {:
     
     @Override
     public void syntax_error(Symbol cur_token){
+
     try{
      String errorMessage = ((Lexer)this.getScanner()).getErrorMessage();
       if(errorMessage != null) {
@@ -127,8 +128,7 @@ typesList           ::= typesList:tl COMMA type:t   {: RESULT = new DefaultNode(
                       ;
 
 
-method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r 
-                        {: RESULT = new MethodNode("method", id);
+method              ::= IDENTIFIER:id LPAREN optionalArgumentsWithType:a RPAREN functionReturnType:r optionalSemicolon {: RESULT = new MethodNode("method", id);
                            RESULT.addChild(a); RESULT.addChild(r); :}
                       | classDef:cd {: RESULT =  cd; :}
                       ;
