@@ -187,11 +187,11 @@ public class IRBinOp extends IRExpr {
 				 .longValue();
 				 break;
 			 case DIV:
-				 if (r == 0) throw new Trap("Division by zero!");
+				 if (r == 0) return null;
 				 result = l / r;
 				 break;
 			 case MOD:
-				 if (r == 0) throw new Trap("Division by zero!");
+				 if (r == 0) return null;
 				 result = l % r;
 				 break;
 			 case AND:
